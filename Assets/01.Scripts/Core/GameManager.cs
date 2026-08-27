@@ -1,8 +1,5 @@
-using UnityEngine;
+﻿using UnityEngine;
 
-/// <summary>
-/// 게임 전체에서 공유하는 플레이어 진행 데이터를 관리합니다.
-/// </summary>
 public class GameManager : Singleton<GameManager>
 {
     public PlayerData PlayerData { get; private set; }
@@ -20,17 +17,13 @@ public class GameManager : Singleton<GameManager>
         CreateNewPlayerData();
     }
 
-    /// <summary>
-    /// 저장된 데이터를 적용합니다.
-    /// </summary>
+    // 저장된 데이터를 적용
     public void SetPlayerData(PlayerData playerData)
     {
         PlayerData = playerData ?? new PlayerData();
     }
 
-    /// <summary>
-    /// 새 게임에 사용할 기본 데이터를 생성합니다.
-    /// </summary>
+    // 새 게임에 사용할 기본 데이터를 생성
     public void CreateNewPlayerData()
     {
         PlayerData = new PlayerData();
