@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class UISettingsPopup : MonoBehaviour
 {
@@ -19,10 +20,52 @@ public class UISettingsPopup : MonoBehaviour
     [Header("Pause Option")]
     [SerializeField] private bool pauseGameOnOpen = true;
 
+    [Header("Sound Settings")]
+    [SerializeField] private Slider bgmSlider;
+    [SerializeField] private Slider sfxSlider;
+
+    [Header("Menu Return Button")]
+    [SerializeField] private GameObject returnToMenuButton;
+
+    private void Start()
+    {
+        if (bgmSlider != null)
+        {
+            bgmSlider.onValueChanged.AddListener(OnBGMVolumeChanged);
+        }
+
+        if (sfxSlider != null)
+        {
+            sfxSlider.onValueChanged.AddListener(OnSFXVolumeChanged);
+        }
+
+    }
+
     private void OnEnable()
     {
         OnClickSoundTab();
+
+        if (SoundManager.instance != null)
+        {
+            if (bgmSlider != null)
+            {
+                bgmSlider.value = SoundManager.instance.GetBGMVolume();
+            }
+
+            if (sfxSlider != null)
+            {
+                sfxSlider.value = SoundManager.instance.GetSFXVolume();
+            }
+        }
+
+        string currentSceneName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+        if (returnToMenuButton != null)
+        {
+            returnToMenuButton.SetActive(currentSceneName != "TitleScene");
+        }
     }
+
+
 
     private void Update()
     {
@@ -47,12 +90,20 @@ public class UISettingsPopup : MonoBehaviour
     public void Open()
     {
         gameObject.SetActive(true);
+
         OnClickSoundTab();
+
+        string currentSceneName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+        if (returnToMenuButton != null)
+        {
+            returnToMenuButton.SetActive(currentSceneName != "TitleScene");
+        }
 
         if (pauseGameOnOpen)
         {
             Time.timeScale = 0f;
         }
+
     }
 
     public void Close()
@@ -81,6 +132,30 @@ public class UISettingsPopup : MonoBehaviour
 
         if (soundTabImage != null) soundTabImage.color = inactiveColor;
         if (convenienceTabImage != null) convenienceTabImage.color = activeColor;
+    }
+
+    private void OnBGMVolumeChanged(float value)
+    {
+        if (SoundManager.instance != null)
+        {
+            SoundManager.instance.SetBGMVolume(value);
+        }
+    }
+
+    private void OnSFXVolumeChanged(float value)
+    {
+        if (SoundManager.instance != null)
+        {
+            SoundManager.instance.SetSFXVolume(value);
+        }
+    }
+
+    public void OnClickReturnToTitle()
+    {
+        Close();
+        Time.timeScale = 1f;
+
+        UnityEngine.SceneManagement.SceneManager.LoadScene("TitleScene");
     }
 
     public void OnClickExitGame()
