@@ -41,24 +41,23 @@ public abstract class BaseUnitController : MonoBehaviour
     protected void Update() => StateMachine.Update();
     protected void FixedUpdate() => StateMachine.FixedUpdate();
 
-    public void SetTarget(BaseUnitController target)
+    protected void SetTarget(BaseUnitController target)
     {
         Target = target == this ? null : target;
     }
 
-    public void ClearTarget()
+    protected void ClearTarget()
     {
         Target = null;
     }
 
-    public bool TryAttackTarget()
+    protected bool TryAttackTarget()
     {
         return IsTargetInAttackRange && Attack.Attack(Target.Health);
     }
 
     private void HandleDied()
     {
-        Move.Stop();
         StateMachine.ChangeState(DieState);
     }
 }
