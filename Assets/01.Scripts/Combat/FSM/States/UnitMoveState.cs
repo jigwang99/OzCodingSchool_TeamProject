@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class UnitMoveState : UnitBaseState
 {
@@ -29,8 +29,7 @@ public class UnitMoveState : UnitBaseState
             return;
         }
 
-        float directionX = Mathf.Sign(controller.Target.transform.position.x - controller.transform.position.x);
-        controller.Move.MoveTo(new Vector2(directionX, 0f));
+        controller.Move.MoveTo(controller.Target.transform);
     }
 
     public override void Update()

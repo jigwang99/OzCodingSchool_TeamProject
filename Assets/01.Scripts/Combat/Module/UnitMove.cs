@@ -15,10 +15,11 @@ public class UnitMove : MonoBehaviour
         unitRigidbody = GetComponent<Rigidbody2D>();
     }
 
-    public void MoveTo(Vector2 direction)
+    public void MoveTo(Transform targetTransform)
     {
-        unitRigidbody.linearVelocity = direction.sqrMagnitude > 0f
-            ? direction.normalized * moveSpeed
+        Vector2 dir = transform.position - targetTransform.position;
+        unitRigidbody.linearVelocity = dir.sqrMagnitude > 0f
+            ? dir.normalized * moveSpeed
             : Vector2.zero;
     }
 
