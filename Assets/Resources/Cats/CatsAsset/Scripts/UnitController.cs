@@ -17,8 +17,8 @@ namespace StudioNAP
         // Start is called before the first frame update
         void Start()
         {
-            SetSword(Random.Range(0, 23));
-            SetShield(Random.Range(0, 12));
+            SetSword(UnityEngine.Random.Range(0, 23));
+            SetShield(UnityEngine.Random.Range(0, 12));
 
         }
         public void RunAnimation(AnimationTypeEnum ani)
