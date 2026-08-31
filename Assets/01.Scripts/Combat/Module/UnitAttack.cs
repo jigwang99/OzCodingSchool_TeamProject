@@ -5,7 +5,7 @@ using static UnityEngine.AdaptivePerformance.Provider.AdaptivePerformanceSubsyst
 public class UnitAttack : MonoBehaviour
 {
     [SerializeField, Min(0f)] private float attackDamage = 10f;
-    [SerializeField, Min(0.01f)] private float attackRange = 1f;
+    [SerializeField, Min(0.01f)] private float attackRange = 2f;
     [SerializeField, Min(0.01f)] private float attackInterval = 1f;
 
     public float AttackDamage => attackDamage;

@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 7699150719261871998}
   - component: {fileID: 684306905913137934}
   - component: {fileID: 8160494925811920960}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Enemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -88,7 +88,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.98490566, g: 0.013008137, b: 0.013008137, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -163,7 +163,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UnitAttack
   attackDamage: 10
-  attackRange: 1
+  attackRange: 2
   attackInterval: 1
 --- !u!114 &684306905913137934
 MonoBehaviour:
