@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
+using static UnityEngine.AdaptivePerformance.Provider.AdaptivePerformanceSubsystemDescriptor;
 
 public class UnitAttack : MonoBehaviour
 {
@@ -9,6 +11,8 @@ public class UnitAttack : MonoBehaviour
     public float AttackDamage => attackDamage;
     public float AttackRange => attackRange;
     public float AttackInterval => attackInterval;
+
+    public event Action<IDamageable, DamageInfo> OnAttackHit;
 
     public bool IsInAttackRange(Transform target)
     {
@@ -21,8 +25,9 @@ public class UnitAttack : MonoBehaviour
         {
             return false;
         }
-
-        target.TakeDamage(new DamageInfo(attackDamage, gameObject.GetInstanceID(), isCritical));
+        var info = new DamageInfo(attackDamage, gameObject.GetInstanceID(), isCritical);
+        target.TakeDamage(info);
+        OnAttackHit?.Invoke(target, info);
         Debug.Log($"{this.gameObject.name}이 공격");
         return true;
     }

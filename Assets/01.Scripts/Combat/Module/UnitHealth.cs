@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using UnityEngine;
 
 public class UnitHealth : MonoBehaviour, IDamageable
@@ -11,7 +11,7 @@ public class UnitHealth : MonoBehaviour, IDamageable
 
     public event Action<DamageInfo> OnDamaged;
     public event Action OnDied;
-
+    public event Action<float, float> OnHealthChanged; // (current, max)
     private void Awake()
     {
         ResetHealth();
@@ -26,6 +26,7 @@ public class UnitHealth : MonoBehaviour, IDamageable
 
         CurrentHp = Mathf.Max(0f, CurrentHp - damageInfo.Damage);
         OnDamaged?.Invoke(damageInfo);
+        OnHealthChanged?.Invoke(CurrentHp, maxHp);
 
         if (CurrentHp <= 0f)
         {
