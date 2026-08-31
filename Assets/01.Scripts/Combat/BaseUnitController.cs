@@ -30,9 +30,11 @@ public abstract class BaseUnitController : MonoBehaviour
         DieState = new UnitDieState(this);
 
         Health.OnDied += HandleDied;
+    }
+    protected void Start()
+    {
         StateMachine.ChangeState(IdleState);
     }
-
     protected virtual void OnDestroy()
     {
         Health.OnDied -= HandleDied;
@@ -41,17 +43,17 @@ public abstract class BaseUnitController : MonoBehaviour
     protected void Update() => StateMachine.Update();
     protected void FixedUpdate() => StateMachine.FixedUpdate();
 
-    protected void SetTarget(BaseUnitController target)
+    public void SetTarget(BaseUnitController target)
     {
         Target = target == this ? null : target;
     }
 
-    protected void ClearTarget()
+    public void ClearTarget()
     {
         Target = null;
     }
 
-    protected bool TryAttackTarget()
+    public bool TryAttackTarget()
     {
         return IsTargetInAttackRange && Attack.Attack(Target.Health);
     }

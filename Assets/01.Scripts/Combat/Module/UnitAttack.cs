@@ -23,6 +23,7 @@ public class UnitAttack : MonoBehaviour
         }
 
         target.TakeDamage(new DamageInfo(attackDamage, gameObject.GetInstanceID(), isCritical));
+        Debug.Log($"{this.gameObject.name}이 공격");
         return true;
     }
 

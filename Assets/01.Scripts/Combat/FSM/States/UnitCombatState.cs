@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 
@@ -36,6 +36,16 @@ public class UnitCombatState : UnitBaseState
 
     public override void Update()
     {
+        if (!controller.HasTarget)
+        {
+            controller.StateMachine.ChangeState(controller.IdleState);
+            return;
+        }
+
+        if (!controller.IsTargetInAttackRange)
+        {
+            controller.StateMachine.ChangeState(controller.MoveState);
+        }
     }
 
     private async UniTaskVoid AttackLoopAsync(CancellationToken cancellationToken)

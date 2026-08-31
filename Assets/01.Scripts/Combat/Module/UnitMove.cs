@@ -17,7 +17,8 @@ public class UnitMove : MonoBehaviour
 
     public void MoveTo(Transform targetTransform)
     {
-        Vector2 dir = transform.position - targetTransform.position;
+        Vector2 dir =  targetTransform.position - transform.position;
+        dir.y = 0f;
         unitRigidbody.linearVelocity = dir.sqrMagnitude > 0f
             ? dir.normalized * moveSpeed
             : Vector2.zero;
