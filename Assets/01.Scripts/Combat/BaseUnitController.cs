@@ -57,7 +57,11 @@ public abstract class BaseUnitController : MonoBehaviour
     {
         return IsTargetInAttackRange && Attack.Attack(Target.Health);
     }
-
+    public void Revive()
+    {
+        Health.ResetHealth();               // IsDead = false, HP 복구
+        StateMachine.ChangeState(IdleState); // DieState 탈출 → 다음 Update에 타겟 재탐색
+    }
     private void HandleDied()
     {
         StateMachine.ChangeState(DieState);
