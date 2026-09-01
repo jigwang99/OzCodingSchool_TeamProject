@@ -15,13 +15,20 @@ public class UnitMove : MonoBehaviour
         unitRigidbody = GetComponent<Rigidbody2D>();
     }
 
+    // 지정한 방향으로 이동 (예: 플레이어 전진)
+    public void MoveInDirection(Vector2 direction)
+    {
+        unitRigidbody.linearVelocity = direction.sqrMagnitude > 0f
+            ? direction.normalized * moveSpeed
+            : Vector2.zero;
+    }
+
+    // 대상 쪽으로 이동 (y 무시, 좌우 라인 이동)
     public void MoveTo(Transform targetTransform)
     {
-        Vector2 dir =  targetTransform.position - transform.position;
+        Vector2 dir = targetTransform.position - transform.position;
         dir.y = 0f;
-        unitRigidbody.linearVelocity = dir.sqrMagnitude > 0f
-            ? dir.normalized * moveSpeed
-            : Vector2.zero;
+        MoveInDirection(dir);
     }
 
     public void Stop()

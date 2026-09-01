@@ -17,7 +17,8 @@ public class UnitMoveState : UnitBaseState
 
     public override void FixedUpdate()
     {
-        if (!controller.HasTarget)
+        // 교전 대상 인식 해제 → 대기 (적: 플레이어가 감지범위 밖으로 이탈)
+        if (!controller.IsTargetDetected)
         {
             controller.StateMachine.ChangeState(controller.IdleState);
             return;
@@ -29,7 +30,8 @@ public class UnitMoveState : UnitBaseState
             return;
         }
 
-        controller.Move.MoveTo(controller.Target.transform);
+        // 플레이어: 앞으로 전진 / 적: 플레이어 추적
+        controller.PerformMove();
     }
 
     public override void Update()

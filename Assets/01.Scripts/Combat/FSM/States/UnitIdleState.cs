@@ -1,4 +1,4 @@
-public class UnitIdleState : UnitBaseState
+﻿public class UnitIdleState : UnitBaseState
 {
     public UnitIdleState(BaseUnitController controller) : base(controller)
     {
@@ -19,7 +19,8 @@ public class UnitIdleState : UnitBaseState
 
     public override void Update()
     {
-        if (!controller.HasTarget)
+        // 교전 대상을 인식하지 못하면 대기 (적: 플레이어가 감지범위 밖)
+        if (!controller.IsTargetDetected)
         {
             return;
         }
