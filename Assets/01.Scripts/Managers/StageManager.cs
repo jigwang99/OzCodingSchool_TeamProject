@@ -22,6 +22,15 @@ public class StageManager : MonoBehaviour
     [SerializeField, Min(0f)] private float clearDelay = 2f; // 클리어 후 재시작까지
     [SerializeField, Min(0f)] private float failDelay = 2f;  // 패배 후 재시작까지
 
+    [SerializeField] private FishDropSystem fishDropSystem;
+
+    [Header("스테이지 드롭 테이블 (스테이지 번호 순서대로)")]
+    [SerializeField] private StageDropTable[] stageDropTables; // index 0 = 1스테이지
+    [SerializeField] private StageDropTable fallbackDropTable; // 목록에 없을 때
+
+    private int CurrentStage => GameManager.instance.PlayerData.currentStage;
+    private bool IsRetry => GameManager.instance.PlayerData.isRetryEnabled;
+
     private Vector3 playerStartPosition; // 스테이지 재시작 시 되돌릴 위치
     private bool isTransitioning;        // 재시작 대기 중 중복 진입 방지
 
@@ -60,12 +69,33 @@ public class StageManager : MonoBehaviour
     {
         isTransitioning = false;
 
-        playerCat.transform.position = playerStartPosition; // 원래 위치로 복귀
-        playerCat.Revive();                                 // 풀피 + Idle (이동 정지 포함)
+        ApplyDropTable(); // ← 추가: 이번 스테이지의 드롭 테이블을 FishDropSystem에 지정
+
+        playerCat.transform.position = playerStartPosition;
+        playerCat.Revive();
 
         IReadOnlyList<EnemyController> enemies = enemySpawner.SpawnStage(playerCat);
-        RetargetPlayer();  // 시작 위치 기준 가장 가까운 적을 첫 타겟으로
+        RetargetPlayer();
         combatManager.BeginBattle(playerCat, enemies);
+    }
+
+    // 현재 스테이지 번호에 맞는 드롭 테이블을 선택해 전달.
+    // 목록 범위를 넘으면 마지막 테이블로 고정(= 최상위 스테이지 규칙 유지), 그래도 없으면 fallback.
+    private void ApplyDropTable()
+    {
+        if (fishDropSystem == null)
+            return;
+
+        StageDropTable table = fallbackDropTable;
+
+        if (stageDropTables != null && stageDropTables.Length > 0)
+        {
+            int index = Mathf.Clamp(CurrentStage - 1, 0, stageDropTables.Length - 1);
+            if (stageDropTables[index] != null)
+                table = stageDropTables[index];
+        }
+
+        fishDropSystem.SetDropTable(table);
     }
 
     // 적이 하나 죽을 때마다 플레이어 타겟을 가장 가까운 살아있는 적으로 갱신
@@ -86,14 +116,15 @@ public class StageManager : MonoBehaviour
     // 승리 → 같은 스테이지 재시작
     private void HandleStageCleared()
     {
-        // TODO: 재도전 토글 off 시 currentStage++ 로 다음 스테이지 진행 (경영·재화 담당 연동)
+        //if (!IsRetry)
+        //    GameManager.instance.PlayerData.currentStage++;
         RestartAfterAsync(clearDelay).Forget();
     }
 
     // 패배 → 같은 스테이지 재시작
     private void HandleStageFailed()
     {
-        // TODO: 실패 시 이전 스테이지로 이동 (경영·재화 담당 연동)
+        // TODO: 실패 시 이전 스테이지로 이동
         RestartAfterAsync(failDelay).Forget();
     }
 
