@@ -30,7 +30,7 @@ public class EnemySpawner : MonoBehaviour
             }
 
             // GetObject 내부에서 IPoolable.Init()이 호출돼 HP/상태가 초기화됨
-            EnemyController enemy = ObjectPoolManager.instance.GetObject<EnemyController>(PoolType.Enemy);
+            EnemyController enemy = CombatObjectPoolManager.instance.GetObject<EnemyController>(PoolType.Enemy);
             if (enemy == null)
             {
                 Debug.LogWarning("[EnemySpawner] Enemy 풀에서 오브젝트를 가져오지 못했습니다. " +
@@ -56,7 +56,7 @@ public class EnemySpawner : MonoBehaviour
                 continue;
             }
 
-            ObjectPoolManager.instance.ReturnObject(PoolType.Enemy, enemy.gameObject);
+            CombatObjectPoolManager.instance.ReturnObject(PoolType.Enemy, enemy.gameObject);
         }
         active.Clear();
     }

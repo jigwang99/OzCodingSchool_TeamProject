@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Security.Cryptography;
 using TMPro;
 using UnityEngine;
@@ -34,7 +34,7 @@ public class MakeFood : MonoBehaviour
 
             yield return null;
         }
-        GameObject foodObject = ObjectPoolManager.instance.GetObject($"{food.name}");
+        GameObject foodObject = BObjectPoolManager.instance.GetObject($"{food.name}");
         foodObject.transform.position = foodPosition;
         customer.myFood = foodObject;
         makeTimeBar.value = 0;

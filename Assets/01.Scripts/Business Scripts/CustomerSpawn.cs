@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,7 +14,7 @@ public class CustomerSpawn : MonoBehaviour
     WaitForSeconds spawnTime;
     WaitForSeconds checkTime;
 
-    // ÇöÀç ÀÚ¸® ±â´Ù¸®´Â ¼Õ´Ôµé
+    // í˜„ì¬ ìë¦¬ ê¸°ë‹¤ë¦¬ëŠ” ì†ë‹˜ë“¤
     public List<Customer> waitingCustomers = new List<Customer>();
 
     private void Awake()
@@ -35,7 +35,7 @@ public class CustomerSpawn : MonoBehaviour
     {
         while (true)
         {
-            GameObject spawnCustomer = ObjectPoolManager.instance.GetObject($"cat{Random.Range(0,2)}");
+            GameObject spawnCustomer = BObjectPoolManager.instance.GetObject($"cat{Random.Range(0,2)}");
             spawnCustomer.transform.position = spawnPoint.position;
             waitingCustomers.Add(spawnCustomer.GetComponent<Customer>());
 

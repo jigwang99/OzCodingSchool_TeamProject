@@ -1,18 +1,18 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Pool;
 
-public class ObjectPoolManager : MonoBehaviour
+public class BObjectPoolManager : MonoBehaviour
 {
-    public static ObjectPoolManager instance;
+    public static BObjectPoolManager instance;
 
     [SerializeField] private List<GameObject> objList = new();
     private Dictionary<string, Queue<GameObject>> pools = new();  
     
-    List<GameObject> activeObjects = new(); //ÇöÀç ³ª¿À´Â À¯´Ö ¹Ş¾Æ¿À±â (°ÔÀÓ Á¾·áÇÒ¶§ Ç®¿¡ ´Ù ²¨¼­ ¸®ÅÏÇÏ±âÀ§ÇØ¼­)
+    List<GameObject> activeObjects = new(); //í˜„ì¬ ë‚˜ì˜¤ëŠ” ìœ ë‹› ë°›ì•„ì˜¤ê¸° (ê²Œì„ ì¢…ë£Œí• ë•Œ í’€ì— ë‹¤ êº¼ì„œ ë¦¬í„´í•˜ê¸°ìœ„í•´ì„œ)
 
     int poolSize;
     private void Awake()
@@ -41,7 +41,7 @@ public class ObjectPoolManager : MonoBehaviour
             }
         }
     }
-    public void GameEnd()   //ToArray() ¾²´Â ÀÌÀ¯´Â foreach µ¹¸é¼­ activeObjects.Remove()°¡ ÀÏ¾î³ª¸é ¸®½ºÆ® º¯°æ ¿À·ù°¡ ³ª±â ¶§¹®.
+    public void GameEnd()   //ToArray() ì“°ëŠ” ì´ìœ ëŠ” foreach ëŒë©´ì„œ activeObjects.Remove()ê°€ ì¼ì–´ë‚˜ë©´ ë¦¬ìŠ¤íŠ¸ ë³€ê²½ ì˜¤ë¥˜ê°€ ë‚˜ê¸° ë•Œë¬¸.
     {
         foreach (GameObject obj in activeObjects.ToArray())
         {

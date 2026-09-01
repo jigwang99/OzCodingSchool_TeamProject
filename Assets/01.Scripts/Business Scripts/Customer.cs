@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -86,7 +86,7 @@ public class Customer : MonoBehaviour
 
         transform.position = Vector3.MoveTowards(transform.position, mySeat.transform.position, moveSpeed * Time.deltaTime);
         float distance = Vector3.Distance(transform.position, mySeat.transform.position);
-        //  ÇöÀç ¼Õ´Ô ÀÌµ¿¹æÇâÀÌ ¾î´À ¹æÇâÀÎÁö
+        //  í˜„ì¬ ì†ë‹˜ ì´ë™ë°©í–¥ì´ ì–´ëŠ ë°©í–¥ì¸ì§€
         if (mySeat.transform.position.x < transform.position.x)
             sprites.transform.localScale = new Vector3(1, 1, 1);
         else
@@ -124,7 +124,7 @@ public class Customer : MonoBehaviour
         {
             timer = 0f;
 
-            ObjectPoolManager.instance.ReturnObject(myFood.name.ToString().Split("(Clone)")[0], myFood);
+            BObjectPoolManager.instance.ReturnObject(myFood.name.ToString().Split("(Clone)")[0], myFood);
             Food f = myFood.GetComponent<Food>();
             FacilityManager.instance.GetGold(f.price, f.isSpecial);
 
@@ -134,11 +134,11 @@ public class Customer : MonoBehaviour
             ChangeState(CustomerState.Exit);
         }
     }
-    void ExitState()  // ¹ÛÀ¸·Î ³ª°¨
+    void ExitState()  // ë°–ìœ¼ë¡œ ë‚˜ê°
     {
         transform.position = Vector3.MoveTowards(transform.position, exitPoint, moveSpeed * Time.deltaTime);
         float distance = Vector3.Distance(transform.position, exitPoint);
-        //  ÇöÀç ¼Õ´Ô ÀÌµ¿¹æÇâÀÌ ¾î´À ¹æÇâÀÎÁö
+        //  í˜„ì¬ ì†ë‹˜ ì´ë™ë°©í–¥ì´ ì–´ëŠ ë°©í–¥ì¸ì§€
         if (exitPoint.x < transform.position.x)
             sprites.transform.localScale = new Vector3(1, 1, 1);
         else
@@ -147,7 +147,7 @@ public class Customer : MonoBehaviour
         if (distance < 0.05f)
         {
             transform.position = mySeat.transform.position;
-            ObjectPoolManager.instance.ReturnObject(name.ToString().Split("(Clone)")[0], gameObject);
+            BObjectPoolManager.instance.ReturnObject(name.ToString().Split("(Clone)")[0], gameObject);
         }
     }
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System;
 
-public class ObjectPoolManager : Singleton<ObjectPoolManager>
+public class CombatObjectPoolManager : Singleton<CombatObjectPoolManager>
 {
     [SerializeField] private int poolSize;
     [SerializeField] private List<GameObject> objList;
