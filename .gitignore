@@ -106,5 +106,5 @@ InitTestScene*.unity*
 /[Aa]ssets/[Ss]ceneDependencyCache*
 
 # 고양이 에셋 (저작권/용량 문제로 리포 제외)
-Assets/CatsAsset/
-Assets/CatsAsset.meta
+Assets/Business Assets
+Assets/Business Assets.meta
