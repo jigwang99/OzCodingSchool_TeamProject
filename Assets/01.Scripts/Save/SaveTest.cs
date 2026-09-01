@@ -22,11 +22,13 @@ public class SaveTest : MonoBehaviour
         }
 
         Debug.Log("===== 불러오기 테스트 =====");
+        Debug.Log($"Gold : {data.gold}");
+        Debug.Log($"Fish : {data.commonFish}");
+        Debug.Log($"Stage : {data.currentStage}");
+        Debug.Log($"Weapon : {data.weaponLevel}");
+        Debug.Log($"Restaurant : {data.restaurantLevel}");
         Debug.Log($"마지막 저장 시간 : {data.lastSaveTime}");
 
-        // PlayerData에 실제 존재하는 변수로 추가
-        // Debug.Log($"Gold : {data.gold}");
-        // Debug.Log($"Fish : {data.fish}");
     }
 
     [ContextMenu("3. 저장 파일 삭제")]
