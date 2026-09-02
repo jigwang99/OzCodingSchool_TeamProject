@@ -36,7 +36,7 @@ public class CustomerSpawn : MonoBehaviour
         while (true)
         {
             GameObject spawnCustomer = BObjectPoolManager.instance.GetObject($"cat{Random.Range(0,2)}");
-            spawnCustomer.transform.position = spawnPoint.position;
+            spawnCustomer.transform.position = spawnPoint.position; 
             waitingCustomers.Add(spawnCustomer.GetComponent<Customer>());
 
             yield return spawnTime;
