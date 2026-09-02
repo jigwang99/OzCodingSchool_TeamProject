@@ -1,109 +1,165 @@
 using System.Collections.Generic;
 using UnityEngine;
+using PixelRestaurant.Data;
 
-public class GachaManager : MonoBehaviour
+namespace PixelRestaurant.Managers
 {
-    public static GachaManager Instance { get; private set; }
-
-    public List<GachaPool> pools = new List<GachaPool>();
-
-    void Awake()
+    /// <summary>
+    /// 가챠 시스템 매니저
+    /// 1차: 레어리티를 가중치로 뽑기
+    /// 2차: 해당 레어리티의 아이템을 가중치로 뽑기
+    /// 골드 결제와 UI는 담당하지 않습니다.
+    /// </summary>
+    public class GachaManager : MonoBehaviour
     {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else if (Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
+        public static GachaManager instance { get; private set; }
 
-        // 디버그: 등록된 풀 목록 출력
-        Debug.Log($"GachaManager Awake - pools count: {pools?.Count ?? 0}");
-        if (pools != null)
+        [SerializeField] private GachaPool gachaPool;
+        [SerializeField] private GachaConfig gachaConfig;
+
+        public GameObject DefaultResultPrefab => gachaPool != null ? gachaPool.DefaultResultPrefab : null;
+
+        private void Awake()
         {
-            for (int i = 0; i < pools.Count; i++)
+            if (instance != null && instance != this)
             {
-                var p = pools[i];
-                Debug.Log($"Pool[{i}] name={p?.name ?? "null"} poolId={(p != null ? p.poolId : "null")}");
+                Destroy(gameObject);
+                return;
+            }
+
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+
+            if (gachaConfig == null)
+            {
+                gachaConfig = new GachaConfig();
+                Debug.LogWarning("[가챠] GachaConfig가 할당되지 않았습니다. 기본값을 사용합니다.");
             }
         }
+
+        /// <summary>
+        /// 뽑기 횟수에 따른 비용 반환 (결제는 하지 않음)
+        /// </summary>
+        public int GetPullCost(int pullCount)
+        {
+            return pullCount switch
+            {
+                1 => gachaConfig.pull1Cost,
+                5 => gachaConfig.pull5Cost,
+                30 => gachaConfig.pull30Cost,
+                _ => gachaConfig.pull1Cost
+            };
+        }
+
+        /// <summary>
+        /// 골드 소비 없이 가챠를 진행하고 결과만 반환
+        /// 실패 시 재시행해서 반드시 결과 반환
+        /// </summary>
+        public GachaItem DrawGachaWithoutCost(GachaGroup group)
+        {
+            GachaItem selectedItem = null;
+            int retryCount = 0;
+            const int maxRetry = 100;
+
+            while (selectedItem == null && retryCount < maxRetry)
+            {
+                GachaRarity selectedRarity = Draw1stRarity();
+                selectedItem = Draw2ndItem(group, selectedRarity);
+
+                if (selectedItem == null)
+                {
+                    retryCount++;
+                }
+            }
+
+            if (selectedItem == null)
+            {
+                Debug.LogWarning($"[경고] {group} 그룹에서 유효한 아이템을 찾을 수 없습니다.");
+            }
+
+            return selectedItem;
+        }
+
+        /// <summary>
+        /// 1차 뽑기: 레어리티를 가중치로 선택
+        /// Common(60) : Rare(30) : Unique(9) : Epic(1)
+        /// </summary>
+        private GachaRarity Draw1stRarity()
+        {
+            int totalWeight = (int)GachaRarity.Common + (int)GachaRarity.Rare +
+                             (int)GachaRarity.Unique + (int)GachaRarity.Epic;
+
+            int randomValue = Random.Range(0, totalWeight);
+            int cumulativeWeight = 0;
+
+            if (randomValue < cumulativeWeight + (int)GachaRarity.Common)
+                return GachaRarity.Common;
+            cumulativeWeight += (int)GachaRarity.Common;
+
+            if (randomValue < cumulativeWeight + (int)GachaRarity.Rare)
+                return GachaRarity.Rare;
+            cumulativeWeight += (int)GachaRarity.Rare;
+
+            if (randomValue < cumulativeWeight + (int)GachaRarity.Unique)
+                return GachaRarity.Unique;
+            cumulativeWeight += (int)GachaRarity.Unique;
+
+            return GachaRarity.Epic;
+        }
+
+        /// <summary>
+        /// 2차 뽑기: 해당 레어리티 + 그룹의 아이템을 가중치로 선택
+        /// </summary>
+        private GachaItem Draw2ndItem(GachaGroup group, GachaRarity rarity)
+        {
+            if (gachaPool == null)
+            {
+                Debug.LogError("[가챠] GachaPool이 할당되지 않았습니다.");
+                return null;
+            }
+
+            List<GachaItem> candidates = gachaPool.GetItemsByGroupAndRarity(group, rarity);
+
+            if (candidates.Count == 0)
+            {
+                return null;
+            }
+
+            int totalWeight = 0;
+            foreach (var item in candidates)
+            {
+                totalWeight += item.weight;
+            }
+
+            int randomValue = Random.Range(0, totalWeight);
+            int cumulativeWeight = 0;
+
+            foreach (var item in candidates)
+            {
+                cumulativeWeight += item.weight;
+                if (randomValue < cumulativeWeight)
+                {
+                    return item;
+                }
+            }
+
+            return candidates[0];
+        }
+
+        internal GachaItem DrawGacha(GachaGroup currentGachaType, int v)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 
-    public GachaResult DrawFromPool(string poolId)
+    /// <summary>
+    /// 가챠 비용 설정 (직렬화)
+    /// </summary>
+    [System.Serializable]
+    public class GachaConfig
     {
-        var pool = pools.Find(p => p != null && p.poolId == poolId);
-        if (pool == null)
-        {
-            Debug.LogWarning($"GachaPool not found: {poolId}");
-            return null;
-        }
-
-        var group = ProbabilityRandom.GetRandomByWeight(pool.groups, g => g.weight);
-        if (group == null || group.entries == null || group.entries.Count == 0)
-        {
-            Debug.LogWarning($"Invalid group or empty entries in pool {poolId}");
-            return null;
-        }
-
-        var entry = ProbabilityRandom.GetRandomByWeight(group.entries, e => e.weight);
-        if (entry == null)
-        {
-            Debug.LogWarning($"Failed to pick entry in pool {poolId}");
-            return null;
-        }
-
-        return new GachaResult
-        {
-            itemId = entry.id,
-            prefab = entry.prefab,
-            rarity = group.rarity,
-            groupName = group.groupName
-        };
-    }
-
-    public List<GachaResult> DrawMultiple(string poolId, int count)
-    {
-        List<GachaResult> results = new List<GachaResult>(count);
-        for (int i = 0; i < count; i++)
-        {
-            var r = DrawFromPool(poolId);
-            if (r != null) results.Add(r);
-        }
-        return results;
-    }
-
-    // (선택) 풀 직접 전달용 오버로드
-    public GachaResult DrawFromPool(GachaPool pool)
-    {
-        if (pool == null)
-        {
-            Debug.LogWarning("DrawFromPool called with null pool");
-            return null;
-        }
-
-        var group = ProbabilityRandom.GetRandomByWeight(pool.groups, g => g.weight);
-        if (group == null || group.entries == null || group.entries.Count == 0)
-        {
-            Debug.LogWarning($"Invalid group or empty entries in pool {pool.poolId}");
-            return null;
-        }
-
-        var entry = ProbabilityRandom.GetRandomByWeight(group.entries, e => e.weight);
-        if (entry == null)
-        {
-            Debug.LogWarning($"Failed to pick entry in pool {pool.poolId}");
-            return null;
-        }
-
-        return new GachaResult
-        {
-            itemId = entry.id,
-            prefab = entry.prefab,
-            rarity = group.rarity,
-            groupName = group.groupName
-        };
+        [SerializeField] public int pull1Cost = 1;
+        [SerializeField] public int pull5Cost = 5;
+        [SerializeField] public int pull30Cost = 30;
     }
 }

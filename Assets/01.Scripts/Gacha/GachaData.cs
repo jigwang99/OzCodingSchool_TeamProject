@@ -1,43 +1,72 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum Rarity
+namespace PixelRestaurant.Data
 {
-    Common,
-    Rare,
-    Unique,
-    Epic
-}
+    /// <summary>
+    /// 가챠 아이템 정보 (무기, 가구, 요리 등)
+    /// </summary>
+    [System.Serializable]
+    public class GachaItem
+    {
+        public string itemId;           // 아이템 고유ID
+        public string itemName;         // 아이템 이름
+        public GachaGroup group;        // 그룹 (무기, 가구, 요리)
+        public GachaRarity rarity;      // 레어리티
+        public int grade;               // 등급 (1,2,3,4)
+        public int weight;              // 개별 아이템 가중치 (기본값 1)
+        public GameObject displayPrefab; // 결과 표시 프리팹 (선택)
+    }
 
-/// <summary>
-/// 풀 전체를 ScriptableObject로 만들어 에디터에서 쉽게 편집하도록 함
-/// </summary>
-[CreateAssetMenu(menuName = "Gacha/GachaPool")]
-public class GachaPool : ScriptableObject
-{
-    public string poolId;
-    public string displayName;
-    public List<GachaGroup> groups = new List<GachaGroup>();
-}
+    /// <summary>
+    /// 가챠 그룹 분류
+    /// </summary>
+    public enum GachaGroup
+    {
+        Weapon,    // 무기
+        Furniture, // 가구
+        Recipe     // 요리
+    }
 
-[Serializable]
-public class GachaGroup
-{
-    public string groupName;
-    public Rarity rarity;
-    [Tooltip("그룹이 뽑힐 확률(가중치)")]
-    public float weight = 1f;
+    /// <summary>
+    /// 레어리티 분류
+    /// </summary>
+    public enum GachaRarity
+    {
+        Common = 60,   // 커몬: 가중치 60
+        Rare = 30,     // 레어: 가중치 30
+        Unique = 9,    // 유니크: 가중치 9
+        Epic = 1       // 에픽: 가중치 1
+    }
 
-    [Tooltip("이 그룹 내부의 아이템 목록과 가중치")]
-    public List<GachaEntry> entries = new List<GachaEntry>();
-}
+    /// <summary>
+    /// 가챠 풀 (하나의 가챠 세트)
+    /// </summary>
+    [CreateAssetMenu(fileName = "GachaPool_", menuName = "Gacha/GachaPool")]
+    public class GachaPool : ScriptableObject
+    {
+        [SerializeField] private string poolName;
+        [SerializeField] private List<GachaItem> items = new List<GachaItem>();
+        [SerializeField] private GameObject defaultResultPrefab; // 기본 프리팹
 
-[Serializable]
-public class GachaEntry
-{
-    public string id;
-    public GameObject prefab; // 또는 ScriptableObject나 데이터 참조로 변경 가능
-    [Tooltip("아이템 뽑힐 확률(가중치)")]
-    public float weight = 1f;
+        public string PoolName => poolName;
+        public List<GachaItem> Items => items;
+        public GameObject DefaultResultPrefab => defaultResultPrefab;
+
+        /// <summary>
+        /// 특정 그룹의 아이템만 필터링해서 반환
+        /// </summary>
+        public List<GachaItem> GetItemsByGroup(GachaGroup group)
+        {
+            return items.FindAll(item => item.group == group);
+        }
+
+        /// <summary>
+        /// 특정 그룹과 레어리티의 아이템들 반환
+        /// </summary>
+        public List<GachaItem> GetItemsByGroupAndRarity(GachaGroup group, GachaRarity rarity)
+        {
+            return items.FindAll(item => item.group == group && item.rarity == rarity);
+        }
+    }
 }
