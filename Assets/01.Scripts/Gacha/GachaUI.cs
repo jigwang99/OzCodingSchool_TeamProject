@@ -1,13 +1,14 @@
-using System.Collections;
+ï»¿using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
 public class GachaUI : MonoBehaviour
 {
+    /*
     [Header("Gacha / Pool")]
-    public GachaPool pool; // inspector¿¡¼­ ¸µÅ©
-    public PoolManager poolManager; // inspector¿¡ PoolManager¸¦ µå·¡±×ÇÏ°Å³ª ÀÚµ¿À¸·Î Ã£À½
+    public GachaPool pool; // inspectorì—ì„œ ë§í¬
+    public PoolManager poolManager; // inspectorì— PoolManagerë¥¼ ë“œë˜ê·¸í•˜ê±°ë‚˜ ìë™ìœ¼ë¡œ ì°¾ìŒ
 
     [Header("Cost")]
     public int costPerDraw = 10;
@@ -15,11 +16,11 @@ public class GachaUI : MonoBehaviour
     [Header("UI")]
     public Button drawButton;
     public TMP_Text moneyText;
-    public TMP_Text drawButtonText; // ¹öÆ° ÅØ½ºÆ®¿¡ ºñ¿ë Ç¥½Ã(¼±ÅÃ)
-    public GameObject popupPanel; // ÆË¾÷ ÆĞ³Î (ºñÈ°¼ºÈ­ »óÅÂ¿¡¼­ »ç¿ë)
+    public TMP_Text drawButtonText; // ë²„íŠ¼ í…ìŠ¤íŠ¸ì— ë¹„ìš© í‘œì‹œ(ì„ íƒ)
+    public GameObject popupPanel; // íŒì—… íŒ¨ë„ (ë¹„í™œì„±í™” ìƒíƒœì—ì„œ ì‚¬ìš©)
     public TMP_Text popupTitleText;
     public TMP_Text popupDetailText;
-    public Transform popupPreviewParent; // ÆË¾÷¿¡ Ç¥½ÃÇÒ prefabÀ» ºÎ¸ğ·Î µÑ Transform (ºó GameObject)
+    public Transform popupPreviewParent; // íŒì—…ì— í‘œì‹œí•  prefabì„ ë¶€ëª¨ë¡œ ë‘˜ Transform (ë¹ˆ GameObject)
     public Button popupCloseButton;
 
     private GameObject currentPreviewInstance;
@@ -35,18 +36,18 @@ public class GachaUI : MonoBehaviour
         drawButton.onClick.AddListener(OnDrawButton);
         if (popupCloseButton != null) popupCloseButton.onClick.AddListener(ClosePopup);
 
-        // CurrencyManager ÀÌº¥Æ® ±¸µ¶ ÁÖ¼® Ã³¸® ¹× Å×½ºÆ®¿ë ÀÓ½Ã °ª Àû¿ë
+        // CurrencyManager ì´ë²¤íŠ¸ êµ¬ë… ì£¼ì„ ì²˜ë¦¬ ë° í…ŒìŠ¤íŠ¸ìš© ì„ì‹œ ê°’ ì ìš©
         // CurrencyManager.Instance.OnMoneyChanged += UpdateMoneyUI;
         // UpdateMoneyUI(CurrencyManager.Instance.currentMoney);
-        UpdateMoneyUI(9999); // UI È®ÀÎ¿ë ÀÓ½Ã °ñµå °ª
+        UpdateMoneyUI(9999); // UI í™•ì¸ìš© ì„ì‹œ ê³¨ë“œ ê°’
 
         if (drawButtonText != null)
-            drawButtonText.text = $"»Ì±â ({costPerDraw})";
+            drawButtonText.text = $"ë½‘ê¸° ({costPerDraw})";
     }
 
     void OnDestroy()
     {
-        // CurrencyManager ÀÌº¥Æ® ±¸µ¶ ÇØÁ¦ ÁÖ¼® Ã³¸®
+        // CurrencyManager ì´ë²¤íŠ¸ êµ¬ë… í•´ì œ ì£¼ì„ ì²˜ë¦¬
         // if (CurrencyManager.Instance != null)
         //     CurrencyManager.Instance.OnMoneyChanged -= UpdateMoneyUI;
     }
@@ -65,21 +66,21 @@ public class GachaUI : MonoBehaviour
             return;
         }
 
-        // ÀçÈ­ °Ë»ç ¹× Â÷°¨ ·ÎÁ÷ ÀÓ½Ã ÁÖ¼® Ã³¸®
+        // ì¬í™” ê²€ì‚¬ ë° ì°¨ê° ë¡œì§ ì„ì‹œ ì£¼ì„ ì²˜ë¦¬
         /*
         if (!CurrencyManager.Instance.CanSpend(costPerDraw))
         {
-            // ºÎÁ· UI Ã³¸®
-            Debug.Log("µ· ºÎÁ·");
-            // TODO: ºÎÁ· ¾È³» ÆË¾÷ µî
+            // ë¶€ì¡± UI ì²˜ë¦¬
+            Debug.Log("ëˆ ë¶€ì¡±");
+            // TODO: ë¶€ì¡± ì•ˆë‚´ íŒì—… ë“±
             return;
         }
 
-        // ÁöºÒ
+        // ì§€ë¶ˆ
         CurrencyManager.Instance.Spend(costPerDraw);
-        */
+        
 
-        // ½ÇÁ¦ »Ì±â
+        // ì‹¤ì œ ë½‘ê¸°
         var result = GachaManager.Instance.DrawFromPool(pool);
         if (result == null)
         {
@@ -87,24 +88,24 @@ public class GachaUI : MonoBehaviour
             return;
         }
 
-        // ÆË¾÷¿¡ ÅØ½ºÆ® ¼Â¾÷
-        if (popupTitleText != null) popupTitleText.text = $"{result.rarity} µî±Ş!";
-        if (popupDetailText != null) popupDetailText.text = $"¾ÆÀÌÅÛ: {result.itemId}\n±×·ì: {result.groupName}";
+        // íŒì—…ì— í…ìŠ¤íŠ¸ ì…‹ì—…
+        if (popupTitleText != null) popupTitleText.text = $"{result.rarity} ë“±ê¸‰!";
+        if (popupDetailText != null) popupDetailText.text = $"ì•„ì´í…œ: {result.itemId}\nê·¸ë£¹: {result.groupName}";
 
-        // ±âÁ¸ ¹Ì¸®º¸±â ÀÖÀ¸¸é ¹İÈ¯
+        // ê¸°ì¡´ ë¯¸ë¦¬ë³´ê¸° ìˆìœ¼ë©´ ë°˜í™˜
         if (currentPreviewInstance != null)
         {
             poolManager.ReleaseToPool(currentPreviewInstance);
             currentPreviewInstance = null;
         }
 
-        // ÇÁ¸®ÆÕÀÌ ÀÖÀ¸¸é Ç®¿¡¼­ ¹Ş¾Æ¿Í ÆË¾÷ ¹Ì¸®º¸±â À§Ä¡¿¡ ºÙÀÓ
+        // í”„ë¦¬íŒ¹ì´ ìˆìœ¼ë©´ í’€ì—ì„œ ë°›ì•„ì™€ íŒì—… ë¯¸ë¦¬ë³´ê¸° ìœ„ì¹˜ì— ë¶™ì„
         if (result.prefab != null && poolManager != null)
         {
             currentPreviewInstance = poolManager.GetFromPool(result.prefab);
             if (currentPreviewInstance != null)
             {
-                // ºÎ¸ğ¸¦ popupPreviewParent·Î ÇÏ°í ·ÎÄÃ º¯È¯ ÃÊ±âÈ­
+                // ë¶€ëª¨ë¥¼ popupPreviewParentë¡œ í•˜ê³  ë¡œì»¬ ë³€í™˜ ì´ˆê¸°í™”
                 currentPreviewInstance.transform.SetParent(popupPreviewParent, false);
                 currentPreviewInstance.transform.localPosition = Vector3.zero;
                 currentPreviewInstance.transform.localRotation = Quaternion.identity;
@@ -112,7 +113,7 @@ public class GachaUI : MonoBehaviour
             }
         }
 
-        // ÆË¾÷ ¿­±â
+        // íŒì—… ì—´ê¸°
         if (popupPanel != null) popupPanel.SetActive(true);
     }
 
@@ -126,4 +127,5 @@ public class GachaUI : MonoBehaviour
 
         if (popupPanel != null) popupPanel.SetActive(false);
     }
+    */
 }
