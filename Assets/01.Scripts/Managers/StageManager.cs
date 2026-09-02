@@ -113,18 +113,34 @@ public class StageManager : MonoBehaviour
         }
     }
 
-    // 승리 → 같은 스테이지 재시작
+    // 승리 → 재도전 OFF: 다음 스테이지 (마지막 스테이지는 무한 반복) / 재도전 ON: 현재 스테이지 반복
     private void HandleStageCleared()
     {
-        //if (!IsRetry)
-        //    GameManager.instance.PlayerData.currentStage++;
+        if (!IsRetry)
+        {
+            int maxStage = (stageDropTables != null && stageDropTables.Length > 0) ? stageDropTables.Length : 1;
+
+            if (CurrentStage < maxStage)
+            {
+                GameManager.instance.PlayerData.currentStage++;
+            }
+        }
+
         RestartAfterAsync(clearDelay).Forget();
     }
 
-    // 패배 → 같은 스테이지 재시작
+    // 패배 → 재도전 OFF: 이전 스테이지 후퇴 + 재도전 토글 자동 ON / 재도전 ON: 현재 스테이지 재시작
     private void HandleStageFailed()
     {
-        // TODO: 실패 시 이전 스테이지로 이동
+        if (!IsRetry)
+        {
+            // 1. 이전 스테이지로 후퇴 (최하 1스테이지 유지)
+            GameManager.instance.PlayerData.currentStage = Mathf.Max(1, CurrentStage - 1);
+
+            // 2. 무한 패배 루프 방지를 위한 재도전 토글 자동 ON
+            GameManager.instance.PlayerData.isRetryEnabled = true;
+        }
+
         RestartAfterAsync(failDelay).Forget();
     }
 
