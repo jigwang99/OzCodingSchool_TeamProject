@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class UpgradeManager : MonoBehaviour
+public class UpgradeManager : Singleton<UpgradeManager>
 {
     public event Action<UpgradeData, int> OnUpgradePurchased;
 
@@ -42,7 +42,7 @@ public class UpgradeManager : MonoBehaviour
     }
 
     // 데이터 타입에 따라 현재 플레이어의 레벨을 가져오는 메서드
-    private int GetCurrentLevel(UpgradeData data, PlayerData playerData)
+    public int GetCurrentLevel(UpgradeData data, PlayerData playerData)
     {
         switch (data.type)
         {

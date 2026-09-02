@@ -2947,7 +2947,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &372690407
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2965,7 +2965,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 173, y: -0.0000015208}
+  m_AnchoredPosition: {x: 148, y: 14}
   m_SizeDelta: {x: 122.9, y: 141.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &372690408
@@ -3011,7 +3011,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 372690409}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 689722903}
+        m_TargetAssemblyTypeName: BInventoryUI, Assembly-CSharp
+        m_MethodName: Toggle
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &372690409
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7069,7 +7081,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &675616891
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7133,7 +7145,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 675616893}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1598213014}
+        m_TargetAssemblyTypeName: BInventoryUI, Assembly-CSharp
+        m_MethodName: Toggle
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &675616893
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7324,6 +7348,7 @@ GameObject:
   - component: {fileID: 689722902}
   - component: {fileID: 689722901}
   - component: {fileID: 689722900}
+  - component: {fileID: 689722903}
   m_Layer: 5
   m_Name: MachineInventory
   m_TagString: Untagged
@@ -7349,7 +7374,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 278.04996, y: 203.25}
+  m_AnchoredPosition: {x: 750, y: 203.25}
   m_SizeDelta: {x: 285.6, y: 673.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &689722900
@@ -7420,6 +7445,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 689722898}
   m_CullTransparentMesh: 1
+--- !u!114 &689722903
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 689722898}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19b9e9817701594492a7a7d91fc81dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BInventoryUI
 --- !u!1 &703560476
 GameObject:
   m_ObjectHideFlags: 0
@@ -10657,22 +10694,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 1029779974}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5cf5ad17e6f5db649bdf32f602c9c2e0, type: 3}
+  m_Script: {fileID: 11500000, guid: 530c48ee60735a049bc4bb991982c279, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ObjectPoolManager
   objList:
   - {fileID: 8149903487868368475, guid: 7ae4269038cd0b645b68e9bb0944c75b, type: 3}
   - {fileID: 2016425223491809613, guid: c7cdb525d10e9c94498c0ef90d6b54e5, type: 3}
-  - {fileID: 1114754883058379977, guid: f198b5f721995db48acdaed7a2e59b70, type: 3}
   - {fileID: 3526033071412154784, guid: c7458b6379d9f9243bbf2b7ea0934fc0, type: 3}
   - {fileID: 6586815672531101423, guid: 5a6a66f4d13632c4d8a4441036bff008, type: 3}
+  - {fileID: 2600127515551963217, guid: 181e871bdc7e31945bfadaba88d17d2b, type: 3}
   - {fileID: 3765203601790461520, guid: e4408627b97f2704d9e6f0468847ff7e, type: 3}
+  - {fileID: 4526336577748075717, guid: 8c60ea9a627aa984e992699c649ef859, type: 3}
   - {fileID: 3869425297471406946, guid: 6dbc12fd501475849bbd8dd7680b63f6, type: 3}
   - {fileID: 2962959328816716769, guid: 9d913180844a6a54986485b7692a86b0, type: 3}
-  - {fileID: 1314006750736943011, guid: 88395d36c50aae24b8f589320e25bd74, type: 3}
-  - {fileID: 2600127515551963217, guid: 181e871bdc7e31945bfadaba88d17d2b, type: 3}
-  - {fileID: 4526336577748075717, guid: 8c60ea9a627aa984e992699c649ef859, type: 3}
   - {fileID: 22180107991044116, guid: da21e7c30bdddff42863b01a386137ba, type: 3}
+  - {fileID: 1314006750736943011, guid: 88395d36c50aae24b8f589320e25bd74, type: 3}
 --- !u!1 &1030168539
 GameObject:
   m_ObjectHideFlags: 0
@@ -10794,7 +10830,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CustomerSpawn
   customers:
-  - {fileID: 0}
+  - {fileID: 8149903487868368475, guid: 7ae4269038cd0b645b68e9bb0944c75b, type: 3}
+  - {fileID: 2016425223491809613, guid: c7cdb525d10e9c94498c0ef90d6b54e5, type: 3}
   spawnPoint: {fileID: 1196567376}
   seatManager: {fileID: 851824477}
   waitingCustomers: []
@@ -11181,7 +11218,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1076684630}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 689722903}
+        m_TargetAssemblyTypeName: BInventoryUI, Assembly-CSharp
+        m_MethodName: Toggle
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1076684630
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14196,7 +14245,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1370652568}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1598213014}
+        m_TargetAssemblyTypeName: BInventoryUI, Assembly-CSharp
+        m_MethodName: Toggle
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1370652568
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16119,6 +16180,7 @@ GameObject:
   - component: {fileID: 1598213011}
   - component: {fileID: 1598213010}
   - component: {fileID: 1598213013}
+  - component: {fileID: 1598213014}
   m_Layer: 5
   m_Name: FishInventory
   m_TagString: Untagged
@@ -16149,7 +16211,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 699, y: 203.25}
+  m_AnchoredPosition: {x: 650, y: 203.25}
   m_SizeDelta: {x: 556.3, y: 673.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1598213010
@@ -16238,6 +16300,18 @@ MonoBehaviour:
   epicFishNum: 
   nowSelectRarity: 0
   fishUI: []
+--- !u!114 &1598213014
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1598213008}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19b9e9817701594492a7a7d91fc81dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BInventoryUI
 --- !u!1 &1601723780
 GameObject:
   m_ObjectHideFlags: 0
@@ -18742,7 +18816,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 1.7
+  orthographic size: 1.74
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
@@ -18767,7 +18841,7 @@ Transform:
   m_GameObject: {fileID: 1955325676}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 8.41, y: 0.42, z: -20}
+  m_LocalPosition: {x: 8.3, y: 0.47, z: -20}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

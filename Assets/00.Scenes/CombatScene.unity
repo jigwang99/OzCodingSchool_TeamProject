@@ -163,6 +163,52 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &397242958
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 397242960}
+  - component: {fileID: 397242959}
+  m_Layer: 0
+  m_Name: FishDropSystem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &397242959
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 397242958}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03210f572d3c70849b7c7028cc71fee8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FishDropSystem
+  combatManager: {fileID: 88393175}
+  defaultDropTable: {fileID: 11400000, guid: e1bfc21c001ac58498f7a46e13e72d3d, type: 2}
+--- !u!4 &397242960
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 397242958}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &547176847
 GameObject:
   m_ObjectHideFlags: 0
@@ -492,6 +538,10 @@ MonoBehaviour:
   playerSpawnPoint: {fileID: 772105239}
   clearDelay: 2
   failDelay: 2
+  fishDropSystem: {fileID: 397242959}
+  stageDropTables:
+  - {fileID: 11400000, guid: e1bfc21c001ac58498f7a46e13e72d3d, type: 2}
+  fallbackDropTable: {fileID: 11400000, guid: e1bfc21c001ac58498f7a46e13e72d3d, type: 2}
 --- !u!4 &1323060462
 Transform:
   m_ObjectHideFlags: 0
@@ -730,6 +780,51 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!1 &1762081858
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1762081860}
+  - component: {fileID: 1762081859}
+  m_Layer: 0
+  m_Name: FishInventoryAdapter
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1762081859
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1762081858}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d19218c54d1e1d84f82aa38ca875e3df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FishInventoryAdapter
+  fishDropSystem: {fileID: 397242959}
+--- !u!4 &1762081860
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1762081858}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1768160941
 GameObject:
   m_ObjectHideFlags: 0
@@ -796,12 +891,12 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: -1
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -7325795301292056700, guid: 557b36292c14a4943b55424fab1b3850, type: 3}
+  m_Sprite: {fileID: -7325795301292056700, guid: c8b46b2ea7e939b4cbb2683834887e64, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 13.65, y: 7.68}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -832,7 +927,7 @@ GameObject:
   - component: {fileID: 1955972193}
   - component: {fileID: 1955972194}
   m_Layer: 0
-  m_Name: ObjectPoolManager
+  m_Name: CombatObjectPoolManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -864,7 +959,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c5a14d75479fc934bb71e24412986a8c, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ObjectPoolManager
+  m_EditorClassIdentifier: Assembly-CSharp::CombatObjectPoolManager
   isDontDestroy: 0
   poolSize: 5
   objList:
@@ -1052,3 +1147,5 @@ SceneRoots:
   - {fileID: 547176849}
   - {fileID: 1968969341}
   - {fileID: 1955972193}
+  - {fileID: 397242960}
+  - {fileID: 1762081860}
