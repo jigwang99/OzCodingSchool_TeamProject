@@ -1,123 +1,124 @@
-using System.Collections;
+ç™¤using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
 public class GachaUI : MonoBehaviour
 {
-    //[Header("Gacha / Pool")]
-    //public GachaPool pool; // inspector¿¡¼­ ¸µÅ©
-    //public PoolManager poolManager; // inspector¿¡ PoolManager¸¦ µå·¡±×ÇÏ°Å³ª ÀÚµ¿À¸·Î Ã£À½
+    [Header("Gacha / Pool")]
+    public GachaPool pool; // inspectorÂ—ÂÂ„Âœ ï§ÂÂ
+    public PoolManager poolManager; // inspectorÂ—Â PoolManagerç‘œ Â“ÂœÂÂ˜æ´¹ëª…Â•Â˜å«„ê³•Â‚Â˜ ÂÂÂ™Âœì‡°Âœ ï§¡ì– ÂÂŒ
 
-    //[Header("Cost")]
-    //public int costPerDraw = 10;
+    [Header("Cost")]
+    public int costPerDraw = 10;
 
-    //[Header("UI")]
-    //public Button drawButton;
-    //public TMP_Text moneyText;
-    //public TMP_Text drawButtonText; // ¹öÆ° ÅØ½ºÆ®¿¡ ºñ¿ë Ç¥½Ã(¼±ÅÃ)
-    //public GameObject popupPanel; // ÆË¾÷ ÆĞ³Î (ºñÈ°¼ºÈ­ »óÅÂ¿¡¼­ »ç¿ë)
-    //public TMP_Text popupTitleText;
-    //public TMP_Text popupDetailText;
-    //public Transform popupPreviewParent; // ÆË¾÷¿¡ Ç¥½ÃÇÒ prefabÀ» ºÎ¸ğ·Î µÑ Transform (ºó GameObject)
-    //public Button popupCloseButton;
+    [Header("UI")]
+    public Button drawButton;
+    public TMP_Text moneyText;
+    public TMP_Text drawButtonText; // è¸°Â„ÂŠ Â…ÂÂŠã…½ÂŠëª„Â—Â é®Â„Âš Â‘ÂœÂ‹Âœ(Â„ÂƒÂ)
+    public GameObject popupPanel; // ÂŒÂÂ—Â… ÂŒâ‘¤Â„Â (é®Â„Â™ÂœÂ„ê¹ŠÂ™Â” ÂƒÂÂƒÂœÂ—ÂÂ„Âœ Â‚ÑŠÂš)
+    public TMP_Text popupTitleText;
+    public TMP_Text popupDetailText;
+    public Transform popupPreviewParent; // ÂŒÂÂ—Â…Â—Â Â‘ÂœÂ‹ÂœÂ• prefabÂÂ„ éºÂ€ï§â‘¤Âœ Â‘Â˜ Transform (é®Âˆ GameObject)
+    public Button popupCloseButton;
 
-    //private GameObject currentPreviewInstance;
+    private GameObject currentPreviewInstance;
+    /*
+    void Start()
+    {
+        if (poolManager == null)
+        {
+            poolManager = FindObjectOfType<PoolManager>();
+            if (poolManager == null) Debug.LogWarning("PoolManager not found in scene. Assign in inspector.");
+        }
 
-    //void Start()
-    //{
-    //    if (poolManager == null)
-    //    {
-    //        poolManager = FindObjectOfType<PoolManager>();
-    //        if (poolManager == null) Debug.LogWarning("PoolManager not found in scene. Assign in inspector.");
-    //    }
+        drawButton.onClick.AddListener(OnDrawButton);
+        if (popupCloseButton != null) popupCloseButton.onClick.AddListener(ClosePopup);
+        CurrencyManager.Instance.OnMoneyChanged += UpdateMoneyUI;
 
-    //    drawButton.onClick.AddListener(OnDrawButton);
-    //    if (popupCloseButton != null) popupCloseButton.onClick.AddListener(ClosePopup);
-    //    CurrencyManager.Instance.OnMoneyChanged += UpdateMoneyUI;
+        UpdateMoneyUI(CurrencyManager.Instance.currentMoney);
 
-    //    UpdateMoneyUI(CurrencyManager.Instance.currentMoney);
+        if (drawButtonText != null)
+            drawButtonText.text = $"ï§’Â‘æ¹² ({costPerDraw})";
+    }
 
-    //    if (drawButtonText != null)
-    //        drawButtonText.text = $"»Ì±â ({costPerDraw})";
-    //}
+    void OnDestroy()
+    {
+        if (CurrencyManager.Instance != null)
+            CurrencyManager.Instance.OnMoneyChanged -= UpdateMoneyUI;
+    }
 
-    //void OnDestroy()
-    //{
-    //    if (CurrencyManager.Instance != null)
-    //        CurrencyManager.Instance.OnMoneyChanged -= UpdateMoneyUI;
-    //}
+    void UpdateMoneyUI(int amount)
+    {
+        if (moneyText != null)
+            moneyText.text = $"Money: {amount}";
+    }
 
-    //void UpdateMoneyUI(int amount)
-    //{
-    //    if (moneyText != null)
-    //        moneyText.text = $"Money: {amount}";
-    //}
+    public void OnDrawButton()
+    {
+        if (pool == null)
+        {
+            Debug.LogWarning("GachaUI: pool is null");
+            return;
+        }
 
-    //public void OnDrawButton()
-    //{
-    //    if (pool == null)
-    //    {
-    //        Debug.LogWarning("GachaUI: pool is null");
-    //        return;
-    //    }
+        if (!CurrencyManager.Instance.CanSpend(costPerDraw))
+        {
+            // éºÂ€è­° UI ï§£Â˜ç”±
+            Debug.Log("Âˆ éºÂ€è­°");
+            // TODO: éºÂ€è­° Â•ÂˆÂ‚ ÂŒÂÂ—Â… Â“
+            return;
+        }
 
-    //    if (!CurrencyManager.Instance.CanSpend(costPerDraw))
-    //    {
-    //        // ºÎÁ· UI Ã³¸®
-    //        Debug.Log("µ· ºÎÁ·");
-    //        // TODO: ºÎÁ· ¾È³» ÆË¾÷ µî
-    //        return;
-    //    }
+        // ï§Â€éºÂˆ
+        CurrencyManager.Instance.Spend(costPerDraw);
 
-    //    // ÁöºÒ
-    //    CurrencyManager.Instance.Spend(costPerDraw);
+        // Â‹ã…¼Âœ ï§’Â‘æ¹²
+        var result = GachaManager.Instance.DrawFromPool(pool);
+        if (result == null)
+        {
+            Debug.LogWarning("GachaUI: draw result is null");
+            return;
+        }
 
-    //    // ½ÇÁ¦ »Ì±â
-    //    var result = GachaManager.Instance.DrawFromPool(pool);
-    //    if (result == null)
-    //    {
-    //        Debug.LogWarning("GachaUI: draw result is null");
-    //        return;
-    //    }
+        // ÂŒÂÂ—Â…Â—Â Â…ÂÂŠã…½ÂŠ Â…Â‹Â—Â…
+        if (popupTitleText != null) popupTitleText.text = $"{result.rarity} Â“ê¹ƒÂ‰!";
+        if (popupDetailText != null) popupDetailText.text = $"Â•Â„ÂëŒ„Â…Âœ: {result.itemId}\næ´¹ëªƒï¼™: {result.groupName}";
 
-    //    // ÆË¾÷¿¡ ÅØ½ºÆ® ¼Â¾÷
-    //    if (popupTitleText != null) popupTitleText.text = $"{result.rarity} µî±Ş!";
-    //    if (popupDetailText != null) popupDetailText.text = $"¾ÆÀÌÅÛ: {result.itemId}\n±×·ì: {result.groupName}";
+        // æ¹²ê³—ã€ˆ èª˜ëªƒâ”è¹‚ë‹¿ë¦° ÂÂˆÂœì‡°ãˆƒ è«›Â˜Â™Â˜
+        if (currentPreviewInstance != null)
+        {
+            poolManager.ReleaseToPool(currentPreviewInstance);
+            currentPreviewInstance = null;
+        }
 
-    //    // ±âÁ¸ ¹Ì¸®º¸±â ÀÖÀ¸¸é ¹İÈ¯
-    //    if (currentPreviewInstance != null)
-    //    {
-    //        poolManager.ReleaseToPool(currentPreviewInstance);
-    //        currentPreviewInstance = null;
-    //    }
+        // Â”Â„ç”±Ñ‹ÂŒë±€Â ÂÂˆÂœì‡°ãˆƒ Â’Â€Â—ÂÂ„Âœ è«›Â›Â•Â„Â™Â€ ÂŒÂÂ—Â… èª˜ëªƒâ”è¹‚ë‹¿ë¦° ÂœÂ„ç§»Â˜Â—Â éºÂ™ÂÂ„
+        if (result.prefab != null && poolManager != null)
+        {
+            currentPreviewInstance = poolManager.GetFromPool(result.prefab);
+            if (currentPreviewInstance != null)
+            {
+                // éºÂ€ï§â‘¤ï¿½ popupPreviewParentæ¿¡Âœ Â•Â˜æ€¨ æ¿¡Âœè€Œ è¹‚Â€Â™Â˜ ç¥Âˆæ¹²ê³ Â™Â”
+                currentPreviewInstance.transform.SetParent(popupPreviewParent, false);
+                currentPreviewInstance.transform.localPosition = Vector3.zero;
+                currentPreviewInstance.transform.localRotation = Quaternion.identity;
+                currentPreviewInstance.transform.localScale = Vector3.one;
+            }
+        }
 
-    //    // ÇÁ¸®ÆÕÀÌ ÀÖÀ¸¸é Ç®¿¡¼­ ¹Ş¾Æ¿Í ÆË¾÷ ¹Ì¸®º¸±â À§Ä¡¿¡ ºÙÀÓ
-    //    if (result.prefab != null && poolManager != null)
-    //    {
-    //        currentPreviewInstance = poolManager.GetFromPool(result.prefab);
-    //        if (currentPreviewInstance != null)
-    //        {
-    //            // ºÎ¸ğ¸¦ popupPreviewParent·Î ÇÏ°í ·ÎÄÃ º¯È¯ ÃÊ±âÈ­
-    //            currentPreviewInstance.transform.SetParent(popupPreviewParent, false);
-    //            currentPreviewInstance.transform.localPosition = Vector3.zero;
-    //            currentPreviewInstance.transform.localRotation = Quaternion.identity;
-    //            currentPreviewInstance.transform.localScale = Vector3.one;
-    //        }
-    //    }
+        // ÂŒÂÂ—Â… Â—ë‹¿ë¦°
+        if (popupPanel != null) popupPanel.SetActive(true);
+    }
 
-    //    // ÆË¾÷ ¿­±â
-    //    if (popupPanel != null) popupPanel.SetActive(true);
-    //}
+    public void ClosePopup()
+    {
+        if (currentPreviewInstance != null && poolManager != null)
+        {
+            poolManager.ReleaseToPool(currentPreviewInstance);
+            currentPreviewInstance = null;
+        }
 
-    //public void ClosePopup()
-    //{
-    //    if (currentPreviewInstance != null && poolManager != null)
-    //    {
-    //        poolManager.ReleaseToPool(currentPreviewInstance);
-    //        currentPreviewInstance = null;
-    //    }
-
-    //    if (popupPanel != null) popupPanel.SetActive(false);
-    //}
+        if (popupPanel != null) popupPanel.SetActive(false);
+    }
+    */
 }

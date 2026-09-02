@@ -1,6 +1,5 @@
 ﻿using System;
 using UnityEngine;
-using static UnityEngine.AdaptivePerformance.Provider.AdaptivePerformanceSubsystemDescriptor;
 
 public class UnitAttack : MonoBehaviour
 {
@@ -35,5 +34,10 @@ public class UnitAttack : MonoBehaviour
     public void SetAttackDamage(float value)
     {
         attackDamage = Mathf.Max(0f, value);
+    }
+    private void ApplyPlayerStats()
+    {
+        int lv = GameManager.instance.PlayerData.weaponLevel;
+        SetAttackDamage(lv * 5);
     }
 }
