@@ -22,7 +22,7 @@ public class SaveManager : Singleton<SaveManager>
         //확인용 ▼
         data.lastSaveTime = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
         //복원 및 사용 ▼
-        data.lastSaveTime = System.DateTime.Now.ToBinary().ToString();
+        //data.lastSaveTime = System.DateTime.Now.ToBinary().ToString();
 
         string json = JsonUtility.ToJson(data, true);
         File.WriteAllText(saveFilePath, json);
