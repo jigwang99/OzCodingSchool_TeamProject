@@ -12,6 +12,34 @@ MonoBehaviour:
   m_Script: {fileID: 0}
   m_Name: GachaPool_
   m_EditorClassIdentifier: Assembly-CSharp:PixelRestaurant.Data:GachaPool
-  poolName: 
-  items: []
-  defaultResultPrefab: {fileID: 0}
+  poolName: Weapon
+  items:
+  - itemId: Weapon_1
+    itemName: Common_1
+    group: 0
+    rarity: 60
+    grade: 1
+    weight: 7
+    displayPrefab: {fileID: 7180142148098103156, guid: a0374b206ca14a146a2d07956c27697b, type: 3}
+  - itemId: Weapon_2
+    itemName: Common_2
+    group: 0
+    rarity: 60
+    grade: 2
+    weight: 3
+    displayPrefab: {fileID: 2019878326564564083, guid: 7f5431e06a26de34eba5b7d7728e5e8e, type: 3}
+  - itemId: Weapon_3
+    itemName: Rare
+    group: 0
+    rarity: 30
+    grade: 1
+    weight: 9
+    displayPrefab: {fileID: 4854769383028091202, guid: 86d80025f289f144792b71289fdd0da2, type: 3}
+  - itemId: Weapon_4
+    itemName: Rare
+    group: 0
+    rarity: 30
+    grade: 2
+    weight: 1
+    displayPrefab: {fileID: 1963650491698709681, guid: c44372891c21b334583c0828906631e4, type: 3}
+  defaultResultPrefab: {fileID: 1548460931398171292, guid: 84b1f43ca96833c4687a62032d9b8fbb, type: 3}
