@@ -1,4 +1,4 @@
-﻿using System.Collections;
+癤using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -6,8 +6,8 @@ using TMPro;
 public class GachaUI : MonoBehaviour
 {
     [Header("Gacha / Pool")]
-    public GachaPool pool; // inspector에서 링크
-    public PoolManager poolManager; // inspector에 PoolManager를 드래그하거나 자동으로 찾음
+    public GachaPool pool; // inspector 留
+    public PoolManager poolManager; // inspector PoolManager瑜 洹명嫄곕 쇰 李얠
 
     [Header("Cost")]
     public int costPerDraw = 10;
@@ -15,11 +15,11 @@ public class GachaUI : MonoBehaviour
     [Header("UI")]
     public Button drawButton;
     public TMP_Text moneyText;
-    public TMP_Text drawButtonText; // 버튼 텍스트에 비용 표시(선택)
-    public GameObject popupPanel; // 팝업 패널 (비활성화 상태에서 사용)
+    public TMP_Text drawButtonText; // 踰 ㅽ몄 鍮 ()
+    public GameObject popupPanel; //  ⑤ (鍮깊  ъ)
     public TMP_Text popupTitleText;
     public TMP_Text popupDetailText;
-    public Transform popupPreviewParent; // 팝업에 표시할 prefab을 부모로 둘 Transform (빈 GameObject)
+    public Transform popupPreviewParent; //   prefab 遺紐⑤  Transform (鍮 GameObject)
     public Button popupCloseButton;
 
     private GameObject currentPreviewInstance;
@@ -39,7 +39,7 @@ public class GachaUI : MonoBehaviour
         UpdateMoneyUI(CurrencyManager.Instance.currentMoney);
 
         if (drawButtonText != null)
-            drawButtonText.text = $"뽑기 ({costPerDraw})";
+            drawButtonText.text = $"戮湲 ({costPerDraw})";
     }
 
     void OnDestroy()
@@ -64,16 +64,16 @@ public class GachaUI : MonoBehaviour
 
         if (!CurrencyManager.Instance.CanSpend(costPerDraw))
         {
-            // 부족 UI 처리
-            Debug.Log("돈 부족");
-            // TODO: 부족 안내 팝업 등
+            // 遺議 UI 泥由
+            Debug.Log(" 遺議");
+            // TODO: 遺議   
             return;
         }
 
-        // 지불
+        // 吏遺
         CurrencyManager.Instance.Spend(costPerDraw);
 
-        // 실제 뽑기
+        // ㅼ 戮湲
         var result = GachaManager.Instance.DrawFromPool(pool);
         if (result == null)
         {
@@ -81,24 +81,24 @@ public class GachaUI : MonoBehaviour
             return;
         }
 
-        // 팝업에 텍스트 셋업
-        if (popupTitleText != null) popupTitleText.text = $"{result.rarity} 등급!";
-        if (popupDetailText != null) popupDetailText.text = $"아이템: {result.itemId}\n그룹: {result.groupName}";
+        //  ㅽ 
+        if (popupTitleText != null) popupTitleText.text = $"{result.rarity} 깃!";
+        if (popupDetailText != null) popupDetailText.text = $"댄: {result.itemId}\n洹몃９: {result.groupName}";
 
-        // 기존 미리보기 있으면 반환
+        // 湲곗〈 誘몃━蹂닿린 쇰㈃ 諛
         if (currentPreviewInstance != null)
         {
             poolManager.ReleaseToPool(currentPreviewInstance);
             currentPreviewInstance = null;
         }
 
-        // 프리팹이 있으면 풀에서 받아와 팝업 미리보기 위치에 붙임
+        // 由ы뱀 쇰㈃  諛  誘몃━蹂닿린 移 遺
         if (result.prefab != null && poolManager != null)
         {
             currentPreviewInstance = poolManager.GetFromPool(result.prefab);
             if (currentPreviewInstance != null)
             {
-                // 부모를 popupPreviewParent로 하고 로컬 변환 초기화
+                // 遺紐⑤� popupPreviewParent濡 怨 濡而 蹂 珥湲고
                 currentPreviewInstance.transform.SetParent(popupPreviewParent, false);
                 currentPreviewInstance.transform.localPosition = Vector3.zero;
                 currentPreviewInstance.transform.localRotation = Quaternion.identity;
@@ -106,7 +106,7 @@ public class GachaUI : MonoBehaviour
             }
         }
 
-        // 팝업 열기
+        //  닿린
         if (popupPanel != null) popupPanel.SetActive(true);
     }
 
