@@ -1,51 +1,41 @@
-using TMPro;
+ï»¿using TMPro;
 using UnityEngine;
 
-public class FacilityManager : MonoBehaviour //½Ã¼³ ¾÷±×·¹ÀÌµå, °¡±¸ ¹èÄ¡, Á÷¿ø °í¿ë, 
+public class FacilityManager : Singleton<FacilityManager> //ì‹œì„¤ ì—…ê·¸ë ˆì´ë“œ, ê°€êµ¬ ë°°ì¹˜, ì§ì› ê³ ìš©, 
 {
-    //°æ¿µ ¿ä¸®°í¾çÀÌ 1¸¶¸®(+ Á÷¿ø °í¾çÀÌ ¾÷±×·¹ÀÌµå)
+    //ê²½ì˜ ìš”ë¦¬ê³ ì–‘ì´ 1ë§ˆë¦¬(+ ì§ì› ê³ ì–‘ì´ ì—…ê·¸ë ˆì´ë“œ)
 
-    //- ¿ä¸®°í¾çÀÌ ¾÷±×·¹ÀÌµå(¿ä¸® ÇØ±Ý)
-    //- Á÷¿ø°í¿ë(ÃÊ´ç °ñµå »ý»ê·® Áõ°¡)
-    //- °¡°Ô Å©±â Áõ°¡(±¸¸Û°¡°Ô, ÀÏ¹Ý »ó°¡, Å« ½Ä´ç)
-    //¡æ °¡±¸ ¹èÄ¡ Ä­ Áõ°¡(ex ±¸¸Û°¡°Ô¡æ°¡±¸ ¹èÄ¡ Ä­ 1°³),
-    //Á÷¿ø°í¿ë ¾÷±×·¹ÀÌµå ÇØ±ÝÁ¶°Ç,
-    //¿ä¸®°í¾çÀÌ ¾÷±×·¹ÀÌµå ÇØ±ÝÁ¶°Ç(ex °¡°è 2´Ü°è ÀÌ»ó½Ã Á÷¿ø ¾÷±×·¹ÀÌµå 5·¹º§°¡´É)
-    //- °¡°Ô¸¦ ¾÷±×·¹ÀÌµå ÇÒ °æ¿ì ´Ù¾çÇÑ ¼Õ´Ô µîÀå(Æ¯º°ÇÑ ¼Õ´Ô µîÀå½Ã nÃÊ°£ °ñµå»ý»ê·® Áõ°¡)
+    //- ìš”ë¦¬ê³ ì–‘ì´ ì—…ê·¸ë ˆì´ë“œ(ìš”ë¦¬ í•´ê¸ˆ)
+    //- ì§ì›ê³ ìš©(ì´ˆë‹¹ ê³¨ë“œ ìƒì‚°ëŸ‰ ì¦ê°€)
+    //- ê°€ê²Œ í¬ê¸° ì¦ê°€(êµ¬ë©ê°€ê²Œ, ì¼ë°˜ ìƒê°€, í° ì‹ë‹¹)
+    //â†’ ê°€êµ¬ ë°°ì¹˜ ì¹¸ ì¦ê°€(ex êµ¬ë©ê°€ê²Œâ†’ê°€êµ¬ ë°°ì¹˜ ì¹¸ 1ê°œ),
+    //ì§ì›ê³ ìš© ì—…ê·¸ë ˆì´ë“œ í•´ê¸ˆì¡°ê±´,
+    //ìš”ë¦¬ê³ ì–‘ì´ ì—…ê·¸ë ˆì´ë“œ í•´ê¸ˆì¡°ê±´(ex ê°€ê³„ 2ë‹¨ê³„ ì´ìƒì‹œ ì§ì› ì—…ê·¸ë ˆì´ë“œ 5ë ˆë²¨ê°€ëŠ¥)
+    //- ê°€ê²Œë¥¼ ì—…ê·¸ë ˆì´ë“œ í•  ê²½ìš° ë‹¤ì–‘í•œ ì†ë‹˜ ë“±ìž¥(íŠ¹ë³„í•œ ì†ë‹˜ ë“±ìž¥ì‹œ nì´ˆê°„ ê³¨ë“œìƒì‚°ëŸ‰ ì¦ê°€)
 
-    public static FacilityManager instance;
+    private PlayerData data => GameManager.instance.PlayerData;
 
-    public int ChefCatLevel { get; set; }   //¼ÎÇÁ°í¾çÀÌ
-    public int CookCatNum { get; set; }      //Á÷¿ø°í¾çÀÌ
-    public int RestaurantLevel { get; set; } //½Ä´ç ·¹º§
-    public int[] FoodMachine { get; set; }   //°¡±¸
+    // ì €ìž¥ ëŒ€ìƒ ìƒíƒœ â†’ PlayerData í”„ë¡ì‹œ
+    public int ChefCatLevel { get => data.chefCatLevel; set => data.chefCatLevel = value; }
+    public int CookCatNum { get => data.cookCatNum; set => data.cookCatNum = value; }
+    public int RestaurantLevel { get => data.restaurantLevel; set => data.restaurantLevel = value; }
+    public int[] FoodMachine => data.foodMachine;
 
-    int Gold;
-    public TextMeshProUGUI goldText;
+    // ì—…ê·¸ë ˆì´ë“œ íš¨ê³¼ê°’ â†’ PlayerData í”„ë¡ì‹œ (ê¸°ì¡´ ì´ë¦„ ìœ ì§€ â†’ ì™¸ë¶€ í˜¸ì¶œë¶€ ì•ˆ ê¹¨ì§)
+    public float makeSpeed { get => data.makeSpeed; set => data.makeSpeed = value; }
+    public float goldBonus { get => data.goldBonus; set => data.goldBonus = value; }
+    public float specialChance { get => data.specialChance; set => data.specialChance = value; }
+    public float makeDouble { get => data.makeDouble; set => data.makeDouble = value; }
 
-    public float makeSpeed;
-    public float goldBonus;
-    public float specialChance;
-    public float makeDouble;
+    //ChefCatLevel = PlayerPrefs.GetInt("chefCatLevel", 1);
+    //CookCatNum = PlayerPrefs.GetInt("cookCatNum", 0);
+    //RestaurantLevel = PlayerPrefs.GetInt("restaurantLevel", 1);
 
-    private void Awake()
-    {
-        if (instance == null)
-            instance = this;
-        else
-            Destroy(gameObject);
-        DontDestroyOnLoad(gameObject);
-
-        //ChefCatLevel = PlayerPrefs.GetInt("chefCatLevel", 1);
-        //CookCatNum = PlayerPrefs.GetInt("cookCatNum", 0);
-        //RestaurantLevel = PlayerPrefs.GetInt("restaurantLevel", 1);
-
-        //FoodMachine = new int[5];
-        //for (int i = 0; i < 5; i++)
-        //{
-        //    FoodMachine[i] = PlayerPrefs.GetInt($"foodMachine{i}", 0);
-        //}
-    }
+    //FoodMachine = new int[5];
+    //for (int i = 0; i < 5; i++)
+    //{
+    //    FoodMachine[i] = PlayerPrefs.GetInt($"foodMachine{i}", 0);
+    //}
 
     //private void OnApplicationQuit()
     //{
@@ -74,23 +64,20 @@ public class FacilityManager : MonoBehaviour //½Ã¼³ ¾÷±×·¹ÀÌµå, °¡±¸ ¹èÄ¡, Á÷¿ø 
 
     public void OnClickMakeDoubleBtn()
     {
-        makeDouble += 1;
+        data.makeDouble += 1;
         ProductionManager.instance.StartChef2();    
     }
     public void GetGold(int foodPrice, bool special)
     {
-        if (Random.Range(0f,1f) < FacilityManager.instance.specialChance)
+        if (Random.Range(0f, 1f) < specialChance)
         {
-            Debug.Log("½ºÆä¼È ¼º°ø!");
+            Debug.Log("ìŠ¤íŽ˜ì…œ ì„±ê³µ!");
             special = true;
         }
 
-        int addGold = (int)(foodPrice * (1f + FacilityManager.instance.goldBonus));
+        int addGold = (int)(foodPrice * (1f + goldBonus));
+        if (special) addGold *= 2;                 // ê¸°ì¡´ 2ë°° ë¡œì§ ìœ ì§€
 
-        Gold += addGold;
-        if (special)
-            Gold += addGold;
-
-        goldText.text = Gold.ToString();
+        CurrencyManager.instance.AddGold(addGold);  // ë¡œì»¬ ëˆ„ì  ëŒ€ì‹  ê²Œì´íŠ¸ í†µê³¼
     }
 }

@@ -1,14 +1,7 @@
-using System.Collections;
+Ôªøusing System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
-
-enum FishRare
-{
-    Common,
-    Rare,
-    Unique,
-    Epic,
-}
 
 public class ProductionManager : MonoBehaviour
 {
@@ -16,11 +9,13 @@ public class ProductionManager : MonoBehaviour
 
     public MakeFood chef1;
     public MakeFood chef2;
-
     public Food[] foods;
 
-    Queue<Customer> orderQueue = new Queue<Customer>();
+    [Header("ÏöîÎ¶¨Ìï† Îì±Í∏â ÏÑ†ÌÉù")]
+    [SerializeField] private TextMeshProUGUI selectRarityText; // ÏÑ†ÌÉù Îì±Í∏â ÌëúÏãú (ÏÑ†ÌÉù)
+    public int SelectedRarity { get; private set; } = 0;       // Íµ¨ nowSelectRarity
 
+    Queue<Customer> orderQueue = new Queue<Customer>();
     bool chef1Cooking = false;
     bool chef2Cooking = false;
 
@@ -28,181 +23,108 @@ public class ProductionManager : MonoBehaviour
 
     private void Awake()
     {
-        if (instance == null)
-            instance = this;
-        else
-            Destroy(gameObject);
-
+        if (instance == null) instance = this;
+        else Destroy(gameObject);
         DontDestroyOnLoad(gameObject);
+    }
+
+    // Îì±Í∏â ÏÑ†ÌÉù Î≤ÑÌäº ‚Üí Ïó¨Í∏∞Î°ú Ïû¨Ïó∞Í≤∞ (Íµ¨ FishInventoryManager.SelectXxx)
+    public void SelectCommon() => SetSelected(0, "Common");
+    public void SelectRare() => SetSelected(1, "Rare");
+    public void SelectUnique() => SetSelected(2, "Unique");
+    public void SelectEpic() => SetSelected(3, "Epic");
+
+    private void SetSelected(int rarity, string label)
+    {
+        SelectedRarity = rarity;
+        if (selectRarityText != null) selectRarityText.text = label;
     }
 
     public void OrderFood(Customer customer)
     {
-        FishInventoryManager.instance.UpdateAllText();
+        orderQueue.Enqueue(customer);   // UpdateAllText Ìò∏Ï∂ú Ï†úÍ±∞ (FishCountViewÍ∞Ä ÏûêÎèô Í∞±Ïã†)
 
-        orderQueue.Enqueue(customer);
-
-        // 1π¯ ø‰∏ÆªÁ ∫ÒæÓ¿÷¿∏∏È Ω√¿€
         if (!chef1Cooking)
             StartCoroutine(CookQueue(chef1, 1));
 
-        // 2π¯ ø‰∏ÆªÁ ∫ÒæÓ¿÷¿∏∏È Ω√¿€
-        if (FacilityManager.instance.makeDouble == 1)
-            if (!chef2Cooking)
-                StartCoroutine(CookQueue(chef2, 2));
+        if (FacilityManager.instance.makeDouble == 1 && !chef2Cooking)
+            StartCoroutine(CookQueue(chef2, 2));
     }
 
     IEnumerator CookQueue(MakeFood chef, int chefNumber)
     {
-        if (chefNumber == 1)
-            chef1Cooking = true;
-        else
-            chef2Cooking = true;
+        if (chefNumber == 1) chef1Cooking = true;
+        else chef2Cooking = true;
 
         while (true)
         {
-            // ¡÷πÆ æ¯¿∏∏È ¡æ∑·
-            if (orderQueue.Count == 0)
-                break;
+            if (orderQueue.Count == 0) break;
 
             int usedFishCount = 0;
             int cookRarity = 0;
 
-            // π∞∞Ì±‚∞° ª˝±Ê ∂ß±Ó¡ˆ ±‚¥Ÿ∏≤
             while (usedFishCount == 0)
             {
-                int selectRarity = FishInventoryManager.instance.nowSelectRarity;
-
-                usedFishCount = UseFish(selectRarity, out cookRarity);
+                usedFishCount = UseFish(SelectedRarity, out cookRarity);
 
                 if (usedFishCount == 0)
                 {
                     yield return null;
-
-                    // ±‚¥Ÿ∏Æ¥¬ µøæ» ¥Ÿ∏• ø‰∏ÆªÁ∞°
-                    // ¡÷πÆ¿ª ¿¸∫Œ √≥∏Æ«ﬂ¿ª ºˆµµ ¿÷¿Ω
-                    if (orderQueue.Count == 0)
-                        break;
+                    if (orderQueue.Count == 0) break;
                 }
             }
 
-            if (orderQueue.Count == 0)
-                break;
-
-            if (usedFishCount == 0)
-                continue;
+            if (orderQueue.Count == 0) break;
+            if (usedFishCount == 0) continue;
 
             Customer customer = orderQueue.Dequeue();
 
-            int foodIndex =
-                foodStartIndex[cookRarity] + usedFishCount - 1;
-
-            if (foodIndex < 0 || foodIndex >= foods.Length)
-            {
-                continue;
-            }
+            int foodIndex = foodStartIndex[cookRarity] + usedFishCount - 1;
+            if (foodIndex < 0 || foodIndex >= foods.Length) continue;
 
             Food food = foods[foodIndex];
-
-            if (food == null)
-            {
-                Debug.Log("¡∂∞«ø° ∏¬¥¬ ¿ΩΩƒ æ¯¿Ω");
-                continue;
-            }
-
-            if (customer == null)
-            {
-                Debug.Log("Customer∞° null");
-                continue;
-            }
-
-            if (customer.mySeat == null)
-            {
-                Debug.Log("Customer ¿⁄∏Æ æ¯¿Ω");
-                continue;
-            }
+            if (food == null) { Debug.Log("Ï°∞Í±¥Ïóê ÎßûÎäî ÏùåÏãù ÏóÜÏùå"); continue; }
+            if (customer == null) { Debug.Log("CustomerÍ∞Ä null"); continue; }
+            if (customer.mySeat == null) { Debug.Log("Customer ÏûêÎ¶¨ ÏóÜÏùå"); continue; }
 
             customer.eatTime = food.eatTime;
-
             Vector3 foodPosition = customer.mySeat.transform.GetChild(0).position;
 
-            // ¿Ã ø‰∏ÆªÁ∞° ¡∂∏Æ∏¶ ≥°≥æ ∂ß±Ó¡ˆ ±‚¥Ÿ∏≤
             yield return StartCoroutine(chef.StartCook(food, customer, foodPosition));
-
-            FishInventoryManager.instance.UpdateAllText();
         }
 
-        if (chefNumber == 1)
-            chef1Cooking = false;
-        else
-            chef2Cooking = false;
+        if (chefNumber == 1) chef1Cooking = false;
+        else chef2Cooking = false;
 
         if (orderQueue.Count > 0)
         {
-            if (!chef1Cooking)
-                StartCoroutine(CookQueue(chef1, 1));
-
-            if (!chef2Cooking)
-                StartCoroutine(CookQueue(chef2, 2));
+            if (!chef1Cooking) StartCoroutine(CookQueue(chef1, 1));
+            if (!chef2Cooking) StartCoroutine(CookQueue(chef2, 2));
         }
-
-        FishInventoryManager.instance.UpdateAllText();
     }
 
+    // ÏÑ†ÌÉù Îì±Í∏âÎ∂ÄÌÑ∞ ÌïòÏúÑÎ°ú Ìè¥Î∞±ÌïòÎ©∞ maxUseÎßåÌÅº ÏÜåÎ™®. Ïã§Ï†ú ÏÜåÎ™® ÎßàÎ¶¨Ïàò Î∞òÌôò.
     int UseFish(int rarity, out int usedRarity)
     {
         usedRarity = -1;
 
         for (int j = rarity; j >= 0; j--)
         {
-            int[] fishes = FishInventoryManager.instance.fishNums[j];
+            int maxUse = (j == 0 || j == 1) ? 3 : (j == 2 ? 2 : 1);
 
-            int maxUse;
-
-            if (j == 0 || j == 1)
-                maxUse = 3;
-            else if (j == 2)
-                maxUse = 2;
-            else
-                maxUse = 1;
-
-            int usedCount = 0;
-
-            for (int i = 0; i < fishes.Length; i++)
+            int used = CurrencyManager.instance.SpendFromGrade((FishGrade)j, maxUse);
+            if (used > 0)
             {
-                if (fishes[i] > 0)
-                {
-                    fishes[i]--;
-                    usedCount++;
-
-                    if (usedCount >= maxUse)
-                        break;
-                }
-            }
-
-            if (usedCount > 0)
-            {
-                // ∞¯øÎ ∫Øºˆ ªÁøÎ X
-                // ¿Ã ø‰∏ÆªÁ∞° ªÁøÎ«— »Ò±Õµµ∏¶ µ˚∑Œ π›»Ø
                 usedRarity = j;
-
-                FishInventoryManager.instance.UpdateAllText();
-
-                return usedCount;
+                return used;   // ÌëúÏãú Í∞±Ïã†ÏùÄ SpendFromGradeÍ∞Ä OnFishChangedÎ°ú Ï≤òÎ¶¨
             }
         }
-
         return 0;
     }
 
     public void StartChef2()
     {
-        if (FacilityManager.instance.makeDouble == 1)
-        {
-            if (!chef2Cooking && orderQueue.Count > 0)
-            {
-                StartCoroutine(CookQueue(chef2, 2));
-            }
-        }
+        if (FacilityManager.instance.makeDouble == 1 && !chef2Cooking && orderQueue.Count > 0)
+            StartCoroutine(CookQueue(chef2, 2));
     }
 }
