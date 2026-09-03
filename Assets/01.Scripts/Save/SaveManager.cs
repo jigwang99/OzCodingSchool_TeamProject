@@ -1,9 +1,11 @@
+using System.Collections;
 using System.IO;
 using UnityEngine;
 
 public class SaveManager : Singleton<SaveManager>
 {
     private string saveFilePath;
+    private float saveInterval = 120f;
 
     protected override void Awake()
     {
@@ -11,6 +13,11 @@ public class SaveManager : Singleton<SaveManager>
 
         //persistentDataPath를 사용해 플랫폼별 안전한 저장 경로 지정
         saveFilePath = Path.Combine(Application.persistentDataPath, "playData.json");
+    }
+
+    void Start()
+    {
+        StartCoroutine(AutoSaveCoroutine());
     }
 
     //데이터 저장
@@ -59,6 +66,18 @@ public class SaveManager : Singleton<SaveManager>
         else
         {
             Debug.Log("[SaveManager] 삭제할 저장 파일이 없습니다.");
+        }
+    }
+
+    // 자동 저장
+    private IEnumerator AutoSaveCoroutine()
+    {
+        while (true)
+        {
+            SaveManager.instance.Save();
+            Debug.Log("[AutoSave] 자동 저장 완료");
+
+            yield return new WaitForSeconds(saveInterval);
         }
     }
 }

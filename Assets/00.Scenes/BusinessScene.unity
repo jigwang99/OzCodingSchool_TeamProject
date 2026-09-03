@@ -1545,6 +1545,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FishCountView
   grade: 2
   species: 1
+  label: {fileID: 0}
 --- !u!1 &158958691
 GameObject:
   m_ObjectHideFlags: 0
@@ -1802,7 +1803,7 @@ SpriteRenderer:
   m_Size: {x: 4, y: 6}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
 --- !u!4 &175476315
 Transform:
@@ -4309,7 +4310,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &427877658
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6117,6 +6118,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FishCountView
   grade: 0
   species: 2
+  label: {fileID: 0}
 --- !u!1 &541822269
 GameObject:
   m_ObjectHideFlags: 0
@@ -6931,6 +6933,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FishCountView
   grade: 0
   species: 1
+  label: {fileID: 0}
 --- !u!1 &662896954
 GameObject:
   m_ObjectHideFlags: 0
@@ -7654,6 +7657,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FishCountView
   grade: 0
   species: 3
+  label: {fileID: 0}
 --- !u!1 &723958712
 GameObject:
   m_ObjectHideFlags: 0
@@ -8445,6 +8449,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FishCountView
   grade: 0
   species: 5
+  label: {fileID: 0}
 --- !u!1 &789257810
 GameObject:
   m_ObjectHideFlags: 0
@@ -9059,6 +9064,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FishCountView
   grade: 0
   species: 7
+  label: {fileID: 0}
 --- !u!1 &821688524
 GameObject:
   m_ObjectHideFlags: 0
@@ -9134,7 +9140,7 @@ SpriteRenderer:
   m_Size: {x: 4, y: 6}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
 --- !u!4 &821688526
 Transform:
@@ -9704,7 +9710,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8820bdd7bcc00d94e93311d2f6ed6eb3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProductionManager
-  isDontDestroy: 1
   chef1: {fileID: 821688527}
   chef2: {fileID: 175476316}
   foods:
@@ -9717,7 +9722,7 @@ MonoBehaviour:
   - {fileID: 6632961076615839356, guid: 181e871bdc7e31945bfadaba88d17d2b, type: 3}
   - {fileID: 4003953427876318691, guid: 8c60ea9a627aa984e992699c649ef859, type: 3}
   - {fileID: 1619392336435122888, guid: da21e7c30bdddff42863b01a386137ba, type: 3}
-  selectRarityText: {fileID: 0}
+  selectRarityText: {fileID: 2111478668}
 --- !u!4 &897046097
 Transform:
   m_ObjectHideFlags: 0
@@ -10665,6 +10670,104 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FishCountView
   grade: 1
   species: 1
+  label: {fileID: 0}
+--- !u!1001 &1024487562
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 749557353372312718, guid: 6661ad1062245524e832cff047bc6a13, type: 3}
+      propertyPath: m_Pivot.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 749557353372312718, guid: 6661ad1062245524e832cff047bc6a13, type: 3}
+      propertyPath: m_Pivot.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 749557353372312718, guid: 6661ad1062245524e832cff047bc6a13, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 749557353372312718, guid: 6661ad1062245524e832cff047bc6a13, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 749557353372312718, guid: 6661ad1062245524e832cff047bc6a13, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 749557353372312718, guid: 6661ad1062245524e832cff047bc6a13, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 749557353372312718, guid: 6661ad1062245524e832cff047bc6a13, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 749557353372312718, guid: 6661ad1062245524e832cff047bc6a13, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 749557353372312718, guid: 6661ad1062245524e832cff047bc6a13, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 749557353372312718, guid: 6661ad1062245524e832cff047bc6a13, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 749557353372312718, guid: 6661ad1062245524e832cff047bc6a13, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 749557353372312718, guid: 6661ad1062245524e832cff047bc6a13, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 749557353372312718, guid: 6661ad1062245524e832cff047bc6a13, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 749557353372312718, guid: 6661ad1062245524e832cff047bc6a13, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 749557353372312718, guid: 6661ad1062245524e832cff047bc6a13, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 749557353372312718, guid: 6661ad1062245524e832cff047bc6a13, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 749557353372312718, guid: 6661ad1062245524e832cff047bc6a13, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 749557353372312718, guid: 6661ad1062245524e832cff047bc6a13, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 749557353372312718, guid: 6661ad1062245524e832cff047bc6a13, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 749557353372312718, guid: 6661ad1062245524e832cff047bc6a13, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1430601404519769175, guid: 6661ad1062245524e832cff047bc6a13, type: 3}
+      propertyPath: m_Name
+      value: UpgradeCanvas
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 6661ad1062245524e832cff047bc6a13, type: 3}
 --- !u!1 &1025153349
 GameObject:
   m_ObjectHideFlags: 0
@@ -11788,7 +11891,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1136039587
 RectTransform:
   m_ObjectHideFlags: 0
@@ -13176,6 +13279,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FishCountView
   grade: 1
   species: 2
+  label: {fileID: 0}
 --- !u!1 &1249709994
 GameObject:
   m_ObjectHideFlags: 0
@@ -13584,6 +13688,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FishCountView
   grade: 3
   species: 0
+  label: {fileID: 0}
 --- !u!1 &1277248913
 GameObject:
   m_ObjectHideFlags: 0
@@ -14918,6 +15023,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FishCountView
   grade: 2
   species: 0
+  label: {fileID: 0}
 --- !u!1 &1442449441
 GameObject:
   m_ObjectHideFlags: 0
@@ -15562,6 +15668,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FishCountView
   grade: 0
   species: 6
+  label: {fileID: 0}
 --- !u!1 &1530248610
 GameObject:
   m_ObjectHideFlags: 0
@@ -16690,6 +16797,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FishCountView
   grade: 1
   species: 3
+  label: {fileID: 0}
 --- !u!1 &1604648891
 GameObject:
   m_ObjectHideFlags: 0
@@ -18119,6 +18227,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FishCountView
   grade: 1
   species: 0
+  label: {fileID: 0}
 --- !u!1 &1776599839
 GameObject:
   m_ObjectHideFlags: 0
@@ -18969,6 +19078,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FishCountView
   grade: 0
   species: 0
+  label: {fileID: 0}
 --- !u!1 &1886902800
 GameObject:
   m_ObjectHideFlags: 0
@@ -20221,6 +20331,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FishCountView
   grade: 0
   species: 4
+  label: {fileID: 0}
 --- !u!1 &2096402101
 GameObject:
   m_ObjectHideFlags: 0
@@ -22636,3 +22747,4 @@ SceneRoots:
   - {fileID: 1056313197}
   - {fileID: 662896956}
   - {fileID: 964357345}
+  - {fileID: 1024487562}
