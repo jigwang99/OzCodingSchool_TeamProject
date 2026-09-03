@@ -3,7 +3,7 @@ using UnityEngine;
 
 // 전투 결과를 '물고기 드롭'으로 변환하는 전투 씬 전담 시스템.
 //  - CombatManager.OnEnemyDefeated 구독 → 적 처치 감지
-//  - StageDropTable로 획득 확률/등급을 굴림
+//  - StageDropTable로 획득 확률/등급/종을 굴림
 //  - 결과는 OnFishDropped 이벤트로만 방출 (인벤토리 담당이 구독해서 저장)
 public class FishDropSystem : MonoBehaviour
 {
@@ -13,7 +13,7 @@ public class FishDropSystem : MonoBehaviour
     private float dropChanceMultiplier = 1f; // 드롭률 업그레이드 배수 (성장 담당이 세팅)
     private StageDropTable currentTable;
 
-    // 인벤토리/재화 담당이 구독: 어떤 등급을 몇 개 얻었는지
+    // 인벤토리/재화 담당이 구독: 어떤 등급의 어떤 종을 몇 개 얻었는지
     public event Action<FishDrop> OnFishDropped;
 
     private void Awake() => currentTable = defaultDropTable;
@@ -36,7 +36,7 @@ public class FishDropSystem : MonoBehaviour
         currentTable = table != null ? table : defaultDropTable;
     }
 
-    // 드롭률 업그레이드 반영
+    // 드롭률 업그레이드 반영 (성장 담당이 호출)
     public void SetDropChanceMultiplier(float multiplier)
     {
         dropChanceMultiplier = Mathf.Max(0f, multiplier);
@@ -51,16 +51,17 @@ public class FishDropSystem : MonoBehaviour
         if (UnityEngine.Random.value > chance)
             return; // 이번엔 드롭 없음
 
-        if (!TryRollGrade(currentTable, out FishGrade grade))
+        if (!TryRollGrade(currentTable, out StageDropTable.GradeWeight picked))
             return;
 
-        OnFishDropped?.Invoke(new FishDrop(grade, 1, enemy.transform.position));
+        int species = RollSpecies(picked);
+        OnFishDropped?.Invoke(new FishDrop(picked.grade, species, 1, enemy.transform.position));
     }
 
-    // 등급 가중치 기반 랜덤 추첨
-    private static bool TryRollGrade(StageDropTable table, out FishGrade grade)
+    // 등급 가중치 기반 랜덤 추첨 → 선택된 등급 구성 전체를 반환
+    private static bool TryRollGrade(StageDropTable table, out StageDropTable.GradeWeight picked)
     {
-        grade = FishGrade.Common;
+        picked = default;
 
         var weights = table.Weights;
         if (weights == null || weights.Length == 0)
@@ -79,12 +80,39 @@ public class FishDropSystem : MonoBehaviour
             roll -= Mathf.Max(0f, gw.weight);
             if (roll <= 0f)
             {
-                grade = gw.grade;
+                picked = gw;
                 return true;
             }
         }
 
-        grade = weights[weights.Length - 1].grade;
+        picked = weights[weights.Length - 1];
         return true;
+    }
+
+    // 등급 안에서 종 인덱스 추첨.
+    // speciesWeights가 speciesCount와 맞으면 가중치 추첨, 아니면 균등 추첨.
+    private static int RollSpecies(StageDropTable.GradeWeight gw)
+    {
+        int count = Mathf.Max(1, gw.speciesCount);
+        var weights = gw.speciesWeights;
+
+        if (weights == null || weights.Length != count)
+            return UnityEngine.Random.Range(0, count);
+
+        float total = 0f;
+        foreach (var w in weights)
+            total += Mathf.Max(0f, w);
+
+        if (total <= 0f)
+            return UnityEngine.Random.Range(0, count);
+
+        float roll = UnityEngine.Random.value * total;
+        for (int i = 0; i < weights.Length; i++)
+        {
+            roll -= Mathf.Max(0f, weights[i]);
+            if (roll <= 0f)
+                return i;
+        }
+        return count - 1;
     }
 }

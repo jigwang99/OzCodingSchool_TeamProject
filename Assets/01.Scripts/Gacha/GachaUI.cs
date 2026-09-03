@@ -1,128 +1,74 @@
-//using System.Collections;
-//using UnityEngine;
-//using UnityEngine.UI;
-//using TMPro;
+ï»¿using System.Collections.Generic;
+using UnityEngine;
 
-//public class GachaUI : MonoBehaviour
-//{
-//    [Header("Gacha / Pool")]
-//    public GachaPool pool; // inspector¿¡¼­ ¸µÅ©
-//    public PoolManager poolManager; // inspector¿¡ PoolManager¸¦ µå·¡±×ÇÏ°Å³ª ÀÚµ¿À¸·Î Ã£À½
+namespace PixelRestaurant.Data
+{
+    /*
+    /// <summary>
+    /// ê°€ì±  ì•„ì´í…œ ì •ë³´ (ë¬´ê¸°, ê°€êµ¬, ìš”ë¦¬ ë“±)
+    /// </summary>
+    [System.Serializable]
+    public class GachaItem
+    {
+        public string itemId;           // ì•„ì´í…œ ê³ ìœ ID
+        public string itemName;         // ì•„ì´í…œ ì´ë¦„
+        public GachaGroup group;        // ê·¸ë£¹ (ë¬´ê¸°, ê°€êµ¬, ìš”ë¦¬)
+        public GachaRarity rarity;      // ë ˆì–´ë¦¬í‹°
+        public int grade;               // ë“±ê¸‰ (1,2,3,4)
+        public int weight;              // ê°œë³„ ì•„ì´í…œ ê°€ì¤‘ì¹˜ (ê¸°ë³¸ê°’ 1)
+        public GameObject displayPrefab; // ê²°ê³¼ í‘œì‹œ í”„ë¦¬íŒ¹ (ì„ íƒ)
+    }
 
-//    [Header("Cost")]
-//    public int costPerDraw = 10;
+    /// <summary>
+    /// ê°€ì±  ê·¸ë£¹ ë¶„ë¥˜
+    /// </summary>
+    public enum GachaGroup
+    {
+        Weapon,    // ë¬´ê¸°
+        Furniture, // ê°€êµ¬
+        Recipe     // ìš”ë¦¬
+    }
 
-//    [Header("UI")]
-//    public Button drawButton;
-//    public TMP_Text moneyText;
-//    public TMP_Text drawButtonText; // ¹öÆ° ÅØ½ºÆ®¿¡ ºñ¿ë Ç¥½Ã(¼±ÅÃ)
-//    public GameObject popupPanel; // ÆË¾÷ ÆĞ³Î (ºñÈ°¼ºÈ­ »óÅÂ¿¡¼­ »ç¿ë)
-//    public TMP_Text popupTitleText;
-//    public TMP_Text popupDetailText;
-//    public Transform popupPreviewParent; // ÆË¾÷¿¡ Ç¥½ÃÇÒ prefabÀ» ºÎ¸ğ·Î µÑ Transform (ºó GameObject)
-//    public Button popupCloseButton;
+    /// <summary>
+    /// ë ˆì–´ë¦¬í‹° ë¶„ë¥˜
+    /// </summary>
+    public enum GachaRarity
+    {
+        Common = 60,   // ì»¤ëª¬: ê°€ì¤‘ì¹˜ 60
+        Rare = 30,     // ë ˆì–´: ê°€ì¤‘ì¹˜ 30
+        Unique = 9,    // ìœ ë‹ˆí¬: ê°€ì¤‘ì¹˜ 9
+        Epic = 1       // ì—í”½: ê°€ì¤‘ì¹˜ 1
+    }
 
-//    private GameObject currentPreviewInstance;
+    /// <summary>
+    /// ê°€ì±  í’€ (í•˜ë‚˜ì˜ ê°€ì±  ì„¸íŠ¸)
+    /// </summary>
+    [CreateAssetMenu(fileName = "GachaPool_", menuName = "Gacha/GachaPool")]
+    public class GachaPool : ScriptableObject
+    {
+        [SerializeField] private string poolName;
+        [SerializeField] private List<GachaItem> items = new List<GachaItem>();
+        [SerializeField] private GameObject defaultResultPrefab; // ê¸°ë³¸ í”„ë¦¬íŒ¹
 
-//    void Start()
-//    {
-//        if (poolManager == null)
-//        {
-//            poolManager = FindObjectOfType<PoolManager>();
-//            if (poolManager == null) Debug.LogWarning("PoolManager not found in scene. Assign in inspector.");
-//        }
+        public string PoolName => poolName;
+        public List<GachaItem> Items => items;
+        public GameObject DefaultResultPrefab => defaultResultPrefab;
 
-//        drawButton.onClick.AddListener(OnDrawButton);
-//        if (popupCloseButton != null) popupCloseButton.onClick.AddListener(ClosePopup);
+        /// <summary>
+        /// íŠ¹ì • ê·¸ë£¹ì˜ ì•„ì´í…œë§Œ í•„í„°ë§í•´ì„œ ë°˜í™˜
+        /// </summary>
+        public List<GachaItem> GetItemsByGroup(GachaGroup group)
+        {
+            return items.FindAll(item => item.group == group);
+        }
 
-//        // CurrencyManager ÀÌº¥Æ® ±¸µ¶ ÁÖ¼® Ã³¸® ¹× Å×½ºÆ®¿ë ÀÓ½Ã °ª Àû¿ë
-//        // CurrencyManager.Instance.OnMoneyChanged += UpdateMoneyUI;
-//        // UpdateMoneyUI(CurrencyManager.Instance.currentMoney);
-//        UpdateMoneyUI(9999); // UI È®ÀÎ¿ë ÀÓ½Ã °ñµå °ª
-
-//        if (drawButtonText != null)
-//            drawButtonText.text = $"»Ì±â ({costPerDraw})";
-//    }
-
-//    void OnDestroy()
-//    {
-//        // CurrencyManager ÀÌº¥Æ® ±¸µ¶ ÇØÁ¦ ÁÖ¼® Ã³¸®
-//        // if (CurrencyManager.Instance != null)
-//        //     CurrencyManager.Instance.OnMoneyChanged -= UpdateMoneyUI;
-//    }
-
-//    void UpdateMoneyUI(int amount)
-//    {
-//        if (moneyText != null)
-//            moneyText.text = $"Money: {amount}";
-//    }
-
-//    public void OnDrawButton()
-//    {
-//        if (pool == null)
-//        {
-//            Debug.LogWarning("GachaUI: pool is null");
-//            return;
-//        }
-
-//        // ÀçÈ­ °Ë»ç ¹× Â÷°¨ ·ÎÁ÷ ÀÓ½Ã ÁÖ¼® Ã³¸®
-//        if (!CurrencyManager.Instance.CanSpend(costPerDraw))
-//        {
-//            // ºÎÁ· UI Ã³¸®
-//            Debug.Log("µ· ºÎÁ·");
-//            // TODO: ºÎÁ· ¾È³» ÆË¾÷ µî
-//            return;
-//        }
-
-//        // ÁöºÒ
-//        CurrencyManager.Instance.Spend(costPerDraw);
-
-
-//        // ½ÇÁ¦ »Ì±â
-//        var result = GachaManager.Instance.DrawFromPool(pool);
-//        if (result == null)
-//        {
-//            Debug.LogWarning("GachaUI: draw result is null");
-//            return;
-//        }
-
-//        // ÆË¾÷¿¡ ÅØ½ºÆ® ¼Â¾÷
-//        if (popupTitleText != null) popupTitleText.text = $"{result.rarity} µî±Ş!";
-//        if (popupDetailText != null) popupDetailText.text = $"¾ÆÀÌÅÛ: {result.itemId}\n±×·ì: {result.groupName}";
-
-//        // ±âÁ¸ ¹Ì¸®º¸±â ÀÖÀ¸¸é ¹İÈ¯
-//        if (currentPreviewInstance != null)
-//        {
-//            poolManager.ReleaseToPool(currentPreviewInstance);
-//            currentPreviewInstance = null;
-//        }
-
-//        // ÇÁ¸®ÆÕÀÌ ÀÖÀ¸¸é Ç®¿¡¼­ ¹Ş¾Æ¿Í ÆË¾÷ ¹Ì¸®º¸±â À§Ä¡¿¡ ºÙÀÓ
-//        if (result.prefab != null && poolManager != null)
-//        {
-//            currentPreviewInstance = poolManager.GetFromPool(result.prefab);
-//            if (currentPreviewInstance != null)
-//            {
-//                // ºÎ¸ğ¸¦ popupPreviewParent·Î ÇÏ°í ·ÎÄÃ º¯È¯ ÃÊ±âÈ­
-//                currentPreviewInstance.transform.SetParent(popupPreviewParent, false);
-//                currentPreviewInstance.transform.localPosition = Vector3.zero;
-//                currentPreviewInstance.transform.localRotation = Quaternion.identity;
-//                currentPreviewInstance.transform.localScale = Vector3.one;
-//            }
-//        }
-
-//        // ÆË¾÷ ¿­±â
-//        if (popupPanel != null) popupPanel.SetActive(true);
-//    }
-
-//    public void ClosePopup()
-//    {
-//        if (currentPreviewInstance != null && poolManager != null)
-//        {
-//            poolManager.ReleaseToPool(currentPreviewInstance);
-//            currentPreviewInstance = null;
-//        }
-
-//        if (popupPanel != null) popupPanel.SetActive(false);
-//    }
-//}
+        /// <summary>
+        /// íŠ¹ì • ê·¸ë£¹ê³¼ ë ˆì–´ë¦¬í‹°ì˜ ì•„ì´í…œë“¤ ë°˜í™˜
+        /// </summary>
+        public List<GachaItem> GetItemsByGroupAndRarity(GachaGroup group, GachaRarity rarity)
+        {
+            return items.FindAll(item => item.group == group && item.rarity == rarity);
+        }
+    }
+    */
+}

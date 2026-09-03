@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5fd91c16fbcbbf4d8b1fb82e5723bd4, type: 3}
+  m_Name: StageDataList
+  m_EditorClassIdentifier: Assembly-CSharp::StageDataList
+  stageList:
+  - stageName: 1-1
+    spawnOffsets:
+    - {x: 4, y: -3}
+    enemyMaxHp: 50
+    enemyDamage: 5
+    dropTable: {fileID: 11400000, guid: e1bfc21c001ac58498f7a46e13e72d3d, type: 2}
+  - stageName: 1-2
+    spawnOffsets:
+    - {x: 4, y: -3}
+    - {x: 7, y: -3}
+    enemyMaxHp: 50
+    enemyDamage: 5
+    dropTable: {fileID: 11400000, guid: e1bfc21c001ac58498f7a46e13e72d3d, type: 2}

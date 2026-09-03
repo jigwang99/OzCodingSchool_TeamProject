@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using UnityEngine;
 
 public class CurrencyManager : Singleton<CurrencyManager>
@@ -13,7 +13,7 @@ public class CurrencyManager : Singleton<CurrencyManager>
         base.Awake();
     }
 
-    //°ñµå È¹µæ
+    //ê³¨ë“œ íšë“
     public void AddGold(int amount)
     {
         if (amount <= 0)
@@ -21,12 +21,12 @@ public class CurrencyManager : Singleton<CurrencyManager>
 
         data.gold += amount;
 
-        Debug.Log($"[CurrencyManager] °ñµå È¹µæ: +{amount} / ÇöÀç °ñµå: {data.gold}");
+        Debug.Log($"[CurrencyManager] ê³¨ë“œ íšë“: +{amount} / í˜„ì¬ ê³¨ë“œ: {data.gold}");
 
         OnGoldChanged?.Invoke();
     }
 
-    //°ñµå ¼Òºñ
+    //ê³¨ë“œ ì†Œë¹„
     public bool SpendGold(int amount)
     {
         if (amount <= 0)
@@ -34,20 +34,20 @@ public class CurrencyManager : Singleton<CurrencyManager>
 
         if (data.gold < amount)
         {
-            Debug.Log("[CurrencyManager] °ñµå°¡ ºÎÁ·ÇÕ´Ï´Ù!");
+            Debug.Log("[CurrencyManager] ê³¨ë“œê°€ ë¶€ì¡±í•©ë‹ˆë‹¤!");
             return false;
         }
 
         data.gold -= amount;
 
-        Debug.Log($"[CurrencyManager] °ñµå ¼Òºñ: -{amount} / ÀÜ¿© °ñµå: {data.gold}");
+        Debug.Log($"[CurrencyManager] ê³¨ë“œ ì†Œë¹„: -{amount} / ì”ì—¬ ê³¨ë“œ: {data.gold}");
 
         OnGoldChanged?.Invoke();
 
         return true;
     }
 
-    //Æ¯Á¤ Á¾ÀÇ ¹°°í±â È¹µæ
+    //íŠ¹ì • ì¢…ì˜ ë¬¼ê³ ê¸° íšë“
     public void AddFish(FishGrade grade, int species, int count)
     {
         if (count <= 0)
@@ -60,12 +60,12 @@ public class CurrencyManager : Singleton<CurrencyManager>
 
         fishArray[species] += count;
 
-        Debug.Log($"[CurrencyManager] {grade} / Á¾ {species} ¹°°í±â È¹µæ: +{count} / ÇöÀç: {fishArray[species]}");
+        Debug.Log($"[CurrencyManager] {grade} / ì¢… {species} ë¬¼ê³ ê¸° íšë“: +{count} / í˜„ì¬: {fishArray[species]}");
 
         OnFishChanged?.Invoke(grade);
     }
 
-    //Æ¯Á¤ Á¾ÀÇ ¹°°í±â ¼ö·® Á¶È¸
+    //íŠ¹ì • ì¢…ì˜ ë¬¼ê³ ê¸° ìˆ˜ëŸ‰ ì¡°íšŒ
     public int GetFish(FishGrade grade, int species)
     {
         int[] fishArray = data.GetFishArray(grade);
@@ -76,7 +76,7 @@ public class CurrencyManager : Singleton<CurrencyManager>
         return fishArray[species];
     }
 
-    //Æ¯Á¤ Á¾ÀÇ ¹°°í±â ¼Òºñ
+    //íŠ¹ì • ì¢…ì˜ ë¬¼ê³ ê¸° ì†Œë¹„
     public bool SpendFish(FishGrade grade, int species, int count)
     {
         if (count <= 0)
@@ -89,21 +89,21 @@ public class CurrencyManager : Singleton<CurrencyManager>
 
         if (fishArray[species] < count)
         {
-            Debug.Log($"[CurrencyManager] {grade} / Á¾ {species} ¹°°í±â°¡ ºÎÁ·ÇÕ´Ï´Ù!");
+            Debug.Log($"[CurrencyManager] {grade} / ì¢… {species} ë¬¼ê³ ê¸°ê°€ ë¶€ì¡±í•©ë‹ˆë‹¤!");
 
             return false;
         }
 
         fishArray[species] -= count;
 
-        Debug.Log($"[CurrencyManager] {grade} / Á¾ {species} ¹°°í±â ¼Òºñ: -{count} / ÀÜ¿©: {fishArray[species]}");
+        Debug.Log($"[CurrencyManager] {grade} / ì¢… {species} ë¬¼ê³ ê¸° ì†Œë¹„: -{count} / ì”ì—¬: {fishArray[species]}");
 
         OnFishChanged?.Invoke(grade);
 
         return true;
     }
 
-    //ÇØ´ç µî±ŞÀÇ ÀüÃ¼ ¹°°í±â ¼ö·®
+    //í•´ë‹¹ ë“±ê¸‰ì˜ ì „ì²´ ë¬¼ê³ ê¸° ìˆ˜ëŸ‰
     public int GetGradeTotal(FishGrade grade)
     {
         int[] fishArray = data.GetFishArray(grade);
@@ -121,8 +121,8 @@ public class CurrencyManager : Singleton<CurrencyManager>
         return total;
     }
 
-    // ÇØ´ç µî±Ş¿¡¼­ ¹°°í±â ¼Òºñ
-    // Á¾ ¹øÈ£°¡ ³·Àº °ÍºÎÅÍ ¼Òºñ
+    // í•´ë‹¹ ë“±ê¸‰ì—ì„œ ë¬¼ê³ ê¸° ì†Œë¹„
+    // ì¢… ë²ˆí˜¸ê°€ ë‚®ì€ ê²ƒë¶€í„° ì†Œë¹„
     public int SpendFromGrade(FishGrade grade, int count)
     {
         if (count <= 0)
@@ -154,7 +154,7 @@ public class CurrencyManager : Singleton<CurrencyManager>
 
         if (usedCount > 0)
         {
-            Debug.Log($"[CurrencyManager] {grade} ¹°°í±â ¼Òºñ: -{usedCount}¸¶¸®");
+            Debug.Log($"[CurrencyManager] {grade} ë¬¼ê³ ê¸° ì†Œë¹„: -{usedCount}ë§ˆë¦¬");
 
             OnFishChanged?.Invoke(grade);
         }
