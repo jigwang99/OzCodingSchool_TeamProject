@@ -10,11 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2a17156e0bb5dd94d82d0e12893f03d3, type: 3}
-  m_Name: RestaurantData
+  m_Name: FishDropRateData
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
-  id: 201
-  upgradeName: "\uC2DD\uB2F9 \uC5C5\uADF8\uB808\uC774\uB4DC"
-  type: 2
+  id: 102
+  upgradeName: "\uBB3C\uACE0\uAE30 \uB4DC\uB86D\uB960 \uAC15\uD654"
+  type: 1
   baseCost: 100
   costMultiplier: 1.15
-  maxLevel: 3
+  maxLevel: 5
+  dropChanceMultiplierPerLevel: 0.3

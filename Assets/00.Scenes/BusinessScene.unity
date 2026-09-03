@@ -1542,7 +1542,9 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4334a3248d70b314ead25095c97594b2, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: "Assembly-CSharp::\uBB3C\uACE0\uAE30\uC22B\uC790\uD655\uC778\uC6A9"
+  m_EditorClassIdentifier: Assembly-CSharp::FishCountView
+  grade: 2
+  species: 1
 --- !u!1 &158958691
 GameObject:
   m_ObjectHideFlags: 0
@@ -6112,7 +6114,9 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4334a3248d70b314ead25095c97594b2, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: "Assembly-CSharp::\uBB3C\uACE0\uAE30\uC22B\uC790\uD655\uC778\uC6A9"
+  m_EditorClassIdentifier: Assembly-CSharp::FishCountView
+  grade: 0
+  species: 2
 --- !u!1 &541822269
 GameObject:
   m_ObjectHideFlags: 0
@@ -6924,7 +6928,54 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4334a3248d70b314ead25095c97594b2, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: "Assembly-CSharp::\uBB3C\uACE0\uAE30\uC22B\uC790\uD655\uC778\uC6A9"
+  m_EditorClassIdentifier: Assembly-CSharp::FishCountView
+  grade: 0
+  species: 1
+--- !u!1 &662896954
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 662896956}
+  - component: {fileID: 662896955}
+  m_Layer: 0
+  m_Name: CurrencyManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &662896955
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 662896954}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3c9e76774909cb458d7f85f802efb72, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CurrencyManager
+  isDontDestroy: 1
+--- !u!4 &662896956
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 662896954}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 80, y: 990, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &672892130
 GameObject:
   m_ObjectHideFlags: 0
@@ -7332,11 +7383,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49813dda902c5c3459964701c17a5b03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FacilityManager
-  goldText: {fileID: 1136039588}
-  makeSpeed: 0
-  goldBonus: 0
-  specialChance: 0
-  makeDouble: 0
+  isDontDestroy: 1
 --- !u!1 &689722898
 GameObject:
   m_ObjectHideFlags: 0
@@ -7604,7 +7651,9 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4334a3248d70b314ead25095c97594b2, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: "Assembly-CSharp::\uBB3C\uACE0\uAE30\uC22B\uC790\uD655\uC778\uC6A9"
+  m_EditorClassIdentifier: Assembly-CSharp::FishCountView
+  grade: 0
+  species: 3
 --- !u!1 &723958712
 GameObject:
   m_ObjectHideFlags: 0
@@ -8393,7 +8442,9 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4334a3248d70b314ead25095c97594b2, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: "Assembly-CSharp::\uBB3C\uACE0\uAE30\uC22B\uC790\uD655\uC778\uC6A9"
+  m_EditorClassIdentifier: Assembly-CSharp::FishCountView
+  grade: 0
+  species: 5
 --- !u!1 &789257810
 GameObject:
   m_ObjectHideFlags: 0
@@ -9005,7 +9056,9 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4334a3248d70b314ead25095c97594b2, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: "Assembly-CSharp::\uBB3C\uACE0\uAE30\uC22B\uC790\uD655\uC778\uC6A9"
+  m_EditorClassIdentifier: Assembly-CSharp::FishCountView
+  grade: 0
+  species: 7
 --- !u!1 &821688524
 GameObject:
   m_ObjectHideFlags: 0
@@ -9651,6 +9704,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8820bdd7bcc00d94e93311d2f6ed6eb3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProductionManager
+  isDontDestroy: 1
   chef1: {fileID: 821688527}
   chef2: {fileID: 175476316}
   foods:
@@ -9663,6 +9717,7 @@ MonoBehaviour:
   - {fileID: 6632961076615839356, guid: 181e871bdc7e31945bfadaba88d17d2b, type: 3}
   - {fileID: 4003953427876318691, guid: 8c60ea9a627aa984e992699c649ef859, type: 3}
   - {fileID: 1619392336435122888, guid: da21e7c30bdddff42863b01a386137ba, type: 3}
+  selectRarityText: {fileID: 0}
 --- !u!4 &897046097
 Transform:
   m_ObjectHideFlags: 0
@@ -9761,8 +9816,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1598213013}
-        m_TargetAssemblyTypeName: FishInventoryManager, Assembly-CSharp
+      - m_Target: {fileID: 897046096}
+        m_TargetAssemblyTypeName: ProductionManager, Assembly-CSharp
         m_MethodName: SelectCommon
         m_Mode: 1
         m_Arguments:
@@ -10146,6 +10201,51 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Slider
+--- !u!1 &964357343
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 964357345}
+  - component: {fileID: 964357344}
+  m_Layer: 0
+  m_Name: UpgradeManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &964357344
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 964357343}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24a3045fbfca1b84d87e4f5c13900722, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UpgradeManager
+  isDontDestroy: 1
+--- !u!4 &964357345
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 964357343}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 80, y: 990, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &968708853
 GameObject:
   m_ObjectHideFlags: 0
@@ -10562,7 +10662,9 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4334a3248d70b314ead25095c97594b2, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: "Assembly-CSharp::\uBB3C\uACE0\uAE30\uC22B\uC790\uD655\uC778\uC6A9"
+  m_EditorClassIdentifier: Assembly-CSharp::FishCountView
+  grade: 1
+  species: 1
 --- !u!1 &1025153349
 GameObject:
   m_ObjectHideFlags: 0
@@ -12071,8 +12173,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1598213013}
-        m_TargetAssemblyTypeName: FishInventoryManager, Assembly-CSharp
+      - m_Target: {fileID: 897046096}
+        m_TargetAssemblyTypeName: ProductionManager, Assembly-CSharp
         m_MethodName: SelectUnique
         m_Mode: 1
         m_Arguments:
@@ -13071,7 +13173,9 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4334a3248d70b314ead25095c97594b2, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: "Assembly-CSharp::\uBB3C\uACE0\uAE30\uC22B\uC790\uD655\uC778\uC6A9"
+  m_EditorClassIdentifier: Assembly-CSharp::FishCountView
+  grade: 1
+  species: 2
 --- !u!1 &1249709994
 GameObject:
   m_ObjectHideFlags: 0
@@ -13477,7 +13581,9 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4334a3248d70b314ead25095c97594b2, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: "Assembly-CSharp::\uBB3C\uACE0\uAE30\uC22B\uC790\uD655\uC778\uC6A9"
+  m_EditorClassIdentifier: Assembly-CSharp::FishCountView
+  grade: 3
+  species: 0
 --- !u!1 &1277248913
 GameObject:
   m_ObjectHideFlags: 0
@@ -14809,7 +14915,9 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4334a3248d70b314ead25095c97594b2, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: "Assembly-CSharp::\uBB3C\uACE0\uAE30\uC22B\uC790\uD655\uC778\uC6A9"
+  m_EditorClassIdentifier: Assembly-CSharp::FishCountView
+  grade: 2
+  species: 0
 --- !u!1 &1442449441
 GameObject:
   m_ObjectHideFlags: 0
@@ -15451,7 +15559,9 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4334a3248d70b314ead25095c97594b2, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: "Assembly-CSharp::\uBB3C\uACE0\uAE30\uC22B\uC790\uD655\uC778\uC6A9"
+  m_EditorClassIdentifier: Assembly-CSharp::FishCountView
+  grade: 0
+  species: 6
 --- !u!1 &1530248610
 GameObject:
   m_ObjectHideFlags: 0
@@ -16317,7 +16427,6 @@ GameObject:
   - component: {fileID: 1598213012}
   - component: {fileID: 1598213011}
   - component: {fileID: 1598213010}
-  - component: {fileID: 1598213013}
   - component: {fileID: 1598213014}
   m_Layer: 5
   m_Name: FishInventory
@@ -16420,24 +16529,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1598213008}
   m_CullTransparentMesh: 1
---- !u!114 &1598213013
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1598213008}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e3a87dd74a34bd847a07772acd98cc1d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::FishCount
-  commonFishNum: 
-  rareFishNum: 
-  uniqueFishNum: 
-  epicFishNum: 
-  nowSelectRarity: 0
-  fishUI: []
 --- !u!114 &1598213014
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16596,7 +16687,9 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4334a3248d70b314ead25095c97594b2, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: "Assembly-CSharp::\uBB3C\uACE0\uAE30\uC22B\uC790\uD655\uC778\uC6A9"
+  m_EditorClassIdentifier: Assembly-CSharp::FishCountView
+  grade: 1
+  species: 3
 --- !u!1 &1604648891
 GameObject:
   m_ObjectHideFlags: 0
@@ -17099,8 +17192,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1598213013}
-        m_TargetAssemblyTypeName: FishInventoryManager, Assembly-CSharp
+      - m_Target: {fileID: 897046096}
+        m_TargetAssemblyTypeName: ProductionManager, Assembly-CSharp
         m_MethodName: SelectRare
         m_Mode: 1
         m_Arguments:
@@ -17279,8 +17372,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1598213013}
-        m_TargetAssemblyTypeName: FishInventoryManager, Assembly-CSharp
+      - m_Target: {fileID: 897046096}
+        m_TargetAssemblyTypeName: ProductionManager, Assembly-CSharp
         m_MethodName: SelectEpic
         m_Mode: 1
         m_Arguments:
@@ -18023,7 +18116,9 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4334a3248d70b314ead25095c97594b2, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: "Assembly-CSharp::\uBB3C\uACE0\uAE30\uC22B\uC790\uD655\uC778\uC6A9"
+  m_EditorClassIdentifier: Assembly-CSharp::FishCountView
+  grade: 1
+  species: 0
 --- !u!1 &1776599839
 GameObject:
   m_ObjectHideFlags: 0
@@ -18871,7 +18966,9 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4334a3248d70b314ead25095c97594b2, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: "Assembly-CSharp::\uBB3C\uACE0\uAE30\uC22B\uC790\uD655\uC778\uC6A9"
+  m_EditorClassIdentifier: Assembly-CSharp::FishCountView
+  grade: 0
+  species: 0
 --- !u!1 &1886902800
 GameObject:
   m_ObjectHideFlags: 0
@@ -20121,7 +20218,9 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4334a3248d70b314ead25095c97594b2, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: "Assembly-CSharp::\uBB3C\uACE0\uAE30\uC22B\uC790\uD655\uC778\uC6A9"
+  m_EditorClassIdentifier: Assembly-CSharp::FishCountView
+  grade: 0
+  species: 4
 --- !u!1 &2096402101
 GameObject:
   m_ObjectHideFlags: 0
@@ -22535,3 +22634,5 @@ SceneRoots:
   - {fileID: 541822270}
   - {fileID: 857985220}
   - {fileID: 1056313197}
+  - {fileID: 662896956}
+  - {fileID: 964357345}

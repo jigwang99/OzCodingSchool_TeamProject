@@ -1,45 +1,43 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-// 스테이지의 각 스폰 위치에 적을 한 번에 배치 (ObjectPoolManager 사용).
-// 상태 초기화/정리는 풀의 Init()/ReturnToPool() 훅이 담당하므로,
-// 여기서는 '어디에 두고 누구를 노리게 할지'만 담당한다.
+// 스테이지의 각 스폰 위치에 적을 한 번에 배치 (CombatObjectPoolManager 사용).
+// 위치는 StageData의 오프셋 + 기준점(origin)으로 계산하고,
+// 스테이지별 적 스탯(HP/데미지)은 스폰 직후 여기서 덮어쓴다.
 public class EnemySpawner : MonoBehaviour
 {
-    [SerializeField] private Transform[] spawnPoints; // 스테이지 내 적 위치들
-
-    private readonly List<EnemyController> active = new(); // 현재 스테이지의 활성 적
+    private readonly List<EnemyController> active = new(); // 현재 스테이지 활성 적
     public IReadOnlyList<EnemyController> Spawned => active;
 
-    // 모든 스폰 위치에 적을 풀에서 꺼내 배치. 각 적의 타겟은 플레이어로 지정.
-    public IReadOnlyList<EnemyController> SpawnStage(BaseUnitController targetForEnemies)
+    // origin 기준으로 StageData.SpawnOffsets 위치마다 적을 스폰. 각 적의 타겟은 플레이어.
+    public IReadOnlyList<EnemyController> SpawnStage(StageData data, Vector3 origin, BaseUnitController targetForEnemies)
     {
         Clear();
 
-        if (spawnPoints == null || spawnPoints.Length == 0)
+        if (data == null || data.SpawnOffsets == null || data.SpawnOffsets.Length == 0)
         {
-            Debug.LogWarning("[EnemySpawner] 스폰 위치가 비어 있습니다.");
+            Debug.LogWarning("[EnemySpawner] StageData가 비었거나 스폰 오프셋이 없습니다.");
             return active;
         }
 
-        foreach (Transform point in spawnPoints)
+        foreach (Vector2 offset in data.SpawnOffsets)
         {
-            if (point == null)
-            {
-                continue;
-            }
-
-            // GetObject 내부에서 IPoolable.Init()이 호출돼 HP/상태가 초기화됨
             EnemyController enemy = CombatObjectPoolManager.instance.GetObject<EnemyController>(PoolType.Enemy);
             if (enemy == null)
             {
                 Debug.LogWarning("[EnemySpawner] Enemy 풀에서 오브젝트를 가져오지 못했습니다. " +
-                                 "(ObjectPoolManager objList에 Enemy 프리팹 등록 확인)");
+                                 "(CombatObjectPoolManager objList에 Enemy 프리팹 등록 확인)");
                 continue;
             }
 
-            enemy.transform.SetPositionAndRotation(point.position, Quaternion.identity);
-            enemy.SetTarget(targetForEnemies); // 적은 플레이어를 노림
+            enemy.transform.SetPositionAndRotation(origin + (Vector3)offset, Quaternion.identity);
+
+            // 순서 주의: GetObject 내부 Init→Revive→ResetHealth가 '프리팹 기본값'으로 되돌린 뒤에
+            // 이 스테이지 값으로 덮어써야 한다. 그래서 스폰 직후 적용.
+            enemy.Health.SetMaxHp(data.EnemyMaxHp);        // resetCurrentHp=true → 새 최대치로 꽉 채움
+            enemy.Attack.SetAttackDamage(data.EnemyDamage);
+
+            enemy.SetTarget(targetForEnemies);             // 적은 플레이어를 노림
             active.Add(enemy);
         }
 
@@ -52,9 +50,7 @@ public class EnemySpawner : MonoBehaviour
         foreach (EnemyController enemy in active)
         {
             if (enemy == null)
-            {
                 continue;
-            }
 
             CombatObjectPoolManager.instance.ReturnObject(PoolType.Enemy, enemy.gameObject);
         }
@@ -70,9 +66,7 @@ public class EnemySpawner : MonoBehaviour
         foreach (EnemyController enemy in active)
         {
             if (enemy == null || enemy.Health.IsDead)
-            {
                 continue;
-            }
 
             float sqr = ((Vector2)(enemy.transform.position - from)).sqrMagnitude;
             if (sqr < bestSqr)

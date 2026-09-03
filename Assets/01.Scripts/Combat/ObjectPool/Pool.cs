@@ -43,7 +43,9 @@ public class Pool
 
     public void ReturnObject(GameObject go)
     {
-        // 반납 전 정리 훅
+        if (!go.activeSelf) // 이미 반납(비활성)된 오브젝트면 무시 → 중복 enqueue 방지
+            return;
+
         if (go.TryGetComponent(out IPoolable poolable))
             poolable.ReturnToPool();
 

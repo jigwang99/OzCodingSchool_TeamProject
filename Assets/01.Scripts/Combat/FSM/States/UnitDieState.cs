@@ -2,27 +2,18 @@
 
 public class UnitDieState : UnitBaseState
 {
-    public UnitDieState(BaseUnitController controller) : base(controller)
-    {
-    }
+    public UnitDieState(BaseUnitController controller) : base(controller) { }
 
     public override void Enter()
     {
         controller.Move.Stop();
+
+        // 적만 자동 반납. 플레이어는 Revive로 되살아나야 하므로 제외.
+        if (controller is EnemyController enemy)
+            enemy.DespawnAfterDeath();
     }
 
-    public override void Exit()
-    {
-        
-    }
-
-    public override void FixedUpdate()
-    {
-        
-    }
-
-    public override void Update()
-    {
-        
-    }
+    public override void Exit() { }
+    public override void FixedUpdate() { }
+    public override void Update() { }
 }
