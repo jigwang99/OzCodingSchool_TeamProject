@@ -28,10 +28,11 @@ public class PlayerData
     public int[] foodMachine = new int[5]; // 가구 5칸
 
     // 식당 업그레이드 효과값
-    public float makeSpeed = 0f;
-    public float goldBonus = 0f;
-    public float specialChance = 0f;
+    public float MakeSpeed = 0f;
+    public float GoldBonus = 0f;
+    public float SpecialChance = 0f;
     public float makeDouble = 0f;
+    public float NoUseFishChance = 0;
 
     // 마지막 저장 시각
     public string lastSaveTime;

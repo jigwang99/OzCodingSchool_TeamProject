@@ -8,4 +8,13 @@ public class SeatManager : MonoBehaviour
     {
         Seats = seatParentObj.GetComponentsInChildren<Seats>();
     }
+    public void ResetSeats()
+    {
+        Seats = seatParentObj.GetComponentsInChildren<Seats>();
+
+        for (int i = 0; i < Seats.Length; i++)
+        {
+            Seats[i].isFull = false;
+        }
+    }
 }

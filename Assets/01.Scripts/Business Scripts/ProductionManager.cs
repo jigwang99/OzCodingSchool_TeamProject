@@ -9,6 +9,8 @@ public class ProductionManager : MonoBehaviour
 
     public MakeFood chef1;
     public MakeFood chef2;
+    public GameObject chef1Slider;
+    public GameObject chef2Slider;
     public Food[] foods;
 
     [Header("요리할 등급 선택")]
@@ -25,7 +27,13 @@ public class ProductionManager : MonoBehaviour
     {
         if (instance == null) instance = this;
         else Destroy(gameObject);
-        DontDestroyOnLoad(gameObject);
+
+        if (FacilityManager.instance.CookCatNum != 1)
+        {
+            chef2.gameObject.SetActive(false);
+            chef2Slider.SetActive(false);
+        }
+        StartChef2();
     }
 
     // 등급 선택 버튼 → 여기로 재연결 (구 FishInventoryManager.SelectXxx)
@@ -47,7 +55,7 @@ public class ProductionManager : MonoBehaviour
         if (!chef1Cooking)
             StartCoroutine(CookQueue(chef1, 1));
 
-        if (FacilityManager.instance.makeDouble == 1 && !chef2Cooking)
+        if (FacilityManager.instance.cooker == 1 && !chef2Cooking)
             StartCoroutine(CookQueue(chef2, 2));
     }
 
@@ -124,7 +132,38 @@ public class ProductionManager : MonoBehaviour
 
     public void StartChef2()
     {
-        if (FacilityManager.instance.makeDouble == 1 && !chef2Cooking && orderQueue.Count > 0)
+        if (FacilityManager.instance.cooker == 1)
+        {
+            chef2.gameObject.SetActive(true);
+            chef2Slider.SetActive(true);
+
             StartCoroutine(CookQueue(chef2, 2));
+        }
+    }
+
+    public void ChefPosition()
+    {
+        if(FacilityManager.instance.RestaurantLevel == 2)
+        {
+            chef1.transform.parent.localScale = new Vector3(.8f, .8f, .8f);
+            chef2.transform.parent.localScale = new Vector3(.8f, .8f, .8f);
+
+            chef1.transform.parent.position = new Vector3(-0.5f, 0.7f);
+            chef2.transform.parent.position = new Vector3(0.7f, 0.7f);
+
+            chef1Slider.transform.localPosition = new Vector3(-200, 390);
+            chef2Slider.transform.localPosition = new Vector3(167, 390);
+        }
+        else if(FacilityManager.instance.RestaurantLevel == 3)
+        {
+            chef1.transform.parent.localScale = new Vector3(.6f, .6f, .6f);
+            chef2.transform.parent.localScale = new Vector3(.6f, .6f, .6f);
+
+            chef1.transform.parent.position = new Vector3(-0.6f, 0.3f);
+            chef2.transform.parent.position = new Vector3(1f, 0.3f);
+
+            chef1Slider.transform.localPosition = new Vector3(-219, 212);
+            chef2Slider.transform.localPosition = new Vector3(271, 221);
+        }
     }
 }
