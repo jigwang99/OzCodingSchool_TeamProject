@@ -37,6 +37,12 @@ public class PlayerData
     // 마지막 저장 시각
     public string lastSaveTime;
 
+    // 방치 물고기 생산 상태
+    public long idleFishLastCollectionUtcTicks;
+    public float idleFishFraction;
+    public bool idleFishAccumulationEnabled;
+    public int idleFishNextCommonSpecies;
+
     // 상태 변경 이벤트 (직렬화 대상 아님)
     [field: NonSerialized] public Action OnRetryChanged;
     [field: NonSerialized] public Action OnStageChanged;
