@@ -10,6 +10,8 @@ public class CurrencyManager : Singleton<CurrencyManager>
 
     protected override void Awake()
     {
+        // 방치 보상은 전투 이외의 모든 씬에서 지급될 수 있으므로 재화 게이트도 유지한다.
+        isDontDestroy = true;
         base.Awake();
     }
 

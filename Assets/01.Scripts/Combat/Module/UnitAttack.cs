@@ -27,7 +27,6 @@ public class UnitAttack : MonoBehaviour
         var info = new DamageInfo(attackDamage, gameObject.GetInstanceID(), isCritical);
         target.TakeDamage(info);
         OnAttackHit?.Invoke(target, info);
-        Debug.Log($"{this.gameObject.name}이 공격");
         return true;
     }
 
