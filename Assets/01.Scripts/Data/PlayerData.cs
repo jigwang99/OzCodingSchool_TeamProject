@@ -61,7 +61,8 @@ public class PlayerData
         if (currentStage == clamped)
             return;
 
-        currentStage = Mathf.Max(1, stage);
+        currentStage = clamped;
+        OnStageChanged?.Invoke();   // ← 추가: 구독 중인 UI(CurrentStageText) 갱신
     }
 
     public void SetRetryEnabled(bool enabled)

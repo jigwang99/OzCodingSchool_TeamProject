@@ -1,13 +1,15 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 {
     private static T _instance;
 
+    private static bool _isQuitting;
     public static T instance
     {
         get
         {
+            if (_isQuitting) return null;   // ← 종료 중엔 새로 만들지 않음
             if (_instance == null)
             {
                 _instance = FindObjectOfType<T>();
@@ -62,5 +64,9 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
         {
             _instance = null;
         }
+    }
+    protected virtual void OnApplicationQuit()
+    {
+        _isQuitting = true;
     }
 }

@@ -1,4 +1,6 @@
-﻿public class UnitIdleState : UnitBaseState
+﻿using StudioNAP; // AnimationTypeEnum
+
+public class UnitIdleState : UnitBaseState
 {
     public UnitIdleState(BaseUnitController controller) : base(controller)
     {
@@ -7,6 +9,7 @@
     public override void Enter()
     {
         controller.Move.Stop();
+        controller.PlayAnimation(AnimationTypeEnum.Idle);
     }
 
     public override void Exit()
