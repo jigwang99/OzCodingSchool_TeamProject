@@ -15,10 +15,6 @@ public class GameManager : Singleton<GameManager>
         }
 
         LoadPlayerData();
-
-        // 씬에 별도 배치하지 않아도 방치 보상은 게임 전체에서 계속 동작해야 한다.
-        if (GetComponent<IdleFishManager>() == null)
-            gameObject.AddComponent<IdleFishManager>();
     }
 
     // 저장된 데이터가 있으면 불러오고,

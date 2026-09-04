@@ -1545,7 +1545,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FishCountView
   grade: 2
   species: 1
-  label: {fileID: 0}
 --- !u!1 &158958691
 GameObject:
   m_ObjectHideFlags: 0
@@ -6118,7 +6117,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FishCountView
   grade: 0
   species: 2
-  label: {fileID: 0}
 --- !u!1 &541822269
 GameObject:
   m_ObjectHideFlags: 0
@@ -6933,7 +6931,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FishCountView
   grade: 0
   species: 1
-  label: {fileID: 0}
 --- !u!1 &662896954
 GameObject:
   m_ObjectHideFlags: 0
@@ -7657,7 +7654,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FishCountView
   grade: 0
   species: 3
-  label: {fileID: 0}
 --- !u!1 &723958712
 GameObject:
   m_ObjectHideFlags: 0
@@ -8449,7 +8445,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FishCountView
   grade: 0
   species: 5
-  label: {fileID: 0}
 --- !u!1 &789257810
 GameObject:
   m_ObjectHideFlags: 0
@@ -9064,7 +9059,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FishCountView
   grade: 0
   species: 7
-  label: {fileID: 0}
 --- !u!1 &821688524
 GameObject:
   m_ObjectHideFlags: 0
@@ -9710,6 +9704,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8820bdd7bcc00d94e93311d2f6ed6eb3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProductionManager
+  isDontDestroy: 1
   chef1: {fileID: 821688527}
   chef2: {fileID: 175476316}
   foods:
@@ -10670,7 +10665,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FishCountView
   grade: 1
   species: 1
-  label: {fileID: 0}
 --- !u!1 &1025153349
 GameObject:
   m_ObjectHideFlags: 0
@@ -13182,7 +13176,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FishCountView
   grade: 1
   species: 2
-  label: {fileID: 0}
 --- !u!1 &1249709994
 GameObject:
   m_ObjectHideFlags: 0
@@ -13591,7 +13584,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FishCountView
   grade: 3
   species: 0
-  label: {fileID: 0}
 --- !u!1 &1277248913
 GameObject:
   m_ObjectHideFlags: 0
@@ -14926,7 +14918,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FishCountView
   grade: 2
   species: 0
-  label: {fileID: 0}
 --- !u!1 &1442449441
 GameObject:
   m_ObjectHideFlags: 0
@@ -15571,7 +15562,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FishCountView
   grade: 0
   species: 6
-  label: {fileID: 0}
 --- !u!1 &1530248610
 GameObject:
   m_ObjectHideFlags: 0
@@ -16700,7 +16690,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FishCountView
   grade: 1
   species: 3
-  label: {fileID: 0}
 --- !u!1 &1604648891
 GameObject:
   m_ObjectHideFlags: 0
@@ -18130,7 +18119,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FishCountView
   grade: 1
   species: 0
-  label: {fileID: 0}
 --- !u!1 &1776599839
 GameObject:
   m_ObjectHideFlags: 0
@@ -18981,7 +18969,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FishCountView
   grade: 0
   species: 0
-  label: {fileID: 0}
 --- !u!1 &1886902800
 GameObject:
   m_ObjectHideFlags: 0
@@ -20234,7 +20221,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FishCountView
   grade: 0
   species: 4
-  label: {fileID: 0}
 --- !u!1 &2096402101
 GameObject:
   m_ObjectHideFlags: 0

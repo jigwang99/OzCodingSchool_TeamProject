@@ -7,29 +7,18 @@ public class FishDropUpgradeBinder : MonoBehaviour
     [SerializeField] private FishDropSystem fishDropSystem;
     [SerializeField] private UpgradeData dropRateUpgrade; // type = FishDropRate 에셋
 
-    // 구독한 매니저 인스턴스를 캐시 → 씬 종료 중 getter 재생성 방지
-    private UpgradeManager subscribedUpgradeManager;
-
     private void OnEnable()
     {
-        UpgradeManager manager = UpgradeManager.instance;
-        if (manager != null)
-        {
-            subscribedUpgradeManager = manager;
-            subscribedUpgradeManager.OnUpgradePurchased += HandlePurchased;
-        }
+        if (UpgradeManager.instance != null)
+            UpgradeManager.instance.OnUpgradePurchased += HandlePurchased;
 
         Apply(); // 저장된 레벨을 진입 시 즉시 반영
     }
 
     private void OnDisable()
     {
-        // 씬 종료 중 UpgradeManager.instance에 접근하면 싱글턴 getter가 새 오브젝트를
-        // 만들 수 있으므로, 구독했던 인스턴스만 직접 해제한다.
-        if (subscribedUpgradeManager != null)
-            subscribedUpgradeManager.OnUpgradePurchased -= HandlePurchased;
-
-        subscribedUpgradeManager = null;
+        if (UpgradeManager.instance != null)
+            UpgradeManager.instance.OnUpgradePurchased -= HandlePurchased;
     }
 
     private void HandlePurchased(UpgradeData data, int level)

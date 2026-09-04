@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using StudioNAP; // AnimationTypeEnum
 
 public class UnitMoveState : UnitBaseState
 {
@@ -9,7 +8,6 @@ public class UnitMoveState : UnitBaseState
 
     public override void Enter()
     {
-        controller.PlayAnimation(AnimationTypeEnum.Run);
     }
 
     public override void Exit()

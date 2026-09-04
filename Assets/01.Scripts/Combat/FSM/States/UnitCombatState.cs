@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using StudioNAP; // AnimationTypeEnum
 
 public class UnitCombatState : UnitBaseState
 {
     private CancellationTokenSource attackCancellationTokenSource;
-    private bool useSecondAttack; // 타격마다 Attack0 / Attack1 번갈아 재생
 
     public UnitCombatState(BaseUnitController controller) : base(controller)
     {
@@ -55,21 +53,12 @@ public class UnitCombatState : UnitBaseState
         try
         {
             // 대상이 도중에 교체돼도 controller.Target 기준으로 계속 공격.
-            // 자기 자신이 죽으면(Health.IsDead) 즉시 루프 종료.
-            while (!cancellationToken.IsCancellationRequested
-                   && !controller.Health.IsDead
-                   && controller.IsTargetInAttackRange)
+            while (!cancellationToken.IsCancellationRequested && controller.IsTargetInAttackRange)
             {
                 if (!controller.TryAttackTarget())
                 {
                     break;
                 }
-
-                // 타격 성공 시 공격 애니메이션 재생 (Attack0 ↔ Attack1 교차)
-                controller.PlayAnimation(useSecondAttack
-                    ? AnimationTypeEnum.Attack1
-                    : AnimationTypeEnum.Attack0);
-                useSecondAttack = !useSecondAttack;
 
                 await UniTask.Delay(
                     TimeSpan.FromSeconds(controller.Attack.AttackInterval),
