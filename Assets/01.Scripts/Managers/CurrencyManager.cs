@@ -93,8 +93,10 @@ public class CurrencyManager : Singleton<CurrencyManager>
 
             return false;
         }
-
-        fishArray[species] -= count;
+        if (FacilityManager.instance.NoUseFishChance < UnityEngine.Random.Range(0f, 1f))    //물고기 안쓰기 확률
+        {
+            fishArray[species] -= count;
+        }
 
         Debug.Log($"[CurrencyManager] {grade} / 종 {species} 물고기 소비: -{count} / 잔여: {fishArray[species]}");
 
