@@ -828,7 +828,7 @@ MonoBehaviour:
   gachaPopup: {fileID: 1836910603}
   gachaCloseButton: {fileID: 487982587}
   scrollViewContent: {fileID: 1357938151}
-  gachaPool: {fileID: 0}
+  gachaPool: {fileID: 11400000, guid: a0ae263f8793da84c9258a7f93c1e8d9, type: 2}
   weaponButton: {fileID: 1859416167}
   furnitureButton: {fileID: 1077684693}
   foodButton: {fileID: 1401255841}
@@ -2789,10 +2789,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 876ebd480cd75644e82e53afe36d180c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GachaTest
-  config:
-    drawCount: 1000
-    spendGold: 0
-  testGroup: 0
 --- !u!4 &1772634581
 Transform:
   m_ObjectHideFlags: 0

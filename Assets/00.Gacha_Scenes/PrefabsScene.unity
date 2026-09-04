@@ -766,9 +766,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a15b033a8163967419cdfd0d1209cf36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ObjectPool
-  prefab: {fileID: 2341365076475621094, guid: 7c7d1f52be6a98d44992f135d6fa4eea, type: 3}
-  initialSize: 10
-  expandIfEmpty: 1
 --- !u!4 &523568164
 Transform:
   m_ObjectHideFlags: 0
@@ -1185,7 +1182,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f149d33cc4804d542a038339a952b912, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CurrencyManager
-  currentMoney: 1000
 --- !u!4 &877694921
 Transform:
   m_ObjectHideFlags: 0
@@ -1341,17 +1337,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20db420ad4589df4182819b1e951dd94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GachaUI
-  pool: {fileID: 0}
-  poolManager: {fileID: 0}
-  costPerDraw: 10
-  drawButton: {fileID: 0}
-  moneyText: {fileID: 0}
-  drawButtonText: {fileID: 0}
-  popupPanel: {fileID: 0}
-  popupTitleText: {fileID: 0}
-  popupDetailText: {fileID: 0}
-  popupPreviewParent: {fileID: 0}
-  popupCloseButton: {fileID: 0}
 --- !u!4 &1336924794
 Transform:
   m_ObjectHideFlags: 0
@@ -1670,25 +1655,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 611e8051f77944244a80ede5f84008a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PoolManager
-  pools:
-  - prefab: {fileID: 2341365076475621094, guid: 7c7d1f52be6a98d44992f135d6fa4eea, type: 3}
-    poolPrefab: {fileID: 0}
-    runtimePool: {fileID: 0}
-  - prefab: {fileID: 4998802265152086895, guid: da55b2457a0d29840bb34e7bc6627ffe, type: 3}
-    poolPrefab: {fileID: 0}
-    runtimePool: {fileID: 0}
-  - prefab: {fileID: 189469910136030312, guid: d0547745a5d52f34f81719db44e12243, type: 3}
-    poolPrefab: {fileID: 0}
-    runtimePool: {fileID: 0}
-  - prefab: {fileID: 2928657680283075976, guid: adc54f65c2d6ee54b8c3c2d7b17ca911, type: 3}
-    poolPrefab: {fileID: 0}
-    runtimePool: {fileID: 0}
-  - prefab: {fileID: 5513289831727018278, guid: 1f0082c5444bafe4cba508aeeb44f0f2, type: 3}
-    poolPrefab: {fileID: 0}
-    runtimePool: {fileID: 0}
-  - prefab: {fileID: 5845151817742204637, guid: 442854fae3c39514aaadab57390353be, type: 3}
-    poolPrefab: {fileID: 0}
-    runtimePool: {fileID: 0}
 --- !u!4 &1423470772
 Transform:
   m_ObjectHideFlags: 0
@@ -1854,8 +1820,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 888686ccf8e864544a455981ed7fbaaf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GachaManager
-  pools:
-  - {fileID: 11400000, guid: d996da0d2cbe704458f50cd0ac0e6ace, type: 2}
+  gachaPool: {fileID: 0}
+  gachaConfig:
+    pull1Cost: 1
+    pull5Cost: 5
+    pull30Cost: 30
 --- !u!4 &1615026709
 Transform:
   m_ObjectHideFlags: 0
@@ -2001,16 +1970,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98f3f1442ec0c3d459c57c334ba7e96a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GachaExampleInstantiateTester
-  pool: {fileID: 11400000, guid: d996da0d2cbe704458f50cd0ac0e6ace, type: 2}
-  testCount: 50
-  perFrameBatch: 100
-  itemsPerRow: 10
-  spawnParent: {fileID: 0}
-  spawnStart: {x: 0, y: 0, z: 0}
-  spawnSpacing: {x: 1.5, y: 2, z: 1}
-  labelOffset: 0.2
-  useFixedSeed: 0
-  seed: 42
 --- !u!4 &1728151918
 Transform:
   m_ObjectHideFlags: 0
