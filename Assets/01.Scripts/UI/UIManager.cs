@@ -30,4 +30,13 @@ public class UIManager : MonoBehaviour
             }
         }
     }
+    public void OpenSettingsPopup()
+    {
+        if (settingsPopup == null) return;
+
+        if (!settingsPopup.gameObject.activeSelf)
+        {
+            settingsPopup.Toggle();
+        }
+    }
 }

@@ -1,11 +1,12 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(Button))]
 public class SceneTransitionButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
-    public enum TargetScene { BusinessScene, CombatScene, TitleScene }
+    public enum TargetScene { BusinessScene, CombatScene, TitleScene, GachaScene }
 
     [Header("¸ñÀûÁö ¾À")]
     [SerializeField] private TargetScene targetScene;
@@ -16,6 +17,11 @@ public class SceneTransitionButton : MonoBehaviour, IPointerDownHandler, IPointe
     {
         originalScale = transform.localScale;
         GetComponent<Button>().onClick.AddListener(OnClickButton);
+
+        if (SceneManager.GetActiveScene().name == targetScene.ToString())
+        {
+            gameObject.SetActive(false);
+        }
     }
 
     private void OnClickButton()
