@@ -21,7 +21,6 @@ public class BObjectPoolManager : MonoBehaviour
             instance = this;
         else
             Destroy(gameObject);
-        DontDestroyOnLoad(gameObject);
     }
     void Start()
     {
@@ -41,7 +40,7 @@ public class BObjectPoolManager : MonoBehaviour
             }
         }
     }
-    public void GameEnd()   //ToArray() 쓰는 이유는 foreach 돌면서 activeObjects.Remove()가 일어나면 리스트 변경 오류가 나기 때문.
+    public void Refresh()   //ToArray() 쓰는 이유는 foreach 돌면서 activeObjects.Remove()가 일어나면 리스트 변경 오류가 나기 때문.
     {
         foreach (GameObject obj in activeObjects.ToArray())
         {
