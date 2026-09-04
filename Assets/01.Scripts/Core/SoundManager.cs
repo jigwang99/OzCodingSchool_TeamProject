@@ -9,8 +9,8 @@ public class SoundManager : Singleton<SoundManager>
 
     [Header("BGM Clips")]
     [SerializeField] private AudioClip titleBgm;
-    [SerializeField] private AudioClip managementBgm; // 경영 씬 브금
-    //[SerializeField] private AudioClip combatBgm;     // 전투 씬 브금
+    [SerializeField] private AudioClip BusinessBgm; // 경영 씬 브금
+    [SerializeField] private AudioClip combatBgm;     // 전투 씬 브금
     //[SerializeField] private AudioClip bossBgm;       // 보스 씬 브금
 
     private const string BGM_KEY = "BGMVolume";
@@ -47,18 +47,18 @@ public class SoundManager : Singleton<SoundManager>
         // 씬 이름이 확정되면 아래 주석을 풀고 실제 씬 이름으로 변경
         switch (scene.name)
         {
-            case "TitleScene":
+            case "TitleScene": // 메인 메뉴
                 PlayBGM(titleBgm);
                 break;
 
 
-            case "MainScene": // 경영 씬 이름
-                PlayBGM(managementBgm);
+            case "BusinessScene": // 경영 씬 이름
+                PlayBGM(BusinessBgm);
                 break;
 
-            //case "CombatScene": // 전투 씬 이름
-            //    PlayBGM(combatBgm);
-            //    break;
+            case "CombatScene": // 전투 씬 이름
+                PlayBGM(combatBgm);
+                break;
 
             //case "BossScene": // 보스 씬 이름
             //    PlayBGM(bossBgm);

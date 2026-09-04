@@ -35,7 +35,8 @@ Transform:
   m_LocalPosition: {x: 4.09, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 8865000000000000002}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &835572492355135138
@@ -177,6 +178,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8f2b76105aa4ff4eb51a1665f3b3b8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyController
+  detectionRange: 4
+  despawnDelay: 0
 --- !u!61 &8160494925811920960
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -223,3 +226,21 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!1001 &8865000000000000001
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 8510719260760172618}
+    m_Modifications: []
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: c05f3b7af682a4242877736160de12b1, type: 3}
+--- !u!224 &8865000000000000002 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 5170421319716037333, guid: c05f3b7af682a4242877736160de12b1, type: 3}
+  m_PrefabInstance: {fileID: 8865000000000000001}
+  m_PrefabAsset: {fileID: 0}

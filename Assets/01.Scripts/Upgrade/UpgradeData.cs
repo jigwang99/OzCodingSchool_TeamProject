@@ -1,32 +1,40 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public enum UpgradeType
 {
     WeaponPower,
+    FishDropRate,
     RestaurantExpansion
 }
 
-[CreateAssetMenu(fileName = "UpgradeData", menuName = "Scriptable Objects/UpgradeData")]
+[CreateAssetMenu(fileName = "UpgradeData", menuName = "Upgrade/UpgradeData")]
 public class UpgradeData : ScriptableObject
 {
-    [Header("°íÀ¯ Á¤º¸")]
+    [Header("ê³ ìœ  ì •ë³´")]
     public int id;
 
-    [Header("UI¿¡ Ç¥½ÃµÉ ¾÷±×·¹ÀÌµå ÀÌ¸§")]
+    [Header("UIì— í‘œì‹œë  ì—…ê·¸ë ˆì´ë“œ ì´ë¦„")]
     public string upgradeName;
 
-    [Header("¾÷±×·¹ÀÌµå Ä«Å×°í¸®")]
+    [Header("ì—…ê·¸ë ˆì´ë“œ ì¹´í…Œê³ ë¦¬")]
     public UpgradeType type;
 
-    [Header("¾÷±×·¹ÀÌµå ¼³Á¤")]
-    [Tooltip("·¹º§ 1 -> 2 ·Î °¥ ¶§ µå´Â ±âº» ºñ¿ë")]
-    //±âº» ºñ¿ë ¼öÁ¤ ÇÊ¿ä
+    [Header("ì—…ê·¸ë ˆì´ë“œ ì„¤ì •")]
+    [Tooltip("ë ˆë²¨ 1 -> 2 ë¡œ ê°ˆ ë•Œ ë“œëŠ” ê¸°ë³¸ ë¹„ìš©")]
     public double baseCost = 100.0;
 
-    [Tooltip("·¹º§ÀÌ ¿À¸¦ ¶§¸¶´Ù ºñ¿ëÀÌ Áõ°¡ÇÏ´Â °è¼ö (ÇöÀç: 1.15 = 15%¾¿ Áõ°¡)")]
-    //ºñ¿ë °è¼ö ¼öÁ¤ ÇÊ¿ä
+    [Tooltip("ë ˆë²¨ì´ ì˜¤ë¥¼ ë•Œë§ˆë‹¤ ë¹„ìš©ì´ ì¦ê°€í•˜ëŠ” ê³„ìˆ˜ (í˜„ì¬: 1.15 = 15%ì”© ì¦ê°€)")]
     public double costMultiplier = 1.15;
 
-    [Tooltip("ÃÖ´ë µµ´Ş °¡´É ·¹º§")]
-    public int maxLevel = 3;
+    [Tooltip("ìµœëŒ€ ë„ë‹¬ ê°€ëŠ¥ ë ˆë²¨")]
+    public int maxLevel = 5;
+
+    [Header("ë“œë¡­ë¥  ì—…ê·¸ë ˆì´ë“œ ì„¤ì •")]
+    [Tooltip("FishDropRate ì—…ê·¸ë ˆì´ë“œ ë ˆë²¨ë‹¹ ì¦ê°€í•˜ëŠ” ë“œë¡­ë¥  ë°°ìˆ˜")]
+    public float dropChanceMultiplierPerLevel = 0.3f;
+
+    public float GetDropChanceMultiplier(int level)
+    {
+        return 1f + Mathf.Max(0, level - 1) * dropChanceMultiplierPerLevel;
+    }
 }

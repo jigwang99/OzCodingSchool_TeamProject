@@ -1,26 +1,25 @@
-using System;
+ï»¿using System;
 using UnityEngine;
 
 public class UpgradeManager : Singleton<UpgradeManager>
 {
     public event Action<UpgradeData, int> OnUpgradePurchased;
 
-    //¾÷±×·¹ÀÌµå ºñ¿ë °è»ê ¸Ş¼­µå
+    // ì—…ê·¸ë ˆì´ë“œ ë¹„ìš© ê³„ì‚°
     public double GetUpgradeCost(UpgradeData data, int currentLevel)
     {
-        // currentLevelÀº 1·¹º§ ±âÁØ & º¸Åë 0ºÎÅÍ ½ÃÀÛÇÏ´Â Áö¼ö °è»ê¿¡ ¸ÂÃß±â À§ÇØ currentLevel - 1 »ç¿ë
         int levelIndex = Mathf.Max(0, currentLevel - 1);
         return data.baseCost * Math.Pow(data.costMultiplier, levelIndex);
     }
 
-    //¾÷±×·¹ÀÌµå ½Ãµµ ¸Ş¼­µå
+    // ì—…ê·¸ë ˆì´ë“œ ì‹œë„
     public void TryUpgrade(UpgradeData data, PlayerData playerData)
     {
         int currentLevel = GetCurrentLevel(data, playerData);
 
         if (currentLevel >= data.maxLevel)
         {
-            Debug.Log($"{data.upgradeName} ÃÖ´ë ·¹º§ µµ´Ş!");
+            Debug.Log($"{data.upgradeName} ìµœëŒ€ ë ˆë²¨ ë„ë‹¬!");
             return;
         }
 
@@ -31,41 +30,37 @@ public class UpgradeManager : Singleton<UpgradeManager>
             SetNextLevel(data, playerData);
             int updatedLevel = GetCurrentLevel(data, playerData);
 
+            // íš¨ê³¼ ë°˜ì˜ì€ ê° ì‹œìŠ¤í…œì˜ ë°”ì¸ë”ê°€ ì´ ì´ë²¤íŠ¸ë¥¼ êµ¬ë…í•´ ì²˜ë¦¬
             OnUpgradePurchased?.Invoke(data, updatedLevel);
 
-            Debug.Log($"{data.upgradeName} ¾÷±×·¹ÀÌµå ¿Ï·á! ÇöÀç ·¹º§: {updatedLevel}, ³²Àº °ñµå: {playerData.gold}");
+            Debug.Log($"{data.upgradeName} ì—…ê·¸ë ˆì´ë“œ ì™„ë£Œ! ë ˆë²¨: {updatedLevel}, ë‚¨ì€ ê³¨ë“œ: {playerData.gold}");
         }
         else
         {
-            Debug.Log($"{data.upgradeName} ¾÷±×·¹ÀÌµå ½ÇÆĞ");
+            Debug.Log($"{data.upgradeName} ì—…ê·¸ë ˆì´ë“œ ì‹¤íŒ¨");
         }
     }
 
-    // µ¥ÀÌÅÍ Å¸ÀÔ¿¡ µû¶ó ÇöÀç ÇÃ·¹ÀÌ¾îÀÇ ·¹º§À» °¡Á®¿À´Â ¸Ş¼­µå
+    // íƒ€ì…ë³„ í˜„ì¬ ë ˆë²¨ ì¡°íšŒ
     public int GetCurrentLevel(UpgradeData data, PlayerData playerData)
     {
         switch (data.type)
         {
-            case UpgradeType.WeaponPower:
-                return playerData.weaponLevel;
-            case UpgradeType.RestaurantExpansion:
-                return playerData.restaurantLevel;
-            default:
-                return 1;
+            case UpgradeType.WeaponPower: return playerData.weaponLevel;
+            case UpgradeType.FishDropRate: return playerData.fishDropRateLevel;
+            case UpgradeType.RestaurantExpansion: return playerData.restaurantLevel;
+            default: return 1;
         }
     }
 
-    // µ¥ÀÌÅÍ Å¸ÀÔ¿¡ µû¶ó ·¹º§À» 1 ¿Ã·ÁÁÖ´Â ¸Ş¼­µå
+    // íƒ€ì…ë³„ ë ˆë²¨ +1
     private void SetNextLevel(UpgradeData data, PlayerData playerData)
     {
         switch (data.type)
         {
-            case UpgradeType.WeaponPower:
-                playerData.weaponLevel++;
-                break;
-            case UpgradeType.RestaurantExpansion:
-                playerData.restaurantLevel++;
-                break;
+            case UpgradeType.WeaponPower: playerData.weaponLevel++; break;
+            case UpgradeType.FishDropRate: playerData.fishDropRateLevel++; break;
+            case UpgradeType.RestaurantExpansion: playerData.restaurantLevel++; break;
         }
     }
 }
