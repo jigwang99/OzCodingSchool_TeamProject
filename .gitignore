@@ -107,8 +107,10 @@ InitTestScene*.unity*
 
 # 고양이 에셋 (저작권/용량 문제로 리포 제외)
 Assets/Business Assets
-Assets/Business Assets.meta
 
 # 외부 에셋 (저작권 및 용량 문제로 제외)
 Assets/SPUM
-Assets/SPUM.meta
+Assets/SP1
+Assets/Eric VFX Studio
+Assets/HitEffectPack
+Assets/WCE Assets
