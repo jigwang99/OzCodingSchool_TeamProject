@@ -6,7 +6,10 @@ using UnityEngine.SceneManagement;
 [RequireComponent(typeof(Button))]
 public class SceneTransitionButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
-    public enum TargetScene { BusinessScene, CombatScene, TitleScene, GachaScene }
+    public enum TargetScene // 씬 이름 변경 시 같이 수정해줘야함
+    {
+        BusinessScene, CombatScene, TitleScene, GachaScene, UpgradeTestScene
+    }
 
     [Header("목적지 씬")]
     [SerializeField] private TargetScene targetScene;

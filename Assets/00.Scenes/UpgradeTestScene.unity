@@ -601,6 +601,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24a3045fbfca1b84d87e4f5c13900722, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeManager
+  isDontDestroy: 0
 --- !u!4 &741521716
 Transform:
   m_ObjectHideFlags: 0
@@ -888,10 +889,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeUI
   upgradeData: {fileID: 11400000, guid: dc42791944396424081e168d210a78ce, type: 2}
-  upgradeManager: {fileID: 741521715}
   upgradeText: {fileID: 593858416}
   upgradeButton: {fileID: 894754043}
-  goldText: {fileID: 338301277}
+  upgradeButtonText: {fileID: 0}
 --- !u!1 &967684981
 GameObject:
   m_ObjectHideFlags: 0
@@ -1198,6 +1198,108 @@ MonoBehaviour:
   goldCheatButton: {fileID: 1386601503}
   goldText: {fileID: 338301277}
   cheatGold: 500
+--- !u!1001 &1611841562
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1946997824}
+    m_Modifications:
+    - target: {fileID: 1345532514786118638, guid: a7ce5c0d36ba0fe488bd2d94586e5ee9, type: 3}
+      propertyPath: m_Name
+      value: HamburgerButton
+      objectReference: {fileID: 0}
+    - target: {fileID: 8505823056965651156, guid: a7ce5c0d36ba0fe488bd2d94586e5ee9, type: 3}
+      propertyPath: m_Pivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8505823056965651156, guid: a7ce5c0d36ba0fe488bd2d94586e5ee9, type: 3}
+      propertyPath: m_Pivot.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8505823056965651156, guid: a7ce5c0d36ba0fe488bd2d94586e5ee9, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8505823056965651156, guid: a7ce5c0d36ba0fe488bd2d94586e5ee9, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8505823056965651156, guid: a7ce5c0d36ba0fe488bd2d94586e5ee9, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8505823056965651156, guid: a7ce5c0d36ba0fe488bd2d94586e5ee9, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8505823056965651156, guid: a7ce5c0d36ba0fe488bd2d94586e5ee9, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 120
+      objectReference: {fileID: 0}
+    - target: {fileID: 8505823056965651156, guid: a7ce5c0d36ba0fe488bd2d94586e5ee9, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 8505823056965651156, guid: a7ce5c0d36ba0fe488bd2d94586e5ee9, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8505823056965651156, guid: a7ce5c0d36ba0fe488bd2d94586e5ee9, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8505823056965651156, guid: a7ce5c0d36ba0fe488bd2d94586e5ee9, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8505823056965651156, guid: a7ce5c0d36ba0fe488bd2d94586e5ee9, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8505823056965651156, guid: a7ce5c0d36ba0fe488bd2d94586e5ee9, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8505823056965651156, guid: a7ce5c0d36ba0fe488bd2d94586e5ee9, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8505823056965651156, guid: a7ce5c0d36ba0fe488bd2d94586e5ee9, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8505823056965651156, guid: a7ce5c0d36ba0fe488bd2d94586e5ee9, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 8505823056965651156, guid: a7ce5c0d36ba0fe488bd2d94586e5ee9, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -100
+      objectReference: {fileID: 0}
+    - target: {fileID: 8505823056965651156, guid: a7ce5c0d36ba0fe488bd2d94586e5ee9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8505823056965651156, guid: a7ce5c0d36ba0fe488bd2d94586e5ee9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8505823056965651156, guid: a7ce5c0d36ba0fe488bd2d94586e5ee9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: a7ce5c0d36ba0fe488bd2d94586e5ee9, type: 3}
+--- !u!224 &1611841563 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 8505823056965651156, guid: a7ce5c0d36ba0fe488bd2d94586e5ee9, type: 3}
+  m_PrefabInstance: {fileID: 1611841562}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1630608770
 GameObject:
   m_ObjectHideFlags: 0
@@ -1687,6 +1789,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 724769017}
+  - {fileID: 1611841563}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -2103,10 +2206,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeUI
   upgradeData: {fileID: 11400000, guid: 30c6373eb033a184594620ef0ed6e4cd, type: 2}
-  upgradeManager: {fileID: 741521715}
   upgradeText: {fileID: 2046162805}
   upgradeButton: {fileID: 2140737302}
-  goldText: {fileID: 338301277}
+  upgradeButtonText: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
