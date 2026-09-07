@@ -1229,6 +1229,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1543899951}
     m_Modifications:
+    - target: {fileID: 4049891458804133279, guid: cc509fb38492e4d71ae0c3a0785867bb, type: 3}
+      propertyPath: m_Controller
+      value:
+      objectReference: {fileID: 22100000, guid: 77ccc437088b4085adcc8913cc5331a1, type: 2}
     - target: {fileID: 673549903829074807, guid: cc509fb38492e4d71ae0c3a0785867bb, type: 3}
       propertyPath: m_LocalScale.x
       value: -0.7
@@ -1335,6 +1339,7 @@ GameObject:
   - component: {fileID: 1543899952}
   - component: {fileID: 1543899957}
   - component: {fileID: 1543899958}
+  - component: {fileID: 1543899959}
   m_Layer: 0
   m_Name: PlayerCat
   m_TagString: Untagged
@@ -1387,6 +1392,8 @@ MonoBehaviour:
   attackDamage: 10
   attackRange: 2
   attackInterval: 1
+  useAnimationEvents: 1
+  hitDelay: 0.083333336
 --- !u!114 &1543899954
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1506,6 +1513,24 @@ SpriteRenderer:
   m_CorrespondingSourceObject: {fileID: 1971507580006021272, guid: cc509fb38492e4d71ae0c3a0785867bb, type: 3}
   m_PrefabInstance: {fileID: 1440917487}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1543899959
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1543899949}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 844711d4bf894445b1ba4c0791ffa2d4, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::CombatHitFeedback
+  visualRoot: {fileID: 1440917488}
+  damageFont: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  flashColor: {r: 1, g: 0.3, b: 0.25, a: 1}
+  flashDuration: 0.12
+  hitOffset: {x: 0, y: 0.5, z: 0}
+  damageColor: {r: 1, g: 0.4, b: 0.35, a: 1}
 --- !u!1 &1762081858
 GameObject:
   m_ObjectHideFlags: 0

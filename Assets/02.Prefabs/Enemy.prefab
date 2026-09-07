@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 7699150719261871998}
   - component: {fileID: 684306905913137934}
   - component: {fileID: 8160494925811920960}
+  - component: {fileID: 918320000000000001}
   m_Layer: 6
   m_Name: Enemy
   m_TagString: Untagged
@@ -78,7 +79,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!114 &3374704969720336761
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -107,6 +108,8 @@ MonoBehaviour:
   attackDamage: 10
   attackRange: 2
   attackInterval: 1
+  useAnimationEvents: 0
+  hitDelay: 0.2
 --- !u!114 &684306905913137934
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -121,7 +124,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyController
   unitViewSource: {fileID: 1309007677256833434}
   detectionRange: 4
-  despawnDelay: 0
+  despawnDelay: 0.35
 --- !u!61 &8160494925811920960
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -291,3 +294,22 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 5170421319716037333, guid: c05f3b7af682a4242877736160de12b1, type: 3}
   m_PrefabInstance: {fileID: 8865000000000000001}
   m_PrefabAsset: {fileID: 0}
+
+--- !u!114 &918320000000000001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1188218269235545268}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 844711d4bf894445b1ba4c0791ffa2d4, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::CombatHitFeedback
+  visualRoot: {fileID: 0}
+  damageFont: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  flashColor: {r: 1, g: 0.3, b: 0.25, a: 1}
+  flashDuration: 0.12
+  hitOffset: {x: 0, y: 0.5, z: 0}
+  damageColor: {r: 1, g: 0.95, b: 0.75, a: 1}

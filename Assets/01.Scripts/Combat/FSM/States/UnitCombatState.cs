@@ -1,16 +1,14 @@
-﻿using System;
+using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using StudioNAP; // AnimationTypeEnum
+using StudioNAP;
 
 public class UnitCombatState : UnitBaseState
 {
     private CancellationTokenSource attackCancellationTokenSource;
-    private bool useSecondAttack; // 타격마다 Attack0 / Attack1 번갈아 재생
+    private bool useSecondAttack;
 
-    public UnitCombatState(BaseUnitController controller) : base(controller)
-    {
-    }
+    public UnitCombatState(BaseUnitController controller) : base(controller) { }
 
     public override void Enter()
     {
@@ -22,62 +20,66 @@ public class UnitCombatState : UnitBaseState
 
     public override void Exit()
     {
-        if (attackCancellationTokenSource == null)
-        {
-            return;
-        }
-
+        controller.Attack.CancelPendingHit();
+        if (attackCancellationTokenSource == null) return;
         attackCancellationTokenSource.Cancel();
         attackCancellationTokenSource.Dispose();
         attackCancellationTokenSource = null;
     }
 
-    public override void FixedUpdate()
-    {
-    }
+    public override void FixedUpdate() { }
 
     public override void Update()
     {
-        // 현재 대상이 사거리 안이면 공격 루프가 처리 중이므로 유지.
-        if (controller.IsTargetInAttackRange)
-        {
+        // 준비 중에 대상이 바뀌면 새 적에게 이전 공격을 넘기지 않는다.
+        bool invalidPending = controller.Attack.HasPendingHit && !controller.Attack.IsPendingTargetValid;
+        if (!invalidPending && controller.IsTargetInAttackRange)
             return;
-        }
-
-        // 대상이 죽었거나(타겟 교체) 사거리를 벗어남 → 재교전 위해 복귀.
-        // 다음 가까운 적으로 이어서 전진/공격하기 위한 핵심 전환.
         controller.StateMachine.ChangeState(
             controller.IsTargetDetected ? controller.MoveState : controller.IdleState);
     }
 
     private async UniTaskVoid AttackLoopAsync(CancellationToken cancellationToken)
     {
+        int attackId = 0;
         try
         {
-            // 대상이 도중에 교체돼도 controller.Target 기준으로 계속 공격.
-            // 자기 자신이 죽으면(Health.IsDead) 즉시 루프 종료.
-            while (!cancellationToken.IsCancellationRequested
-                   && !controller.Health.IsDead
-                   && controller.IsTargetInAttackRange)
+            while (!cancellationToken.IsCancellationRequested && controller.isActiveAndEnabled
+                   && !controller.Health.IsDead && controller.IsTargetInAttackRange)
             {
-                if (!controller.TryAttackTarget())
+                if (controller.Attack.CooldownRemaining > 0f)
                 {
-                    break;
+                    await UniTask.Delay(TimeSpan.FromSeconds(controller.Attack.CooldownRemaining),
+                        cancellationToken: cancellationToken);
+                    continue;
                 }
 
-                // 타격 성공 시 공격 애니메이션 재생 (Attack0 ↔ Attack1 교차)
-                controller.PlayAnimation(useSecondAttack
-                    ? AnimationTypeEnum.Attack1
-                    : AnimationTypeEnum.Attack0);
+                int animationIndex = useSecondAttack ? 1 : 0;
+                attackId = controller.Attack.BeginAttack(controller.Target, animationIndex);
+                if (attackId == 0) break;
+                controller.PlayAnimation(useSecondAttack ? AnimationTypeEnum.Attack1 : AnimationTypeEnum.Attack0);
                 useSecondAttack = !useSecondAttack;
 
-                await UniTask.Delay(
-                    TimeSpan.FromSeconds(controller.Attack.AttackInterval),
+                if (!controller.Attack.UseAnimationEvents)
+                {
+                    // 애니메이션 이벤트가 없는 적/임시 유닛은 설정한 준비 시간 뒤 판정한다.
+                    await UniTask.Delay(TimeSpan.FromSeconds(controller.Attack.HitDelay),
+                        cancellationToken: cancellationToken);
+                    cancellationToken.ThrowIfCancellationRequested();
+                    controller.Attack.TryResolveHit(attackId);
+                }
+
+                // 준비 시간을 포함해 공격 시작 간격을 유지한다. 이벤트가 누락돼도 지연 타격을 만들지 않는다.
+                await UniTask.Delay(TimeSpan.FromSeconds(controller.Attack.CooldownRemaining),
                     cancellationToken: cancellationToken);
+                controller.Attack.CancelPendingHit(attackId);
             }
         }
-        catch (OperationCanceledException)
+        catch (OperationCanceledException) { }
+        finally
         {
+            // 이전 루프의 finally가 새 공격 예약을 취소하지 않도록 ID를 검사한다.
+            controller.Attack.CancelPendingHit(attackId);
         }
     }
 }
