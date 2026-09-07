@@ -1,0 +1,637 @@
+fileFormatVersion: 2
+guid: d8367192e203c674b9f0b0836b44c2c3
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -6317066916707456106
+    second: Spum_Fish_0
+  - first:
+      213: 8107496383443153728
+    second: Spum_Fish_1
+  - first:
+      213: 6340838208814233322
+    second: Spum_Fish_2
+  - first:
+      213: -6261196484734825620
+    second: Spum_Fish_3
+  - first:
+      213: 3313968879556921026
+    second: Spum_Fish_4
+  - first:
+      213: 4081187610884084035
+    second: Spum_Fish_5
+  - first:
+      213: -8471886986643311438
+    second: Spum_Fish_6
+  - first:
+      213: 804852945975694217
+    second: Spum_Fish_7
+  - first:
+      213: 1900265333363448409
+    second: Spum_Fish_8
+  - first:
+      213: -2851596752899409963
+    second: Spum_Fish_9
+  - first:
+      213: 6259225956037844210
+    second: Spum_Fish_10
+  - first:
+      213: -4973808100698219247
+    second: Spum_Fish_11
+  - first:
+      213: -8323392815989571853
+    second: Spum_Fish_12
+  - first:
+      213: -7350231478557936033
+    second: Spum_Fish_13
+  - first:
+      213: -2906562136282193026
+    second: Spum_Fish_14
+  - first:
+      213: -2195469764733784678
+    second: Spum_Fish_15
+  - first:
+      213: 1726787363752014160
+    second: Spum_Fish_16
+  - first:
+      213: 6846480999623650403
+    second: Spum_Fish_17
+  - first:
+      213: -3731295275058258950
+    second: Spum_Fish_18
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WindowsStoreApps
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Spum_Fish_0
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 0
+        width: 1052
+        height: 1234
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 69ba747cb154558a0800000000000000
+      internalID: -6317066916707456106
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spum_Fish_1
+      rect:
+        serializedVersion: 2
+        x: 725
+        y: 998
+        width: 10
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 043b4e0610d938070800000000000000
+      internalID: 8107496383443153728
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spum_Fish_2
+      rect:
+        serializedVersion: 2
+        x: 734
+        y: 1001
+        width: 17
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ae6b89671ce2ff750800000000000000
+      internalID: 6340838208814233322
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spum_Fish_3
+      rect:
+        serializedVersion: 2
+        x: 762
+        y: 960
+        width: 13
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c6bc47a68f2cb19a0800000000000000
+      internalID: -6261196484734825620
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spum_Fish_4
+      rect:
+        serializedVersion: 2
+        x: 866
+        y: 953
+        width: 9
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2c680b643259dfd20800000000000000
+      internalID: 3313968879556921026
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spum_Fish_5
+      rect:
+        serializedVersion: 2
+        x: 1095
+        y: 670
+        width: 29
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3419870528a43a830800000000000000
+      internalID: 4081187610884084035
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spum_Fish_6
+      rect:
+        serializedVersion: 2
+        x: 1125
+        y: 586
+        width: 80
+        height: 103
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2b4fedfebafcd6a80800000000000000
+      internalID: -8471886986643311438
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spum_Fish_7
+      rect:
+        serializedVersion: 2
+        x: 1196
+        y: 648
+        width: 7
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 983de457d796b2b00800000000000000
+      internalID: 804852945975694217
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spum_Fish_8
+      rect:
+        serializedVersion: 2
+        x: 1161
+        y: 632
+        width: 8
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 95a1e1ea0491f5a10800000000000000
+      internalID: 1900265333363448409
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spum_Fish_9
+      rect:
+        serializedVersion: 2
+        x: 1127
+        y: 606
+        width: 18
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5d7f5c49cd71d68d0800000000000000
+      internalID: -2851596752899409963
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spum_Fish_10
+      rect:
+        serializedVersion: 2
+        x: 217
+        y: 546
+        width: 11
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2fc5a8e18dc3dd650800000000000000
+      internalID: 6259225956037844210
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spum_Fish_11
+      rect:
+        serializedVersion: 2
+        x: 1139
+        y: 451
+        width: 46
+        height: 68
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 11d1ce082eb79fab0800000000000000
+      internalID: -4973808100698219247
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spum_Fish_12
+      rect:
+        serializedVersion: 2
+        x: 1030
+        y: 425
+        width: 22
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3fe37e4455e5d7c80800000000000000
+      internalID: -8323392815989571853
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spum_Fish_13
+      rect:
+        serializedVersion: 2
+        x: 1115
+        y: 387
+        width: 20
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f56f8a7d96bbef990800000000000000
+      internalID: -7350231478557936033
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spum_Fish_14
+      rect:
+        serializedVersion: 2
+        x: 1131
+        y: 405
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e73ac4df221d9a7d0800000000000000
+      internalID: -2906562136282193026
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spum_Fish_15
+      rect:
+        serializedVersion: 2
+        x: 1123
+        y: 384
+        width: 22
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a9daeed81ef1881e0800000000000000
+      internalID: -2195469764733784678
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spum_Fish_16
+      rect:
+        serializedVersion: 2
+        x: 1059
+        y: 224
+        width: 17
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 051721b55f7c6f710800000000000000
+      internalID: 1726787363752014160
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spum_Fish_17
+      rect:
+        serializedVersion: 2
+        x: 1101
+        y: 232
+        width: 7
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 36c6708e136930f50800000000000000
+      internalID: 6846480999623650403
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spum_Fish_18
+      rect:
+        serializedVersion: 2
+        x: 788
+        y: 206
+        width: 15
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: afb1f0277b6c73cc0800000000000000
+      internalID: -3731295275058258950
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Spum_Fish_0: -6317066916707456106
+      Spum_Fish_1: 8107496383443153728
+      Spum_Fish_10: 6259225956037844210
+      Spum_Fish_11: -4973808100698219247
+      Spum_Fish_12: -8323392815989571853
+      Spum_Fish_13: -7350231478557936033
+      Spum_Fish_14: -2906562136282193026
+      Spum_Fish_15: -2195469764733784678
+      Spum_Fish_16: 1726787363752014160
+      Spum_Fish_17: 6846480999623650403
+      Spum_Fish_18: -3731295275058258950
+      Spum_Fish_2: 6340838208814233322
+      Spum_Fish_3: -6261196484734825620
+      Spum_Fish_4: 3313968879556921026
+      Spum_Fish_5: 4081187610884084035
+      Spum_Fish_6: -8471886986643311438
+      Spum_Fish_7: 804852945975694217
+      Spum_Fish_8: 1900265333363448409
+      Spum_Fish_9: -2851596752899409963
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
