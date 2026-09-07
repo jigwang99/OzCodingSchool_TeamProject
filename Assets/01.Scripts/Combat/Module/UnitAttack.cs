@@ -35,9 +35,4 @@ public class UnitAttack : MonoBehaviour
     {
         attackDamage = Mathf.Max(0f, value);
     }
-    private void ApplyPlayerStats()
-    {
-        int lv = GameManager.instance.PlayerData.weaponLevel;
-        SetAttackDamage(lv * 5);
-    }
 }

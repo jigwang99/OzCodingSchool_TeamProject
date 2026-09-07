@@ -1334,6 +1334,7 @@ GameObject:
   - component: {fileID: 1543899953}
   - component: {fileID: 1543899952}
   - component: {fileID: 1543899957}
+  - component: {fileID: 1543899958}
   m_Layer: 0
   m_Name: PlayerCat
   m_TagString: Untagged
@@ -1485,6 +1486,26 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &1543899958
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1543899949}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2da7a5a929264531b0009ca01d87d351, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerWeaponEquipment
+  catalog: {fileID: 11400000, guid: 4398b1cd33594454b932691a80c8f77a, type: 2}
+  swordRenderer: {fileID: 1440917492}
+  defaultWeaponId: swords_0
+--- !u!212 &1440917492 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 1971507580006021272, guid: cc509fb38492e4d71ae0c3a0785867bb, type: 3}
+  m_PrefabInstance: {fileID: 1440917487}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1762081858
 GameObject:
   m_ObjectHideFlags: 0
