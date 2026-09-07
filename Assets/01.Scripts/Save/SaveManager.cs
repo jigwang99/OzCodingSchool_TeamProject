@@ -43,7 +43,7 @@ public class SaveManager : Singleton<SaveManager>
     {
         if (File.Exists(saveFilePath))
         {
-            string json = File.ReadAllText(saveFilePath);
+            string json = MigrateLegacyGold(File.ReadAllText(saveFilePath));
             PlayerData data = JsonUtility.FromJson<PlayerData>(json);
             Debug.Log("[SaveManager] 게임 불러오기 성공");
             return data;
@@ -79,5 +79,21 @@ public class SaveManager : Singleton<SaveManager>
 
             yield return new WaitForSeconds(saveInterval);
         }
+    }
+    // Convert old numeric gold to the BigNumber object before JsonUtility reads it.
+    private static string MigrateLegacyGold(string json)
+    {
+        return System.Text.RegularExpressions.Regex.Replace(
+            json,
+            @"(""gold""\s*:\s*)(-?(?:0|[1-9]\d*)(?:\.\d+)?(?:[eE][+-]?\d+)?)(?=\s*[,}])",
+            match =>
+            {
+                var culture = System.Globalization.CultureInfo.InvariantCulture;
+                double legacy = double.Parse(match.Groups[2].Value,
+                    System.Globalization.NumberStyles.Float, culture);
+                var gold = new BigNumber(legacy);
+                return match.Groups[1].Value + "{\"value\":" + gold.value.ToString("R", culture)
+                    + ",\"exponent\":" + gold.exponent.ToString(culture) + "}";
+            });
     }
 }

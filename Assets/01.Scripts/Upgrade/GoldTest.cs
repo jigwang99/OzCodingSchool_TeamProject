@@ -25,6 +25,6 @@ public class GoldTest : MonoBehaviour
 
         CurrencyManager.instance.AddGold(cheatGold);
 
-        goldText.text = $"Gold: {playerData.gold:N0}";
+        goldText.text = $"Gold: {playerData.gold}";
     }
 }

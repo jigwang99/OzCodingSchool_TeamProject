@@ -25,7 +25,7 @@ public class GoldUI : MonoBehaviour
 
     private void OnGoldChanged()
     {
-        int gold = GameManager.instance.PlayerData.gold;
-        goldText.text = $"Gold: {gold:N0}";
+        BigNumber gold = GameManager.instance.PlayerData.gold;
+        goldText.text = $"Gold: {gold}";
     }
 }

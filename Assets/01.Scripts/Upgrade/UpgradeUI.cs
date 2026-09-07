@@ -74,9 +74,9 @@ public class UpgradeUI : MonoBehaviour
             return;
         }
 
-        double cost = UpgradeManager.instance.GetUpgradeCost(upgradeData, currentLevel);
+        BigNumber cost = UpgradeManager.instance.GetUpgradeCost(upgradeData, currentLevel);
 
-        upgradeText.text = $"Lv. {currentLevel} / Price: {cost:N0} G";
+        upgradeText.text = $"Lv. {currentLevel} / Price: {cost} G";
 
         upgradeButton.interactable = true;
     }

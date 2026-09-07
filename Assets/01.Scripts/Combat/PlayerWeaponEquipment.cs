@@ -19,6 +19,17 @@ public class PlayerWeaponEquipment : MonoBehaviour
     public PlayerWeaponCatalog.Weapon CurrentWeapon { get; private set; }
     public event Action<PlayerWeaponCatalog.Weapon> OnWeaponChanged;
 
+    // 가차 결과 지급/인스펙터 테스트의 공통 진입점. 획득과 장착은 별도 동작이다.
+    public bool AcquireWeapon(string weaponId, int count = 1)
+    {
+        PlayerWeaponCatalog.Weapon weapon = catalog != null ? catalog.Find(weaponId) : null;
+        if (weapon == null || weapon.GetSprite() == null)
+            return false;
+
+        PlayerData data = GameManager.instance.PlayerData;
+        return data != null && data.AddWeapon(weaponId, count);
+    }
+
     private void OnEnable()
     {
         subscribedUpgradeManager = UpgradeManager.instance;
@@ -61,14 +72,14 @@ public class PlayerWeaponEquipment : MonoBehaviour
         }
 
         PlayerData data = GameManager.instance.PlayerData;
-        if (data == null)
+        if (data == null || !data.OwnsWeapon(weaponId))
             return false;
 
         // sword의 Transform/정렬/머티리얼을 유지해 기존 팔과 검 애니메이션을 그대로 사용한다.
         swordRenderer.sprite = sprite;
         CurrentWeapon = weapon;
-        unitAttack.SetAttackDamage(weapon.GetDamage(data.weaponLevel));
-        data.equippedWeaponId = weapon.id;
+        unitAttack.SetAttackDamage(weapon.GetDamage(data.GetWeaponLevel(weaponId)));
+        data.TryEquipOwnedWeapon(weapon.id);
         OnWeaponChanged?.Invoke(weapon);
         return true;
     }
@@ -79,6 +90,7 @@ public class PlayerWeaponEquipment : MonoBehaviour
         if (data == null)
             return;
 
+        data.InitializeWeapons(defaultWeaponId);
         string savedId = data.equippedWeaponId;
         if (string.IsNullOrEmpty(savedId))
         {
@@ -97,7 +109,7 @@ public class PlayerWeaponEquipment : MonoBehaviour
 
         PlayerData data = GameManager.instance.PlayerData;
         if (data != null)
-            unitAttack.SetAttackDamage(CurrentWeapon.GetDamage(data.weaponLevel));
+            unitAttack.SetAttackDamage(CurrentWeapon.GetDamage(data.GetWeaponLevel(CurrentWeapon.id)));
     }
 
     private bool ResolveReferences()
