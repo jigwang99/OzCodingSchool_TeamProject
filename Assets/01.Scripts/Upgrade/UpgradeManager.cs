@@ -6,10 +6,10 @@ public class UpgradeManager : Singleton<UpgradeManager>
     public event Action<UpgradeData, int> OnUpgradePurchased;
 
     // 업그레이드 비용 계산
-    public double GetUpgradeCost(UpgradeData data, int currentLevel)
+    public BigNumber GetUpgradeCost(UpgradeData data, int currentLevel)
     {
         int levelIndex = Mathf.Max(0, currentLevel - 1);
-        return data.baseCost * Math.Pow(data.costMultiplier, levelIndex);
+        return new BigNumber(data.baseCost * Math.Pow(data.costMultiplier, levelIndex));
     }
 
     // 업그레이드 시도
@@ -23,9 +23,9 @@ public class UpgradeManager : Singleton<UpgradeManager>
             return;
         }
 
-        double cost = GetUpgradeCost(data, currentLevel);
+        BigNumber cost = GetUpgradeCost(data, currentLevel);
 
-        if (CurrencyManager.instance.SpendGold((int)cost))
+        if (CurrencyManager.instance.SpendGold(cost))
         {
             SetNextLevel(data, playerData);
             int updatedLevel = GetCurrentLevel(data, playerData);

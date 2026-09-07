@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerData
 {
     // 재화 - 골드
-    public int gold;
+    public BigNumber gold;
 
     // 재화 - 물고기 (등급별 종 재고)
     public int[] commonFish = new int[8];
