@@ -25,10 +25,7 @@ public class ProductionManager : MonoBehaviour
 
     int[] foodStartIndex = { 0, 3, 6, 8 };
 
-    public int Recipe1 { get; set; }
-    public int Recipe2 { get; set; }
-    public int Recipe3 { get; set; }
-    public int Recipe4 { get; set; }
+    public int[] Recipes { get; set; }
 
     private void Awake()
     {
@@ -42,11 +39,14 @@ public class ProductionManager : MonoBehaviour
             chefsSlider[i].SetActive(true);
             StartChef(i);
         }
+        Recipes = new int[4];
+        for(int i = 0; i < Recipes.Length; i++)
+        {
+            if(Recipes[i] > 1)
+                Recipes[i] = 1;
 
-        Recipe1 = PlayerPrefs.GetInt("레시피1", 0);
-        Recipe2 = PlayerPrefs.GetInt("레시피2", 0);
-        Recipe3 = PlayerPrefs.GetInt("레시피3", 0);
-        Recipe4 = PlayerPrefs.GetInt("레시피4", 0);
+            PlayerPrefs.GetInt($"레시피{i}", 0);
+        }
     }
 
     // 등급 선택 버튼 → 여기로 재연결 (구 FishInventoryManager.SelectXxx)
@@ -64,6 +64,12 @@ public class ProductionManager : MonoBehaviour
     public void OrderFood(Customer customer)
     {
         orderQueue.Enqueue(customer);   // UpdateAllText 호출 제거 (FishCountView가 자동 갱신)
+
+        for (int i = 0; i < Recipes.Length; i++)
+        {
+            if (Recipes[i] > 1)
+                Recipes[i] = 1;
+        }
 
         if (!chef1Cooking)
             StartCoroutine(CookQueue(chefs[0], 1));
@@ -147,19 +153,19 @@ public class ProductionManager : MonoBehaviour
 
             if (j == 0)
             {
-                maxUse = Mathf.Clamp(chefLevel, 1, 2 + Recipe1);    //셰프 레벨에 따라서 최소 1마리 ~ 3마리 ( 2 + 레시피해금 );
+                maxUse = Mathf.Clamp(chefLevel, 1, 2 + Recipes[0]);    //셰프 레벨에 따라서 최소 1마리 ~ 3마리 ( 2 + 레시피해금 );
             }
             else if (j == 1 && chefLevel > 3)
             {
-                maxUse = Mathf.Clamp(chefLevel - 3, 1, 2 + Recipe2);
+                maxUse = Mathf.Clamp(chefLevel - 3, 1, 2 + Recipes[1]);
             }
             else if (j == 2 && chefLevel > 6)
             {
-                maxUse = Mathf.Clamp(chefLevel - 6, 1, 1 + Recipe3);
+                maxUse = Mathf.Clamp(chefLevel - 6, 1, 1 + Recipes[2]);
             }
             else if (j == 3 && chefLevel > 8)
             {
-                maxUse = Recipe4;
+                maxUse = Recipes[3];
             }
 
             int used = CurrencyManager.instance.SpendFromGrade((FishGrade)j, maxUse);
@@ -223,9 +229,12 @@ public class ProductionManager : MonoBehaviour
 
     private void OnApplicationQuit()
     {
-        PlayerPrefs.SetInt("레시피1", Recipe1);
-        PlayerPrefs.SetInt("레시피2", Recipe2);
-        PlayerPrefs.SetInt("레시피3", Recipe3);
-        PlayerPrefs.SetInt("레시피4", Recipe4);
+        for (int i = 0; i < Recipes.Length; i++)
+        {
+            if (Recipes[i] > 1)
+                Recipes[i] = 1;
+
+            PlayerPrefs.SetInt($"레시피{i}", Recipes[i]);
+        }
     }
 }
