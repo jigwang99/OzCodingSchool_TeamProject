@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
@@ -33,6 +34,11 @@ public class StageManager : MonoBehaviour
     private Vector3 playerStartPosition;
     private bool isTransitioning;
     private float resultEndsAt;
+    private bool isInitialized;
+    private CancellationTokenSource restartCancellation;
+
+    public int StageCount => stageDataList != null ? stageDataList.Count : 0;
+    public int CurrentStageNumber => CurrentStage;
 
     public event Action<StageResult> OnStageResult;
     public event Action OnStageStarted;
@@ -57,17 +63,48 @@ public class StageManager : MonoBehaviour
         combatManager.OnStageFailed += HandleStageFailed;
         combatManager.OnEnemyDefeated += HandleEnemyDefeated;
 
+        isInitialized = true;
         StartStage();
     }
 
     private void OnDestroy()
     {
+        isInitialized = false;
+        CancelPendingRestart();
         if (combatManager != null)
         {
             combatManager.OnStageCleared -= HandleStageCleared;
             combatManager.OnStageFailed -= HandleStageFailed;
             combatManager.OnEnemyDefeated -= HandleEnemyDefeated;
         }
+    }
+
+    public string GetStageName(int stageNumber)
+    {
+        string stageName = stageDataList?.GetClone(stageNumber)?.StageName;
+        return string.IsNullOrEmpty(stageName) ? stageNumber.ToString() : stageName;
+    }
+
+    // 선택 UI의 진입점. 미완료 전투에 클리어/패배 보상을 새로 발생시키지 않는다.
+    public bool SelectStage(int stageNumber)
+    {
+        if (!isInitialized || !isActiveAndEnabled || stageNumber < 1 || stageNumber > StageCount ||
+            stageDataList.GetClone(stageNumber) == null)
+            return false;
+
+        CancelPendingRestart();
+        GameManager.instance.PlayerData.SetCurrentStage(stageNumber);
+        StartStage();
+        SaveManager.instance?.Save();
+        return true;
+    }
+
+    private void CancelPendingRestart()
+    {
+        // Dispose는 대기 작업의 finally에서 처리한다. 취소 직후 새 작업이 생겨도 서로 간섭하지 않는다.
+        CancellationTokenSource pending = restartCancellation;
+        restartCancellation = null;
+        pending?.Cancel();
     }
 
     // 스테이지를 처음부터 시작
@@ -89,6 +126,9 @@ public class StageManager : MonoBehaviour
 
         fishDropSystem?.SetDropTable(data.DropTable);
 
+        // 수동 선택 시에도 이전 전투의 판정/공격 예약/이동/대상을 먼저 정리한다.
+        combatManager.StopBattle();
+        playerCat.PrepareForPool();
         playerCat.transform.position = playerStartPosition;
         playerCat.Revive();
 
@@ -158,15 +198,24 @@ public class StageManager : MonoBehaviour
         isTransitioning = true;
         CurrentResult = result;
         resultEndsAt = Time.time + result.Delay;
-        OnStageResult?.Invoke(result);
+        var cancellation = CancellationTokenSource.CreateLinkedTokenSource(this.GetCancellationTokenOnDestroy());
+        restartCancellation = cancellation;
+        CancellationToken token = cancellation.Token;
 
         try
         {
+            OnStageResult?.Invoke(result);
             await UniTask.Delay(TimeSpan.FromSeconds(result.Delay),
-                cancellationToken: this.GetCancellationTokenOnDestroy());
+                cancellationToken: token);
+            if (!token.IsCancellationRequested)
+                StartStage();
         }
-        catch (OperationCanceledException) { return; }
-
-        StartStage();
+        catch (OperationCanceledException) { }
+        finally
+        {
+            if (restartCancellation == cancellation)
+                restartCancellation = null;
+            cancellation.Dispose();
+        }
     }
 }
