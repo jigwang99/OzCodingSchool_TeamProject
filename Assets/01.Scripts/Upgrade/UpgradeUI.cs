@@ -12,6 +12,10 @@ public class UpgradeUI : MonoBehaviour
     [SerializeField] private Button upgradeButton;
     [SerializeField] private TMP_Text upgradeButtonText;
 
+    [Header("POPUP")]
+    [SerializeField] private GameObject successPopup;
+    [SerializeField] private GameObject failPopup;
+
     private void Start()
     {
         upgradeButton.onClick.AddListener(OnClickUpgrade);
@@ -39,9 +43,18 @@ public class UpgradeUI : MonoBehaviour
     {
         PlayerData playerData = GameManager.instance.PlayerData;
 
-        UpgradeManager.instance.TryUpgrade(upgradeData, playerData);
+        bool isSuccess = UpgradeManager.instance.TryUpgrade(upgradeData, playerData);
 
         RefreshUI();
+
+        if (isSuccess)
+        {
+            successPopup.SetActive(true);
+        }
+        else
+        {
+            failPopup.SetActive(true);
+        }
     }
 
     private void OnUpgradePurchased(UpgradeData data, int level)
