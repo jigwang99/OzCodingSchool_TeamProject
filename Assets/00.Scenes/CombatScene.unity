@@ -479,6 +479,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83ed9b59f81ba7f41a79d5aec74339af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CurrentStageText
+  stageDataList: {fileID: 11400000, guid: 82f2e6c4d84de7543a3da7639204bbbc, type: 2}
   stageText: {fileID: 360349106}
   format: Stage {0}
 --- !u!1 &397242958

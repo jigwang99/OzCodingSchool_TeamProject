@@ -4,6 +4,7 @@ using TMPro;
 public class CurrentStageText : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI stageText;
+    [SerializeField] private StageDataList stageDataList;
     [SerializeField] private string format = "Stage {0}"; // 표시 형식
 
     private PlayerData boundData;
@@ -39,6 +40,11 @@ public class CurrentStageText : MonoBehaviour
         if (boundData == null || stageText == null)
             return;
 
-        stageText.text = string.Format(format, boundData.currentStage);
+        // 저장 데이터의 진행도(1~15)를 스테이지 데이터의 표시 이름(1-1~3-5)으로 보여준다.
+        string stageName = stageDataList != null
+            ? stageDataList.GetClone(boundData.currentStage)?.StageName
+            : null;
+        stageText.text = string.Format(format,
+            string.IsNullOrEmpty(stageName) ? boundData.currentStage.ToString() : stageName);
     }
 }
