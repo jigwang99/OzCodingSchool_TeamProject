@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class CombatResultUI : MonoBehaviour
 {
     [SerializeField] private StageManager stageManager;
+    [SerializeField] private CombatRewardTracker rewardTracker;
     [SerializeField] private Font font;
     [SerializeField] private Color clearColor = new Color(1f, 0.82f, 0.39f);
     [SerializeField] private Color failColor = new Color(1f, 0.48f, 0.46f);
@@ -16,6 +17,7 @@ public class CombatResultUI : MonoBehaviour
     private Text stageLabel;
     private Text titleLabel;
     private Text messageLabel;
+    private Text rewardLabel;
     private Text countdownLabel;
     private Image accent;
     private Image progress;
@@ -25,9 +27,9 @@ public class CombatResultUI : MonoBehaviour
 
     private void Awake()
     {
-        if (stageManager == null || font == null)
+        if (stageManager == null || rewardTracker == null || font == null)
         {
-            Debug.LogError("[CombatResultUI] StageManager와 한글 폰트를 연결하세요.", this);
+            Debug.LogError("[CombatResultUI] StageManager, CombatRewardTracker와 한글 폰트를 연결하세요.", this);
             enabled = false;
             return;
         }
@@ -72,6 +74,8 @@ public class CombatResultUI : MonoBehaviour
         stageLabel.text = $"스테이지 {result.CompletedStageName}";
         titleLabel.text = result.Title;
         messageLabel.text = result.Message;
+        // CombatManager가 마지막 적의 드롭 이벤트를 처리한 뒤 결과를 알리므로 마지막 보상도 포함된다.
+        rewardLabel.text = $"이번 전투 획득 물고기 ×{rewardTracker.TotalFishCount:N0}";
         Color color = result.IsClear ? clearColor : failColor;
         titleLabel.color = color;
         accent.color = color;
@@ -113,7 +117,7 @@ public class CombatResultUI : MonoBehaviour
     {
         if (panelRect == null) return;
         float canvasWidth = ((RectTransform)transform).rect.width;
-        panelRect.sizeDelta = new Vector2(Mathf.Min(640f, Mathf.Max(240f, canvasWidth - 40f)), 258f);
+        panelRect.sizeDelta = new Vector2(Mathf.Min(640f, Mathf.Max(240f, canvasWidth - 40f)), 304f);
     }
 
     private void BuildPanel()
@@ -132,7 +136,8 @@ public class CombatResultUI : MonoBehaviour
         stageLabel = CreateText("Stage", 20, new Color(0.71f, 0.77f, 0.85f), 14f, 30f);
         titleLabel = CreateText("Title", 42, clearColor, 47f, 55f);
         messageLabel = CreateText("Message", 23, new Color(0.94f, 0.95f, 0.98f), 108f, 70f);
-        countdownLabel = CreateText("Countdown", 19, new Color(0.71f, 0.77f, 0.85f), 188f, 30f);
+        rewardLabel = CreateText("Rewards", 23, new Color(0.75f, 0.90f, 0.85f), 188f, 36f);
+        countdownLabel = CreateText("Countdown", 19, new Color(0.71f, 0.77f, 0.85f), 234f, 30f);
 
         Image track = CreateImage("CountdownTrack", panelRect, new Color(1f, 1f, 1f, 0.12f));
         SetRect(track.rectTransform, Vector2.zero, Vector2.right,
