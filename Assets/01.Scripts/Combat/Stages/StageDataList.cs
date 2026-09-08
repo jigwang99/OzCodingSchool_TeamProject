@@ -11,6 +11,9 @@ public class StageData
     [Header("Enemy Placement (스폰 기준점 기준 오프셋, 길이 = 적 수)")]
     [SerializeField] private Vector2[] spawnOffsets;
 
+    [Tooltip("Spawn Offsets와 같은 순서로 15종의 적 외형을 지정합니다. 비어 있거나 부족한 항목은 Crab_0001입니다.")]
+    [SerializeField] private PoolType[] enemyTypes;
+
     [Header("Enemy Stats (절대값)")]
     [SerializeField] private float enemyMaxHp;
     [SerializeField] private float enemyDamage;
@@ -26,13 +29,21 @@ public class StageData
     public StageDropTable DropTable => dropTable;
 
     public StageData(string stageName, Vector2[] spawnOffsets, float enemyMaxHp,
-        float enemyDamage, StageDropTable dropTable)
+        float enemyDamage, StageDropTable dropTable, PoolType[] enemyTypes = null)
     {
         this.stageName = stageName;
         this.spawnOffsets = spawnOffsets;
         this.enemyMaxHp = enemyMaxHp;
         this.enemyDamage = enemyDamage;
         this.dropTable = dropTable;
+        this.enemyTypes = enemyTypes;
+    }
+
+    public PoolType GetEnemyType(int spawnIndex)
+    {
+        return enemyTypes != null && spawnIndex >= 0 && spawnIndex < enemyTypes.Length
+            ? enemyTypes[spawnIndex]
+            : PoolType.Crab_0001;
     }
 
     public StageData Clone()
@@ -44,7 +55,10 @@ public class StageData
             : Array.Empty<Vector2>();
 
         // dropTable은 SO 참조 → 공유가 정상(에셋을 공용으로 참조). 복제하지 않는다.
-        return new StageData(stageName, clonedOffsets, enemyMaxHp, enemyDamage, dropTable);
+        PoolType[] clonedTypes = enemyTypes != null
+            ? (PoolType[])enemyTypes.Clone()
+            : Array.Empty<PoolType>();
+        return new StageData(stageName, clonedOffsets, enemyMaxHp, enemyDamage, dropTable, clonedTypes);
     }
 }
 [CreateAssetMenu(fileName = "StageDataList", menuName = "Combat/Stage Data List")]

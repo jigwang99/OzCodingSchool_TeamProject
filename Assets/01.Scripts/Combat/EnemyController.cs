@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class EnemyController : BaseUnitController, IPoolable
 {
+    [SerializeField] private PoolType enemyType = PoolType.Crab_0001;
     [SerializeField, Min(0f)] private float detectionRange = 4f;
     [SerializeField, Min(0f)] private float despawnDelay = 0f; // 사망 후 반납까지 (연출 있으면 늘리기)
 
@@ -12,7 +13,7 @@ public class EnemyController : BaseUnitController, IPoolable
     private Quaternion initialLocalRotation;
 
     public float DetectionRange => detectionRange;
-    public Enum PoolKey => PoolType.Enemy;
+    public Enum PoolKey => enemyType;
 
     protected override void Awake()
     {
@@ -57,7 +58,7 @@ public class EnemyController : BaseUnitController, IPoolable
                 await UniTask.NextFrame(token); // 최소 한 프레임: 사망 이벤트 처리 완료 보장
 
             if (isActiveAndEnabled && Health.IsDead && Health.LifeVersion == lifeVersion)
-                CombatObjectPoolManager.instance.ReturnObject(PoolType.Enemy, gameObject);
+                CombatObjectPoolManager.instance.ReturnObject(PoolKey, gameObject);
         }
         catch (OperationCanceledException) { }
     }

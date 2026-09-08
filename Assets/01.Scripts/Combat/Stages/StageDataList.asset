@@ -16,6 +16,7 @@ MonoBehaviour:
   - stageName: 1-1
     spawnOffsets:
     - {x: 4, y: -3}
+    enemyTypes: 00000000
     enemyMaxHp: 50
     enemyDamage: 5
     dropTable: {fileID: 11400000, guid: e1bfc21c001ac58498f7a46e13e72d3d, type: 2}
@@ -23,6 +24,7 @@ MonoBehaviour:
     spawnOffsets:
     - {x: 4, y: -3}
     - {x: 7, y: -3}
+    enemyTypes: 0100000002000000
     enemyMaxHp: 50
     enemyDamage: 5
     dropTable: {fileID: 11400000, guid: e1bfc21c001ac58498f7a46e13e72d3d, type: 2}
