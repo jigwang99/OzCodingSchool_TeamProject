@@ -32,6 +32,14 @@ public class StageManager : MonoBehaviour
 
     private Vector3 playerStartPosition;
     private bool isTransitioning;
+    private float resultEndsAt;
+
+    public event Action<StageResult> OnStageResult;
+    public event Action OnStageStarted;
+    public StageResult? CurrentResult { get; private set; }
+    public float ResultRemainingSeconds => isTransitioning
+        ? Mathf.Max(0f, resultEndsAt - Time.time)
+        : 0f;
 
     private void Start()
     {
@@ -66,6 +74,7 @@ public class StageManager : MonoBehaviour
     private void StartStage()
     {
         isTransitioning = false;
+        CurrentResult = null;
 
         StageData data = stageDataList != null ? stageDataList.GetClone(CurrentStage) : null;
         if (data == null)
@@ -86,6 +95,7 @@ public class StageManager : MonoBehaviour
         IReadOnlyList<EnemyController> enemies = enemySpawner.SpawnStage(data, origin, playerCat);
         RetargetPlayer();
         combatManager.BeginBattle(playerCat, enemies);
+        OnStageStarted?.Invoke();
 
         Debug.Log($"[Stage] {data.StageName} 시작 ({CurrentStage}/{MaxStage})");
     }
@@ -106,32 +116,53 @@ public class StageManager : MonoBehaviour
     // 승리
     private void HandleStageCleared()
     {
+        if (isTransitioning) return;
+        int completedStage = CurrentStage;
+        bool retryWasEnabled = IsRetry;
+
         if (!IsRetry && CurrentStage < MaxStage)
             GameManager.instance.PlayerData.SetCurrentStage(CurrentStage + 1);
 
-        RestartAfterAsync(clearDelay).Forget();
+        RestartAfterAsync(CreateResult(true, completedStage, retryWasEnabled, clearDelay)).Forget();
     }
 
     // 패배
     private void HandleStageFailed()
     {
+        if (isTransitioning) return;
+        int completedStage = CurrentStage;
+        bool retryWasEnabled = IsRetry;
+
         if (!IsRetry)
         {
             GameManager.instance.PlayerData.SetCurrentStage(CurrentStage - 1); // 세터 내부에서 최하 1 보장
             GameManager.instance.PlayerData.SetRetryEnabled(true);
         }
 
-        RestartAfterAsync(failDelay).Forget();
+        RestartAfterAsync(CreateResult(false, completedStage, retryWasEnabled, failDelay)).Forget();
     }
 
-    private async UniTaskVoid RestartAfterAsync(float delay)
+    private StageResult CreateResult(bool isClear, int completedStage, bool retryWasEnabled, float delay)
+    {
+        string completedName = stageDataList?.GetClone(completedStage)?.StageName;
+        string nextName = stageDataList?.GetClone(CurrentStage)?.StageName;
+        return new StageResult(isClear, completedStage, CurrentStage,
+            string.IsNullOrEmpty(completedName) ? completedStage.ToString() : completedName,
+            string.IsNullOrEmpty(nextName) ? CurrentStage.ToString() : nextName,
+            retryWasEnabled, Mathf.Max(0f, delay));
+    }
+
+    private async UniTaskVoid RestartAfterAsync(StageResult result)
     {
         if (isTransitioning) return;
         isTransitioning = true;
+        CurrentResult = result;
+        resultEndsAt = Time.time + result.Delay;
+        OnStageResult?.Invoke(result);
 
         try
         {
-            await UniTask.Delay(TimeSpan.FromSeconds(delay),
+            await UniTask.Delay(TimeSpan.FromSeconds(result.Delay),
                 cancellationToken: this.GetCancellationTokenOnDestroy());
         }
         catch (OperationCanceledException) { return; }

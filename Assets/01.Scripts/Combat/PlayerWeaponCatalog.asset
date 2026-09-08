@@ -14,23 +14,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerWeaponCatalog
   weapons:
   - id: swords_0
-    prefab: {fileID: 5108586841713532949, guid: db8107fea9a26cd478986e6d3350f99d, type: 3}
+    prefab: {fileID: 5108586841713532949, guid: 5e2b871da22838340ac81521a5aa6175, type: 3}
     baseDamage: 10
     damagePerLevel: 5
   - id: swords_1
-    prefab: {fileID: 3038567190503479868, guid: f8acff7d4ed49684483dd770447b98ba, type: 3}
+    prefab: {fileID: 3038567190503479868, guid: 86cacb35418d0014282b84ae8adeb091, type: 3}
     baseDamage: 15
     damagePerLevel: 5
   - id: swords_2
-    prefab: {fileID: 85547855024863184, guid: 7896eebfe7101ff42b89600188e52a66, type: 3}
+    prefab: {fileID: 85547855024863184, guid: 049fd5c586e1bc147b002f17f085284f, type: 3}
     baseDamage: 20
     damagePerLevel: 5
   - id: swords_3
-    prefab: {fileID: 4997258140202185063, guid: 8a6e8349c98ddea48bf1427c8856e489, type: 3}
+    prefab: {fileID: 4997258140202185063, guid: 4ab12087b014ed944ae76bb304e2889d, type: 3}
     baseDamage: 25
     damagePerLevel: 5
   - id: swords_4
-    prefab: {fileID: 7486135362970670261, guid: 79a3ec560a5661444916fd104b475f3b, type: 3}
+    prefab: {fileID: 7486135362970670261, guid: 3c531bbd0e554294dbd197977b0f0fa9, type: 3}
     baseDamage: 30
     damagePerLevel: 5
   - id: swords_5
@@ -38,70 +38,70 @@ MonoBehaviour:
     baseDamage: 35
     damagePerLevel: 5
   - id: swords_6
-    prefab: {fileID: 6063338786950207708, guid: 7825d772ccb4f8449a1f3b24e57deccc, type: 3}
+    prefab: {fileID: 6063338786950207708, guid: 268066d096c3bb74da5e7605f1f3945e, type: 3}
     baseDamage: 40
     damagePerLevel: 5
   - id: swords_7
-    prefab: {fileID: 3566464038548240538, guid: d38dba43117eb9a488dab6b6ec65e9cc, type: 3}
+    prefab: {fileID: 3566464038548240538, guid: 8c8254825369aed498d692d91923a8f8, type: 3}
     baseDamage: 45
     damagePerLevel: 5
   - id: swords_8
-    prefab: {fileID: 282621361169986830, guid: b68fd26d6f633984ea02c8ce496307bf, type: 3}
+    prefab: {fileID: 282621361169986830, guid: 8656e06b8eb66564e8ca0751f10bf386, type: 3}
     baseDamage: 50
     damagePerLevel: 5
   - id: swords_9
-    prefab: {fileID: 8529470379274003572, guid: e276a1db3b6d45e46865118c437ea121, type: 3}
+    prefab: {fileID: 8529470379274003572, guid: ca4afe1abd6ab6e42bc56abcf2d1b1fa, type: 3}
     baseDamage: 55
     damagePerLevel: 5
   - id: swords_10
-    prefab: {fileID: 1760769811292791127, guid: e9cda4df4af8ac347b664364b1238aa9, type: 3}
+    prefab: {fileID: 1760769811292791127, guid: 29902f06fc05a6041801e5654ce227f7, type: 3}
     baseDamage: 60
     damagePerLevel: 5
   - id: swords_11
-    prefab: {fileID: 7832941446364942816, guid: b80d8d31fcaa5204da19749b8d242d36, type: 3}
+    prefab: {fileID: 7832941446364942816, guid: b827ccc575920134f80e6ceddd36e196, type: 3}
     baseDamage: 65
     damagePerLevel: 5
   - id: swords_12
-    prefab: {fileID: 6846263035685858993, guid: bc67e4df7a9ca114bb02d2793bc2af60, type: 3}
+    prefab: {fileID: 6846263035685858993, guid: 655f03b9213c79b448f20306c46816c3, type: 3}
     baseDamage: 70
     damagePerLevel: 5
   - id: swords_13
-    prefab: {fileID: 984282329067995459, guid: 5586c069625198d4ea2eb6beb4f017a5, type: 3}
+    prefab: {fileID: 984282329067995459, guid: 2d708e6b735a9af4c82af9185cbf8ec4, type: 3}
     baseDamage: 75
     damagePerLevel: 5
   - id: swords_14
-    prefab: {fileID: 896645349825550520, guid: 97f5f24a442bd8e4282942d2e5b39673, type: 3}
+    prefab: {fileID: 896645349825550520, guid: 6a4186459698fe4448e0304a064917e3, type: 3}
     baseDamage: 80
     damagePerLevel: 5
   - id: swords_15
-    prefab: {fileID: 7816587753233510918, guid: 0b41d0f719cce67419a4d5ab64a280c5, type: 3}
+    prefab: {fileID: 7816587753233510918, guid: 048dc029ea53e7a42a65561464917c7b, type: 3}
     baseDamage: 85
     damagePerLevel: 5
   - id: swords_16
-    prefab: {fileID: 7935268375840918420, guid: d61197cc75282fa419e5a930c728ccfe, type: 3}
+    prefab: {fileID: 7935268375840918420, guid: 4aaae9af6c976e54c8a4530b1e9ad398, type: 3}
     baseDamage: 90
     damagePerLevel: 5
   - id: swords_17
-    prefab: {fileID: 928571396802083952, guid: 6451ab887d7654c46870b5941b29b499, type: 3}
+    prefab: {fileID: 928571396802083952, guid: 3da48add9cc51a44d84ce7c7373448ed, type: 3}
     baseDamage: 95
     damagePerLevel: 5
   - id: swords_18
-    prefab: {fileID: 5448696442646326241, guid: 847d1b05af377ca43848acde88df4a1c, type: 3}
+    prefab: {fileID: 5448696442646326241, guid: 1595be543e369ec4bb48edf6f048cad4, type: 3}
     baseDamage: 100
     damagePerLevel: 5
   - id: swords_19
-    prefab: {fileID: 5614041972019548634, guid: 36a989dd8fd260f46ab16de4a8251472, type: 3}
+    prefab: {fileID: 5614041972019548634, guid: cfcd9961e08147c44bfe4dd6c78025ce, type: 3}
     baseDamage: 105
     damagePerLevel: 5
   - id: swords_20
-    prefab: {fileID: 5569953501538390296, guid: 0e84cffe58a7f744d91e282055c968ea, type: 3}
+    prefab: {fileID: 5569953501538390296, guid: fe6d73f420aaba24da038a46687596e3, type: 3}
     baseDamage: 110
     damagePerLevel: 5
   - id: swords_21
-    prefab: {fileID: 5152363797696314033, guid: 06a27947dcea97d42a556a358f4cf194, type: 3}
+    prefab: {fileID: 5152363797696314033, guid: 23c0b4e06ac03304d878ce91e8905f07, type: 3}
     baseDamage: 115
     damagePerLevel: 5
   - id: swords_22
-    prefab: {fileID: 6521193352797571059, guid: 7b85b95f8ac11fd4287e475d1c428775, type: 3}
+    prefab: {fileID: 6521193352797571059, guid: b0eb88ecd5731c947be326f8ea421146, type: 3}
     baseDamage: 120
     damagePerLevel: 5
