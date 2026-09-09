@@ -1164,4 +1164,6 @@ MonoBehaviour:
   flipObj: {fileID: 6236887096969597659}
   exitPoint: {x: 0, y: 0, z: 0}
   animator: {fileID: 0}
-  waypointObj: []
+  waypointObj: {fileID: 0}
+  waypoints: []
+  popUp: {fileID: 8993090807983863386, guid: 9879d36f46398dc458b52bd1214281c7, type: 3}

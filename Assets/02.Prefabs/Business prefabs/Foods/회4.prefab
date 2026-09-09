@@ -104,10 +104,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a1ba2b44bbc4d543ac78f335d6fdcba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Food
+  originalScale: {x: 0, y: 0, z: 0}
   foodName: "\uD68C"
   fishCount: 1
   fishRare: 1
-  cookTime: 3
-  eatTime: 5
-  price: 400
+  cookTime: 6
+  eatTime: 10
+  price: 600
   isSpecial: 0
