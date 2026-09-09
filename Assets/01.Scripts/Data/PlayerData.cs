@@ -37,7 +37,13 @@ public class PlayerData
     // 식당 상태 (구 PlayerPrefs 저장분)
     public int chefCatLevel = 1;         // 셰프고양이 레벨
     public int cookCatNum = 0;           // 직원고양이 수
-    public int[] foodMachine = new int[5]; // 가구 5칸
+    public int[] foodMachine = new int[6]; // 가구 6칸
+                                           // 0 가스레인지
+                                           // 1 전자레인지
+                                           // 2 찜기
+                                           // 3 튀김기
+                                           // 4 냉장고
+                                           // 5 오븐
 
     // 식당 업그레이드 효과값
     public float MakeSpeed = 0f;

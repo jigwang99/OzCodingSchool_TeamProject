@@ -44,101 +44,140 @@ public class FacilityManager : Singleton<FacilityManager> //시설 업그레이�
 
     public TextMeshProUGUI chefLevelText;
 
-    private void Awake()
+    private void Start()
     {
-        gasstove = PlayerPrefs.GetInt("가스레인지", 0);
-        microwaveOven = PlayerPrefs.GetInt("전자레인지", 0);
-        steamer = PlayerPrefs.GetInt("찜기", 0);
-        deepfryer = PlayerPrefs.GetInt("튀김기", 0);
-        refrigerator = PlayerPrefs.GetInt("냉장고", 0);
-        oven = PlayerPrefs.GetInt("오븐", 0);
-        CookCatNum = PlayerPrefs.GetInt("직원", 0);
-        RestaurantLevel = PlayerPrefs.GetInt("식당", 1);
-        ChefCatLevel = PlayerPrefs.GetInt("요리사레벨", 0);
+        gasstove = FoodMachine[0];
+        microwaveOven = FoodMachine[1];
+        steamer = FoodMachine[2];
+        deepfryer = FoodMachine[3];
+        refrigerator = FoodMachine[4];
+        oven = FoodMachine[5];
+
         if (gasstove == 1) gasstoveBtn.interactable = false;
         if (microwaveOven == 1) microwaveOvenBtn.interactable = false;
         if (steamer == 1) steamerBtn.interactable = false;
         if (deepfryer == 1) deepfryerBtn.interactable = false;
         if (refrigerator == 1) refrigeratorBtn.interactable = false;
         if (oven == 1) ovenBtn.interactable = false;
-        if (CookCatNum == 1) chefBtn.interactable = false;
         if (RestaurantLevel >= 3) { RestaurantLevel = 3; restaurantUpgradeBtn.interactable = false; }
         if (ChefCatLevel >= 9) { ChefCatLevel = 9; chefLevelBtn.interactable = false; }
-    }
 
-    private void Start()
-    {
         chefLevelText.text = $"Chef Level : {ChefCatLevel}";
         UpgradeRestaurant();
+
+        // 식당 레벨만큼만 직원 고용 가능
+        chefBtn.interactable = CookCatNum < RestaurantLevel;
     }
     public void OnClickGasstoveBtn(Button btn)
     {
+        BigNumber price = new BigNumber(200);
+
+        if (FoodMachine[0] == 1) return;
+        if (!CurrencyManager.instance.SpendGold(price)) return;
+
         MakeSpeed += 0.1f;
         btn.interactable = false;
 
-        gasstove = 1;
-        PlayerPrefs.SetInt("가스레인지", gasstove);
+        FoodMachine[0] = 1;
+        SaveManager.instance.Save();
     }
 
     public void OnClickMicrowaveovenBtn(Button btn)
     {
+        BigNumber price = new BigNumber(300);
+
+        if (FoodMachine[1] == 1) return;
+        if (!CurrencyManager.instance.SpendGold(price)) return;
+
         GoldBonus += 0.15f;
         btn.interactable = false;
 
-        microwaveOven = 1;
-        PlayerPrefs.SetInt("전자레인지", microwaveOven);
+        FoodMachine[1] = 1;
+        SaveManager.instance.Save();
     }
     public void OnClickSteamerBtn(Button btn)
     {
+        BigNumber price = new BigNumber(400);
+
+        if (FoodMachine[2] == 1) return;
+        if (!CurrencyManager.instance.SpendGold(price)) return;
+
         MakeSpeed += 0.05f;
         GoldBonus += 0.05f;
         btn.interactable = false;
 
-        steamer = 1;
-        PlayerPrefs.SetInt("찜기", steamer);
+        FoodMachine[2] = 1;
+        SaveManager.instance.Save();
     }
     public void OnClickDeepfryerBtn(Button btn)
     {
+        BigNumber price = new BigNumber(500);
+
+        if (FoodMachine[3] == 1) return;
+        if (!CurrencyManager.instance.SpendGold(price)) return;
+
         MakeSpeed += 0.2f;
         GoldBonus += 0.05f;
         btn.interactable = false;
 
-        deepfryer = 1;
-        PlayerPrefs.SetInt("튀김기", deepfryer);
+        FoodMachine[3] = 1;
+        SaveManager.instance.Save();
     }
     public void OnClickRefrigeratorBtn(Button btn)
     {
+        BigNumber price = new BigNumber(600);
+
+        if (FoodMachine[4] == 1) return;
+        if (!CurrencyManager.instance.SpendGold(price)) return;
+
         NoUseFishChance += 0.05f;
         btn.interactable = false;
 
-        refrigerator = 1;
-        PlayerPrefs.SetInt("냉장고", refrigerator);
+        FoodMachine[4] = 1;
+        SaveManager.instance.Save();
     }
     public void OnClickOvenBtn(Button btn)
     {
+        BigNumber price = new BigNumber(700);
+
+        if (FoodMachine[5] == 1) return;
+        if (!CurrencyManager.instance.SpendGold(price)) return;
+
         SpecialChance += 0.3f;
         btn.interactable = false;
 
-        oven = 1;
-        PlayerPrefs.SetInt("오븐", oven);
+        FoodMachine[5] = 1;
+        SaveManager.instance.Save();
     }
     public void OnClickCookerBtn(Button btn)
     {
+        if (CookCatNum >= RestaurantLevel) return;
+
+        int basePrice = 700;
+        int currentPrice = basePrice * (CookCatNum + 1);
+
+        if (!CurrencyManager.instance.SpendGold(new BigNumber(currentPrice))) return;
+
         CookCatNum += 1;
-        btn.interactable = false;
-        if (RestaurantLevel > CookCatNum) //식당 1레벨 -> 직원 1명 가능 , 2 > 1 가능
-            btn.interactable = true;
+        btn.interactable = CookCatNum < RestaurantLevel;
 
         for (int i = 1; i <= CookCatNum; i++)
         {
             ProductionManager.instance.StartChef(i);
         }
 
-        PlayerPrefs.SetInt("직원", CookCatNum);
+        SaveManager.instance.Save();
     }
 
     public void OnClickRestaurantBtn(Button btn)
     {
+        if (RestaurantLevel >= 3) return;
+
+        int basePrice = 1000;
+        int currentPrice = basePrice * (RestaurantLevel);
+
+        if (!CurrencyManager.instance.SpendGold(new BigNumber(currentPrice))) return;
+
         RestaurantLevel += 1;
 
         if (RestaurantLevel > 3)
@@ -154,18 +193,28 @@ public class FacilityManager : Singleton<FacilityManager> //시설 업그레이�
         CustomerSpawn.instance.waitingCustomers.Clear();
         BObjectPoolManager.instance.Refresh();
 
-        PlayerPrefs.SetInt("식당", RestaurantLevel);
+        SaveManager.instance.Save();
     }
 
     public void OnClickChefLevelUpBtn(Button btn)
     {
+        if (ChefCatLevel >= 9) return;
+
+        int basePrice = 300;
+        int currentPrice = basePrice * (ChefCatLevel);
+
+        if (!CurrencyManager.instance.SpendGold(new BigNumber(currentPrice))) return;
+
         ChefCatLevel += 1;
 
-        if (ChefCatLevel == 9)
+        if (ChefCatLevel >= 9)
+        {
+            ChefCatLevel = 9;
             btn.interactable = false;
+        }
 
         chefLevelText.text = $"Chef Level : {ChefCatLevel}";
-        PlayerPrefs.SetInt("요리사레벨", ChefCatLevel);
+        SaveManager.instance.Save();
     }
 
     public void GetGold(int foodPrice, bool special)
@@ -194,8 +243,6 @@ public class FacilityManager : Singleton<FacilityManager> //시설 업그레이�
             restaurants[1].gameObject.SetActive(true);
             restaurants[2].gameObject.SetActive(false);
             restaurants[1].GetComponent<RestaurantPosition>().seats.ResetSeats();
-
-            chefBtn.interactable = true;
         }
         else if (RestaurantLevel == 3)
         {
@@ -203,9 +250,8 @@ public class FacilityManager : Singleton<FacilityManager> //시설 업그레이�
             restaurants[1].gameObject.SetActive(false);
             restaurants[2].gameObject.SetActive(true);
             restaurants[2].GetComponent<RestaurantPosition>().seats.ResetSeats();
-
-            chefBtn.interactable = true;
         }
+        chefBtn.interactable = CookCatNum < RestaurantLevel;
         ProductionManager.instance.ChefPosition();
     }
 }
