@@ -20,13 +20,15 @@ public class EnemySpawner : MonoBehaviour
             return active;
         }
 
-        foreach (Vector2 offset in data.SpawnOffsets)
+        for (int i = 0; i < data.EnemyCount; i++)
         {
-            EnemyController enemy = CombatObjectPoolManager.instance.GetObject<EnemyController>(PoolType.Enemy);
+            Vector2 offset = data.SpawnOffsets[i];
+            PoolType enemyType = data.GetEnemyType(i);
+            EnemyController enemy = CombatObjectPoolManager.instance.GetObject<EnemyController>(enemyType);
             if (enemy == null)
             {
-                Debug.LogWarning("[EnemySpawner] Enemy 풀에서 오브젝트를 가져오지 못했습니다. " +
-                                 "(CombatObjectPoolManager objList에 Enemy 프리팹 등록 확인)");
+                Debug.LogWarning($"[EnemySpawner] {enemyType} 풀에서 오브젝트를 가져오지 못했습니다. " +
+                                 "(CombatObjectPoolManager objList에 해당 적 프리팹 등록 확인)");
                 continue;
             }
 
@@ -52,7 +54,7 @@ public class EnemySpawner : MonoBehaviour
             if (enemy == null)
                 continue;
 
-            CombatObjectPoolManager.instance.ReturnObject(PoolType.Enemy, enemy.gameObject);
+            CombatObjectPoolManager.instance.ReturnObject(enemy.PoolKey, enemy.gameObject);
         }
         active.Clear();
     }

@@ -38,10 +38,11 @@ public class GameManager : Singleton<GameManager>
     public void SetPlayerData(PlayerData playerData)
     {
         PlayerData = playerData ?? new PlayerData();
+        PlayerData.InitializeWeapons();
     }
 
     public void CreateNewPlayerData()
     {
-        PlayerData = new PlayerData();
+        SetPlayerData(new PlayerData());
     }
 }

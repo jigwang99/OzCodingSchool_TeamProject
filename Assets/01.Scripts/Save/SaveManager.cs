@@ -12,7 +12,7 @@ public class SaveManager : Singleton<SaveManager>
     {
         base.Awake();
 
-        //persistentDataPath¸¦ »ç¿ëÇØ ÇÃ·§Æûº° ¾ÈÀüÇÑ ÀúÀå °æ·Î ÁöÁ¤
+        //persistentDataPathë¥¼ ì‚¬ìš©í•´ í”Œë«í¼ë³„ ì•ˆì „í•œ ì €ì¥ ê²½ë¡œ ì§€ì •
         saveFilePath = Path.Combine(Application.persistentDataPath, "playData.json");
     }
 
@@ -21,14 +21,14 @@ public class SaveManager : Singleton<SaveManager>
         StartCoroutine(AutoSaveCoroutine());
     }
 
-    //µ¥ÀÌÅÍ ÀúÀå
+    //ë°ì´í„° ì €ì¥
     public void Save()
     {
         try
         {
             if (GameManager.instance == null)
             {
-                Debug.LogError("[SaveManager] GameManager°¡ Á¸ÀçÇÏÁö ¾Ê¾Æ ÀúÀåÇÒ ¼ö ¾ø½À´Ï´Ù.");
+                Debug.LogError("[SaveManager] GameManagerê°€ ì¡´ì¬í•˜ì§€ ì•Šì•„ ì €ì¥í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.");
                 return;
             }
 
@@ -36,37 +36,37 @@ public class SaveManager : Singleton<SaveManager>
 
             if (data == null)
             {
-                Debug.LogError("[SaveManager] PlayerData°¡ Á¸ÀçÇÏÁö ¾Ê¾Æ ÀúÀåÇÒ ¼ö ¾ø½À´Ï´Ù.");
+                Debug.LogError("[SaveManager] PlayerDataê°€ ì¡´ì¬í•˜ì§€ ì•Šì•„ ì €ì¥í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.");
                 return;
             }
 
-            // ¸¶Áö¸· ÀúÀå ½Ã°£ °»½Å
+            // ë§ˆì§€ë§‰ ì €ì¥ ì‹œê°„ ê°±ì‹ 
             data.lastSaveTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
             //data.lastSaveTime = System.DateTime.Now.ToBinary().ToString();
 
             string json = JsonUtility.ToJson(data, true);
             File.WriteAllText(saveFilePath, json);
 
-            Debug.Log($"[SaveManager] °ÔÀÓ ÀúÀå ¿Ï·á: {saveFilePath}");
+            Debug.Log($"[SaveManager] ê²Œì„ ì €ì¥ ì™„ë£Œ: {saveFilePath}");
         }
         catch (IOException e)
         {
-            Debug.LogError($"[SaveManager] ÆÄÀÏ ÀúÀå Áß ¿À·ù ¹ß»ı: {e.Message}");
+            Debug.LogError($"[SaveManager] íŒŒì¼ ì €ì¥ ì¤‘ ì˜¤ë¥˜ ë°œìƒ: {e.Message}");
         }
         catch (Exception e)
         {
-            Debug.LogError($"[SaveManager] ÀúÀå Áß ¿¹»óÇÏÁö ¸øÇÑ ¿À·ù ¹ß»ı: {e}");
+            Debug.LogError($"[SaveManager] ì €ì¥ ì¤‘ ì˜ˆìƒí•˜ì§€ ëª»í•œ ì˜¤ë¥˜ ë°œìƒ: {e}");
         }
     }
 
-    //µ¥ÀÌÅÍ ºÒ·¯¿À±â
+    //ë°ì´í„° ë¶ˆëŸ¬ì˜¤ê¸°
     public PlayerData Load()
     {
         try
         {
             if (!File.Exists(saveFilePath))
             {
-                Debug.Log("[SaveManager] ÀúÀåµÈ ÆÄÀÏÀÌ ¾ø½À´Ï´Ù.");
+                Debug.Log("[SaveManager] ì €ì¥ëœ íŒŒì¼ì´ ì—†ìŠµë‹ˆë‹¤.");
                 return null;
             }
 
@@ -74,7 +74,7 @@ public class SaveManager : Singleton<SaveManager>
 
             if (string.IsNullOrEmpty(json))
             {
-                Debug.LogWarning("[SaveManager] ÀúÀå ÆÄÀÏÀÌ ºñ¾îÀÖ½À´Ï´Ù.");
+                Debug.LogWarning("[SaveManager] ì €ì¥ íŒŒì¼ì´ ë¹„ì–´ìˆìŠµë‹ˆë‹¤.");
                 return null;
             }
 
@@ -82,26 +82,26 @@ public class SaveManager : Singleton<SaveManager>
 
             if (data == null)
             {
-                Debug.LogError("[SaveManager] ÀúÀå µ¥ÀÌÅÍ¸¦ ºÒ·¯¿ÔÁö¸¸ PlayerData°¡ nullÀÔ´Ï´Ù.");
+                Debug.LogError("[SaveManager] ì €ì¥ ë°ì´í„°ë¥¼ ë¶ˆëŸ¬ì™”ì§€ë§Œ PlayerDataê°€ nullì…ë‹ˆë‹¤.");
                 return null;
             }
 
-            Debug.Log("[SaveManager] °ÔÀÓ ºÒ·¯¿À±â ¼º°ø");
+            Debug.Log("[SaveManager] ê²Œì„ ë¶ˆëŸ¬ì˜¤ê¸° ì„±ê³µ");
             return data;
         }
         catch (IOException e)
         {
-            Debug.LogError($"[SaveManager] ÆÄÀÏ ºÒ·¯¿À±â Áß ¿À·ù ¹ß»ı: {e.Message}");
+            Debug.LogError($"[SaveManager] íŒŒì¼ ë¶ˆëŸ¬ì˜¤ê¸° ì¤‘ ì˜¤ë¥˜ ë°œìƒ: {e.Message}");
             return null;
         }
         catch (Exception e)
         {
-            Debug.LogError($"[SaveManager] ºÒ·¯¿À±â Áß ¿¹»óÇÏÁö ¸øÇÑ ¿À·ù ¹ß»ı: {e}");
+            Debug.LogError($"[SaveManager] ë¶ˆëŸ¬ì˜¤ê¸° ì¤‘ ì˜ˆìƒí•˜ì§€ ëª»í•œ ì˜¤ë¥˜ ë°œìƒ: {e}");
             return null;
         }
     }
 
-    // ÀúÀå ÆÄÀÏ »èÁ¦ - Å×½ºÆ®¿ë
+    // ì €ì¥ íŒŒì¼ ì‚­ì œ - í…ŒìŠ¤íŠ¸ìš©
     public void DeleteSaveFile()
     {
         try
@@ -109,31 +109,31 @@ public class SaveManager : Singleton<SaveManager>
             if (File.Exists(saveFilePath))
             {
                 File.Delete(saveFilePath);
-                Debug.Log("[SaveManager] ÀúÀå ÆÄÀÏ »èÁ¦ ¿Ï·á");
+                Debug.Log("[SaveManager] ì €ì¥ íŒŒì¼ ì‚­ì œ ì™„ë£Œ");
             }
             else
             {
-                Debug.Log("[SaveManager] »èÁ¦ÇÒ ÀúÀå ÆÄÀÏÀÌ ¾ø½À´Ï´Ù.");
+                Debug.Log("[SaveManager] ì‚­ì œí•  ì €ì¥ íŒŒì¼ì´ ì—†ìŠµë‹ˆë‹¤.");
             }
         }
         catch (IOException e)
         {
-            Debug.LogError($"[SaveManager] ÀúÀå ÆÄÀÏ »èÁ¦ Áß ¿À·ù ¹ß»ı: {e.Message}");
+            Debug.LogError($"[SaveManager] ì €ì¥ íŒŒì¼ ì‚­ì œ ì¤‘ ì˜¤ë¥˜ ë°œìƒ: {e.Message}");
         }
         catch (Exception e)
         {
-            Debug.LogError($"[SaveManager] »èÁ¦ Áß ¿¹»óÇÏÁö ¸øÇÑ ¿À·ù ¹ß»ı: {e}");
+            Debug.LogError($"[SaveManager] ì‚­ì œ ì¤‘ ì˜ˆìƒí•˜ì§€ ëª»í•œ ì˜¤ë¥˜ ë°œìƒ: {e}");
         }
     }
 
-    // ÀÚµ¿ ÀúÀå
+    // ìë™ ì €ì¥
     private IEnumerator AutoSaveCoroutine()
     {
         while (true)
         {
             Save();
 
-            Debug.Log("[AutoSave] ÀÚµ¿ ÀúÀå ¿Ï·á");
+            Debug.Log("[AutoSave] ìë™ ì €ì¥ ì™„ë£Œ");
 
             yield return new WaitForSeconds(saveInterval);
         }

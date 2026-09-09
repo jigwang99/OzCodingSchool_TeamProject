@@ -8,6 +8,7 @@ public class UnitHealth : MonoBehaviour, IDamageable
     public float MaxHp => maxHp;
     public float CurrentHp { get; private set; }
     public bool IsDead { get; private set; }
+    public int LifeVersion { get; private set; }
 
     public event Action<DamageInfo> OnDamaged;
     public event Action OnDied;
@@ -25,18 +26,20 @@ public class UnitHealth : MonoBehaviour, IDamageable
         }
 
         CurrentHp = Mathf.Max(0f, CurrentHp - damageInfo.Damage);
+        // 콜백에서 추가 피해/리타겟이 발생해도 사망 판정을 중복 실행하지 않는다.
+        IsDead = CurrentHp <= 0f;
         OnDamaged?.Invoke(damageInfo);
         OnHealthChanged?.Invoke(CurrentHp, maxHp);
 
         if (CurrentHp <= 0f)
         {
-            IsDead = true;
             OnDied?.Invoke();
         }
     }
 
     public void ResetHealth()
     {
+        LifeVersion++;
         CurrentHp = maxHp;
         IsDead = false;
     }

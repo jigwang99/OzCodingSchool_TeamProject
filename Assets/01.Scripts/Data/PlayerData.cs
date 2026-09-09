@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEngine;
 using System.Collections.Generic;
 
@@ -166,7 +166,8 @@ public class PlayerData
         if (currentStage == clamped)
             return;
 
-        currentStage = Mathf.Max(1, stage);
+        currentStage = clamped;
+        OnStageChanged?.Invoke();
     }
 
     public void SetRetryEnabled(bool enabled)

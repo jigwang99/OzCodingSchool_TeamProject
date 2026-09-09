@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
@@ -32,6 +33,19 @@ public class StageManager : MonoBehaviour
 
     private Vector3 playerStartPosition;
     private bool isTransitioning;
+    private float resultEndsAt;
+    private bool isInitialized;
+    private CancellationTokenSource restartCancellation;
+
+    public int StageCount => stageDataList != null ? stageDataList.Count : 0;
+    public int CurrentStageNumber => CurrentStage;
+
+    public event Action<StageResult> OnStageResult;
+    public event Action OnStageStarted;
+    public StageResult? CurrentResult { get; private set; }
+    public float ResultRemainingSeconds => isTransitioning
+        ? Mathf.Max(0f, resultEndsAt - Time.time)
+        : 0f;
 
     private void Start()
     {
@@ -49,11 +63,14 @@ public class StageManager : MonoBehaviour
         combatManager.OnStageFailed += HandleStageFailed;
         combatManager.OnEnemyDefeated += HandleEnemyDefeated;
 
+        isInitialized = true;
         StartStage();
     }
 
     private void OnDestroy()
     {
+        isInitialized = false;
+        CancelPendingRestart();
         if (combatManager != null)
         {
             combatManager.OnStageCleared -= HandleStageCleared;
@@ -62,10 +79,39 @@ public class StageManager : MonoBehaviour
         }
     }
 
+    public string GetStageName(int stageNumber)
+    {
+        string stageName = stageDataList?.GetClone(stageNumber)?.StageName;
+        return string.IsNullOrEmpty(stageName) ? stageNumber.ToString() : stageName;
+    }
+
+    // 선택 UI의 진입점. 미완료 전투에 클리어/패배 보상을 새로 발생시키지 않는다.
+    public bool SelectStage(int stageNumber)
+    {
+        if (!isInitialized || !isActiveAndEnabled || stageNumber < 1 || stageNumber > StageCount ||
+            stageDataList.GetClone(stageNumber) == null)
+            return false;
+
+        CancelPendingRestart();
+        GameManager.instance.PlayerData.SetCurrentStage(stageNumber);
+        StartStage();
+        SaveManager.instance?.Save();
+        return true;
+    }
+
+    private void CancelPendingRestart()
+    {
+        // Dispose는 대기 작업의 finally에서 처리한다. 취소 직후 새 작업이 생겨도 서로 간섭하지 않는다.
+        CancellationTokenSource pending = restartCancellation;
+        restartCancellation = null;
+        pending?.Cancel();
+    }
+
     // 스테이지를 처음부터 시작
     private void StartStage()
     {
         isTransitioning = false;
+        CurrentResult = null;
 
         StageData data = stageDataList != null ? stageDataList.GetClone(CurrentStage) : null;
         if (data == null)
@@ -80,12 +126,16 @@ public class StageManager : MonoBehaviour
 
         fishDropSystem?.SetDropTable(data.DropTable);
 
+        // 수동 선택 시에도 이전 전투의 판정/공격 예약/이동/대상을 먼저 정리한다.
+        combatManager.StopBattle();
+        playerCat.PrepareForPool();
         playerCat.transform.position = playerStartPosition;
         playerCat.Revive();
 
         IReadOnlyList<EnemyController> enemies = enemySpawner.SpawnStage(data, origin, playerCat);
         RetargetPlayer();
         combatManager.BeginBattle(playerCat, enemies);
+        OnStageStarted?.Invoke();
 
         Debug.Log($"[Stage] {data.StageName} 시작 ({CurrentStage}/{MaxStage})");
     }
@@ -106,36 +156,66 @@ public class StageManager : MonoBehaviour
     // 승리
     private void HandleStageCleared()
     {
+        if (isTransitioning) return;
+        int completedStage = CurrentStage;
+        bool retryWasEnabled = IsRetry;
+
         if (!IsRetry && CurrentStage < MaxStage)
             GameManager.instance.PlayerData.SetCurrentStage(CurrentStage + 1);
 
-        RestartAfterAsync(clearDelay).Forget();
+        RestartAfterAsync(CreateResult(true, completedStage, retryWasEnabled, clearDelay)).Forget();
     }
 
     // 패배
     private void HandleStageFailed()
     {
+        if (isTransitioning) return;
+        int completedStage = CurrentStage;
+        bool retryWasEnabled = IsRetry;
+
         if (!IsRetry)
         {
             GameManager.instance.PlayerData.SetCurrentStage(CurrentStage - 1); // 세터 내부에서 최하 1 보장
             GameManager.instance.PlayerData.SetRetryEnabled(true);
         }
 
-        RestartAfterAsync(failDelay).Forget();
+        RestartAfterAsync(CreateResult(false, completedStage, retryWasEnabled, failDelay)).Forget();
     }
 
-    private async UniTaskVoid RestartAfterAsync(float delay)
+    private StageResult CreateResult(bool isClear, int completedStage, bool retryWasEnabled, float delay)
+    {
+        string completedName = stageDataList?.GetClone(completedStage)?.StageName;
+        string nextName = stageDataList?.GetClone(CurrentStage)?.StageName;
+        return new StageResult(isClear, completedStage, CurrentStage,
+            string.IsNullOrEmpty(completedName) ? completedStage.ToString() : completedName,
+            string.IsNullOrEmpty(nextName) ? CurrentStage.ToString() : nextName,
+            retryWasEnabled, Mathf.Max(0f, delay));
+    }
+
+    private async UniTaskVoid RestartAfterAsync(StageResult result)
     {
         if (isTransitioning) return;
         isTransitioning = true;
+        CurrentResult = result;
+        resultEndsAt = Time.time + result.Delay;
+        var cancellation = CancellationTokenSource.CreateLinkedTokenSource(this.GetCancellationTokenOnDestroy());
+        restartCancellation = cancellation;
+        CancellationToken token = cancellation.Token;
 
         try
         {
-            await UniTask.Delay(TimeSpan.FromSeconds(delay),
-                cancellationToken: this.GetCancellationTokenOnDestroy());
+            OnStageResult?.Invoke(result);
+            await UniTask.Delay(TimeSpan.FromSeconds(result.Delay),
+                cancellationToken: token);
+            if (!token.IsCancellationRequested)
+                StartStage();
         }
-        catch (OperationCanceledException) { return; }
-
-        StartStage();
+        catch (OperationCanceledException) { }
+        finally
+        {
+            if (restartCancellation == cancellation)
+                restartCancellation = null;
+            cancellation.Dispose();
+        }
     }
 }

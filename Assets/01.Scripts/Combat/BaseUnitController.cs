@@ -61,6 +61,20 @@ public abstract class BaseUnitController : MonoBehaviour
         Health.OnDied -= HandleDied;
     }
 
+    protected virtual void OnDisable()
+    {
+        // 비활성/풀 반납 시 실행 중인 공격 루프와 애니메이션 타격 예약을 모두 취소한다.
+        CombatState?.Exit();
+        if (Attack != null)
+            Attack.CancelPendingHit();
+    }
+
+    protected virtual void OnEnable()
+    {
+        if (StateMachine?.CurrentState != null && Health != null && !Health.IsDead)
+            StateMachine.ChangeState(IdleState);
+    }
+
     protected void Update() => StateMachine.Update();
     protected void FixedUpdate() => StateMachine.FixedUpdate();
 
@@ -103,6 +117,7 @@ public abstract class BaseUnitController : MonoBehaviour
 
     public void Revive()
     {
+        Attack.ResetAttack();
         Health.ResetHealth();                // IsDead = false, HP 복구
         StateMachine.ChangeState(IdleState); // DieState 탈출 → Idle 애니메이션도 여기서 복귀
     }
