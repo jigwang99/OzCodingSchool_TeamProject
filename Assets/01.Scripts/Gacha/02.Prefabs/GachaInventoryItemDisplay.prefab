@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2132589948151629028}
   - component: {fileID: 8087746444547732424}
   m_Layer: 5
-  m_Name: GachaResultItemDisplay  1
+  m_Name: GachaInventoryItemDisplay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
