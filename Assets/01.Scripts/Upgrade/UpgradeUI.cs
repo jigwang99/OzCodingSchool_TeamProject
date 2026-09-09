@@ -16,11 +16,11 @@ public class UpgradeUI : MonoBehaviour
     [SerializeField] private GameObject successPopup;
     [SerializeField] private GameObject failPopup;
 
-    private void Start()
-    {
-        upgradeButton.onClick.AddListener(OnClickUpgrade);
-        RefreshUI();
-    }
+    //private void Start()
+    //{
+    //    upgradeButton.onClick.AddListener(OnClickUpgrade);
+    //    RefreshUI();
+    //}
 
     private void OnEnable()
     {
@@ -34,28 +34,28 @@ public class UpgradeUI : MonoBehaviour
             UpgradeManager.instance.OnUpgradePurchased -= OnUpgradePurchased;
     }
 
-    private void OnDestroy()
-    {
-        upgradeButton.onClick.RemoveListener(OnClickUpgrade);
-    }
+    //private void OnDestroy()
+    //{
+    //    upgradeButton.onClick.RemoveListener(OnClickUpgrade);
+    //}
 
-    private void OnClickUpgrade()
-    {
-        PlayerData playerData = GameManager.instance.PlayerData;
+    //private void OnClickUpgrade()
+    //{
+    //    PlayerData playerData = GameManager.instance.PlayerData;
 
-        bool isSuccess = UpgradeManager.instance.TryUpgrade(upgradeData, playerData);
+    //    bool isSuccess = UpgradeManager.instance.TryUpgrade(upgradeData, playerData);
 
-        RefreshUI();
+    //    RefreshUI();
 
-        if (isSuccess)
-        {
-            successPopup.SetActive(true);
-        }
-        else
-        {
-            failPopup.SetActive(true);
-        }
-    }
+    //    if (isSuccess)
+    //    {
+    //        successPopup.SetActive(true);
+    //    }
+    //    else
+    //    {
+    //        failPopup.SetActive(true);
+    //    }
+    //}
 
     private void OnUpgradePurchased(UpgradeData data, int level)
     {
