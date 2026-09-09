@@ -28,6 +28,13 @@ public class HamburgerMenuUI : MonoBehaviour
         SetMenuStateImmediate(false);
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            ToggleMenu();
+        }
+    }
     public void ToggleMenu()
     {
         if (isOpen)

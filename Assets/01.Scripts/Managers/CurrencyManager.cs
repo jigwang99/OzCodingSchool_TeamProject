@@ -14,8 +14,6 @@ public class CurrencyManager : Singleton<CurrencyManager>
     }
 
     //골드 획득
-    public void AddGold(int amount) => AddGold(new BigNumber(amount));
-
     public void AddGold(BigNumber amount)
     {
         if (amount.IsZeroOrNegative)
@@ -29,8 +27,6 @@ public class CurrencyManager : Singleton<CurrencyManager>
     }
 
     //골드 소비
-    public bool SpendGold(int amount) => SpendGold(new BigNumber(amount));
-
     public bool SpendGold(BigNumber amount)
     {
         if (amount.IsZeroOrNegative)

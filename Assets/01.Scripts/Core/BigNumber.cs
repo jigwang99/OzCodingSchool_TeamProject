@@ -4,14 +4,39 @@ using System.Globalization;
 [Serializable]
 public struct BigNumber : IComparable<BigNumber>, IEquatable<BigNumber>, IFormattable
 {
-    // 실제 값 = value * 10^exponent. 정규화 시 지수는 3의 배수로 유지한다.
+    //실제 숫자 앞부분
     public double value;
+    //숫자가 얼마나 큰지 나타내는 지수
     public int exponent;
 
-    public BigNumber(int value) : this((double)value) { }
-    public BigNumber(int value, int exponent) : this((double)value, exponent) { }
-    public BigNumber(double value) : this(value, 0) { }
+    //생성자 1-1
+    public BigNumber(int value)
+    {
+        this.value = value;
+        this.exponent = 0;
 
+        Normalize();
+    }
+
+    //생성자 1-2
+    public BigNumber(int value, int exponent)
+    {
+        this.value = value;
+        this.exponent = exponent;
+
+        Normalize();
+    }
+
+    //생성자 2-1
+    public BigNumber(double value)
+    {
+        this.value = value;
+        this.exponent = 0;
+
+        Normalize();
+    }
+
+    //생성자 2-2
     public BigNumber(double value, int exponent)
     {
         this.value = value;
@@ -119,18 +144,131 @@ public struct BigNumber : IComparable<BigNumber>, IEquatable<BigNumber>, IFormat
         return order != 0 ? order * sign : a.value.CompareTo(b.value);
     }
 
-    public bool Equals(BigNumber other) => CompareTo(other) == 0;
-    public override bool Equals(object obj) => obj is BigNumber other && Equals(other);
-    public override int GetHashCode()
+    public override string ToString()
     {
-        var number = new BigNumber(value, exponent);
-        return number.value.GetHashCode() ^ number.exponent.GetHashCode();
+        string[] units =
+        {
+            "",
+            "K",
+            "M",
+            "B",
+            "T"
+        };
+
+        int unitIndex = exponent / 3;
+
+        if (unitIndex < units.Length)
+        {
+            //소수점 최대 2자리까지 보여줌 -> 0.##
+            return $"{value:0.##}{units[unitIndex]}";
+        }
+        //T를 넘겼을 때 일단 e로 표현 -> 나중에 필요하면 추가 예정
+        return $"{value:0.##}e{exponent}";
     }
 
-    public static bool operator >(BigNumber a, BigNumber b) => a.CompareTo(b) > 0;
-    public static bool operator <(BigNumber a, BigNumber b) => a.CompareTo(b) < 0;
-    public static bool operator >=(BigNumber a, BigNumber b) => a.CompareTo(b) >= 0;
-    public static bool operator <=(BigNumber a, BigNumber b) => a.CompareTo(b) <= 0;
-    public static bool operator ==(BigNumber a, BigNumber b) => a.Equals(b);
-    public static bool operator !=(BigNumber a, BigNumber b) => !a.Equals(b);
+    //사칙 연산자
+    public static BigNumber operator +(BigNumber a, BigNumber b)
+    {
+        if (a.value == 0)
+            return b;
+
+        if (b.value == 0)
+            return a;
+
+        // 지수가 큰 쪽을 기준으로 맞춤
+        if (a.exponent > b.exponent)
+        {
+            double convertedValue = b.value * Math.Pow(10, b.exponent - a.exponent);
+
+            return new BigNumber(a.value + convertedValue, a.exponent);
+        }
+        else
+        {
+            double convertedValue = a.value * Math.Pow(10, a.exponent - b.exponent);
+
+            return new BigNumber(b.value + convertedValue, b.exponent);
+        }
+    }
+
+    public static BigNumber operator -(BigNumber a, BigNumber b)
+    {
+        if (a.exponent > b.exponent)
+        {
+            double convertedValue = b.value * Math.Pow(10, b.exponent - a.exponent);
+
+            return new BigNumber(a.value - convertedValue, a.exponent);
+        }
+        else
+        {
+            double convertedValue = a.value * Math.Pow(10, a.exponent - b.exponent);
+
+            return new BigNumber(convertedValue - b.value, b.exponent);
+        }
+    }
+
+    public static BigNumber operator *(BigNumber a, BigNumber b)
+    {
+        //value끼리 곱하고 exponent끼리 더하기
+        return new BigNumber(a.value * b.value, a.exponent + b.exponent);
+    }
+
+    public static BigNumber operator /(BigNumber a, BigNumber b)
+    {
+        if (b.value == 0)
+            throw new DivideByZeroException();
+
+        return new BigNumber(a.value / b.value, a.exponent - b.exponent);
+    }
+
+    //비교 연산자
+    public bool IsZeroOrNegative => value <= 0;
+
+    // >
+    public static bool operator >(BigNumber a, BigNumber b)
+    {
+        if (a.exponent != b.exponent)
+            return a.exponent > b.exponent;
+
+        return a.value > b.value;
+    }
+
+    // <
+    public static bool operator <(BigNumber a, BigNumber b)
+    {
+        if (a.exponent != b.exponent)
+            return a.exponent < b.exponent;
+
+        return a.value < b.value;
+    }
+
+    // >=
+    public static bool operator >=(BigNumber a, BigNumber b)
+    {
+        if (a.exponent != b.exponent)
+            return a.exponent > b.exponent;
+
+        return a.value >= b.value;
+    }
+
+    // <=
+    public static bool operator <=(BigNumber a, BigNumber b)
+    {
+        if (a.exponent != b.exponent)
+            return a.exponent < b.exponent;
+
+        return a.value <= b.value;
+    }
+
+    // ==
+    public static bool operator ==(BigNumber a, BigNumber b)
+    {
+        return a.exponent == b.exponent &&
+               a.value == b.value;
+    }
+
+    // !=
+    public static bool operator !=(BigNumber a, BigNumber b)
+    {
+        return !(a == b);
+    }
 }

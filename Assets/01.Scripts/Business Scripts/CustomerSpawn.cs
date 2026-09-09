@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class CustomerSpawn : MonoBehaviour
 {
-    public static CustomerSpawn Instance;
+    public static CustomerSpawn instance;
 
     public GameObject[] customers;
 
@@ -18,14 +18,14 @@ public class CustomerSpawn : MonoBehaviour
 
     private void Awake()
     {
-        Instance = this;
+        instance = this;
 
         checkTime = new WaitForSeconds(.5f);
     }
 
     void Start()
     {
-        StartCoroutine(SpawnCustomers());
+        StartCoroutine(SpawnCustomers()); 
         StartCoroutine(EmptySeatCheck());
     }
 

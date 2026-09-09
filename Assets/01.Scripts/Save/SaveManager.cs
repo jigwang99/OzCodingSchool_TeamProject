@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.IO;
 using UnityEngine;
@@ -11,7 +12,7 @@ public class SaveManager : Singleton<SaveManager>
     {
         base.Awake();
 
-        //persistentDataPath¸¦ »ç¿ëÇØ ÇÃ·§Æûº° ¾ÈÀüÇÑ ÀúÀå °æ·Î ÁöÁ¤
+        //persistentDataPathë¥¼ ì‚¬ìš©í•´ í”Œë«í¼ë³„ ì•ˆì „í•œ ì €ì¥ ê²½ë¡œ ì§€ì •
         saveFilePath = Path.Combine(Application.persistentDataPath, "playData.json");
     }
 
@@ -20,80 +21,121 @@ public class SaveManager : Singleton<SaveManager>
         StartCoroutine(AutoSaveCoroutine());
     }
 
-    //µ¥ÀÌÅÍ ÀúÀå
+    //ë°ì´í„° ì €ì¥
     public void Save()
     {
-        PlayerData data = GameManager.instance.PlayerData;
+        try
+        {
+            if (GameManager.instance == null)
+            {
+                Debug.LogError("[SaveManager] GameManagerê°€ ì¡´ì¬í•˜ì§€ ì•Šì•„ ì €ì¥í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.");
+                return;
+            }
 
-        //¸¶Áö¸· ÀúÀå ½Ã°£ °»½Å
-        //È®ÀÎ¿ë ¡å
-        data.lastSaveTime = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-        //º¹¿ø ¹× »ç¿ë ¡å
-        //data.lastSaveTime = System.DateTime.Now.ToBinary().ToString();
+            PlayerData data = GameManager.instance.PlayerData;
 
-        string json = JsonUtility.ToJson(data, true);
-        File.WriteAllText(saveFilePath, json);
-        Debug.Log($"[SaveManager] °ÔÀÓ ÀúÀå ¿Ï·á: {saveFilePath}");
+            if (data == null)
+            {
+                Debug.LogError("[SaveManager] PlayerDataê°€ ì¡´ì¬í•˜ì§€ ì•Šì•„ ì €ì¥í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.");
+                return;
+            }
+
+            // ë§ˆì§€ë§‰ ì €ì¥ ì‹œê°„ ê°±ì‹ 
+            data.lastSaveTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            //data.lastSaveTime = System.DateTime.Now.ToBinary().ToString();
+
+            string json = JsonUtility.ToJson(data, true);
+            File.WriteAllText(saveFilePath, json);
+
+            Debug.Log($"[SaveManager] ê²Œì„ ì €ì¥ ì™„ë£Œ: {saveFilePath}");
+        }
+        catch (IOException e)
+        {
+            Debug.LogError($"[SaveManager] íŒŒì¼ ì €ì¥ ì¤‘ ì˜¤ë¥˜ ë°œìƒ: {e.Message}");
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[SaveManager] ì €ì¥ ì¤‘ ì˜ˆìƒí•˜ì§€ ëª»í•œ ì˜¤ë¥˜ ë°œìƒ: {e}");
+        }
     }
 
-    //µ¥ÀÌÅÍ ºÒ·¯¿À±â
-    //GameManagerÀÇ Awake¿¡¼­ ÀúÀåµÈ ÆÄÀÏÀÌ ÀÖÀ¸¸é LoadÇÔ¼ö ºÒ·¯¼­ SetPlayerDataÇÔ¼ö ¸Å°³º¯¼ö·Î ³Ö¾îÁÖ±â
-    //ÀúÀåµÈ ÆÄÀÏÀÌ ¾øÀ¸¸é CreateNewPlayerData·Î »õ µ¥ÀÌÅÍ »ı¼ºÇÏ±â
+    //ë°ì´í„° ë¶ˆëŸ¬ì˜¤ê¸°
     public PlayerData Load()
     {
-        if (File.Exists(saveFilePath))
+        try
         {
-            string json = MigrateLegacyGold(File.ReadAllText(saveFilePath));
+            if (!File.Exists(saveFilePath))
+            {
+                Debug.Log("[SaveManager] ì €ì¥ëœ íŒŒì¼ì´ ì—†ìŠµë‹ˆë‹¤.");
+                return null;
+            }
+
+            string json = File.ReadAllText(saveFilePath);
+
+            if (string.IsNullOrEmpty(json))
+            {
+                Debug.LogWarning("[SaveManager] ì €ì¥ íŒŒì¼ì´ ë¹„ì–´ìˆìŠµë‹ˆë‹¤.");
+                return null;
+            }
+
             PlayerData data = JsonUtility.FromJson<PlayerData>(json);
-            Debug.Log("[SaveManager] °ÔÀÓ ºÒ·¯¿À±â ¼º°ø");
+
+            if (data == null)
+            {
+                Debug.LogError("[SaveManager] ì €ì¥ ë°ì´í„°ë¥¼ ë¶ˆëŸ¬ì™”ì§€ë§Œ PlayerDataê°€ nullì…ë‹ˆë‹¤.");
+                return null;
+            }
+
+            Debug.Log("[SaveManager] ê²Œì„ ë¶ˆëŸ¬ì˜¤ê¸° ì„±ê³µ");
             return data;
         }
-        else
+        catch (IOException e)
         {
-            Debug.Log("[SaveManager] ÀúÀåµÈ ÆÄÀÏÀÌ ¾ø½À´Ï´Ù.");
+            Debug.LogError($"[SaveManager] íŒŒì¼ ë¶ˆëŸ¬ì˜¤ê¸° ì¤‘ ì˜¤ë¥˜ ë°œìƒ: {e.Message}");
+            return null;
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[SaveManager] ë¶ˆëŸ¬ì˜¤ê¸° ì¤‘ ì˜ˆìƒí•˜ì§€ ëª»í•œ ì˜¤ë¥˜ ë°œìƒ: {e}");
             return null;
         }
     }
 
-    // ÀúÀå ÆÄÀÏ »èÁ¦ - Å×½ºÆ®¿ë
+    // ì €ì¥ íŒŒì¼ ì‚­ì œ - í…ŒìŠ¤íŠ¸ìš©
     public void DeleteSaveFile()
     {
-        if (File.Exists(saveFilePath))
+        try
         {
-            File.Delete(saveFilePath);
-            Debug.Log("[SaveManager] ÀúÀå ÆÄÀÏ »èÁ¦ ¿Ï·á");
+            if (File.Exists(saveFilePath))
+            {
+                File.Delete(saveFilePath);
+                Debug.Log("[SaveManager] ì €ì¥ íŒŒì¼ ì‚­ì œ ì™„ë£Œ");
+            }
+            else
+            {
+                Debug.Log("[SaveManager] ì‚­ì œí•  ì €ì¥ íŒŒì¼ì´ ì—†ìŠµë‹ˆë‹¤.");
+            }
         }
-        else
+        catch (IOException e)
         {
-            Debug.Log("[SaveManager] »èÁ¦ÇÒ ÀúÀå ÆÄÀÏÀÌ ¾ø½À´Ï´Ù.");
+            Debug.LogError($"[SaveManager] ì €ì¥ íŒŒì¼ ì‚­ì œ ì¤‘ ì˜¤ë¥˜ ë°œìƒ: {e.Message}");
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[SaveManager] ì‚­ì œ ì¤‘ ì˜ˆìƒí•˜ì§€ ëª»í•œ ì˜¤ë¥˜ ë°œìƒ: {e}");
         }
     }
 
-    // ÀÚµ¿ ÀúÀå
+    // ìë™ ì €ì¥
     private IEnumerator AutoSaveCoroutine()
     {
         while (true)
         {
-            SaveManager.instance.Save();
-            Debug.Log("[AutoSave] ÀÚµ¿ ÀúÀå ¿Ï·á");
+            Save();
+
+            Debug.Log("[AutoSave] ìë™ ì €ì¥ ì™„ë£Œ");
 
             yield return new WaitForSeconds(saveInterval);
         }
-    }
-    // Convert old numeric gold to the BigNumber object before JsonUtility reads it.
-    private static string MigrateLegacyGold(string json)
-    {
-        return System.Text.RegularExpressions.Regex.Replace(
-            json,
-            @"(""gold""\s*:\s*)(-?(?:0|[1-9]\d*)(?:\.\d+)?(?:[eE][+-]?\d+)?)(?=\s*[,}])",
-            match =>
-            {
-                var culture = System.Globalization.CultureInfo.InvariantCulture;
-                double legacy = double.Parse(match.Groups[2].Value,
-                    System.Globalization.NumberStyles.Float, culture);
-                var gold = new BigNumber(legacy);
-                return match.Groups[1].Value + "{\"value\":" + gold.value.ToString("R", culture)
-                    + ",\"exponent\":" + gold.exponent.ToString(culture) + "}";
-            });
     }
 }

@@ -23,7 +23,7 @@ public class GoldTest : MonoBehaviour
     {
         PlayerData playerData = GameManager.instance.PlayerData;
 
-        CurrencyManager.instance.AddGold(cheatGold);
+        //CurrencyManager.instance.AddGold(cheatGold);
 
         goldText.text = $"Gold: {playerData.gold}";
     }
