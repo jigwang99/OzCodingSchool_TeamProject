@@ -4,13 +4,17 @@ using UnityEngine.UI;
 
 public class UpgradeUI : MonoBehaviour
 {
-    [Header("¾÷±×·¹ÀÌµå µ¥ÀÌÅÍ")]
+    [Header("ì—…ê·¸ë ˆì´ë“œ ë°ì´í„°")]
     [SerializeField] private UpgradeData upgradeData;
 
     [Header("UI")]
     [SerializeField] private TMP_Text upgradeText;
     [SerializeField] private Button upgradeButton;
     [SerializeField] private TMP_Text upgradeButtonText;
+
+    [Header("POPUP")]
+    [SerializeField] private GameObject successPopup;
+    [SerializeField] private GameObject failPopup;
 
     private void Start()
     {
@@ -39,14 +43,23 @@ public class UpgradeUI : MonoBehaviour
     {
         PlayerData playerData = GameManager.instance.PlayerData;
 
-        UpgradeManager.instance.TryUpgrade(upgradeData, playerData);
+        bool isSuccess = UpgradeManager.instance.TryUpgrade(upgradeData, playerData);
 
         RefreshUI();
+
+        if (isSuccess)
+        {
+            successPopup.SetActive(true);
+        }
+        else
+        {
+            failPopup.SetActive(true);
+        }
     }
 
     private void OnUpgradePurchased(UpgradeData data, int level)
     {
-        // ³»°¡ ´ã´çÇÏ´Â ¾÷±×·¹ÀÌµå°¡ ¾Æ´Ï¸é ¹«½Ã
+        // ë‚´ê°€ ë‹´ë‹¹í•˜ëŠ” ì—…ê·¸ë ˆì´ë“œê°€ ì•„ë‹ˆë©´ ë¬´ì‹œ
         if (data != upgradeData)
             return;
 
@@ -74,7 +87,7 @@ public class UpgradeUI : MonoBehaviour
             return;
         }
 
-        //double cost = UpgradeManager.instance.GetUpgradeCost(upgradeData, currentLevel);
+        BigNumber cost = UpgradeManager.instance.GetUpgradeCost(upgradeData, currentLevel);
 
         //upgradeText.text = $"Lv. {currentLevel} / Price: {cost:N0} G";
 

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.IO;
 using UnityEngine;
@@ -23,34 +24,79 @@ public class SaveManager : Singleton<SaveManager>
     //데이터 저장
     public void Save()
     {
-        PlayerData data = GameManager.instance.PlayerData;
+        try
+        {
+            if (GameManager.instance == null)
+            {
+                Debug.LogError("[SaveManager] GameManager가 존재하지 않아 저장할 수 없습니다.");
+                return;
+            }
 
-        //마지막 저장 시간 갱신
-        //확인용 ▼
-        data.lastSaveTime = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-        //복원 및 사용 ▼
-        //data.lastSaveTime = System.DateTime.Now.ToBinary().ToString();
+            PlayerData data = GameManager.instance.PlayerData;
 
-        string json = JsonUtility.ToJson(data, true);
-        File.WriteAllText(saveFilePath, json);
-        Debug.Log($"[SaveManager] 게임 저장 완료: {saveFilePath}");
+            if (data == null)
+            {
+                Debug.LogError("[SaveManager] PlayerData가 존재하지 않아 저장할 수 없습니다.");
+                return;
+            }
+
+            // 마지막 저장 시간 갱신
+            data.lastSaveTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            //data.lastSaveTime = System.DateTime.Now.ToBinary().ToString();
+
+            string json = JsonUtility.ToJson(data, true);
+            File.WriteAllText(saveFilePath, json);
+
+            Debug.Log($"[SaveManager] 게임 저장 완료: {saveFilePath}");
+        }
+        catch (IOException e)
+        {
+            Debug.LogError($"[SaveManager] 파일 저장 중 오류 발생: {e.Message}");
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[SaveManager] 저장 중 예상하지 못한 오류 발생: {e}");
+        }
     }
 
     //데이터 불러오기
-    //GameManager의 Awake에서 저장된 파일이 있으면 Load함수 불러서 SetPlayerData함수 매개변수로 넣어주기
-    //저장된 파일이 없으면 CreateNewPlayerData로 새 데이터 생성하기
     public PlayerData Load()
     {
-        if (File.Exists(saveFilePath))
+        try
         {
+            if (!File.Exists(saveFilePath))
+            {
+                Debug.Log("[SaveManager] 저장된 파일이 없습니다.");
+                return null;
+            }
+
             string json = File.ReadAllText(saveFilePath);
+
+            if (string.IsNullOrEmpty(json))
+            {
+                Debug.LogWarning("[SaveManager] 저장 파일이 비어있습니다.");
+                return null;
+            }
+
             PlayerData data = JsonUtility.FromJson<PlayerData>(json);
+
+            if (data == null)
+            {
+                Debug.LogError("[SaveManager] 저장 데이터를 불러왔지만 PlayerData가 null입니다.");
+                return null;
+            }
+
             Debug.Log("[SaveManager] 게임 불러오기 성공");
             return data;
         }
-        else
+        catch (IOException e)
         {
-            Debug.Log("[SaveManager] 저장된 파일이 없습니다.");
+            Debug.LogError($"[SaveManager] 파일 불러오기 중 오류 발생: {e.Message}");
+            return null;
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[SaveManager] 불러오기 중 예상하지 못한 오류 발생: {e}");
             return null;
         }
     }
@@ -58,14 +104,25 @@ public class SaveManager : Singleton<SaveManager>
     // 저장 파일 삭제 - 테스트용
     public void DeleteSaveFile()
     {
-        if (File.Exists(saveFilePath))
+        try
         {
-            File.Delete(saveFilePath);
-            Debug.Log("[SaveManager] 저장 파일 삭제 완료");
+            if (File.Exists(saveFilePath))
+            {
+                File.Delete(saveFilePath);
+                Debug.Log("[SaveManager] 저장 파일 삭제 완료");
+            }
+            else
+            {
+                Debug.Log("[SaveManager] 삭제할 저장 파일이 없습니다.");
+            }
         }
-        else
+        catch (IOException e)
         {
-            Debug.Log("[SaveManager] 삭제할 저장 파일이 없습니다.");
+            Debug.LogError($"[SaveManager] 저장 파일 삭제 중 오류 발생: {e.Message}");
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[SaveManager] 삭제 중 예상하지 못한 오류 발생: {e}");
         }
     }
 
@@ -74,7 +131,8 @@ public class SaveManager : Singleton<SaveManager>
     {
         while (true)
         {
-            SaveManager.instance.Save();
+            Save();
+
             Debug.Log("[AutoSave] 자동 저장 완료");
 
             yield return new WaitForSeconds(saveInterval);

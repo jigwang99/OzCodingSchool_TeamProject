@@ -8,7 +8,7 @@ public class SceneTransitionButton : MonoBehaviour, IPointerDownHandler, IPointe
 {
     public enum TargetScene // 씬 이름 변경 시 같이 수정해줘야함
     {
-        BusinessScene, CombatScene, TitleScene, GachaScene, UpgradeTestScene
+        BusinessScene, CombatScene, TitleScene, GachaScene, UpgradeScene
     }
 
     [Header("목적지 씬")]
