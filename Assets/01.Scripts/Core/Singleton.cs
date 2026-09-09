@@ -1,13 +1,18 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 {
     private static T _instance;
+    private static bool isQuitting = false;
 
     public static T instance
     {
         get
         {
+            // 종료 중에는 기존 인스턴스만 반환하고 새로 생성하지 않는다.
+            if (isQuitting)
+                return _instance != null ? _instance : null;
+
             if (_instance == null)
             {
                 _instance = FindObjectOfType<T>();
@@ -62,5 +67,10 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
         {
             _instance = null;
         }
+    }
+
+    protected virtual void OnApplicationQuit()
+    {
+        isQuitting = true;
     }
 }

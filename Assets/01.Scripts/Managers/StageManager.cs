@@ -175,7 +175,10 @@ public class StageManager : MonoBehaviour
 
         if (!IsRetry)
         {
-            GameManager.instance.PlayerData.SetCurrentStage(CurrentStage - 1); // 세터 내부에서 최하 1 보장
+            // 챕터당 5개 스테이지: 1-1, 2-1, 3-1(진행도 1, 6, 11)에서는 후퇴하지 않는다.
+            if ((completedStage - 1) % 5 != 0)
+                GameManager.instance.PlayerData.SetCurrentStage(completedStage - 1);
+
             GameManager.instance.PlayerData.SetRetryEnabled(true);
         }
 
