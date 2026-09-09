@@ -166,8 +166,7 @@ public class PlayerData
         if (currentStage == clamped)
             return;
 
-        currentStage = clamped;
-        OnStageChanged?.Invoke();
+        currentStage = Mathf.Max(1, stage);
     }
 
     public void SetRetryEnabled(bool enabled)
