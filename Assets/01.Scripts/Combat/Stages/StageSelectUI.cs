@@ -1,6 +1,6 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UI;
 
 // CombatScene 전용. 열려 있는 동안 전투는 계속되며, 선택 시 StageManager가 새 전투를 시작한다.
@@ -8,37 +8,58 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster))]
 public class StageSelectUI : MonoBehaviour
 {
+    [Serializable]
+    private sealed class StageButton
+    {
+        [Min(1)] public int stageNumber;
+        public Button button;
+        public Text label;
+    }
+
     [SerializeField] private StageManager stageManager;
-    [SerializeField] private Font font;
+    [Header("씬에 배치된 UI")]
+    [SerializeField] private GameObject modal;
+    [SerializeField] private RectTransform panel;
+    [SerializeField] private Button openButton;
+    [SerializeField] private Text hint;
+    [SerializeField] private List<StageButton> stages = new List<StageButton>();
 
-    private readonly List<Button> stageButtons = new List<Button>();
-    private readonly List<Text> stageLabels = new List<Text>();
-    private GameObject modal;
-    private RectTransform panel;
-    private Button openButton;
-    private Text hint;
-
-    private static readonly Color NormalColor = new Color(0.18f, 0.23f, 0.32f);
-    private static readonly Color BossColor = new Color(0.38f, 0.27f, 0.15f);
-    private static readonly Color CurrentColor = new Color(0.13f, 0.46f, 0.48f);
+    [Header("상태별 색상")]
+    [SerializeField] private Color normalColor = new Color(0.18f, 0.23f, 0.32f);
+    [SerializeField] private Color bossColor = new Color(0.38f, 0.27f, 0.15f);
+    [SerializeField] private Color currentColor = new Color(0.13f, 0.46f, 0.48f);
     private const string SelectionHint = "번호를 누르면 해당 스테이지에서 전투를 새로 시작합니다.";
+    private bool initialized;
 
     private void Awake()
     {
-        if (stageManager == null || font == null || stageManager.StageCount == 0)
+        if (stageManager == null || stageManager.StageCount == 0 || modal == null ||
+            panel == null || openButton == null || hint == null || stages == null || stages.Count == 0)
         {
-            Debug.LogError("[StageSelectUI] StageManager, 스테이지 데이터와 한글 폰트를 확인하세요.", this);
+            Debug.LogError("[StageSelectUI] 스테이지 데이터와 씬의 UI 참조를 확인하세요.", this);
             enabled = false;
             return;
         }
 
-        BuildUI();
+        var numbers = new HashSet<int>();
+        foreach (StageButton stage in stages)
+        {
+            if (stage == null || stage.button == null || stage.button.image == null || stage.label == null ||
+                stage.stageNumber < 1 || stage.stageNumber > stageManager.StageCount || !numbers.Add(stage.stageNumber))
+            {
+                Debug.LogError("[StageSelectUI] 버튼 참조와 중복되지 않는 스테이지 번호를 확인하세요.", this);
+                enabled = false;
+                return;
+            }
+        }
+
+        initialized = true;
         Hide();
     }
 
     private void OnEnable()
     {
-        if (modal == null) return;
+        if (!initialized) return;
         openButton.interactable = true;
         stageManager.OnStageStarted += Refresh;
         stageManager.OnStageResult += HandleResult;
@@ -58,7 +79,7 @@ public class StageSelectUI : MonoBehaviour
 
     public void Show()
     {
-        if (modal == null) return;
+        if (!initialized || !isActiveAndEnabled) return;
         hint.text = SelectionHint;
         modal.SetActive(true);
         ResizePanel();
@@ -70,8 +91,10 @@ public class StageSelectUI : MonoBehaviour
         if (modal != null) modal.SetActive(false);
     }
 
-    private void Select(int stageNumber)
+    // 씬의 Button.onClick에서 선택할 스테이지 번호를 int 인자로 전달한다.
+    public void Select(int stageNumber)
     {
+        if (!initialized || !isActiveAndEnabled) return;
         if (stageManager.SelectStage(stageNumber))
             Hide();
         else
@@ -82,147 +105,29 @@ public class StageSelectUI : MonoBehaviour
 
     private void Refresh()
     {
-        for (int i = 0; i < stageButtons.Count; i++)
+        if (!initialized) return;
+        foreach (StageButton stage in stages)
         {
-            int number = i + 1;
+            int number = stage.stageNumber;
             bool current = number == stageManager.CurrentStageNumber;
             bool boss = number % 5 == 0;
-            stageButtons[i].image.color = current ? CurrentColor : boss ? BossColor : NormalColor;
+            stage.button.image.color = current ? currentColor : boss ? bossColor : normalColor;
             string status = boss ? (current ? "보스 · 현재" : "보스") : (current ? "현재" : "일반");
-            stageLabels[i].text = stageManager.GetStageName(number) + "\n" + status;
+            stage.label.text = stageManager.GetStageName(number) + "\n" + status;
         }
-    }
-
-    private void BuildUI()
-    {
-        openButton = CreateButton("OpenStageSelect", transform, "스테이지 선택", 20, Show);
-        var openRect = (RectTransform)openButton.transform;
-        openRect.anchorMin = openRect.anchorMax = new Vector2(0.5f, 1f);
-        openRect.anchoredPosition = new Vector2(190f, -65f);
-        openRect.sizeDelta = new Vector2(170f, 44f);
-
-        Image backdrop = CreateImage("StageSelectModal", transform, new Color(0f, 0f, 0f, 0.6f));
-        modal = backdrop.gameObject;
-        SetRect(backdrop.rectTransform, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
-        // 패널 바깥 클릭은 닫기로 처리하고 뒤쪽 전투 UI에 전달하지 않는다.
-        Button dismiss = backdrop.gameObject.AddComponent<Button>();
-        dismiss.targetGraphic = backdrop;
-        dismiss.transition = Selectable.Transition.None;
-        dismiss.navigation = new Navigation { mode = Navigation.Mode.None };
-        dismiss.onClick.AddListener(Hide);
-
-        Image card = CreateImage("StageSelectPanel", modal.transform, new Color(0.075f, 0.10f, 0.16f, 1f));
-        panel = card.rectTransform;
-        panel.anchorMin = panel.anchorMax = new Vector2(0.5f, 0.5f);
-        // 공백 영역도 클릭을 소비해 패널 바깥 닫기로 전파하지 않는다.
-        Button panelSurface = card.gameObject.AddComponent<Button>();
-        panelSurface.targetGraphic = card;
-        panelSurface.transition = Selectable.Transition.None;
-        panelSurface.navigation = new Navigation { mode = Navigation.Mode.None };
-
-        Text title = CreateText("Title", panel, "스테이지 선택", 32);
-        TopRect(title.rectTransform, 24f, 75f, 16f, 44f);
-        title.alignment = TextAnchor.MiddleLeft;
-        Button close = CreateButton("Close", panel, "닫기", 18, Hide);
-        var closeRect = (RectTransform)close.transform;
-        closeRect.anchorMin = closeRect.anchorMax = Vector2.one;
-        closeRect.anchoredPosition = new Vector2(-50f, -38f);
-        closeRect.sizeDelta = new Vector2(64f, 36f);
-
-        int rows = Mathf.CeilToInt(stageManager.StageCount / 5f);
-        for (int row = 0; row < rows; row++)
-        {
-            float rowTop = 74f + row * 116f;
-            Text chapter = CreateText("Chapter" + (row + 1), panel, (row + 1) + "장", 22);
-            chapter.alignment = TextAnchor.MiddleLeft;
-            TopRect(chapter.rectTransform, 24f, 24f, rowTop, 28f);
-
-            var rowObject = new GameObject("Stages" + (row + 1), typeof(RectTransform));
-            rowObject.layer = gameObject.layer;
-            var rowRect = (RectTransform)rowObject.transform;
-            rowRect.SetParent(panel, false);
-            TopRect(rowRect, 20f, 20f, rowTop + 32f, 70f);
-
-            for (int column = 0; column < 5; column++)
-            {
-                int stageNumber = row * 5 + column + 1;
-                if (stageNumber > stageManager.StageCount) break;
-                Button button = CreateButton("Stage" + stageNumber, rowRect, "", 22, () => Select(stageNumber));
-                SetRect((RectTransform)button.transform,
-                    new Vector2(column / 5f, 0f), new Vector2((column + 1) / 5f, 1f),
-                    new Vector2(4f, 0f), new Vector2(-4f, 0f));
-                stageButtons.Add(button);
-                stageLabels.Add(button.GetComponentInChildren<Text>());
-            }
-        }
-
-        hint = CreateText("Hint", panel, SelectionHint, 17);
-        TopRect(hint.rectTransform, 24f, 24f, 80f + rows * 116f, 40f);
-        ResizePanel();
     }
 
     private void OnRectTransformDimensionsChange() => ResizePanel();
 
     private void ResizePanel()
     {
-        if (panel == null) return;
+        if (!initialized || panel == null) return;
         Rect bounds = ((RectTransform)transform).rect;
-        float height = 140f + Mathf.CeilToInt(stageManager.StageCount / 5f) * 116f;
-        panel.sizeDelta = new Vector2(Mathf.Min(700f, Mathf.Max(280f, bounds.width - 32f)), height);
-        panel.localScale = Vector3.one * Mathf.Min(1f, Mathf.Max(0.1f, (bounds.height - 32f) / height));
-    }
-
-    private Button CreateButton(string objectName, Transform parent, string label, int size, UnityAction clicked)
-    {
-        Image image = CreateImage(objectName, parent, NormalColor);
-        Button button = image.gameObject.AddComponent<Button>();
-        button.targetGraphic = image;
-        button.navigation = new Navigation { mode = Navigation.Mode.None };
-        button.onClick.AddListener(clicked);
-        Text text = CreateText("Label", image.transform, label, size);
-        SetRect(text.rectTransform, Vector2.zero, Vector2.one, new Vector2(6f, 4f), new Vector2(-6f, -4f));
-        return button;
-    }
-
-    private Image CreateImage(string objectName, Transform parent, Color color)
-    {
-        var obj = new GameObject(objectName, typeof(RectTransform), typeof(Image));
-        obj.layer = gameObject.layer;
-        var image = obj.GetComponent<Image>();
-        image.rectTransform.SetParent(parent, false);
-        image.color = color;
-        return image;
-    }
-
-    private Text CreateText(string objectName, Transform parent, string value, int size)
-    {
-        var obj = new GameObject(objectName, typeof(RectTransform), typeof(Text));
-        obj.layer = gameObject.layer;
-        Text text = obj.GetComponent<Text>();
-        text.rectTransform.SetParent(parent, false);
-        text.font = font;
-        text.text = value;
-        text.fontSize = size;
-        text.resizeTextForBestFit = true;
-        text.resizeTextMinSize = 12;
-        text.resizeTextMaxSize = size;
-        text.alignment = TextAnchor.MiddleCenter;
-        text.color = Color.white;
-        text.raycastTarget = false;
-        text.supportRichText = false;
-        return text;
-    }
-
-    private static void TopRect(RectTransform rect, float left, float right, float top, float height)
-    {
-        SetRect(rect, Vector2.up, Vector2.one, new Vector2(left, -top - height), new Vector2(-right, -top));
-    }
-
-    private static void SetRect(RectTransform rect, Vector2 min, Vector2 max, Vector2 offsetMin, Vector2 offsetMax)
-    {
-        rect.anchorMin = min;
-        rect.anchorMax = max;
-        rect.offsetMin = offsetMin;
-        rect.offsetMax = offsetMax;
+        Rect authoredSize = panel.rect;
+        if (authoredSize.width <= 0f || authoredSize.height <= 0f) return;
+        // 씬에서 설정한 크기와 배치를 보존하고 작은 화면에서는 전체 배율만 줄인다.
+        float scale = Mathf.Min(1f, (bounds.width - 32f) / authoredSize.width,
+            (bounds.height - 32f) / authoredSize.height);
+        panel.localScale = Vector3.one * Mathf.Max(0.1f, scale);
     }
 }
