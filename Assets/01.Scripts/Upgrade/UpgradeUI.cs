@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class UpgradeUI : MonoBehaviour
 {
-    [Header("¾÷±×·¹ÀÌµå µ¥ÀÌÅÍ")]
+    [Header("ì—…ê·¸ë ˆì´ë“œ ë°ì´í„°")]
     [SerializeField] private UpgradeData upgradeData;
 
     [Header("UI")]
@@ -59,7 +59,7 @@ public class UpgradeUI : MonoBehaviour
 
     private void OnUpgradePurchased(UpgradeData data, int level)
     {
-        // ³»°¡ ´ã´çÇÏ´Â ¾÷±×·¹ÀÌµå°¡ ¾Æ´Ï¸é ¹«½Ã
+        // ë‚´ê°€ ë‹´ë‹¹í•˜ëŠ” ì—…ê·¸ë ˆì´ë“œê°€ ì•„ë‹ˆë©´ ë¬´ì‹œ
         if (data != upgradeData)
             return;
 
@@ -89,7 +89,7 @@ public class UpgradeUI : MonoBehaviour
 
         BigNumber cost = UpgradeManager.instance.GetUpgradeCost(upgradeData, currentLevel);
 
-        upgradeText.text = $"Lv. {currentLevel} / Price: {cost:N0} G";
+        //upgradeText.text = $"Lv. {currentLevel} / Price: {cost:N0} G";
 
         upgradeButton.interactable = true;
     }

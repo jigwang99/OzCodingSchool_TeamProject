@@ -5,12 +5,12 @@ using UnityEngine;
 [Serializable]
 public struct BigNumber
 {
-    //½ÇÁ¦ ¼ıÀÚ ¾ÕºÎºĞ
+    //ì‹¤ì œ ìˆ«ì ì•ë¶€ë¶„
     public double value;
-    //¼ıÀÚ°¡ ¾ó¸¶³ª Å«Áö ³ªÅ¸³»´Â Áö¼ö
+    //ìˆ«ìê°€ ì–¼ë§ˆë‚˜ í°ì§€ ë‚˜íƒ€ë‚´ëŠ” ì§€ìˆ˜
     public int exponent;
 
-    //»ı¼ºÀÚ 1-1
+    //ìƒì„±ì 1-1
     public BigNumber(int value)
     {
         this.value = value;
@@ -19,7 +19,7 @@ public struct BigNumber
         Normalize();
     }
 
-    //»ı¼ºÀÚ 1-2
+    //ìƒì„±ì 1-2
     public BigNumber(int value, int exponent)
     {
         this.value = value;
@@ -28,7 +28,7 @@ public struct BigNumber
         Normalize();
     }
 
-    //»ı¼ºÀÚ 2-1
+    //ìƒì„±ì 2-1
     public BigNumber(double value)
     {
         this.value = value;
@@ -37,7 +37,7 @@ public struct BigNumber
         Normalize();
     }
 
-    //»ı¼ºÀÚ 2-2
+    //ìƒì„±ì 2-2
     public BigNumber(double value, int exponent)
     {
         this.value = value;
@@ -82,14 +82,14 @@ public struct BigNumber
 
         if (unitIndex < units.Length)
         {
-            //¼Ò¼öÁ¡ ÃÖ´ë 2ÀÚ¸®±îÁö º¸¿©ÁÜ -> 0.##
+            //ì†Œìˆ˜ì  ìµœëŒ€ 2ìë¦¬ê¹Œì§€ ë³´ì—¬ì¤Œ -> 0.##
             return $"{value:0.##}{units[unitIndex]}";
         }
-        //T¸¦ ³Ñ°åÀ» ¶§ ÀÏ´Ü e·Î Ç¥Çö -> ³ªÁß¿¡ ÇÊ¿äÇÏ¸é Ãß°¡ ¿¹Á¤
+        //Të¥¼ ë„˜ê²¼ì„ ë•Œ ì¼ë‹¨ eë¡œ í‘œí˜„ -> ë‚˜ì¤‘ì— í•„ìš”í•˜ë©´ ì¶”ê°€ ì˜ˆì •
         return $"{value:0.##}e{exponent}";
     }
 
-    //»çÄ¢ ¿¬»êÀÚ
+    //ì‚¬ì¹™ ì—°ì‚°ì
     public static BigNumber operator +(BigNumber a, BigNumber b)
     {
         if (a.value == 0)
@@ -98,7 +98,7 @@ public struct BigNumber
         if (b.value == 0)
             return a;
 
-        // Áö¼ö°¡ Å« ÂÊÀ» ±âÁØÀ¸·Î ¸ÂÃã
+        // ì§€ìˆ˜ê°€ í° ìª½ì„ ê¸°ì¤€ìœ¼ë¡œ ë§ì¶¤
         if (a.exponent > b.exponent)
         {
             double convertedValue = b.value * Math.Pow(10, b.exponent - a.exponent);
@@ -131,7 +131,7 @@ public struct BigNumber
 
     public static BigNumber operator *(BigNumber a, BigNumber b)
     {
-        //value³¢¸® °öÇÏ°í exponent³¢¸® ´õÇÏ±â
+        //valueë¼ë¦¬ ê³±í•˜ê³  exponentë¼ë¦¬ ë”í•˜ê¸°
         return new BigNumber(a.value * b.value, a.exponent + b.exponent);
     }
 
@@ -143,7 +143,7 @@ public struct BigNumber
         return new BigNumber(a.value / b.value, a.exponent - b.exponent);
     }
 
-    //ºñ±³ ¿¬»êÀÚ
+    //ë¹„êµ ì—°ì‚°ì
     public bool IsZeroOrNegative => value <= 0;
 
     // >

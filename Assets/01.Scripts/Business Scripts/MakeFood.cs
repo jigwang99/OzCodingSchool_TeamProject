@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using NUnit.Framework.Internal;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -43,12 +44,21 @@ public class MakeFood : MonoBehaviour
         }
 
         GameObject foodObject = BObjectPoolManager.instance.GetObject($"{food.name}");
+        Food foodScale = foodObject.GetComponent<Food>();
+
+        if (FacilityManager.instance.RestaurantLevel == 2)
+            foodObject.transform.localScale =
+                new Vector3(foodScale.originalScale.x / 1.4f, foodScale.originalScale.y / 1.4f, foodScale.originalScale.z / 1.4f);
+        else if (FacilityManager.instance.RestaurantLevel == 3)
+            foodObject.transform.localScale =
+                new Vector3(foodScale.originalScale.x / 1.7f, foodScale.originalScale.y / 1.7f, foodScale.originalScale.z / 1.7f);
+
         Vector3 startPos = transform.position + new Vector3(0.5f, 0f, 0f);
         foodObject.transform.position = startPos;
         StartCoroutine(MoveFood(foodObject, foodPosition, customer));
         customer.myFood = foodObject;
         makeTimeBar.value = 0;
-        makeTimeText.text = $"0.0 / 0.0";
+        makeTimeText.text = $"";
 
         animator.SetBool("Idle", true);
         animator.SetBool("Cook", false);
@@ -103,5 +113,20 @@ public class MakeFood : MonoBehaviour
 
         foodObject.transform.position = targetPos;
         customer.myFood = foodObject;
+    }
+
+    public void CancelCook()   //식당 레벨업시 음식 캔슬
+    {
+        makeTimeBar.value = 0;
+        makeTimeText.text = $"";
+
+        animator.SetBool("Idle", true);
+        animator.SetBool("Cook", false);
+        isCooking = false;
+
+        for (int i = 0; i < effects.Length; i++)
+        {
+            effects[i].SetActive(false);
+        }
     }
 }

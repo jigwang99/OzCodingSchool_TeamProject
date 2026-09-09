@@ -1,19 +1,11 @@
 ﻿using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 public class FacilityManager : Singleton<FacilityManager> //시설 업그레이드, 가구 배치, 직원 고용, 
 {
-    //경영 요리고양이 1마리(+ 직원 고양이 업그레이드)
-
-    //- 요리고양이 업그레이드(요리 해금)
-    //- 직원고용(초당 골드 생산량 증가)
-    //- 가게 크기 증가(구멍가게, 일반 상가, 큰 식당)
-    //→ 가구 배치 칸 증가(ex 구멍가게→가구 배치 칸 1개),
-    //직원고용 업그레이드 해금조건,
-    //요리고양이 업그레이드 해금조건(ex 가계 2단계 이상시 직원 업그레이드 5레벨가능)
-    //- 가게를 업그레이드 할 경우 다양한 손님 등장(특별한 손님 등장시 n초간 골드생산량 증가)
-
     private PlayerData data => GameManager.instance.PlayerData;
 
     // 저장 대상 상태 → PlayerData 프록시
@@ -37,7 +29,6 @@ public class FacilityManager : Singleton<FacilityManager> //시설 업그레이�
     int deepfryer;
     int refrigerator;
     int oven;
-    public int cooker;
 
     public Button gasstoveBtn;
     public Button microwaveOvenBtn;
@@ -47,10 +38,11 @@ public class FacilityManager : Singleton<FacilityManager> //시설 업그레이�
     public Button ovenBtn;
     public Button chefBtn;
     public Button restaurantUpgradeBtn;
+    public Button chefLevelBtn;
 
-    public GameObject restaurant1;
-    public GameObject restaurant2;
-    public GameObject restaurant3;
+    public GameObject[] restaurants;
+
+    public TextMeshProUGUI chefLevelText;
 
     private void Awake()
     {
@@ -61,7 +53,8 @@ public class FacilityManager : Singleton<FacilityManager> //시설 업그레이�
         refrigerator = PlayerPrefs.GetInt("냉장고", 0);
         oven = PlayerPrefs.GetInt("오븐", 0);
         CookCatNum = PlayerPrefs.GetInt("직원", 0);
-        //restaurantUpgrade = PlayerPrefs.GetInt("식당", 0);
+        RestaurantLevel = PlayerPrefs.GetInt("식당", 1);
+        ChefCatLevel = PlayerPrefs.GetInt("요리사레벨", 0);
         if (gasstove == 1) gasstoveBtn.interactable = false;
         if (microwaveOven == 1) microwaveOvenBtn.interactable = false;
         if (steamer == 1) steamerBtn.interactable = false;
@@ -69,12 +62,13 @@ public class FacilityManager : Singleton<FacilityManager> //시설 업그레이�
         if (refrigerator == 1) refrigeratorBtn.interactable = false;
         if (oven == 1) ovenBtn.interactable = false;
         if (CookCatNum == 1) chefBtn.interactable = false;
-        if (RestaurantLevel == 2) chefBtn.interactable = false;
-
+        if (RestaurantLevel >= 3) { RestaurantLevel = 3; restaurantUpgradeBtn.interactable = false; }
+        if (ChefCatLevel >= 9) { ChefCatLevel = 9; chefLevelBtn.interactable = false; }
     }
 
     private void Start()
     {
+        chefLevelText.text = $"Chef Level : {ChefCatLevel}";
         UpgradeRestaurant();
     }
     public void OnClickGasstoveBtn(Button btn)
@@ -132,20 +126,34 @@ public class FacilityManager : Singleton<FacilityManager> //시설 업그레이�
     {
         CookCatNum += 1;
         btn.interactable = false;
-        ProductionManager.instance.StartChef2();
+        if (RestaurantLevel > CookCatNum) //식당 1레벨 -> 직원 1명 가능 , 2 > 1 가능
+            btn.interactable = true;
 
-        cooker = 1;
-        PlayerPrefs.SetInt("직원", cooker);
+        for (int i = 1; i <= CookCatNum; i++)
+        {
+            ProductionManager.instance.StartChef(i);
+        }
+
+        PlayerPrefs.SetInt("직원", CookCatNum);
     }
 
     public void OnClickRestaurantBtn(Button btn)
     {
         RestaurantLevel += 1;
 
+        if (RestaurantLevel > 3)
+            RestaurantLevel = 3;
+
         if (RestaurantLevel == 3)
             btn.interactable = false;
 
+        ProductionManager.instance.CancelCook();
+
         UpgradeRestaurant();
+
+        CustomerSpawn.instance.waitingCustomers.Clear();
+        BObjectPoolManager.instance.Refresh();
+
         PlayerPrefs.SetInt("식당", RestaurantLevel);
     }
 
@@ -156,16 +164,17 @@ public class FacilityManager : Singleton<FacilityManager> //시설 업그레이�
         if (ChefCatLevel == 9)
             btn.interactable = false;
 
+        chefLevelText.text = $"Chef Level : {ChefCatLevel}";
         PlayerPrefs.SetInt("요리사레벨", ChefCatLevel);
     }
 
     public void GetGold(int foodPrice, bool special)
     {
-        if (Random.Range(0f, 1f) < FacilityManager.instance.SpecialChance)
-        {
-            Debug.Log("스페셜 성공!");
-            special = true;
-        }
+        //if (Random.Range(0f, 1f) < FacilityManager.instance.SpecialChance)    //손님에서 음식 다먹었을때 실행
+        //{
+        //    Debug.Log("스페셜 성공!");
+        //    special = true;
+        //}
 
         int addGold = (int)(foodPrice * (1f + FacilityManager.instance.GoldBonus));
 
@@ -174,28 +183,29 @@ public class FacilityManager : Singleton<FacilityManager> //시설 업그레이�
         if (special)
             goldAmount += addGold;
 
-        CurrencyManager.instance.AddGold(goldAmount);
+        CurrencyManager.instance.AddGold(new BigNumber(goldAmount));
     }
 
     public void UpgradeRestaurant()
     {
         if (RestaurantLevel == 2)
         {
-            restaurant1.gameObject.SetActive(false);
-            restaurant2.gameObject.SetActive(true);
-            restaurant3.gameObject.SetActive(false);
-            restaurant2.GetComponent<RestaurantPosition>().seats.ResetSeats();
+            restaurants[0].gameObject.SetActive(false);
+            restaurants[1].gameObject.SetActive(true);
+            restaurants[2].gameObject.SetActive(false);
+            restaurants[1].GetComponent<RestaurantPosition>().seats.ResetSeats();
+
+            chefBtn.interactable = true;
         }
         else if (RestaurantLevel == 3)
         {
-            restaurant1.gameObject.SetActive(false);
-            restaurant2.gameObject.SetActive(false);
-            restaurant3.gameObject.SetActive(true);
-            restaurant3.GetComponent<RestaurantPosition>().seats.ResetSeats();
-        }
-        CustomerSpawn.Instance.waitingCustomers.Clear();
-        BObjectPoolManager.instance.Refresh();
+            restaurants[0].gameObject.SetActive(false);
+            restaurants[1].gameObject.SetActive(false);
+            restaurants[2].gameObject.SetActive(true);
+            restaurants[2].GetComponent<RestaurantPosition>().seats.ResetSeats();
 
+            chefBtn.interactable = true;
+        }
         ProductionManager.instance.ChefPosition();
     }
 }

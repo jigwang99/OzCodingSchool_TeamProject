@@ -32,6 +32,7 @@ public class Customer : MonoBehaviour
     int myWaypointNum;
     int nowPoint;
 
+    public GetGoldPopup popUp;
     void OnEnable()
     {
         state = CustomerState.Enter;
@@ -175,6 +176,14 @@ public class Customer : MonoBehaviour
 
             BObjectPoolManager.instance.ReturnObject(myFood.name.ToString().Split("(Clone)")[0], myFood);
             Food f = myFood.GetComponent<Food>();
+            if (Random.Range(0f, 1f) < FacilityManager.instance.SpecialChance)
+            {
+                Debug.Log("스페셜 성공!");
+                f.isSpecial = true;
+            }
+            GetGoldPopup myPopup = Instantiate(popUp);
+            myPopup.Show(f.price, f.isSpecial);
+            myPopup.transform.position = transform.position + Vector3.up * .7f;
             FacilityManager.instance.GetGold(f.price, f.isSpecial);
 
             myFood = null;
