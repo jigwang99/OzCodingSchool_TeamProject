@@ -109,9 +109,9 @@ MonoBehaviour:
       - rarity: 0
         weight: 50
       - rarity: 0
-        weight: 0
+        weight: 1
       - rarity: 0
-        weight: 0
+        weight: 1
     - level: 2
       requiredPullCount: 30
       rarities:
@@ -122,7 +122,7 @@ MonoBehaviour:
       - rarity: 0
         weight: 10
       - rarity: 0
-        weight: 0
+        weight: 1
     - level: 3
       requiredPullCount: 50
       rarities:

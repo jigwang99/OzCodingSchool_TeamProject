@@ -1,0 +1,58 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8ff4255ab00be8488ae9c1c06855be1, type: 3}
+  m_Name: GachaPool_
+  m_EditorClassIdentifier: Assembly-CSharp::PixelRestaurant.Gacha.GachaPoolData
+  poolName: WeaponGachaPool
+  group: 0
+  items:
+  - itemId: Test1
+    itemName: 1
+    group: 0
+    rarity: 0
+    grade: 1
+    weight: 1
+    displayPrefab: {fileID: 7852710830195475270, guid: 8584ab6e2de39344f9309e225faf56d2, type: 3}
+  - itemId: Test2
+    itemName: 2
+    group: 0
+    rarity: 1
+    grade: 1
+    weight: 1
+    displayPrefab: {fileID: 1202570505607622291, guid: def3d7c4c1d64484b8c1ac15a6c11c2a, type: 3}
+  - itemId: Test3
+    itemName: 3
+    group: 0
+    rarity: 2
+    grade: 1
+    weight: 1
+    displayPrefab: {fileID: 4426969066726286575, guid: 02c928cdc3c5b024388ede116f83e2d6, type: 3}
+  - itemId: Test4
+    itemName: 4
+    group: 0
+    rarity: 3
+    grade: 1
+    weight: 1
+    displayPrefab: {fileID: 1756148654014240070, guid: d6ca4417c1f589b4ab43bc6b043d9291, type: 3}
+  pityConfig:
+    levels:
+    - level: 1
+      requiredPullCount: 1
+      rarities:
+      - rarity: 0
+        weight: 1
+      - rarity: 1
+        weight: 1
+      - rarity: 2
+        weight: 1
+      - rarity: 3
+        weight: 1

@@ -20,6 +20,9 @@ namespace PixelRestaurant.Data
         /// <summary>
         /// 요리 레시피 가챠
         /// </summary>
-        Recipe
+        Recipe,
+
+     
+
     }
 }
