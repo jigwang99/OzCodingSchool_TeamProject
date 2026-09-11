@@ -140,6 +140,7 @@ public class StageManager : MonoBehaviour
             // 완전히 검은 프레임을 그린 뒤 풀을 갱신한다.
             await UniTask.NextFrame(token);
             enemySpawner.Clear();
+            await CombatFeedbackPool.PrepareForStageAsync(token);
             await CombatObjectPoolManager.instance.PrepareStageAsync(data, token);
             playerCat.transform.position = playerStartPosition;
             playerCat.Revive();

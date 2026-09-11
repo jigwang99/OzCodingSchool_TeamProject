@@ -31,6 +31,10 @@ public class UnitCombatState : UnitBaseState
 
     public override void Update()
     {
+        // 처치로 타깃이 사라져도 성공한 공격의 후반 모션/FireSlash는 끝까지 재생한다.
+        // 사망과 강제 중단은 기존 Exit 경로에서 즉시 공격을 취소한다.
+        if (controller.IsFinishingAttack)
+            return;
         // 준비 중에 대상이 바뀌면 새 적에게 이전 공격을 넘기지 않는다.
         bool invalidPending = controller.Attack.HasPendingHit && !controller.Attack.IsPendingTargetValid;
         if (!invalidPending && controller.IsTargetInAttackRange)

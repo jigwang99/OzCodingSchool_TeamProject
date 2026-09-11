@@ -16,6 +16,7 @@ public class CombatHitFeedback : MonoBehaviour
     private SpriteRenderer[] sprites;
     private Color[] originalColors;
     private float flashRemaining;
+    private bool flashActive;
 
     private void Awake()
     {
@@ -43,17 +44,21 @@ public class CombatHitFeedback : MonoBehaviour
     private void HandleDamaged(DamageInfo info)
     {
         flashRemaining = flashDuration;
-        ApplyFlash();
+        // 연속 피격은 표시 시간을 연장하고, 같은 색을 다시 쓰지는 않는다.
+        if (!flashActive)
+        {
+            ApplyFlash();
+            flashActive = true;
+        }
         // 유닛의 자식으로 만들지 않아 적이 풀에 돌아가도 숫자와 타격 이펙트는 끝까지 재생된다.
         CombatFeedbackPool.Show(transform.position + hitOffset, info, damageColor, damageFont);
     }
 
     private void LateUpdate()
     {
-        if (flashRemaining <= 0f) return;
+        if (!flashActive) return;
         flashRemaining -= Time.deltaTime;
         if (flashRemaining <= 0f) RestoreColors();
-        else ApplyFlash();
     }
 
     private void ApplyFlash()
@@ -70,6 +75,8 @@ public class CombatHitFeedback : MonoBehaviour
     private void RestoreColors()
     {
         flashRemaining = 0f;
+        if (!flashActive) return;
+        flashActive = false;
         if (sprites == null) return;
         for (int i = 0; i < sprites.Length; i++)
             if (sprites[i] != null) sprites[i].color = originalColors[i];

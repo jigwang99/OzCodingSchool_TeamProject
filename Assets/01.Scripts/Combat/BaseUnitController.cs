@@ -20,6 +20,8 @@ public abstract class BaseUnitController : MonoBehaviour
     [SerializeField] private MonoBehaviour unitViewSource;
     private IUnitView unitView;
 
+    public bool IsFinishingAttack => unitView is IAttackRecoveryView recovery && recovery.IsFinishingAttack;
+
     public bool HasTarget => Target != null && !Target.Health.IsDead;
     public bool IsTargetInAttackRange => HasTarget && Attack.IsInAttackRange(Target.transform);
 

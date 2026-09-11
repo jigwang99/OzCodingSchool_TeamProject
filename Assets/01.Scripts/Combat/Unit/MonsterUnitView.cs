@@ -33,6 +33,7 @@ public class MonsterUnitView : MonoBehaviour, IUnitView
     private Quaternion[] initialRotations;
     private Vector3[] initialScales;
     private bool playingDeath;
+    private bool poseNeedsReset = true;
 
     private void Awake()
     {
@@ -79,7 +80,7 @@ public class MonsterUnitView : MonoBehaviour, IUnitView
     public void ResetPose()
     {
         EnsureInitialized();
-        if (animator == null || !animator.isActiveAndEnabled)
+        if (animator == null || !animator.isActiveAndEnabled || !poseNeedsReset)
             return;
 
         // die가 바꾼 bone_center의 회전/위치/크기는 idle에 키가 없어 그대로 남을 수 있다.
@@ -99,6 +100,8 @@ public class MonsterUnitView : MonoBehaviour, IUnitView
         monster.PlayAnimation(idleClip, 0f, 0f);
         animator.Update(0f); // 렌더링 전에 대기 자세를 즉시 적용한다.
         playingDeath = false;
+        // 풀 반납 때 복구했다면 OnEnable에서는 같은 본 복구/Rebind를 반복하지 않는다.
+        poseNeedsReset = false;
     }
 
     public void RunAnimation(AnimationTypeEnum ani)
@@ -114,11 +117,18 @@ public class MonsterUnitView : MonoBehaviour, IUnitView
         // 풀 반납 또는 직접 부활 시 사망 모션과 다음 모션을 섞지 않는다.
         bool leavingDeath = playingDeath && ani != AnimationTypeEnum.Dead;
         if (leavingDeath)
+        {
             ResetPose();
+            // ResetPose가 이미 idle을 즉시 재생했다.
+            if (!playingDeath && clip == idleClip)
+                return;
+        }
 
         // 존재하지 않는 이름이면 MonsterPrefabController가 경고만 남기고 무시하므로 안전하다.
         monster.PlayAnimation(clip, leavingDeath ? 0f : crossFade, 0f);
         playingDeath = ani == AnimationTypeEnum.Dead;
+        if (clip != idleClip || playingDeath)
+            poseNeedsReset = true;
     }
 
     private string ResolveClip(AnimationTypeEnum ani)
