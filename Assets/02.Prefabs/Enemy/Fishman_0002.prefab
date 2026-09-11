@@ -36,7 +36,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 4379689392073171668}
   - {fileID: 4180021143513208603}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -339,25 +338,3 @@ MonoBehaviour:
   deadClip: die
   crossFade: 0.1
   logClipNames: 0
---- !u!1001 &8865000000000000001
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 8510719260760172618}
-    m_Modifications:
-    - target: {fileID: 5170421319716037333, guid: c05f3b7af682a4242877736160de12b1, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 3
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: c05f3b7af682a4242877736160de12b1, type: 3}
---- !u!224 &4379689392073171668 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 5170421319716037333, guid: c05f3b7af682a4242877736160de12b1, type: 3}
-  m_PrefabInstance: {fileID: 8865000000000000001}
-  m_PrefabAsset: {fileID: 0}

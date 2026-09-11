@@ -42,6 +42,7 @@ public class UnitHealth : MonoBehaviour, IDamageable
         LifeVersion++;
         CurrentHp = maxHp;
         IsDead = false;
+        OnHealthChanged?.Invoke(CurrentHp, maxHp);
     }
 
     public void SetMaxHp(float value, bool resetCurrentHp = true)
@@ -55,6 +56,7 @@ public class UnitHealth : MonoBehaviour, IDamageable
         else
         {
             CurrentHp = Mathf.Min(CurrentHp, maxHp);
+            OnHealthChanged?.Invoke(CurrentHp, maxHp);
         }
     }
 }
