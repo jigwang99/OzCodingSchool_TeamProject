@@ -120,6 +120,7 @@ GameObject:
   - component: {fileID: 4338564493499518265}
   - component: {fileID: 3366460835478319913}
   - component: {fileID: 4124344710048796466}
+  - component: {fileID: 1391302016260238683}
   m_Layer: 5
   m_Name: GoToCombatButton
   m_TagString: Untagged
@@ -242,6 +243,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SceneTransitionButton
   targetScene: 1
+--- !u!114 &1391302016260238683
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 431212071243995663}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd496d23da0468344a823e7052bc152e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIButtonAnimation
+  hoverScale: {x: 1.1, y: 1.1, z: 1}
+  pressScale: {x: 0.92, y: 0.92, z: 1}
+  duration: 0.15
+  easeType: 27
 --- !u!1 &1345532514786118638
 GameObject:
   m_ObjectHideFlags: 0
@@ -255,6 +272,7 @@ GameObject:
   - component: {fileID: 385643553159248849}
   - component: {fileID: 4330508038157889518}
   - component: {fileID: 789885811753318665}
+  - component: {fileID: -6816325716585205282}
   m_Layer: 5
   m_Name: HamburgerButton
   m_TagString: Untagged
@@ -390,6 +408,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::HamburgerMenuUI
   menuRect: {fileID: 1845022529146753340}
   duration: 0.15
+--- !u!114 &-6816325716585205282
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1345532514786118638}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd496d23da0468344a823e7052bc152e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIButtonAnimation
+  hoverScale: {x: 1, y: 1, z: 1}
+  pressScale: {x: 0.92, y: 0.92, z: 1}
+  duration: 0.15
+  easeType: 27
 --- !u!1 &1440061734879966121
 GameObject:
   m_ObjectHideFlags: 0
@@ -676,6 +710,7 @@ GameObject:
   - component: {fileID: 4584144455795482030}
   - component: {fileID: 5670586208595338653}
   - component: {fileID: 1830078364435802492}
+  - component: {fileID: 3635057205550854579}
   m_Layer: 5
   m_Name: SettingPopupButton
   m_TagString: Untagged
@@ -797,6 +832,22 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &3635057205550854579
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2354900481927442099}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd496d23da0468344a823e7052bc152e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIButtonAnimation
+  hoverScale: {x: 1.1, y: 1.1, z: 1}
+  pressScale: {x: 0.92, y: 0.92, z: 1}
+  duration: 0.15
+  easeType: 27
 --- !u!1 &2811370267067022479
 GameObject:
   m_ObjectHideFlags: 0
@@ -810,6 +861,7 @@ GameObject:
   - component: {fileID: 8628702689995650515}
   - component: {fileID: 59753086544431365}
   - component: {fileID: 1513025946799455540}
+  - component: {fileID: 3436139284068642514}
   m_Layer: 5
   m_Name: GoToBusinessButton
   m_TagString: Untagged
@@ -932,6 +984,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SceneTransitionButton
   targetScene: 0
+--- !u!114 &3436139284068642514
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2811370267067022479}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd496d23da0468344a823e7052bc152e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIButtonAnimation
+  hoverScale: {x: 1.1, y: 1.1, z: 1}
+  pressScale: {x: 0.92, y: 0.92, z: 1}
+  duration: 0.15
+  easeType: 27
 --- !u!1 &3081745416720461075
 GameObject:
   m_ObjectHideFlags: 0
@@ -945,6 +1013,7 @@ GameObject:
   - component: {fileID: 4633286915542344342}
   - component: {fileID: 6314624475320453386}
   - component: {fileID: 2373581511268087829}
+  - component: {fileID: 2735648407333214313}
   m_Layer: 5
   m_Name: GoToGachaButton
   m_TagString: Untagged
@@ -1067,6 +1136,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SceneTransitionButton
   targetScene: 3
+--- !u!114 &2735648407333214313
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3081745416720461075}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd496d23da0468344a823e7052bc152e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIButtonAnimation
+  hoverScale: {x: 1.1, y: 1.1, z: 1}
+  pressScale: {x: 0.92, y: 0.92, z: 1}
+  duration: 0.15
+  easeType: 27
 --- !u!1 &3193053600448322363
 GameObject:
   m_ObjectHideFlags: 0
@@ -1491,6 +1576,7 @@ GameObject:
   - component: {fileID: 7036406983315915470}
   - component: {fileID: 1803090427883449692}
   - component: {fileID: 3469398269329652320}
+  - component: {fileID: 1869392511216869317}
   m_Layer: 5
   m_Name: GoToUpgradeButton
   m_TagString: Untagged
@@ -1613,3 +1699,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SceneTransitionButton
   targetScene: 4
+--- !u!114 &1869392511216869317
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8503171771907356051}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd496d23da0468344a823e7052bc152e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIButtonAnimation
+  hoverScale: {x: 1.1, y: 1.1, z: 1}
+  pressScale: {x: 0.92, y: 0.92, z: 1}
+  duration: 0.15
+  easeType: 27

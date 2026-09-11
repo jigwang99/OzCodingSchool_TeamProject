@@ -48,6 +48,7 @@ GameObject:
   - component: {fileID: 5396652781931763833}
   - component: {fileID: 182890880945087784}
   - component: {fileID: 7742579445999181500}
+  - component: {fileID: 396910823292098250}
   m_Layer: 5
   m_Name: Btn_Close
   m_TagString: Untagged
@@ -168,6 +169,22 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &396910823292098250
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 793791273195679156}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd496d23da0468344a823e7052bc152e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIButtonAnimation
+  hoverScale: {x: 1.1, y: 1.1, z: 1}
+  pressScale: {x: 0.92, y: 0.92, z: 1}
+  duration: 0.15
+  easeType: 27
 --- !u!1 &853664374772320322
 GameObject:
   m_ObjectHideFlags: 0
@@ -317,6 +334,7 @@ GameObject:
   - component: {fileID: 3084543245986634976}
   - component: {fileID: 7431979819750482537}
   - component: {fileID: 6337628454971145090}
+  - component: {fileID: 2578274204226662158}
   m_Layer: 5
   m_Name: Btn_ConvenienceTab
   m_TagString: Untagged
@@ -438,6 +456,22 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &2578274204226662158
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 910946700199131164}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd496d23da0468344a823e7052bc152e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIButtonAnimation
+  hoverScale: {x: 1.1, y: 1.1, z: 1}
+  pressScale: {x: 0.92, y: 0.92, z: 1}
+  duration: 0.15
+  easeType: 27
 --- !u!1 &1149218535253237588
 GameObject:
   m_ObjectHideFlags: 0
@@ -1227,6 +1261,7 @@ GameObject:
   - component: {fileID: 7739800212863729425}
   - component: {fileID: 8372536248018572046}
   - component: {fileID: 371749018283136192}
+  - component: {fileID: 9125555411728135290}
   m_Layer: 5
   m_Name: Btn_SoundTab
   m_TagString: Untagged
@@ -1348,6 +1383,22 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &9125555411728135290
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4414306490691028770}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd496d23da0468344a823e7052bc152e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIButtonAnimation
+  hoverScale: {x: 1.1, y: 1.1, z: 1}
+  pressScale: {x: 0.92, y: 0.92, z: 1}
+  duration: 0.15
+  easeType: 27
 --- !u!1 &4639436147073916232
 GameObject:
   m_ObjectHideFlags: 0
@@ -1546,6 +1597,7 @@ GameObject:
   - component: {fileID: 5762780360216422648}
   - component: {fileID: 1291492925446349627}
   - component: {fileID: 1784316370258283072}
+  - component: {fileID: 2441226773603572659}
   m_Layer: 5
   m_Name: Btn_Exit
   m_TagString: Untagged
@@ -1667,6 +1719,22 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &2441226773603572659
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4952474268185694331}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd496d23da0468344a823e7052bc152e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIButtonAnimation
+  hoverScale: {x: 1.1, y: 1.1, z: 1}
+  pressScale: {x: 0.92, y: 0.92, z: 1}
+  duration: 0.15
+  easeType: 27
 --- !u!1 &4957810021669507379
 GameObject:
   m_ObjectHideFlags: 0
@@ -1816,6 +1884,7 @@ GameObject:
   - component: {fileID: 1027241532769001756}
   - component: {fileID: 7160740579882892665}
   - component: {fileID: 4978139434800930639}
+  - component: {fileID: 2125530924415035491}
   m_Layer: 5
   m_Name: Btn_ReturnToTitle
   m_TagString: Untagged
@@ -1949,6 +2018,22 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &2125530924415035491
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4991848482524302148}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd496d23da0468344a823e7052bc152e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIButtonAnimation
+  hoverScale: {x: 1.1, y: 1.1, z: 1}
+  pressScale: {x: 0.92, y: 0.92, z: 1}
+  duration: 0.15
+  easeType: 27
 --- !u!1 &5153387134514728457
 GameObject:
   m_ObjectHideFlags: 0
