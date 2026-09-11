@@ -7,6 +7,21 @@ public class Pool
     private GameObject prefab;
     private Transform parent;
 
+    public int AvailableCount => pool.Count;
+
+    // 모든 대여 오브젝트를 반납한 스테이지 전환 중에 호출한다.
+    public void Resize(int size)
+    {
+        while (pool.Count < size) Create();
+        while (pool.Count > size) UnityEngine.Object.Destroy(pool.Dequeue());
+    }
+
+    public void Dispose()
+    {
+        UnityEngine.Object.Destroy(parent.gameObject);
+        pool.Clear();
+    }
+
     public Pool(GameObject prefab, Transform parent, int size)
     {
         this.prefab = prefab;
@@ -26,12 +41,13 @@ public class Pool
         return go;
     }
 
-    public T GetObject<T>() where T : Component
+    public T GetObject<T>(Vector3 position, Quaternion rotation) where T : Component
     {
         if (pool.Count == 0)
             Create();
 
         GameObject go = pool.Dequeue();
+        go.transform.SetPositionAndRotation(position, rotation);
         go.SetActive(true);
 
         // 꺼낼 때 초기화 훅

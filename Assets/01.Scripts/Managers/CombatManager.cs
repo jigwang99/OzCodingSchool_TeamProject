@@ -21,27 +21,15 @@ public class CombatManager : MonoBehaviour
     public event Action<EnemyController> OnEnemyDefeated; // 개별 적 처치(리타게팅 등에서 사용)
 
     // 이번 스테이지의 판정 시작
-    public void BeginBattle(PlayercatController playerCat, IReadOnlyList<EnemyController> stageEnemies)
+    public void BeginBattle(PlayercatController playerCat, int totalEnemyCount)
     {
         StopBattle(); // 이전 스테이지 구독 정리
 
         player = playerCat;
         player.Health.OnDied += HandlePlayerDied;
 
-        aliveEnemyCount = 0;
-        foreach (EnemyController enemy in stageEnemies)
-        {
-            if (enemy == null)
-            {
-                continue;
-            }
-
-            // 클로저로 어떤 적이 죽었는지 식별 (OnDied는 인자가 없음)
-            Action handler = () => HandleEnemyDied(enemy);
-            enemyDeathHandlers.Add(enemy, handler);
-            enemy.Health.OnDied += handler;
-            aliveEnemyCount++;
-        }
+        // 아직 활성화되지 않은 스폰 예약도 남은 적 수에 포함한다.
+        aliveEnemyCount = totalEnemyCount;
 
         if (aliveEnemyCount <= 0)
         {
@@ -50,6 +38,14 @@ public class CombatManager : MonoBehaviour
         }
 
         isJudging = true;
+    }
+
+    public void RegisterEnemy(EnemyController enemy)
+    {
+        if (!isJudging || enemy == null || enemyDeathHandlers.ContainsKey(enemy)) return;
+        Action handler = () => HandleEnemyDied(enemy);
+        enemyDeathHandlers.Add(enemy, handler);
+        enemy.Health.OnDied += handler;
     }
 
     // 판정 중단 및 모든 구독 해제
@@ -76,7 +72,7 @@ public class CombatManager : MonoBehaviour
 
     private void HandleEnemyDied(EnemyController enemy)
     {
-        if (!isJudging)
+        if (!isJudging || !enemyDeathHandlers.ContainsKey(enemy))
         {
             return;
         }

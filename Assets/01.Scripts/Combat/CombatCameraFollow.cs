@@ -6,7 +6,9 @@ public class CombatCameraFollow : MonoBehaviour
     [SerializeField] private Transform target;
     [SerializeField] private float horizontalOffset = 4f;
 
-    private void LateUpdate()
+    private void LateUpdate() => SnapToTarget();
+
+    public void SnapToTarget()
     {
         if (target == null)
             return;

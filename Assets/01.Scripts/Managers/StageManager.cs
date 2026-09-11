@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.UI;
 
 // 스테이지 흐름 관리:
 //  1) 플레이어를 시작 위치로 되돌리고 StageData 기준으로 적 스폰
@@ -26,6 +26,12 @@ public class StageManager : MonoBehaviour
     [Header("연출 딜레이(초)")]
     [SerializeField, Min(0f)] private float clearDelay = 2f;
     [SerializeField, Min(0f)] private float failDelay = 2f;
+
+    [Header("스테이지 전환")]
+    [SerializeField, Min(0f)] private float fadeOutDuration = 0.2f;
+    [SerializeField, Min(0f)] private float fadeInDuration = 0.2f;
+    private CanvasGroup fade;
+    private bool isChangingStage;
 
     private int CurrentStage => GameManager.instance.PlayerData.currentStage;
     private bool IsRetry => GameManager.instance.PlayerData.isRetryEnabled;
@@ -62,15 +68,17 @@ public class StageManager : MonoBehaviour
         combatManager.OnStageCleared += HandleStageCleared;
         combatManager.OnStageFailed += HandleStageFailed;
         combatManager.OnEnemyDefeated += HandleEnemyDefeated;
+        enemySpawner.OnEnemyActivated += HandleEnemyActivated;
 
         isInitialized = true;
-        StartStage();
+        ChangeStageAsync().Forget();
     }
 
     private void OnDestroy()
     {
         isInitialized = false;
         CancelPendingRestart();
+        if (enemySpawner != null) enemySpawner.OnEnemyActivated -= HandleEnemyActivated;
         if (combatManager != null)
         {
             combatManager.OnStageCleared -= HandleStageCleared;
@@ -88,13 +96,13 @@ public class StageManager : MonoBehaviour
     // 선택 UI의 진입점. 미완료 전투에 클리어/패배 보상을 새로 발생시키지 않는다.
     public bool SelectStage(int stageNumber)
     {
-        if (!isInitialized || !isActiveAndEnabled || stageNumber < 1 || stageNumber > StageCount ||
-            stageDataList.GetClone(stageNumber) == null)
+        if (!isInitialized || !isActiveAndEnabled || isChangingStage || stageNumber < 1 || stageNumber > StageCount ||
+            !CombatObjectPoolManager.instance.CanPrepare(stageDataList.GetClone(stageNumber)))
             return false;
 
         CancelPendingRestart();
         GameManager.instance.PlayerData.SetCurrentStage(stageNumber);
-        StartStage();
+        ChangeStageAsync().Forget();
         SaveManager.instance?.Save();
         return true;
     }
@@ -107,37 +115,92 @@ public class StageManager : MonoBehaviour
         pending?.Cancel();
     }
 
-    // 스테이지를 처음부터 시작
-    private void StartStage()
+    // 수동 선택/자동 진행/재도전 모두 동일한 전환을 사용한다.
+    private async UniTask ChangeStageAsync()
     {
-        isTransitioning = false;
-        CurrentResult = null;
-
-        StageData data = stageDataList != null ? stageDataList.GetClone(CurrentStage) : null;
-        if (data == null)
+        StageData data = stageDataList?.GetClone(CurrentStage);
+        if (!CombatObjectPoolManager.instance.CanPrepare(data))
         {
-            Debug.LogError("[StageManager] StageData를 가져오지 못했습니다. (StageDataList 확인)");
+            Debug.LogError("[StageManager] 스테이지 데이터 또는 적 프리팹 등록을 확인하세요.", this);
             return;
         }
-
-        Vector3 origin = enemySpawnOrigin != null
-            ? enemySpawnOrigin.position
-            : enemySpawner.transform.position;
-
-        fishDropSystem?.SetDropTable(data.DropTable);
-
-        // 수동 선택 시에도 이전 전투의 판정/공격 예약/이동/대상을 먼저 정리한다.
+        isChangingStage = true;
+        isTransitioning = true;
         combatManager.StopBattle();
+        enemySpawner.SetCombatRunning(false);
+        playerCat.HasPendingEnemies = false;
         playerCat.PrepareForPool();
-        playerCat.transform.position = playerStartPosition;
-        playerCat.Revive();
+        playerCat.enabled = false;
+        CancellationToken token = this.GetCancellationTokenOnDestroy();
+        EnsureFade();
+        fade.gameObject.SetActive(true);
+        try
+        {
+            await FadeAsync(1f, fadeOutDuration, token);
+            // 완전히 검은 프레임을 그린 뒤 풀을 갱신한다.
+            await UniTask.NextFrame(token);
+            enemySpawner.Clear();
+            await CombatObjectPoolManager.instance.PrepareStageAsync(data, token);
+            playerCat.transform.position = playerStartPosition;
+            playerCat.Revive();
+            fishDropSystem?.SetDropTable(data.DropTable);
+            Vector3 origin = enemySpawnOrigin != null ? enemySpawnOrigin.position : enemySpawner.transform.position;
+            combatManager.BeginBattle(playerCat, data.EnemyCount);
+            enemySpawner.PrepareStage(data, origin, playerCat);
+            RetargetPlayer();
+            CurrentResult = null;
+            // 결과 UI와 스테이지 표시는 검은 화면에서 갱신한다.
+            OnStageStarted?.Invoke();
+            await FadeAsync(0f, fadeInDuration, token);
+            isTransitioning = false;
+            enemySpawner.SetCombatRunning(true);
+            playerCat.enabled = true;
+        }
+        finally
+        {
+            isChangingStage = false;
+            if (fade != null) fade.gameObject.SetActive(false);
+        }
+    }
 
-        IReadOnlyList<EnemyController> enemies = enemySpawner.SpawnStage(data, origin, playerCat);
+    private void EnsureFade()
+    {
+        if (fade != null) return;
+        var root = new GameObject("StageTransitionFade", typeof(RectTransform), typeof(Canvas),
+            typeof(CanvasGroup), typeof(GraphicRaycaster));
+        root.transform.SetParent(transform, false);
+        Canvas canvas = root.GetComponent<Canvas>();
+        canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+        canvas.sortingOrder = 32760;
+        fade = root.GetComponent<CanvasGroup>();
+        fade.alpha = 0f;
+        var cover = new GameObject("Black", typeof(RectTransform), typeof(Image));
+        cover.transform.SetParent(root.transform, false);
+        Image image = cover.GetComponent<Image>();
+        image.color = Color.black;
+        RectTransform rect = image.rectTransform;
+        rect.anchorMin = Vector2.zero;
+        rect.anchorMax = Vector2.one;
+        rect.offsetMin = rect.offsetMax = Vector2.zero;
+    }
+
+    private async UniTask FadeAsync(float target, float duration, CancellationToken token)
+    {
+        float initial = fade.alpha;
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            await UniTask.NextFrame(token);
+            elapsed += Time.unscaledDeltaTime;
+            fade.alpha = Mathf.Lerp(initial, target, Mathf.Clamp01(elapsed / duration));
+        }
+        fade.alpha = target;
+    }
+
+    private void HandleEnemyActivated(EnemyController enemy)
+    {
+        combatManager.RegisterEnemy(enemy);
         RetargetPlayer();
-        combatManager.BeginBattle(playerCat, enemies);
-        OnStageStarted?.Invoke();
-
-        Debug.Log($"[Stage] {data.StageName} 시작 ({CurrentStage}/{MaxStage})");
     }
 
     // 적이 하나 죽을 때마다 플레이어 타겟을 가장 가까운 살아있는 적으로 갱신
@@ -149,8 +212,7 @@ public class StageManager : MonoBehaviour
     private void RetargetPlayer()
     {
         EnemyController nearest = enemySpawner.GetNearestAlive(playerCat.transform.position);
-        if (nearest != null)
-            playerCat.SetTarget(nearest);
+        playerCat.SetTarget(nearest);
     }
 
     // 승리
@@ -211,7 +273,7 @@ public class StageManager : MonoBehaviour
             await UniTask.Delay(TimeSpan.FromSeconds(result.Delay),
                 cancellationToken: token);
             if (!token.IsCancellationRequested)
-                StartStage();
+                await ChangeStageAsync();
         }
         catch (OperationCanceledException) { }
         finally
