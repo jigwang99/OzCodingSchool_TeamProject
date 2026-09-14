@@ -46,7 +46,7 @@ namespace PixelRestaurant.Gacha
         [Header("Result")]
         [SerializeField] private Transform resultSpawnPoint;
 
-        private const int CostPerPull = 100;
+        private const int CostPerPull = 10;
 
         private void Start()
         {
@@ -125,7 +125,7 @@ namespace PixelRestaurant.Gacha
                 return;
             }
 
-            if (CurrencyManager.Instance == null)
+            if (PixelRestaurant.Managers.CurrencyManager.Instance == null)
             {
                 Debug.LogError("[GachaUI] CurrencyManager.Instance가 없습니다.");
                 return;
@@ -210,14 +210,14 @@ namespace PixelRestaurant.Gacha
             if (goldDisplay == null)
                 return;
 
-            if (CurrencyManager.Instance == null)
+            if (PixelRestaurant.Managers.CurrencyManager.Instance == null)
             {
                 goldDisplay.text = "0";
                 return;
             }
 
             goldDisplay.text =
-                CurrencyManager.Instance.GetCurrentGold().ToString();
+                PixelRestaurant.Managers.CurrencyManager.Instance.GetCurrentGold().ToString();
         }
 
         private void UpdateGroupDisplay()
@@ -246,6 +246,16 @@ namespace PixelRestaurant.Gacha
             if (GachaPitySystem.Instance == null)
                 return;
 
+            GachaPoolData pool =
+                GachaManager.Instance != null
+                    ? GachaManager.Instance.GetPoolData(_currentGachaType)
+                    : null;
+
+            if (pool == null || pool.PityConfig == null)
+                return;
+
+            GachaPityConfig config = pool.PityConfig;
+
             int level =
                 GachaPitySystem.Instance.GetCurrentPityLevel(
                     _currentGachaType
@@ -258,7 +268,8 @@ namespace PixelRestaurant.Gacha
             {
                 pityCounterDisplay.text =
                     GachaPitySystem.Instance.GetPityDisplayText(
-                        _currentGachaType
+                        _currentGachaType,
+                        config
                     );
             }
 
@@ -266,7 +277,8 @@ namespace PixelRestaurant.Gacha
             {
                 pityProgressBar.fillAmount =
                     GachaPitySystem.Instance.GetPityProgressFillAmount(
-                        _currentGachaType
+                        _currentGachaType,
+                        config
                     );
             }
         }
@@ -281,52 +293,48 @@ namespace PixelRestaurant.Gacha
                     _currentGachaType
                 );
 
-            if (pool == null)
+            if (pool == null || pool.PityConfig == null)
                 return;
 
-            int pityLevel =
-                GachaPitySystem.Instance != null
-                    ? GachaPitySystem.Instance.GetCurrentPityLevel(
-                        _currentGachaType)
-                    : 1;
+            GachaPityConfig config = pool.PityConfig;
 
             UpdateRarityText(
                 probabilityCommonDisplay,
                 GachaRarity.Common,
-                pityLevel
+                config
             );
 
             UpdateRarityText(
                 probabilityRareDisplay,
                 GachaRarity.Rare,
-                pityLevel
+                config
             );
 
             UpdateRarityText(
                 probabilityUniqueDisplay,
                 GachaRarity.Unique,
-                pityLevel
+                config
             );
 
             UpdateRarityText(
                 probabilityEpicDisplay,
                 GachaRarity.Epic,
-                pityLevel
+                config
             );
         }
 
         private void UpdateRarityText(
-            TextMeshProUGUI text,
-            GachaRarity rarity,
-            int pityLevel)
+      TextMeshProUGUI text,
+      GachaRarity rarity,
+      GachaPityConfig config)
         {
-            if (text == null)
+            if (text == null || config == null)
                 return;
 
             float weight =
                 GachaPitySystem.Instance.GetRarityWeight(
                     _currentGachaType,
-                    pityLevel,
+                    config,
                     rarity
                 );
 
