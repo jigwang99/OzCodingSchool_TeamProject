@@ -28,7 +28,8 @@ public class StageSelectUI : MonoBehaviour
     [SerializeField] private Color normalColor = new Color(0.18f, 0.23f, 0.32f);
     [SerializeField] private Color bossColor = new Color(0.38f, 0.27f, 0.15f);
     [SerializeField] private Color currentColor = new Color(0.13f, 0.46f, 0.48f);
-    private const string SelectionHint = "번호를 누르면 해당 스테이지에서 전투를 새로 시작합니다.";
+    [SerializeField] private Color lockedColor = new Color(0.22f, 0.22f, 0.22f);
+    private const string SelectionHint = "이전 스테이지를 클리어하면 다음 스테이지가 해금됩니다.";
     private bool initialized;
 
     private void Awake()
@@ -98,7 +99,9 @@ public class StageSelectUI : MonoBehaviour
         if (stageManager.SelectStage(stageNumber))
             Hide();
         else
-            hint.text = "스테이지를 시작할 수 없습니다. 잠시 후 다시 선택해 주세요.";
+            hint.text = stageManager.IsStageUnlocked(stageNumber)
+                ? "스테이지를 시작할 수 없습니다. 잠시 후 다시 선택해 주세요."
+                : "이전 스테이지를 먼저 클리어해 주세요.";
     }
 
     private void HandleResult(StageResult _) => Refresh();
@@ -109,10 +112,13 @@ public class StageSelectUI : MonoBehaviour
         foreach (StageButton stage in stages)
         {
             int number = stage.stageNumber;
+            bool unlocked = stageManager.IsStageUnlocked(number);
             bool current = number == stageManager.CurrentStageNumber;
             bool boss = number % 5 == 0;
-            stage.button.image.color = current ? currentColor : boss ? bossColor : normalColor;
-            string status = boss ? (current ? "보스 · 현재" : "보스") : (current ? "현재" : "일반");
+            stage.button.interactable = unlocked;
+            stage.button.image.color = !unlocked ? lockedColor : current ? currentColor : boss ? bossColor : normalColor;
+            string status = !unlocked ? (boss ? "보스 · 미해금" : "미해금")
+                : boss ? (current ? "보스 · 진행중" : "보스") : (current ? "진행중" : "일반");
             stage.label.text = stageManager.GetStageName(number) + "\n" + status;
         }
     }

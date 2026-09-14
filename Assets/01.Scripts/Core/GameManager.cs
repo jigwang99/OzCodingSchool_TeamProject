@@ -38,7 +38,9 @@ public class GameManager : Singleton<GameManager>
     public void SetPlayerData(PlayerData playerData)
     {
         PlayerData = playerData ?? new PlayerData();
+        PlayerData.InitializeStageProgress();
         PlayerData.InitializeWeapons();
+        IdleFishManager.PrepareLoadedData(PlayerData);
     }
 
     public void CreateNewPlayerData()

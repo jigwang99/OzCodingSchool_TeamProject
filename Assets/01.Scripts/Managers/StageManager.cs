@@ -55,11 +55,13 @@ public class StageManager : MonoBehaviour
 
     private void Start()
     {
-        if (combatManager == null || enemySpawner == null || playerCat == null)
+        if (combatManager == null || enemySpawner == null || playerCat == null || StageCount == 0)
         {
             Debug.LogError("[StageManager] 참조가 비어 있습니다.");
             return;
         }
+
+        GameManager.instance.PlayerData.InitializeStageProgress(StageCount);
 
         playerStartPosition = playerSpawnPoint != null
             ? playerSpawnPoint.position
@@ -93,10 +95,16 @@ public class StageManager : MonoBehaviour
         return string.IsNullOrEmpty(stageName) ? stageNumber.ToString() : stageName;
     }
 
+    public bool IsStageUnlocked(int stageNumber)
+    {
+        return stageNumber >= 1 && stageNumber <= StageCount &&
+            stageNumber <= GameManager.instance.PlayerData.highestUnlockedStage;
+    }
+
     // 선택 UI의 진입점. 미완료 전투에 클리어/패배 보상을 새로 발생시키지 않는다.
     public bool SelectStage(int stageNumber)
     {
-        if (!isInitialized || !isActiveAndEnabled || isChangingStage || stageNumber < 1 || stageNumber > StageCount ||
+        if (!isInitialized || !isActiveAndEnabled || isChangingStage || !IsStageUnlocked(stageNumber) ||
             !CombatObjectPoolManager.instance.CanPrepare(stageDataList.GetClone(stageNumber)))
             return false;
 
@@ -223,6 +231,9 @@ public class StageManager : MonoBehaviour
         int completedStage = CurrentStage;
         bool retryWasEnabled = IsRetry;
 
+        // 반복 사냥도 최초 클리어라면 다음 구간을 해금한다. 이동 여부와 해금 기록은 별개다.
+        GameManager.instance.PlayerData.UnlockNextStage(completedStage, MaxStage);
+
         if (!IsRetry && CurrentStage < MaxStage)
             GameManager.instance.PlayerData.SetCurrentStage(CurrentStage + 1);
 
@@ -270,6 +281,11 @@ public class StageManager : MonoBehaviour
 
         try
         {
+            // 마지막 적의 드롭 지급과 진행도 변경이 끝난 뒤, 결과 UI/대기보다 먼저 저장한다.
+            // 반복 사냥과 마지막 스테이지 클리어도 이번 전투에서 획득한 재고를 저장한다.
+            if (result.IsClear)
+                SaveManager.instance?.Save();
+
             OnStageResult?.Invoke(result);
             await UniTask.Delay(TimeSpan.FromSeconds(result.Delay),
                 cancellationToken: token);
