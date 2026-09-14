@@ -65,6 +65,7 @@ public class UpgradeManager : Singleton<UpgradeManager>
         switch (data.type)
         {
             case UpgradeType.WeaponPower: return playerData.GetWeaponLevel(playerData.equippedWeaponId);
+            case UpgradeType.Health: return playerData.healthLevel;
             case UpgradeType.FishDropRate: return playerData.fishDropRateLevel;
             case UpgradeType.RestaurantExpansion: return playerData.restaurantLevel;
             default: return 1;
@@ -76,6 +77,7 @@ public class UpgradeManager : Singleton<UpgradeManager>
     {
         switch (data.type)
         {
+            case UpgradeType.Health: playerData.healthLevel++; break;
             case UpgradeType.FishDropRate: playerData.fishDropRateLevel++; break;
             case UpgradeType.RestaurantExpansion: playerData.restaurantLevel++; break;
         }

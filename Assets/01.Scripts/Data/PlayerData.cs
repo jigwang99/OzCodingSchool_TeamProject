@@ -31,6 +31,7 @@ public class PlayerData
     public string equippedWeaponId;     // 비어 있는 기존 저장 데이터는 기본 무기를 장착한다.
     public List<OwnedWeaponData> ownedWeapons = new List<OwnedWeaponData>();
     public int weaponInventoryVersion;
+    public int healthLevel = 1;
     public int fishDropRateLevel = 1;
     public int restaurantLevel = 1;      // ← 식당 레벨은 이 값을 공용으로 사용
 

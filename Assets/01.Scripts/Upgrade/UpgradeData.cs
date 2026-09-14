@@ -3,6 +3,7 @@
 public enum UpgradeType
 {
     WeaponPower,
+    Health,
     FishDropRate,
     RestaurantExpansion
 }
@@ -27,7 +28,7 @@ public class UpgradeData : ScriptableObject
     public double costMultiplier = 1.15;
 
     [Tooltip("최대 도달 가능 레벨")]
-    public int maxLevel = 5;
+    public int maxLevel;
 
     [Header("드롭률 업그레이드 설정")]
     [Tooltip("FishDropRate 업그레이드 레벨당 증가하는 드롭률 배수")]
@@ -36,5 +37,11 @@ public class UpgradeData : ScriptableObject
     public float GetDropChanceMultiplier(int level)
     {
         return 1f + Mathf.Max(0, level - 1) * dropChanceMultiplierPerLevel;
+    }
+
+    //일단 레벨마다 +20해둠
+    public float GetMaxHealth(int level)
+    {
+        return 100f + (level - 1) * 20f;
     }
 }
