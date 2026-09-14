@@ -2708,9 +2708,10 @@ MonoBehaviour:
   activeColor: {r: 1, g: 1, b: 1, a: 1}
   inactiveColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   pauseGameOnOpen: 1
-  bgmSlider: {fileID: 0}
-  sfxSlider: {fileID: 0}
-  returnToMenuButton: {fileID: 0}
+  bgmSlider: {fileID: 3703971626029115822}
+  sfxSlider: {fileID: 6915424167230561911}
+  returnToMenuButton: {fileID: 4991848482524302148}
+  exitPopup: {fileID: 2946841746748188284, guid: f48d8a15b16928549924e56659453036, type: 3}
 --- !u!1 &8794710076569855503
 GameObject:
   m_ObjectHideFlags: 0
