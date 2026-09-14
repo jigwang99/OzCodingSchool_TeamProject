@@ -21,84 +21,84 @@ MonoBehaviour:
     rarity: 0
     grade: 1
     weight: 4
-    displayPrefab: {fileID: 7852710830195475270, guid: 8584ab6e2de39344f9309e225faf56d2, type: 3}
+    itemIcon: {fileID: 21300000, guid: 50907f1e9a0374083b1a365c573dce14, type: 3}
   - itemId: 002
     itemName: TwoSpade
     group: 0
     rarity: 0
     grade: 2
     weight: 3
-    displayPrefab: {fileID: 1202570505607622291, guid: def3d7c4c1d64484b8c1ac15a6c11c2a, type: 3}
+    itemIcon: {fileID: 21300000, guid: 105a291dc74d24d63b8d1d628f492855, type: 3}
   - itemId: 003
     itemName: TreeSpade
     group: 0
     rarity: 0
     grade: 3
     weight: 2
-    displayPrefab: {fileID: 1756148654014240070, guid: d6ca4417c1f589b4ab43bc6b043d9291, type: 3}
+    itemIcon: {fileID: 21300000, guid: 8e01f85dcc1c44405b4631363ed8ea80, type: 3}
   - itemId: 004
     itemName: FourSpade
     group: 0
     rarity: 0
     grade: 4
     weight: 1
-    displayPrefab: {fileID: 1756148654014240070, guid: d6ca4417c1f589b4ab43bc6b043d9291, type: 3}
+    itemIcon: {fileID: 21300000, guid: 48dc8cfae34294688bacc001a408689e, type: 3}
   - itemId: 005
     itemName: FiveSpade
     group: 0
     rarity: 1
     grade: 1
     weight: 4
-    displayPrefab: {fileID: 4046062424294452969, guid: 2ba2b6024962aac4f8846da1fef79b4f, type: 3}
+    itemIcon: {fileID: 21300000, guid: 2f95a4123f4c2437cbfe277e7b7aafce, type: 3}
   - itemId: 006
     itemName: SixSpade
     group: 0
     rarity: 1
     grade: 2
     weight: 3
-    displayPrefab: {fileID: 1445645359674444053, guid: 470252071d6ca204e81b6387b69b7119, type: 3}
+    itemIcon: {fileID: 21300000, guid: d6a48dcfa9dfc431f9366a5f89b92b38, type: 3}
   - itemId: 007
     itemName: SevenSpade
     group: 0
     rarity: 1
     grade: 3
     weight: 2
-    displayPrefab: {fileID: 665710706938954659, guid: 15ca92f93962fc341a75e9da4e29348a, type: 3}
+    itemIcon: {fileID: 21300000, guid: e010050db04134cb5b601f0409fad269, type: 3}
   - itemId: 008
     itemName: EightSpade
     group: 0
     rarity: 1
     grade: 4
     weight: 1
-    displayPrefab: {fileID: 9141944940351651698, guid: a00d346d125a58241a6b25f67d20f37a, type: 3}
+    itemIcon: {fileID: 21300000, guid: 9945bc954a3b74ea4a4ca4655bc77fe1, type: 3}
   - itemId: 009
     itemName: NineSpade
     group: 0
     rarity: 2
     grade: 1
     weight: 1
-    displayPrefab: {fileID: 6254490825291193462, guid: a703a4a1649af0a4ab152fbad2ddf09d, type: 3}
+    itemIcon: {fileID: 21300000, guid: e9672d3afd9c24c38a93d2d5f7b91f3b, type: 3}
   - itemId: 010
     itemName: TenSpade
     group: 0
     rarity: 2
     grade: 2
     weight: 1
-    displayPrefab: {fileID: 635834423237340268, guid: ac968d403437bb94fab806edeb13418c, type: 3}
+    itemIcon: {fileID: 21300000, guid: 9b79f2fe4f77840f0821ae410f3f2612, type: 3}
   - itemId: 011
     itemName: ElevenSpade
     group: 0
     rarity: 3
     grade: 1
     weight: 1
-    displayPrefab: {fileID: 8660375499945845536, guid: 489c2ead7b65b0e4b8b834b95d4d0304, type: 3}
+    itemIcon: {fileID: 21300000, guid: 4f386fb78838d425d9e0c070d591fd17, type: 3}
   - itemId: 012
     itemName: TwelveSpade
     group: 0
     rarity: 3
     grade: 2
     weight: 1
-    displayPrefab: {fileID: 7745016542798134878, guid: 86a105a940d92fb41911cae6cee90e9b, type: 3}
+    itemIcon: {fileID: 21300000, guid: fc46404c3ec7f42c0aaaa9001f9f05c7, type: 3}
   pityConfig:
     levels:
     - level: 1
