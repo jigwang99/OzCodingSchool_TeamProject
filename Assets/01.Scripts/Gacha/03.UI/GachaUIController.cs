@@ -50,7 +50,6 @@ namespace PixelRestaurant.Gacha
 
         private void Start()
         {
-            RegisterButtonEvents();
             UpdateDisplay();
         }
 
@@ -59,34 +58,9 @@ namespace PixelRestaurant.Gacha
             UpdateGoldDisplay();
         }
 
-        private void RegisterButtonEvents()
-        {
-            if (gachaOpenButton != null)
-                gachaOpenButton.onClick.AddListener(OpenGachaPopup);
-
-            if (gachaCloseButton != null)
-                gachaCloseButton.onClick.AddListener(CloseGachaPopup);
-
-            if (weaponButton != null)
-                weaponButton.onClick.AddListener(() =>
-                    SelectGachaType(GachaGroup.Weapon));
-
-            if (furnitureButton != null)
-                furnitureButton.onClick.AddListener(() =>
-                    SelectGachaType(GachaGroup.Furniture));
-
-            if (recipeButton != null)
-                recipeButton.onClick.AddListener(() =>
-                    SelectGachaType(GachaGroup.Recipe));
-
-            if (pull1Button != null)
-                pull1Button.onClick.AddListener(() =>
-                    ExecuteGacha(1));
-
-            if (pull10Button != null)
-                pull10Button.onClick.AddListener(() =>
-                    ExecuteGacha(10));
-        }
+        // =========================
+        // Gacha Open / Close
+        // =========================
 
         public void OpenGachaPopup()
         {
@@ -100,10 +74,29 @@ namespace PixelRestaurant.Gacha
             }
         }
 
-        private void CloseGachaPopup()
+        public void CloseGachaPopup()
         {
             if (gachaPopup != null)
                 gachaPopup.SetActive(false);
+        }
+
+        // =========================
+        // Gacha Type
+        // =========================
+
+        public void SelectWeapon()
+        {
+            SelectGachaType(GachaGroup.Weapon);
+        }
+
+        public void SelectFurniture()
+        {
+            SelectGachaType(GachaGroup.Furniture);
+        }
+
+        public void SelectRecipe()
+        {
+            SelectGachaType(GachaGroup.Recipe);
         }
 
         private void SelectGachaType(GachaGroup group)
@@ -113,6 +106,20 @@ namespace PixelRestaurant.Gacha
             Debug.Log($"[GachaUI] 가챠 종류 변경: {group}");
 
             UpdateDisplay();
+        }
+
+        // =========================
+        // Pull
+        // =========================
+
+        public void Pull1()
+        {
+            ExecuteGacha(1);
+        }
+
+        public void Pull10()
+        {
+            ExecuteGacha(10);
         }
 
         private void ExecuteGacha(int pullCount)
@@ -154,6 +161,10 @@ namespace PixelRestaurant.Gacha
 
             UpdateDisplay();
         }
+
+        // =========================
+        // Result
+        // =========================
 
         private void ShowGachaResults(List<GachaItem> items)
         {
@@ -197,6 +208,10 @@ namespace PixelRestaurant.Gacha
             }
         }
 
+        // =========================
+        // Display
+        // =========================
+
         private void UpdateDisplay()
         {
             UpdateGoldDisplay();
@@ -217,7 +232,9 @@ namespace PixelRestaurant.Gacha
             }
 
             goldDisplay.text =
-                PixelRestaurant.Managers.CurrencyManager.Instance.GetCurrentGold().ToString();
+                PixelRestaurant.Managers.CurrencyManager.Instance
+                .GetCurrentGold()
+                .ToString();
         }
 
         private void UpdateGroupDisplay()
@@ -324,9 +341,9 @@ namespace PixelRestaurant.Gacha
         }
 
         private void UpdateRarityText(
-      TextMeshProUGUI text,
-      GachaRarity rarity,
-      GachaPityConfig config)
+            TextMeshProUGUI text,
+            GachaRarity rarity,
+            GachaPityConfig config)
         {
             if (text == null || config == null)
                 return;
@@ -338,31 +355,7 @@ namespace PixelRestaurant.Gacha
                     rarity
                 );
 
-            text.text = $"{rarity}: {weight:0.##}%";
-        }
-
-        private void OnDestroy()
-        {
-            if (gachaOpenButton != null)
-                gachaOpenButton.onClick.RemoveListener(OpenGachaPopup);
-
-            if (gachaCloseButton != null)
-                gachaCloseButton.onClick.RemoveListener(CloseGachaPopup);
-
-            if (weaponButton != null)
-                weaponButton.onClick.RemoveAllListeners();
-
-            if (furnitureButton != null)
-                furnitureButton.onClick.RemoveAllListeners();
-
-            if (recipeButton != null)
-                recipeButton.onClick.RemoveAllListeners();
-
-            if (pull1Button != null)
-                pull1Button.onClick.RemoveAllListeners();
-
-            if (pull10Button != null)
-                pull10Button.onClick.RemoveAllListeners();
+            text.text = $"{rarity}: \n{weight:0.##}%";
         }
     }
 }
