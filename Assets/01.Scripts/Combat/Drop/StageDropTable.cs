@@ -6,6 +6,7 @@ using UnityEngine;
 public class StageDropTable : ScriptableObject
 {
     [Header("드롭 확률 (적 1마리 처치당 물고기 획득 확률)")]
+    [Tooltip("강화 전 기본 확률. 강화 적용 후 100%마다 1마리 확정, 나머지 확률로 1마리 추가 지급합니다.")]
     [SerializeField, Range(0f, 1f)] private float dropChance = 0.7f;
 
     [Header("등급 가중치 + 등급별 종 구성")]

@@ -47,15 +47,32 @@ public class FishDropSystem : MonoBehaviour
         if (currentTable == null || enemy == null)
             return;
 
-        float chance = Mathf.Clamp01(currentTable.DropChance * dropChanceMultiplier);
-        if (UnityEngine.Random.value > chance)
-            return; // 이번엔 드롭 없음
+        // 100%를 넘는 강화분도 보상으로 반영한다.
+        // 예: 130% = 1회 확정 + 30% 확률로 1회 추가, 220% = 2회 확정 + 20% 추가.
+        StageDropTable table = currentTable;
+        int dropCount = CalculateDropCount(table.DropChance * dropChanceMultiplier, UnityEngine.Random.value);
+        Vector3 sourcePosition = enemy.transform.position;
 
-        if (!TryRollGrade(currentTable, out StageDropTable.GradeWeight picked))
-            return;
+        for (int i = 0; i < dropCount; i++)
+        {
+            if (!TryRollGrade(table, out StageDropTable.GradeWeight picked))
+                return;
 
-        int species = RollSpecies(picked);
-        OnFishDropped?.Invoke(new FishDrop(picked.grade, species, 1, enemy.transform.position));
+            // 추가 드롭도 별도로 추첨하여 기존 등급/종별 확률을 유지한다.
+            int species = RollSpecies(picked);
+            OnFishDropped?.Invoke(new FishDrop(picked.grade, species, 1, sourcePosition));
+        }
+    }
+
+    internal static int CalculateDropCount(float expectedDrops, float roll)
+    {
+        if (expectedDrops <= 0f || float.IsNaN(expectedDrops) || float.IsInfinity(expectedDrops))
+            return 0;
+
+        int guaranteedDrops = Mathf.FloorToInt(expectedDrops);
+        float extraChance = expectedDrops - guaranteedDrops;
+        // 0%는 난수가 0이어도 지급하지 않고, 정수 배율은 확정 수량만 지급한다.
+        return guaranteedDrops + (roll < extraChance ? 1 : 0);
     }
 
     // 등급 가중치 기반 랜덤 추첨 → 선택된 등급 구성 전체를 반환

@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f8be97de27bcd3a48baa4fe8c55fd2da, type: 3}
-  m_Name: StageDropTable
+  m_Name: StageDropTable_Chapter2
   m_EditorClassIdentifier: Assembly-CSharp::StageDropTable
   dropChance: 0.7
   gradeWeights:
@@ -25,8 +25,4 @@ MonoBehaviour:
   - grade: 2
     weight: 4
     speciesCount: 2
-    speciesWeights: []
-  - grade: 3
-    weight: 1
-    speciesCount: 1
     speciesWeights: []

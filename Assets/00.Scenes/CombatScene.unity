@@ -529,7 +529,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishDropSystem
   combatManager: {fileID: 88393175}
-  defaultDropTable: {fileID: 11400000, guid: e1bfc21c001ac58498f7a46e13e72d3d, type: 2}
+  defaultDropTable: {fileID: 11400000, guid: b0925c4738e94adea23f07d665098f41, type: 2}
 --- !u!4 &397242960
 Transform:
   m_ObjectHideFlags: 0
