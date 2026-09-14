@@ -15,10 +15,14 @@ public class CombatManager : MonoBehaviour
     private int aliveEnemyCount;
     private bool isJudging;
 
+    public int RemainingEnemyCount => aliveEnemyCount;
+    public int TotalEnemyCount { get; private set; }
+
     // StageManager / UI 등이 구독
     public event Action OnStageCleared;
     public event Action OnStageFailed;
     public event Action<EnemyController> OnEnemyDefeated; // 개별 적 처치(리타게팅 등에서 사용)
+    public event Action<int, int> OnEnemyCountChanged; // 남은 적 / 전체 적 (스폰 예약 포함)
 
     // 이번 스테이지의 판정 시작
     public void BeginBattle(PlayercatController playerCat, int totalEnemyCount)
@@ -29,7 +33,9 @@ public class CombatManager : MonoBehaviour
         player.Health.OnDied += HandlePlayerDied;
 
         // 아직 활성화되지 않은 스폰 예약도 남은 적 수에 포함한다.
-        aliveEnemyCount = totalEnemyCount;
+        TotalEnemyCount = Mathf.Max(0, totalEnemyCount);
+        aliveEnemyCount = TotalEnemyCount;
+        OnEnemyCountChanged?.Invoke(aliveEnemyCount, TotalEnemyCount);
 
         if (aliveEnemyCount <= 0)
         {
@@ -68,6 +74,8 @@ public class CombatManager : MonoBehaviour
         }
         enemyDeathHandlers.Clear();
         aliveEnemyCount = 0;
+        TotalEnemyCount = 0;
+        OnEnemyCountChanged?.Invoke(aliveEnemyCount, TotalEnemyCount);
     }
 
     private void HandleEnemyDied(EnemyController enemy)
@@ -84,6 +92,7 @@ public class CombatManager : MonoBehaviour
         }
 
         aliveEnemyCount--;
+        OnEnemyCountChanged?.Invoke(aliveEnemyCount, TotalEnemyCount);
         OnEnemyDefeated?.Invoke(enemy);
 
         // 스테이지 내 모든 적 처치 → 승리
