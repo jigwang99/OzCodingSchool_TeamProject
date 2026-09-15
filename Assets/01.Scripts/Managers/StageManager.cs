@@ -91,7 +91,7 @@ public class StageManager : MonoBehaviour
 
     public string GetStageName(int stageNumber)
     {
-        string stageName = stageDataList?.GetClone(stageNumber)?.StageName;
+        string stageName = stageDataList?.GetStageName(stageNumber);
         return string.IsNullOrEmpty(stageName) ? stageNumber.ToString() : stageName;
     }
 
@@ -261,8 +261,8 @@ public class StageManager : MonoBehaviour
 
     private StageResult CreateResult(bool isClear, int completedStage, bool retryWasEnabled, float delay)
     {
-        string completedName = stageDataList?.GetClone(completedStage)?.StageName;
-        string nextName = stageDataList?.GetClone(CurrentStage)?.StageName;
+        string completedName = stageDataList?.GetStageName(completedStage);
+        string nextName = stageDataList?.GetStageName(CurrentStage);
         return new StageResult(isClear, completedStage, CurrentStage,
             string.IsNullOrEmpty(completedName) ? completedStage.ToString() : completedName,
             string.IsNullOrEmpty(nextName) ? CurrentStage.ToString() : nextName,

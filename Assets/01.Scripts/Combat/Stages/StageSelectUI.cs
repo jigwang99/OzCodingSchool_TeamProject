@@ -31,6 +31,7 @@ public class StageSelectUI : MonoBehaviour
     [SerializeField] private Color lockedColor = new Color(0.22f, 0.22f, 0.22f);
     private const string SelectionHint = "이전 스테이지를 클리어하면 다음 스테이지가 해금됩니다.";
     private bool initialized;
+    private bool refreshPending = true;
 
     private void Awake()
     {
@@ -62,16 +63,16 @@ public class StageSelectUI : MonoBehaviour
     {
         if (!initialized) return;
         openButton.interactable = true;
-        stageManager.OnStageStarted += Refresh;
+        stageManager.OnStageStarted += RequestRefresh;
         stageManager.OnStageResult += HandleResult;
-        Refresh();
+        RequestRefresh();
     }
 
     private void OnDisable()
     {
         if (stageManager != null)
         {
-            stageManager.OnStageStarted -= Refresh;
+            stageManager.OnStageStarted -= RequestRefresh;
             stageManager.OnStageResult -= HandleResult;
         }
         if (openButton != null) openButton.interactable = false;
@@ -104,11 +105,19 @@ public class StageSelectUI : MonoBehaviour
                 : "이전 스테이지를 먼저 클리어해 주세요.";
     }
 
-    private void HandleResult(StageResult _) => Refresh();
+    private void HandleResult(StageResult _) => RequestRefresh();
+
+    private void RequestRefresh()
+    {
+        refreshPending = true;
+        Refresh();
+    }
 
     private void Refresh()
     {
-        if (!initialized) return;
+        // 닫힌 동안의 변경은 하나로 모아 다음 표시 때 반영한다.
+        if (!initialized || !refreshPending || !modal.activeInHierarchy) return;
+        refreshPending = false;
         foreach (StageButton stage in stages)
         {
             int number = stage.stageNumber;

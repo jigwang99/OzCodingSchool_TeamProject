@@ -25,6 +25,14 @@ public class SoundManager : Singleton<SoundManager>
         isDontDestroy = true;
         DontDestroyOnLoad(gameObject);
 
+        // Ensure SFX playback when the combat scene is launched directly.
+        if (sfxAudioSource == null)
+        {
+            sfxAudioSource = gameObject.AddComponent<AudioSource>();
+            sfxAudioSource.playOnAwake = false;
+            sfxAudioSource.spatialBlend = 0f;
+        }
+
         float savedBgm = PlayerPrefs.GetFloat(BGM_KEY, 0.5f);
         float savedSfx = PlayerPrefs.GetFloat(SFX_KEY, 0.5f);
 

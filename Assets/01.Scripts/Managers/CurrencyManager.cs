@@ -60,7 +60,9 @@ public class CurrencyManager : Singleton<CurrencyManager>
 
         fishArray[species] += count;
 
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
         Debug.Log($"[CurrencyManager] {grade} / 종 {species} 물고기 획득: +{count} / 현재: {fishArray[species]}");
+#endif
 
         OnFishChanged?.Invoke(grade);
     }

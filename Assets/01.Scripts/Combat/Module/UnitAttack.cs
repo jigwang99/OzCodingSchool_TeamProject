@@ -40,7 +40,9 @@ public class UnitAttack : MonoBehaviour
         pendingAnimationIndex = animationIndex;
         pendingDamage = new DamageInfo(attackDamage, gameObject.GetInstanceID());
         nextAttackTime = Time.time + AttackInterval;
-        return window.Begin();
+        int attackId = window.Begin();
+        OnAttackStarted?.Invoke();
+        return attackId;
     }
 
     public bool ResolveAnimationHit(int animationIndex)
@@ -94,6 +96,7 @@ public class UnitAttack : MonoBehaviour
     }
 
     public event Action<IDamageable, DamageInfo> OnAttackHit;
+    public event Action OnAttackStarted;
 
     public bool IsInAttackRange(Transform target)
     {

@@ -1346,6 +1346,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayercatController
   unitViewSource: {fileID: 1440917491}
+  attackSound: {fileID: 8300000, guid: fd9b77b7a58c2c040962a32cd44e6d8b, type: 3}
 --- !u!114 &1543899953
 MonoBehaviour:
   m_ObjectHideFlags: 0
