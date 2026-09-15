@@ -2674,8 +2674,7 @@ PrefabInstance:
       propertyPath: m_text
       value: "\uC624\uB298\uC758 \uD301:"
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 4898425804038775420, guid: e776960ec6501f748a8796e1599d4fa3, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

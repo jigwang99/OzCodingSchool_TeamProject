@@ -2,7 +2,6 @@ using DG.Tweening;
 using System.Collections;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -15,9 +14,9 @@ public class LoadingScreen : MonoBehaviour
     [SerializeField] private TextMeshProUGUI loadingText;
     [SerializeField] private TextMeshProUGUI tipText;
 
-    [Header("Audio Settings")]
-    [SerializeField] private AudioSource audioSource;
-    [SerializeField] private AudioClip clickSound;
+    [Header("Cat Settings")]
+    [SerializeField] private Image catImage;
+    [SerializeField] private Sprite[] catSprites;
 
     [Header("Settings")]
     [SerializeField] private float fadeDuration = 0.4f;
@@ -27,10 +26,12 @@ public class LoadingScreen : MonoBehaviour
     [SerializeField]
     private string[] loadingTips = new string[]
     {
-
+       
     };
 
     private Tween textPulseTween;
+    private Tween catRotateTween;
+    private Tween catBounceTween;
 
     private void Awake()
     {
@@ -46,11 +47,6 @@ public class LoadingScreen : MonoBehaviour
 
     public void LoadScene(string sceneName)
     {
-        if (audioSource != null && clickSound != null)
-        {
-            audioSource.PlayOneShot(clickSound);
-        }
-
         StartCoroutine(LoadSceneCoroutine(sceneName));
     }
 
@@ -59,6 +55,26 @@ public class LoadingScreen : MonoBehaviour
         if (tipText != null && loadingTips != null && loadingTips.Length > 0)
         {
             tipText.text = loadingTips[Random.Range(0, loadingTips.Length)];
+        }
+
+        if (catImage != null && catSprites != null && catSprites.Length > 0)
+        {
+            catImage.sprite = catSprites[Random.Range(0, catSprites.Length)];
+            catImage.SetNativeSize();
+
+            catImage.transform.localRotation = Quaternion.identity;
+
+            catRotateTween = catImage.transform
+                .DOLocalRotate(new Vector3(0f, 0f, 10f), 0.4f)
+                .SetLoops(-1, LoopType.Yoyo)
+                .SetEase(Ease.InOutSine)
+                .SetUpdate(true);
+
+            catBounceTween = catImage.transform
+                .DOBlendableLocalMoveBy(new Vector3(0f, 15f, 0f), 0.35f)
+                .SetLoops(-1, LoopType.Yoyo)
+                .SetEase(Ease.OutQuad)
+                .SetUpdate(true);
         }
 
         if (loadingCanvasGroup != null)
@@ -92,7 +108,6 @@ public class LoadingScreen : MonoBehaviour
             timer += Time.unscaledDeltaTime;
 
             float targetProgress = Mathf.Clamp01(op.progress / 0.9f);
-
             currentProgress = Mathf.MoveTowards(currentProgress, targetProgress, Time.unscaledDeltaTime * 2.0f);
 
             if (progressBar != null)
@@ -118,10 +133,9 @@ public class LoadingScreen : MonoBehaviour
 
     private void KillTweens()
     {
-        if (textPulseTween != null && textPulseTween.IsActive())
-        {
-            textPulseTween.Kill();
-        }
+        if (textPulseTween != null && textPulseTween.IsActive()) textPulseTween.Kill();
+        if (catRotateTween != null && catRotateTween.IsActive()) catRotateTween.Kill();
+        if (catBounceTween != null && catBounceTween.IsActive()) catBounceTween.Kill();
         if (loadingCanvasGroup != null) loadingCanvasGroup.DOKill();
     }
 
