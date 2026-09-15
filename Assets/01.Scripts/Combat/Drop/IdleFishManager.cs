@@ -6,9 +6,9 @@ using UnityEngine.SceneManagement;
 public class IdleFishManager : MonoBehaviour
 {
     private const string CombatSceneName = "CombatScene";
-    private const float BaseFishPerMinute = 1f;
-    private const float FishDropRateBonusPerLevel = 0.3f;
-    private const float StageBonusPerStage = 0.1f;
+    private const double BaseFishPerMinute = 0.5;
+    private const double FishDropRateBonusPerLevel = 0.3;
+    private const double StageBonusPerStage = 0.1;
     private const float UpdateIntervalSeconds = 1f;
     public const double MaxOfflineSeconds = 8 * 60 * 60;
 
@@ -19,16 +19,19 @@ public class IdleFishManager : MonoBehaviour
         get
         {
             long total = 0;
-            int[] pending = GameManager.instance.PlayerData.pendingIdleCommonFish;
-            if (pending != null)
-                foreach (int count in pending) total += Math.Max(0, count);
+            for (int grade = 0; grade <= (int)FishGrade.Epic; grade++)
+            {
+                int[] pending = GameManager.instance.PlayerData.GetPendingIdleFishArray((FishGrade)grade);
+                if (pending != null)
+                    foreach (int count in pending) total += Math.Max(0, count);
+            }
             return total;
         }
     }
 
-    public int GetPendingFish(int species)
+    public int GetPendingFish(FishGrade grade, int species)
     {
-        int[] pending = GameManager.instance.PlayerData.pendingIdleCommonFish;
+        int[] pending = GameManager.instance.PlayerData.GetPendingIdleFishArray(grade);
         return pending != null && species >= 0 && species < pending.Length ? pending[species] : 0;
     }
 
@@ -36,12 +39,21 @@ public class IdleFishManager : MonoBehaviour
     {
         if (PendingFishCount <= 0) return false;
         PlayerData data = GameManager.instance.PlayerData;
-        int[] rewards = data.pendingIdleCommonFish;
+        int[][] rewards = { data.pendingIdleCommonFish, data.pendingIdleRareFish,
+            data.pendingIdleUniqueFish, data.pendingIdleEpicFish };
         // 지급 이벤트가 다시 수령을 호출해도 동일한 보상을 재지급하지 않는다.
         data.pendingIdleCommonFish = new int[8];
+        data.pendingIdleRareFish = new int[4];
+        data.pendingIdleUniqueFish = new int[2];
+        data.pendingIdleEpicFish = new int[1];
         data.pendingIdleSeconds = 0;
-        for (int i = 0; i < rewards.Length; i++)
-            if (rewards[i] > 0) CurrencyManager.instance.AddFish(FishGrade.Common, i, rewards[i]);
+        for (int grade = 0; grade < rewards.Length; grade++)
+        {
+            int[] fish = rewards[grade];
+            if (fish == null) continue;
+            for (int i = 0; i < fish.Length; i++)
+                if (fish[i] > 0) CurrencyManager.instance.AddFish((FishGrade)grade, i, fish[i]);
+        }
         SaveManager.instance?.Save();
         OnPendingRewardsChanged?.Invoke();
         return true;
@@ -50,6 +62,7 @@ public class IdleFishManager : MonoBehaviour
     private float elapsedSinceUpdate;
     private bool sessionInitialized;
     private bool isAway;
+    private StageDataList stageDataList;
 
     private void OnEnable()
     {
@@ -60,6 +73,14 @@ public class IdleFishManager : MonoBehaviour
 
     private void Start()
     {
+        // 전투 씬이 로드되기 전에도 전투와 동일한 원본 테이블로 정산한다.
+        stageDataList = Resources.Load<StageDataList>("Combat/StageDataList");
+        if (stageDataList == null || stageDataList.Count == 0)
+        {
+            Debug.LogError("[IdleFishManager] 스테이지 보상 테이블을 찾을 수 없습니다.", this);
+            enabled = false;
+            return;
+        }
         PlayerData data = GameManager.instance.PlayerData;
         PrepareLoadedData(data);
 
@@ -73,6 +94,7 @@ public class IdleFishManager : MonoBehaviour
     // 자동 저장의 Start보다 먼저, 로드 직후 기존 저장의 미접속 기준 시각을 확정한다.
     public static void PrepareLoadedData(PlayerData data)
     {
+        data.InitializePendingIdleFish();
         // 이전 버전의 전투 종료 저장(false)도 마지막 저장 이후의 미접속 시간을 정산한다.
         // 전투 진입 시각을 사용하면 접속 중 전투한 시간까지 지급되므로 저장 시각을 기준으로 한다.
         if (!data.idleFishAccumulationEnabled || data.idleFishLastCollectionUtcTicks <= 0)
@@ -206,14 +228,13 @@ public class IdleFishManager : MonoBehaviour
             data.pendingIdleSeconds = Math.Min(MaxOfflineSeconds, data.pendingIdleSeconds + rewardedSeconds);
             elapsedMinutes = rewardedSeconds / 60;
         }
-        float totalFish = data.idleFishFraction +
-                          (float)(elapsedMinutes * GetFishPerMinute(data));
+        double totalFish = data.idleFishFraction + elapsedMinutes * GetFishPerMinute(data);
 
-        int wholeFish = Mathf.FloorToInt(totalFish);
-        data.idleFishFraction = totalFish - wholeFish;
+        int wholeFish = (int)Math.Floor(totalFish);
+        data.idleFishFraction = (float)(totalFish - wholeFish);
 
         if (wholeFish > 0)
-            AddCommonFishEvenly(data, wholeFish, offline);
+            AddStageFish(data, wholeFish, offline);
         if (offline) OnPendingRewardsChanged?.Invoke();
     }
 
@@ -232,40 +253,37 @@ public class IdleFishManager : MonoBehaviour
         return parsed;
     }
 
-    private static float GetFishPerMinute(PlayerData data)
+    private static double GetFishPerMinute(PlayerData data)
     {
-        float stageMultiplier = 1f + Mathf.Max(0, data.currentStage - 1) * StageBonusPerStage;
-        float upgradeMultiplier = 1f + Mathf.Max(0, data.fishDropRateLevel - 1) * FishDropRateBonusPerLevel;
+        double stageMultiplier = 1 + Mathf.Max(0, data.currentStage - 1) * StageBonusPerStage;
+        double upgradeMultiplier = 1 + Mathf.Max(0, data.fishDropRateLevel - 1) * FishDropRateBonusPerLevel;
 
         return BaseFishPerMinute * stageMultiplier * upgradeMultiplier;
     }
 
-    private static void AddCommonFishEvenly(PlayerData data, int count, bool pendingReward)
+    private void AddStageFish(PlayerData data, int count, bool pendingReward)
     {
-        int speciesCount = data.commonFish != null ? data.commonFish.Length : 0;
-        if (speciesCount == 0)
-            return;
-
-        if (pendingReward && (data.pendingIdleCommonFish == null || data.pendingIdleCommonFish.Length != speciesCount))
-            Array.Resize(ref data.pendingIdleCommonFish, speciesCount);
-
-        int firstSpecies = Mathf.Clamp(data.idleFishNextCommonSpecies, 0, speciesCount - 1);
-        int fishPerSpecies = count / speciesCount;
-        int remainder = count % speciesCount;
-
-        for (int offset = 0; offset < speciesCount; offset++)
+        StageDropTable table = stageDataList.GetDropTable(data.currentStage);
+        // 생산량은 시간/강화로 결정했으므로 처치당 드롭 확률(0.7)은 다시 적용하지 않는다.
+        // 지급은 종별로 합쳐 대량 정산에서도 인벤토리 이벤트를 최대 15번만 발생시킨다.
+        int[][] amounts = pendingReward
+            ? new[] { data.pendingIdleCommonFish, data.pendingIdleRareFish,
+                data.pendingIdleUniqueFish, data.pendingIdleEpicFish }
+            : new[] { new int[8], new int[4], new int[2], new int[1] };
+        for (int i = 0; i < count; i++)
         {
-            int amount = fishPerSpecies + (offset < remainder ? 1 : 0);
-            if (amount > 0 && pendingReward)
-                data.pendingIdleCommonFish[(firstSpecies + offset) % speciesCount] += amount;
-            else if (amount > 0)
-                CurrencyManager.instance.AddFish(
-                    FishGrade.Common,
-                    (firstSpecies + offset) % speciesCount,
-                    amount);
+            if (!FishDropSystem.TryRollFish(table, out FishGrade grade, out int species))
+                break;
+            int gradeIndex = (int)grade;
+            if (gradeIndex >= 0 && gradeIndex < amounts.Length &&
+                species >= 0 && species < amounts[gradeIndex].Length)
+                amounts[gradeIndex][species]++;
         }
-
-        data.idleFishNextCommonSpecies = (firstSpecies + remainder) % speciesCount;
+        if (pendingReward) return;
+        for (int grade = 0; grade < amounts.Length; grade++)
+            for (int species = 0; species < amounts[grade].Length; species++)
+                if (amounts[grade][species] > 0)
+                    CurrencyManager.instance.AddFish((FishGrade)grade, species, amounts[grade][species]);
     }
 
     private static bool IsCombatScene()

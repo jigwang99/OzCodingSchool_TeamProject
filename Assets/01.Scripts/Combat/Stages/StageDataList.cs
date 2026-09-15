@@ -71,6 +71,8 @@ public class StageDataList : ScriptableObject
     // 표시용 조회는 원본의 문자열만 반환해 적 배치 배열을 복제하지 않는다.
     public string GetStageName(int stageNumber) => GetSource(stageNumber)?.StageName;
 
+    public StageDropTable GetDropTable(int stageNumber) => GetSource(stageNumber)?.DropTable;
+
     // stageNumber: 1부터 시작 (currentStage와 동일 규약).
     // 범위를 벗어나면 첫/마지막 스테이지로 고정한다.
     // 원본 오염 방지를 위해 항상 Clone을 반환.

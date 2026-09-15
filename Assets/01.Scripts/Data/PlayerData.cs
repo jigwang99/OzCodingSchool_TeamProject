@@ -55,8 +55,10 @@ public class PlayerData
     public long idleFishLastCollectionUtcTicks;
     public float idleFishFraction;
     public bool idleFishAccumulationEnabled;
-    public int idleFishNextCommonSpecies;
     public int[] pendingIdleCommonFish = new int[8];
+    public int[] pendingIdleRareFish = new int[4];
+    public int[] pendingIdleUniqueFish = new int[2];
+    public int[] pendingIdleEpicFish = new int[1];
     public double pendingIdleSeconds;
 
     // 상태 변경 이벤트 (직렬화 대상 아님)
@@ -175,6 +177,27 @@ public class PlayerData
 
         highestUnlockedStage = Mathf.Clamp(highestUnlockedStage, 1, maxStage);
         SetCurrentStage(currentStage);
+    }
+
+    public int[] GetPendingIdleFishArray(FishGrade grade)
+    {
+        switch (grade)
+        {
+            case FishGrade.Common: return pendingIdleCommonFish;
+            case FishGrade.Rare: return pendingIdleRareFish;
+            case FishGrade.Unique: return pendingIdleUniqueFish;
+            case FishGrade.Epic: return pendingIdleEpicFish;
+            default: return null;
+        }
+    }
+
+    public void InitializePendingIdleFish()
+    {
+        // 기존 커먼 보상은 그대로 보존하고 새 등급 배열만 보완한다.
+        if (pendingIdleCommonFish == null) pendingIdleCommonFish = new int[8];
+        if (pendingIdleRareFish == null) pendingIdleRareFish = new int[4];
+        if (pendingIdleUniqueFish == null) pendingIdleUniqueFish = new int[2];
+        if (pendingIdleEpicFish == null) pendingIdleEpicFish = new int[1];
     }
 
     public bool UnlockNextStage(int completedStage, int stageCount)

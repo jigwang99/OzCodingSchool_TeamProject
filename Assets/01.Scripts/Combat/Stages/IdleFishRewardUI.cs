@@ -10,6 +10,8 @@ public class IdleFishRewardUI : MonoBehaviour
     [Serializable]
     private sealed class RewardSlot
     {
+        public FishGrade grade;
+        public int species;
         public RectTransform root;
         public Text countLabel;
     }
@@ -19,7 +21,7 @@ public class IdleFishRewardUI : MonoBehaviour
     [SerializeField] private Text timeLabel;
     [SerializeField] private Text totalLabel;
     [SerializeField] private Button claimButton;
-    [SerializeField] private RewardSlot[] commonSlots;
+    [SerializeField] private RewardSlot[] rewardSlots;
     [SerializeField] private RectTransform[] footer;
     private IdleFishManager manager;
     private Vector2[] slotPositions;
@@ -30,22 +32,22 @@ public class IdleFishRewardUI : MonoBehaviour
     private void Awake()
     {
         if (modal == null || panel == null || timeLabel == null || totalLabel == null ||
-            claimButton == null || commonSlots == null || commonSlots.Length != 8 || footer == null)
+            claimButton == null || rewardSlots == null || rewardSlots.Length != 15 || footer == null)
         {
             Debug.LogError("[IdleFishRewardUI] 미접속 보상 UI 참조를 확인하세요.", this);
             enabled = false;
             return;
         }
-        slotPositions = new Vector2[commonSlots.Length];
-        for (int i = 0; i < commonSlots.Length; i++)
+        slotPositions = new Vector2[rewardSlots.Length];
+        for (int i = 0; i < rewardSlots.Length; i++)
         {
-            if (commonSlots[i]?.root == null || commonSlots[i].countLabel == null)
+            if (rewardSlots[i]?.root == null || rewardSlots[i].countLabel == null)
             {
                 enabled = false;
-                Debug.LogError("[IdleFishRewardUI] 커먼 물고기 슬롯 참조를 확인하세요.", this);
+                Debug.LogError("[IdleFishRewardUI] 물고기 슬롯 참조를 확인하세요.", this);
                 return;
             }
-            slotPositions[i] = commonSlots[i].root.anchoredPosition;
+            slotPositions[i] = rewardSlots[i].root.anchoredPosition;
         }
         fullHeight = panel.rect.height;
         footerPositions = new Vector2[footer.Length];
@@ -103,16 +105,16 @@ public class IdleFishRewardUI : MonoBehaviour
         timeLabel.text = $"누적 {duration.Hours}시간 {duration.Minutes}분 · 최대 8시간";
         totalLabel.text = $"수령할 물고기 ×{total:N0}";
         int visible = 0;
-        for (int i = 0; i < commonSlots.Length; i++)
+        for (int i = 0; i < rewardSlots.Length; i++)
         {
-            int count = manager.GetPendingFish(i);
-            RewardSlot slot = commonSlots[i];
+            RewardSlot slot = rewardSlots[i];
+            int count = manager.GetPendingFish(slot.grade, slot.species);
             slot.root.gameObject.SetActive(count > 0);
             if (count <= 0) continue;
             slot.countLabel.text = $"+{count:N0}";
             slot.root.anchoredPosition = slotPositions[visible++];
         }
-        float removedHeight = (2 - Mathf.CeilToInt(visible / 4f)) * 88f;
+        float removedHeight = (Mathf.CeilToInt(rewardSlots.Length / 4f) - Mathf.CeilToInt(visible / 4f)) * 88f;
         panel.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, fullHeight - removedHeight);
         for (int i = 0; i < footer.Length; i++)
             if (footer[i] != null) footer[i].anchoredPosition = footerPositions[i] + Vector2.up * removedHeight;
