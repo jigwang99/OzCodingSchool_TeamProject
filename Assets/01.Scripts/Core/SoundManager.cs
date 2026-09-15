@@ -13,6 +13,11 @@ public class SoundManager : Singleton<SoundManager>
     [SerializeField] private AudioClip combatBgm;     // ¿¸≈ı æ¿ ∫Í±›
     //[SerializeField] private AudioClip bossBgm;       // ∫∏Ω∫ æ¿ ∫Í±›
 
+    [Header("Enemy Attack SFX")]
+    [SerializeField, Range(0f, 1f)] private float enemyAttackVolume = 0.65f;
+    [SerializeField, Min(0f)] private float enemyAttackMinInterval = 0.1f;
+    private float nextEnemyAttackTime;
+
     private const string BGM_KEY = "BGMVolume";
     private const string SFX_KEY = "SFXVolume";
 
@@ -111,6 +116,16 @@ public class SoundManager : Singleton<SoundManager>
         bgmAudioSource.clip = clip;
         bgmAudioSource.loop = true;
         bgmAudioSource.Play();
+    }
+
+    // Shared limit keeps simultaneous enemy hits from stacking too loudly.
+    public void PlayEnemyAttackSFX(AudioClip clip)
+    {
+        if (clip == null || sfxAudioSource == null || Time.unscaledTime < nextEnemyAttackTime)
+            return;
+
+        nextEnemyAttackTime = Time.unscaledTime + enemyAttackMinInterval;
+        sfxAudioSource.PlayOneShot(clip, enemyAttackVolume);
     }
 
     public void PlaySFX(AudioClip clip)

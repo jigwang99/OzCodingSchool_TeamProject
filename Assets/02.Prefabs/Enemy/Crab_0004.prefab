@@ -125,6 +125,7 @@ MonoBehaviour:
   enemyType: 5
   detectionRange: 4
   despawnDelay: 0.35
+  attackSound: {fileID: 8300000, guid: d5684dbe78504b189a8ad56ec516c496, type: 3}
 --- !u!61 &8160494925811920960
 BoxCollider2D:
   m_ObjectHideFlags: 0
