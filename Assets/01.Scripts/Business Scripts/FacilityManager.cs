@@ -44,6 +44,13 @@ public class FacilityManager : Singleton<FacilityManager> //시설 업그레이�
 
     public TextMeshProUGUI chefLevelText;
 
+    public TextMeshProUGUI infoText;
+    
+    public TextMeshProUGUI chefBuyText;
+    public TextMeshProUGUI cheflevelBuyText;
+    public TextMeshProUGUI restaurantBuyText;
+
+
     private void Start()
     {
         gasstove = FoodMachine[0];
@@ -67,10 +74,11 @@ public class FacilityManager : Singleton<FacilityManager> //시설 업그레이�
 
         // 식당 레벨만큼만 직원 고용 가능
         chefBtn.interactable = CookCatNum < RestaurantLevel;
+        InfoText();
     }
     public void OnClickGasstoveBtn(Button btn)
     {
-        BigNumber price = new BigNumber(200);
+        BigNumber price = new BigNumber(3000);
 
         if (FoodMachine[0] == 1) return;
         if (!CurrencyManager.instance.SpendGold(price)) return;
@@ -80,11 +88,12 @@ public class FacilityManager : Singleton<FacilityManager> //시설 업그레이�
 
         FoodMachine[0] = 1;
         SaveManager.instance.Save();
+        InfoText();
     }
 
     public void OnClickMicrowaveovenBtn(Button btn)
     {
-        BigNumber price = new BigNumber(300);
+        BigNumber price = new BigNumber(5000);
 
         if (FoodMachine[1] == 1) return;
         if (!CurrencyManager.instance.SpendGold(price)) return;
@@ -94,10 +103,11 @@ public class FacilityManager : Singleton<FacilityManager> //시설 업그레이�
 
         FoodMachine[1] = 1;
         SaveManager.instance.Save();
+        InfoText();
     }
     public void OnClickSteamerBtn(Button btn)
     {
-        BigNumber price = new BigNumber(400);
+        BigNumber price = new BigNumber(5000);
 
         if (FoodMachine[2] == 1) return;
         if (!CurrencyManager.instance.SpendGold(price)) return;
@@ -108,10 +118,11 @@ public class FacilityManager : Singleton<FacilityManager> //시설 업그레이�
 
         FoodMachine[2] = 1;
         SaveManager.instance.Save();
+        InfoText();
     }
     public void OnClickDeepfryerBtn(Button btn)
     {
-        BigNumber price = new BigNumber(500);
+        BigNumber price = new BigNumber(6000);
 
         if (FoodMachine[3] == 1) return;
         if (!CurrencyManager.instance.SpendGold(price)) return;
@@ -122,10 +133,11 @@ public class FacilityManager : Singleton<FacilityManager> //시설 업그레이�
 
         FoodMachine[3] = 1;
         SaveManager.instance.Save();
+        InfoText();
     }
     public void OnClickRefrigeratorBtn(Button btn)
     {
-        BigNumber price = new BigNumber(600);
+        BigNumber price = new BigNumber(7000);
 
         if (FoodMachine[4] == 1) return;
         if (!CurrencyManager.instance.SpendGold(price)) return;
@@ -135,10 +147,11 @@ public class FacilityManager : Singleton<FacilityManager> //시설 업그레이�
 
         FoodMachine[4] = 1;
         SaveManager.instance.Save();
+        InfoText();
     }
     public void OnClickOvenBtn(Button btn)
     {
-        BigNumber price = new BigNumber(700);
+        BigNumber price = new BigNumber(9000);
 
         if (FoodMachine[5] == 1) return;
         if (!CurrencyManager.instance.SpendGold(price)) return;
@@ -148,13 +161,14 @@ public class FacilityManager : Singleton<FacilityManager> //시설 업그레이�
 
         FoodMachine[5] = 1;
         SaveManager.instance.Save();
+        InfoText();
     }
     public void OnClickCookerBtn(Button btn)
     {
         if (CookCatNum >= RestaurantLevel) return;
 
-        int basePrice = 700;
-        int currentPrice = basePrice * (CookCatNum + 1);
+        int currentPrice = 2000 * (CookCatNum + 1);
+        chefBuyText.text = $"{currentPrice}";
 
         if (!CurrencyManager.instance.SpendGold(new BigNumber(currentPrice))) return;
 
@@ -167,6 +181,7 @@ public class FacilityManager : Singleton<FacilityManager> //시설 업그레이�
         }
 
         SaveManager.instance.Save();
+        InfoText();
     }
 
     public void OnClickRestaurantBtn(Button btn)
@@ -175,6 +190,7 @@ public class FacilityManager : Singleton<FacilityManager> //시설 업그레이�
 
         int basePrice = 1000;
         int currentPrice = basePrice * (RestaurantLevel);
+        restaurantBuyText.text = $"{currentPrice}";
 
         if (!CurrencyManager.instance.SpendGold(new BigNumber(currentPrice))) return;
 
@@ -194,6 +210,7 @@ public class FacilityManager : Singleton<FacilityManager> //시설 업그레이�
         BObjectPoolManager.instance.Refresh();
 
         SaveManager.instance.Save();
+        InfoText();
     }
 
     public void OnClickChefLevelUpBtn(Button btn)
@@ -202,6 +219,7 @@ public class FacilityManager : Singleton<FacilityManager> //시설 업그레이�
 
         int basePrice = 300;
         int currentPrice = basePrice * (ChefCatLevel);
+        chefLevelText.text = $"{currentPrice}";
 
         if (!CurrencyManager.instance.SpendGold(new BigNumber(currentPrice))) return;
 
@@ -215,6 +233,7 @@ public class FacilityManager : Singleton<FacilityManager> //시설 업그레이�
 
         chefLevelText.text = $"Chef Level : {ChefCatLevel}";
         SaveManager.instance.Save();
+        InfoText();
     }
 
     public void GetGold(int foodPrice, bool special)
@@ -253,5 +272,13 @@ public class FacilityManager : Singleton<FacilityManager> //시설 업그레이�
         }
         chefBtn.interactable = CookCatNum < RestaurantLevel;
         ProductionManager.instance.ChefPosition();
+    }
+
+    public void InfoText()
+    {
+        infoText.text = $"Chef : {CookCatNum}\n MakeSpeed : {MakeSpeed}\n GoldBonus : {GoldBonus}\n SpecialChance : {SpecialChance}\n NoUseFishChance : {NoUseFishChance}";
+        chefLevelText.text = $"{300 * (ChefCatLevel)}";
+        restaurantBuyText.text = $"{1000 * RestaurantLevel}";
+        chefBuyText.text = $"{2000 * (CookCatNum + 1)}";
     }
 }
