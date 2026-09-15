@@ -8,7 +8,7 @@ namespace PixelRestaurant.Managers
     /// ICurrencyProvider 구현
     /// 나중에 CurrencyManager로 교체 가능
     /// </summary>
-    public class CurrencyManager : MonoBehaviour, ICurrencyProvider
+    public class CurrencyManager : MonoBehaviour
     {
         private static CurrencyManager _instance;
 
@@ -22,10 +22,7 @@ namespace PixelRestaurant.Managers
                 if (_instance == null)
                 {
                     _instance = FindObjectOfType<CurrencyManager>();
-                    if (_instance == null)
-                    {
-                        Debug.LogError("[골드 관리자] GoldManager를 찾을 수 없습니다!");
-                    }
+                   
                 }
                 return _instance;
             }

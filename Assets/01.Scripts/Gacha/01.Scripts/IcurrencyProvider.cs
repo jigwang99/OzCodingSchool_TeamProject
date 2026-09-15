@@ -1,36 +1,27 @@
 namespace PixelRestaurant.Gacha
 {
     /// <summary>
-    /// 재화 시스템과의 계약 인터페이스
-    /// GachaManager가 직접 GoldManager를 알지 않도록 함
-    /// 나중에 GoldManager → CurrencyManager로 교체 가능하게 설계
+    /// Gacha 시스템이 재화 시스템과 연결되기 위한 인터페이스
+    /// 골드는 공용 BigNumber를 사용한다.
     /// </summary>
     public interface ICurrencyProvider
     {
         /// <summary>
-        /// 골드 소비 (뽑기 등)
+        /// 골드 소비
         /// </summary>
-        /// <param name="amount">소비할 골드 양</param>
-        /// <returns>성공 여부 (골드 부족 시 false)</returns>
-        bool SpendGold(int amount);
+        /// <param name="amount">소비할 골드</param>
+        /// <returns>소비 성공 여부</returns>
+        bool SpendGold(BigNumber amount);
 
         /// <summary>
-        /// 골드 획득 (경영 등)
+        /// 골드 획득
         /// </summary>
-        /// <param name="amount">획득할 골드 양</param>
-        void AddGold(int amount);
-
-        /// <summary>
-        /// 아이템(물고기/무기/가구/레시피) 획득
-        /// </summary>
-        /// <param name="itemId">아이템 고유 ID (예: "weapon_001")</param>
-        /// <param name="count">개수</param>
-        void AddItem(string itemId, int count);
+        /// <param name="amount">획득할 골드</param>
+        void AddGold(BigNumber amount);
 
         /// <summary>
         /// 현재 골드 조회
         /// </summary>
-        /// <returns>현재 보유 골드</returns>
-        int GetCurrentGold();
+        BigNumber GetCurrentGold();
     }
 }

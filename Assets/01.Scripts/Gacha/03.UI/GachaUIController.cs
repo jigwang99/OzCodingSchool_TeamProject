@@ -46,7 +46,19 @@ namespace PixelRestaurant.Gacha
         [Header("Result")]
         [SerializeField] private Transform resultSpawnPoint;
 
-        private const int CostPerPull = 10;
+        [Header("Popup")]
+        [SerializeField] private GameObject resultPopup;
+        [SerializeField] private GameObject infoPopup;
+        [SerializeField] private GameObject listPopup;
+
+        [Header("Popup Buttons")]
+        [SerializeField] private Button resultOpenButton;
+        [SerializeField] private Button resultCloseButton;
+        [SerializeField] private Button inventoryOpenButton;
+        [SerializeField] private Button listOpenButton;
+
+        private static readonly BigNumber CostPerPull =
+    new BigNumber(30);
 
         private void Start()
         {
@@ -64,8 +76,7 @@ namespace PixelRestaurant.Gacha
 
         public void OpenGachaPopup()
         {
-            if (inventoryUI != null)
-                inventoryUI.CloseInventory();
+            CloseAllPopups();
 
             if (gachaPopup != null)
             {
@@ -73,17 +84,31 @@ namespace PixelRestaurant.Gacha
                 UpdateDisplay();
             }
         }
-
-        public void CloseGachaPopup()
+        public void CloseAllPopups()
         {
             if (gachaPopup != null)
                 gachaPopup.SetActive(false);
+
+            if (resultPopup != null)
+                resultPopup.SetActive(false);
+
+            if (infoPopup != null)
+                infoPopup.SetActive(false);
+
+            if (listPopup != null)
+                listPopup.SetActive(false);
+
+            if (inventoryUI != null)
+                inventoryUI.CloseInventory();
         }
 
         // =========================
         // Gacha Type
         // =========================
-
+        public void CloseGachaPopup()
+        {
+            CloseAllPopups();
+        }
         public void SelectWeapon()
         {
             SelectGachaType(GachaGroup.Weapon);
@@ -107,6 +132,17 @@ namespace PixelRestaurant.Gacha
 
             UpdateDisplay();
         }
+        public void OpenResultPopup()
+        {
+            if (resultPopup != null)
+                resultPopup.SetActive(true);
+        }
+
+        public void CloseResultPopup()
+        {
+            if (resultPopup != null)
+                resultPopup.SetActive(false);
+        }
 
         // =========================
         // Pull
@@ -115,11 +151,17 @@ namespace PixelRestaurant.Gacha
         public void Pull1()
         {
             ExecuteGacha(1);
+
+            if (resultPopup != null)
+                resultPopup.SetActive(true);
         }
 
         public void Pull10()
         {
             ExecuteGacha(10);
+
+            if (resultPopup != null)
+                resultPopup.SetActive(true);
         }
 
         private void ExecuteGacha(int pullCount)
@@ -132,9 +174,9 @@ namespace PixelRestaurant.Gacha
                 return;
             }
 
-            if (PixelRestaurant.Managers.CurrencyManager.Instance == null)
+            if (CurrencyManager.instance == null)
             {
-                Debug.LogError("[GachaUI] CurrencyManager.Instance가 없습니다.");
+                Debug.LogError("[GachaUI] CurrencyManager.instance가 없습니다.");
                 return;
             }
 
@@ -157,7 +199,38 @@ namespace PixelRestaurant.Gacha
                 return;
             }
 
+            // =====================================
+            // 뽑은 아이템 인벤토리에 추가
+            // =====================================
+
+            GachaInventory inventory = GachaInventory.Instance;
+
+            if (inventory == null)
+            {
+                Debug.LogError("[GachaUI] GachaInventory.Instance가 없습니다.");
+                return;
+            }
+
+            foreach (GachaItem item in results)
+            {
+                if (item == null)
+                    continue;
+
+                inventory.AddItem(item.ItemId);
+
+                Debug.Log(
+                    $"[GachaUI] 인벤토리에 추가: {item.ItemName} ({item.ItemId})"
+                );
+            }
+
+            // =====================================
+            // 결과 화면 표시
+            // =====================================
+
             ShowGachaResults(results);
+
+            if (resultPopup != null)
+                resultPopup.SetActive(true);
 
             UpdateDisplay();
         }
@@ -202,12 +275,36 @@ namespace PixelRestaurant.Gacha
             if (resultSpawnPoint == null)
                 return;
 
+            GachaResultHandler resultHandler =
+                GachaResultHandler.Instance;
+
+            if (resultHandler == null)
+            {
+                Debug.LogError("[GachaUI] GachaResultHandler.Instance가 없습니다.");
+                return;
+            }
+
+            GachaObjectPool objectPool =
+                resultHandler.GetComponent<GachaObjectPool>();
+
+            if (objectPool == null)
+            {
+                Debug.LogError("[GachaUI] GachaObjectPool을 찾을 수 없습니다.");
+                return;
+            }
+
+            List<GameObject> resultCards = new List<GameObject>();
+
             foreach (Transform child in resultSpawnPoint)
             {
-                Destroy(child.gameObject);
+                resultCards.Add(child.gameObject);
+            }
+
+            foreach (GameObject card in resultCards)
+            {
+                objectPool.ReturnObject(card);
             }
         }
-
         // =========================
         // Display
         // =========================
@@ -219,24 +316,22 @@ namespace PixelRestaurant.Gacha
             UpdatePityDisplay();
             UpdateProbabilityDisplay();
         }
-
         private void UpdateGoldDisplay()
         {
             if (goldDisplay == null)
                 return;
 
-            if (PixelRestaurant.Managers.CurrencyManager.Instance == null)
+            if (CurrencyManager.instance == null)
             {
                 goldDisplay.text = "0";
                 return;
             }
 
             goldDisplay.text =
-                PixelRestaurant.Managers.CurrencyManager.Instance
-                .GetCurrentGold()
-                .ToString();
+                CurrencyManager.instance
+                    .GetCurrentGold()
+                    .ToString();
         }
-
         private void UpdateGroupDisplay()
         {
             if (currentGroupDisplay == null)
@@ -257,7 +352,20 @@ namespace PixelRestaurant.Gacha
                     break;
             }
         }
+        public void OpenInventoryPopup()
+        {
+            CloseAllPopups();
 
+            if (inventoryUI != null)
+                inventoryUI.OpenInventory();
+        }
+        public void OpenListPopup()
+        {
+            CloseAllPopups();
+
+            if (listPopup != null)
+                listPopup.SetActive(true);
+        }
         private void UpdatePityDisplay()
         {
             if (GachaPitySystem.Instance == null)
