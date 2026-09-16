@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using PixelRestaurant.Data;
-using PixelRestaurant.Managers;
+
 
 namespace PixelRestaurant.Gacha
 {
@@ -202,26 +202,12 @@ namespace PixelRestaurant.Gacha
             // =====================================
             // 뽑은 아이템 인벤토리에 추가
             // =====================================
+            ShowGachaResults(results);
 
-            GachaInventory inventory = GachaInventory.Instance;
+            if (resultPopup != null)
+                resultPopup.SetActive(true);
 
-            if (inventory == null)
-            {
-                Debug.LogError("[GachaUI] GachaInventory.Instance가 없습니다.");
-                return;
-            }
-
-            foreach (GachaItem item in results)
-            {
-                if (item == null)
-                    continue;
-
-                inventory.AddItem(item.ItemId);
-
-                Debug.Log(
-                    $"[GachaUI] 인벤토리에 추가: {item.ItemName} ({item.ItemId})"
-                );
-            }
+            UpdateDisplay();
 
             // =====================================
             // 결과 화면 표시

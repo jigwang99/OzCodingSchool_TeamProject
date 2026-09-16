@@ -17,6 +17,11 @@ namespace PixelRestaurant.Gacha
         [Header("Display")]
         [SerializeField] private Sprite itemIcon;
 
+        [Header("Stats")]
+        [SerializeField]
+        private GachaItemStats stats =
+            new GachaItemStats();
+
         public string ItemId => itemId;
         public string ItemName => itemName;
         public GachaGroup Group => group;
@@ -24,6 +29,8 @@ namespace PixelRestaurant.Gacha
         public int Grade => grade;
         public int Weight => weight;
         public Sprite ItemIcon => itemIcon;
+
+        public GachaItemStats Stats => stats;
 
         public string GetDisplayName()
         {
@@ -35,16 +42,24 @@ namespace PixelRestaurant.Gacha
         private void ValidateItemId()
         {
             if (string.IsNullOrEmpty(itemId))
-                Debug.LogError($"[{itemName}] itemId는 필수입니다!");
+                Debug.LogError(
+                    $"[{itemName}] itemId는 필수입니다!"
+                );
 
             if (grade < 1 || grade > 4)
-                Debug.LogError($"[{itemName}] grade는 1~4 사이여야 합니다!");
+                Debug.LogError(
+                    $"[{itemName}] grade는 1~4 사이여야 합니다!"
+                );
 
             if (weight <= 0)
-                Debug.LogWarning($"[{itemName}] weight는 0보다 커야 합니다!");
+                Debug.LogWarning(
+                    $"[{itemName}] weight는 0보다 커야 합니다!"
+                );
 
             if (itemIcon == null)
-                Debug.LogWarning($"[{itemName}] 아이콘이 등록되지 않았습니다!");
+                Debug.LogWarning(
+                    $"[{itemName}] 아이콘이 등록되지 않았습니다!"
+                );
         }
 #endif
     }

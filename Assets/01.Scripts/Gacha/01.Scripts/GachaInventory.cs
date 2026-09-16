@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using PixelRestaurant.Data;
-
+using System;
 namespace PixelRestaurant.Gacha
 {
     /// <summary>
@@ -11,6 +11,8 @@ namespace PixelRestaurant.Gacha
     /// </summary>
     public class GachaInventory : MonoBehaviour
     {
+        public event Action OnInventoryChanged;
+
         private static GachaInventory _instance;
 
         [SerializeField]
@@ -82,7 +84,11 @@ namespace PixelRestaurant.Gacha
             if (previousCount == 0)
                 _newItems.Add(itemId);
 
-            Debug.Log($"[가챠 인벤토리] {itemId} 획득 → 총 {_items[itemId]}개");
+            OnInventoryChanged?.Invoke();
+
+            Debug.Log(
+                $"[가챠 인벤토리] {itemId} 획득 → 총 {_items[itemId]}개"
+            );
         }
 
         /// <summary>
@@ -113,7 +119,11 @@ namespace PixelRestaurant.Gacha
         {
             if (_newItems.Remove(itemId))
             {
-                Debug.Log($"[가챠 인벤토리] {itemId} NEW 표시 제거");
+                OnInventoryChanged?.Invoke();
+
+                Debug.Log(
+                    $"[가챠 인벤토리] {itemId} NEW 표시 제거"
+                );
             }
         }
 
@@ -123,14 +133,30 @@ namespace PixelRestaurant.Gacha
         /// <param name="group">그룹</param>
         /// <param name="poolData">풀 데이터 (그룹 내 아이템 정보용)</param>
         /// <returns>해당 그룹의 itemId 리스트</returns>
-        public List<string> GetItemsInGroup(GachaGroup group, GachaPoolData poolData)
+        public List<string> GetItemsInGroup(
+      GachaGroup group,
+      GachaPoolData poolData)
         {
             var result = new List<string>();
 
+            if (poolData == null)
+            {
+                Debug.LogError(
+                    "[가챠 인벤토리] poolData가 null입니다."
+                );
+
+                return result;
+            }
+
             foreach (var itemId in _items.Keys)
             {
-                var item = poolData.Items.Find(i => i.ItemId == itemId);
-                if (item != null && item.Group == group)
+                GachaItem item =
+                    poolData.Items.Find(
+                        i => i.ItemId == itemId
+                    );
+
+                // 현재 Pool에 존재하면 해당 그룹 아이템으로 취급
+                if (item != null)
                 {
                     result.Add(itemId);
                 }
@@ -201,7 +227,66 @@ namespace PixelRestaurant.Gacha
         {
             _items.Clear();
             _newItems.Clear();
+
+            OnInventoryChanged?.Invoke();
+
             Debug.Log("[가챠 인벤토리] 초기화됨");
+        }
+        public void LoadFromPlayerData()
+        {
+            if (GameManager.instance == null)
+            {
+                Debug.LogError(
+                    "[가챠 인벤토리] GameManager를 찾을 수 없습니다."
+                );
+                return;
+            }
+
+            PlayerData playerData =
+                GameManager.instance.PlayerData;
+
+            if (playerData == null)
+            {
+                Debug.LogError(
+                    "[가챠 인벤토리] PlayerData가 없습니다."
+                );
+                return;
+            }
+
+            if (playerData.gachaInventory == null)
+            {
+                Debug.Log(
+                    "[가챠 인벤토리] 저장된 가챠 데이터가 없습니다."
+                );
+                return;
+            }
+
+            _items.Clear();
+            _newItems.Clear();
+
+            foreach (
+                GachaOwnedItemData data
+                in playerData.gachaInventory.items)
+            {
+                if (data == null ||
+                    string.IsNullOrEmpty(data.itemId) ||
+                    data.count <= 0)
+                {
+                    continue;
+                }
+
+                _items[data.itemId] = data.count;
+
+                if (data.isNew)
+                {
+                    _newItems.Add(data.itemId);
+                }
+            }
+
+            Debug.Log(
+                $"[가챠 인벤토리] 저장 데이터 복원 완료: " +
+                $"{_items.Count}종"
+            );
         }
     }
 }

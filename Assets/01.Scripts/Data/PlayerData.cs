@@ -1,6 +1,7 @@
+using PixelRestaurant.Gacha;
 using System;
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
 
 [Serializable]
 public class OwnedWeaponData
@@ -34,6 +35,9 @@ public class PlayerData
     public int fishDropRateLevel = 1;
     public int restaurantLevel = 1;      // ← 식당 레벨은 이 값을 공용으로 사용
 
+    // 무기,가구,레시피 아이템
+    public GachaInventoryData gachaInventory =  new GachaInventoryData();
+
     // 식당 상태 (구 PlayerPrefs 저장분)
     public int chefCatLevel = 1;         // 셰프고양이 레벨
     public int cookCatNum = 0;           // 직원고양이 수
@@ -54,6 +58,7 @@ public class PlayerData
     public float idleFishFraction;
     public bool idleFishAccumulationEnabled;
     public int idleFishNextCommonSpecies;
+
 
     // 상태 변경 이벤트 (직렬화 대상 아님)
     [field: NonSerialized] public Action OnRetryChanged;

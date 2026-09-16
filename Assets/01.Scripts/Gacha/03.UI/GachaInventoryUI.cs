@@ -32,6 +32,9 @@ namespace PixelRestaurant.Gacha
         [Header("가챠 UI")]
         [SerializeField] private GachaUIController gachaUI;
 
+        [Header("테스트")]
+        [SerializeField] private Button clearGachaInventoryButton;
+
         // =========================================================
         // 인벤토리 탭
         // =========================================================
@@ -60,12 +63,23 @@ namespace PixelRestaurant.Gacha
         private void Start()
         {
             RegisterTabEvents();
+            RegisterTestEvents();
 
             Debug.Log(
                 "[인벤토리 UI] 초기화 완료"
             );
         }
+        private void RegisterTestEvents()
+        {
+            if (clearGachaInventoryButton == null)
+                return;
 
+            clearGachaInventoryButton.onClick.RemoveAllListeners();
+
+            clearGachaInventoryButton.onClick.AddListener(
+                ClearGachaInventory
+            );
+        }
         // =========================================================
         // 탭 이벤트
         // =========================================================
@@ -228,7 +242,45 @@ namespace PixelRestaurant.Gacha
                 inventory.GetItemsInGroup(
                     _currentTab,
                     poolData
-                );
+                ); 
+                itemIds.Sort((idA, idB) =>
+                {
+                    GachaItem itemA =
+                        poolData.Items.Find(i => i.ItemId == idA);
+
+                    GachaItem itemB =
+                        poolData.Items.Find(i => i.ItemId == idB);
+
+                    if (itemA == null)
+                        return 1;
+
+                    if (itemB == null)
+                        return -1;
+
+                    // 1순위: 레어도
+                    int rarityCompare =
+                        GetRarityOrder(itemA.Rarity)
+                        .CompareTo(
+                            GetRarityOrder(itemB.Rarity)
+                        );
+
+                    if (rarityCompare != 0)
+                        return rarityCompare;
+
+                    // 2순위: 등급
+                    int gradeCompare =
+                        itemA.Grade.CompareTo(itemB.Grade);
+
+                    if (gradeCompare != 0)
+                        return gradeCompare;
+
+                    // 3순위: 같은 경우 이름순
+                    return string.Compare(
+                        itemA.ItemName,
+                        itemB.ItemName,
+                        System.StringComparison.Ordinal
+                    );
+                });
 
             if (itemIds.Count == 0)
             {
@@ -337,6 +389,7 @@ namespace PixelRestaurant.Gacha
 
             card.name =
                 $"{item.ItemName}_InventoryCard";
+
 
             // -----------------------------------------------------
             // 보유 개수
@@ -484,5 +537,59 @@ namespace PixelRestaurant.Gacha
         {
             RefreshInventoryDisplay();
         }
+        private int GetRarityOrder(GachaRarity rarity)
+        {
+            switch (rarity)
+            {
+                case GachaRarity.Common:
+                    return 0;
+
+                case GachaRarity.Rare:
+                    return 1;
+
+                case GachaRarity.Unique:
+                    return 2;
+
+                case GachaRarity.Epic:
+                    return 3;
+
+                default:
+                    return 99;
+            }
+        }
+        // =========================================================
+        // 인벤토리 초기화 버튼 이벤트 등록 (테스트용)
+        // =========================================================
+        private void ClearGachaInventory()
+        {
+            GachaInventory inventory =
+                GachaInventory.Instance;
+
+            if (inventory == null)
+            {
+                Debug.LogError(
+                    "[인벤토리 UI] GachaInventory를 찾을 수 없습니다."
+                );
+
+                return;
+            }
+
+            // 인벤토리 데이터 초기화
+            inventory.Clear();
+
+            // 현재 화면도 즉시 갱신
+            RefreshInventoryDisplay();
+
+            // 테스트용 저장 데이터까지 즉시 반영
+            if (SaveManager.instance != null)
+            {
+                SaveManager.instance.Save();
+            }
+
+            Debug.Log(
+                "[인벤토리 UI] 가챠 인벤토리 초기화 완료"
+            );
+        }
     }
+
 }

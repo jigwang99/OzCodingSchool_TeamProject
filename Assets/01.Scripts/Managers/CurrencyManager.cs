@@ -1,9 +1,8 @@
-
 using System;
 using UnityEngine;
-using PixelRestaurant.Gacha;
+using PixelRestaurant.Gacha; // new
 
-public class CurrencyManager : Singleton<CurrencyManager>, ICurrencyProvider
+public class CurrencyManager : Singleton<CurrencyManager>, ICurrencyProvider // new , ICurrencyProvider 인터페이스 구현
 {
     private PlayerData data => GameManager.instance.PlayerData;
 
@@ -15,13 +14,7 @@ public class CurrencyManager : Singleton<CurrencyManager>, ICurrencyProvider
         base.Awake();
     }
 
-    // =========================
-    // Gold
-    // =========================
-
-    /// <summary>
-    /// 골드 획득
-    /// </summary>
+    //골드 획득
     public void AddGold(BigNumber amount)
     {
         if (amount.IsZeroOrNegative)
@@ -29,53 +22,34 @@ public class CurrencyManager : Singleton<CurrencyManager>, ICurrencyProvider
 
         data.gold += amount;
 
-        Debug.Log(
-            $"[CurrencyManager] 골드 획득: +{amount} / 현재 골드: {data.gold}"
-        );
-
         OnGoldChanged?.Invoke();
     }
 
-    /// <summary>
-    /// 골드 소비
-    /// </summary>
+    //골드 소비
     public bool SpendGold(BigNumber amount)
     {
         if (amount.IsZeroOrNegative)
             return false;
 
         if (data.gold < amount)
-        {
-            Debug.Log("[CurrencyManager] 골드가 부족합니다!");
             return false;
-        }
 
         data.gold -= amount;
-
-        Debug.Log(
-            $"[CurrencyManager] 골드 소비: -{amount} / 잔여 골드: {data.gold}"
-        );
 
         OnGoldChanged?.Invoke();
 
         return true;
     }
 
-    /// <summary>
-    /// 현재 골드 조회
-    /// </summary>
+    //new 
+    //현재 골드 조회
+
     public BigNumber GetCurrentGold()
     {
         return data.gold;
     }
 
-    // =========================
-    // Fish
-    // =========================
-
-    /// <summary>
-    /// 특정 종의 물고기 획득
-    /// </summary>
+    //특정 종의 물고기 획득
     public void AddFish(FishGrade grade, int species, int count)
     {
         if (count <= 0)
@@ -88,16 +62,10 @@ public class CurrencyManager : Singleton<CurrencyManager>, ICurrencyProvider
 
         fishArray[species] += count;
 
-        Debug.Log(
-            $"[CurrencyManager] {grade} / 종 {species} 물고기 획득: +{count} / 현재: {fishArray[species]}"
-        );
-
         OnFishChanged?.Invoke(grade);
     }
 
-    /// <summary>
-    /// 특정 종의 물고기 수량 조회
-    /// </summary>
+    //특정 종의 물고기 수량 조회
     public int GetFish(FishGrade grade, int species)
     {
         int[] fishArray = data.GetFishArray(grade);
@@ -108,9 +76,7 @@ public class CurrencyManager : Singleton<CurrencyManager>, ICurrencyProvider
         return fishArray[species];
     }
 
-    /// <summary>
-    /// 특정 종의 물고기 소비
-    /// </summary>
+    //특정 종의 물고기 소비
     public bool SpendFish(FishGrade grade, int species, int count)
     {
         if (count <= 0)
@@ -122,32 +88,19 @@ public class CurrencyManager : Singleton<CurrencyManager>, ICurrencyProvider
             return false;
 
         if (fishArray[species] < count)
-        {
-            Debug.Log(
-                $"[CurrencyManager] {grade} / 종 {species} 물고기가 부족합니다!"
-            );
-
             return false;
-        }
 
-        if (FacilityManager.instance.NoUseFishChance
-            < UnityEngine.Random.Range(0f, 1f))
+        if (FacilityManager.instance.NoUseFishChance < UnityEngine.Random.Range(0f, 1f))    //물고기 안쓰기 확률
         {
             fishArray[species] -= count;
         }
-
-        Debug.Log(
-            $"[CurrencyManager] {grade} / 종 {species} 물고기 소비: -{count} / 잔여: {fishArray[species]}"
-        );
 
         OnFishChanged?.Invoke(grade);
 
         return true;
     }
 
-    /// <summary>
-    /// 해당 등급의 전체 물고기 수량
-    /// </summary>
+    //해당 등급의 전체 물고기 수량
     public int GetGradeTotal(FishGrade grade)
     {
         int[] fishArray = data.GetFishArray(grade);
@@ -165,46 +118,49 @@ public class CurrencyManager : Singleton<CurrencyManager>, ICurrencyProvider
         return total;
     }
 
-    /// <summary>
-    /// 해당 등급의 물고기 소비
-    /// </summary>
+    // 해당 등급에서 물고기 소비
+    // 종 번호가 낮은 것부터 소비
     public int SpendFromGrade(FishGrade grade, int count)
     {
         if (count <= 0)
             return 0;
 
-        int total = GetGradeTotal(grade);
-
-        if (total < count)
-        {
-            Debug.Log(
-                $"[CurrencyManager] {grade} 등급 물고기가 부족합니다!"
-            );
-
-            return 0;
-        }
-
         int[] fishArray = data.GetFishArray(grade);
 
+        if (fishArray == null)
+            return 0;
+
         int remaining = count;
+        int usedCount = 0;
 
-        for (int i = 0; i < fishArray.Length && remaining > 0; i++)
+        for (int i = 0; i < fishArray.Length; i++)
         {
-            int spend = Mathf.Min(fishArray[i], remaining);
+            if (remaining <= 0)
+                break;
 
-            fishArray[i] -= spend;
-            remaining -= spend;
+            int consumeAmount = Mathf.Min(fishArray[i], remaining);
+
+            if (consumeAmount <= 0)
+                continue;
+
+            fishArray[i] -= consumeAmount;
+
+            remaining -= consumeAmount;
+            usedCount += consumeAmount;
         }
 
-        OnFishChanged?.Invoke(grade);
+        if (usedCount > 0)
+        {
+            OnFishChanged?.Invoke(grade);
+        }
 
-        return count;
+        return usedCount;
     }
 
     private bool IsValidSpecies(int[] fishArray, int species)
     {
-        return fishArray != null
-            && species >= 0
-            && species < fishArray.Length;
+        return fishArray != null &&
+               species >= 0 &&
+               species < fishArray.Length;
     }
 }

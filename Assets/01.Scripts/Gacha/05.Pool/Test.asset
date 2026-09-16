@@ -21,28 +21,77 @@ MonoBehaviour:
     rarity: 0
     grade: 1
     weight: 1
-    displayPrefab: {fileID: 213800520459445659, guid: 1acf46c43bc04ba42bc74f873059b67e, type: 3}
+    itemIcon: {fileID: 0}
+    stats:
+      attackPower: 0
+      goldBonusFlat: 0
+      goldBonusRate: 0
   - itemId: Test2
     itemName: 2
     group: 0
     rarity: 1
-    grade: 1
+    grade: 2
     weight: 1
-    displayPrefab: {fileID: 213800520459445659, guid: 1acf46c43bc04ba42bc74f873059b67e, type: 3}
+    itemIcon: {fileID: 0}
+    stats:
+      attackPower: 0
+      goldBonusFlat: 0
+      goldBonusRate: 0
   - itemId: Test3
     itemName: 3
     group: 0
     rarity: 2
-    grade: 1
+    grade: 3
     weight: 1
-    displayPrefab: {fileID: 213800520459445659, guid: 1acf46c43bc04ba42bc74f873059b67e, type: 3}
+    itemIcon: {fileID: 0}
+    stats:
+      attackPower: 0
+      goldBonusFlat: 0
+      goldBonusRate: 0
   - itemId: Test4
     itemName: 4
     group: 0
     rarity: 3
-    grade: 1
+    grade: 4
     weight: 1
-    displayPrefab: {fileID: 213800520459445659, guid: 1acf46c43bc04ba42bc74f873059b67e, type: 3}
+    itemIcon: {fileID: 0}
+    stats:
+      attackPower: 0
+      goldBonusFlat: 0
+      goldBonusRate: 0
+  - itemId: Test5
+    itemName: 5
+    group: 0
+    rarity: 3
+    grade: 5
+    weight: 1
+    itemIcon: {fileID: 0}
+    stats:
+      attackPower: 0
+      goldBonusFlat: 0
+      goldBonusRate: 0
+  - itemId: Test6
+    itemName: 6
+    group: 0
+    rarity: 3
+    grade: 6
+    weight: 1
+    itemIcon: {fileID: 0}
+    stats:
+      attackPower: 0
+      goldBonusFlat: 0
+      goldBonusRate: 0
+  - itemId: Test7
+    itemName: 7
+    group: 0
+    rarity: 3
+    grade: 6
+    weight: 1
+    itemIcon: {fileID: 0}
+    stats:
+      attackPower: 0
+      goldBonusFlat: 0
+      goldBonusRate: 0
   pityConfig:
     levels:
     - level: 1

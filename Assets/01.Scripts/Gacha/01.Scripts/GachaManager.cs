@@ -1,6 +1,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 using PixelRestaurant.Data;
+using System;
+using System.Collections.Generic;
+using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace PixelRestaurant.Gacha
 {
@@ -24,6 +28,7 @@ namespace PixelRestaurant.Gacha
 
         private GachaItem _lastDrawnItem;
 
+        public event Action<List<GachaItem>> OnGachaItemsDrawn;
         public static GachaManager Instance
         {
             get
@@ -223,8 +228,13 @@ namespace PixelRestaurant.Gacha
             }
 
             Debug.Log(
-                $"[°¡Ã­] »Ì±â ¿Ï·á: {results.Count}°³ È¹µæ"
-            );
+    $"[°¡Ã­] »Ì±â ¿Ï·á: {results.Count}°³ È¹µæ"
+);
+
+            if (results.Count > 0)
+            {
+                OnGachaItemsDrawn?.Invoke(results);
+            }
 
             return results;
         }
