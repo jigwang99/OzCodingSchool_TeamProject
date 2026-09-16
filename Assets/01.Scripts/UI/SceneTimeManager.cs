@@ -50,8 +50,6 @@ public class SceneTimeManager : MonoBehaviour
 
         PlayerPrefs.SetString($"ExitTime_{sceneName}", now.Ticks.ToString());
         PlayerPrefs.Save();
-
-        Debug.Log($"[SceneTimeManager] '{sceneName}' 퇴장 시각 기록 완료: {now}");
     }
 
     public float ConsumeElapsedSeconds(string sceneName)
@@ -78,7 +76,6 @@ public class SceneTimeManager : MonoBehaviour
             PlayerPrefs.DeleteKey($"ExitTime_{sceneName}");
             PlayerPrefs.Save();
 
-            Debug.Log($"[SceneTimeManager] '{sceneName}' 부재 시간 지급 완료: {elapsedSeconds:F1}초");
             return elapsedSeconds;
         }
 
