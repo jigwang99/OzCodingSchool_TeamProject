@@ -41,8 +41,8 @@ public abstract class BaseUnitController : MonoBehaviour
         if (unitView == null)
             unitView = GetComponentInChildren<IUnitView>(true);
 
-        if (unitViewSource != null && unitView == null)
 #if UNITY_EDITOR
+        if (unitViewSource != null && unitView == null)
             Debug.LogWarning($"[{name}] unitViewSource가 IUnitView를 구현하지 않습니다. 연결을 확인하세요.");
 #endif
 

@@ -3053,7 +3053,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PixelRestaurant.Gacha.GachaInventoryUI
   inventoryPopup: {fileID: 811681111}
-  gachaUI: {fileID: 0}
+  gachaUI: {fileID: 106314148}
   clearGachaInventoryButton: {fileID: 1483543296}
   weaponTab: {fileID: 1550728711}
   furnitureTab: {fileID: 167650452}
@@ -6229,7 +6229,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 9e8092b947bc8604e8830960573e691e, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e9606c622b82e4125bb34f0662219453, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -11921,7 +11921,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 3009030062900057397, guid: 15fcd670e52f2fe4fac9578baed05b96, type: 3}
+  m_Sprite: {fileID: 3009030062900057397, guid: c1b0bbbd287f34b63a81673b7ada0b31, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
