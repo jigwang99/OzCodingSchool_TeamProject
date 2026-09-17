@@ -24,6 +24,8 @@ public class PlayerData
 
     // 진행도
     public int currentStage = 1;
+    public int highestUnlockedStage = 1;
+    public int stageProgressVersion;    // 0: 해금 기록이 없는 기존 저장 데이터
     public bool isRetryEnabled;
 
     // 성장 요소 (기존)
@@ -53,7 +55,11 @@ public class PlayerData
     public long idleFishLastCollectionUtcTicks;
     public float idleFishFraction;
     public bool idleFishAccumulationEnabled;
-    public int idleFishNextCommonSpecies;
+    public int[] pendingIdleCommonFish = new int[8];
+    public int[] pendingIdleRareFish = new int[4];
+    public int[] pendingIdleUniqueFish = new int[2];
+    public int[] pendingIdleEpicFish = new int[1];
+    public double pendingIdleSeconds;
 
     // 상태 변경 이벤트 (직렬화 대상 아님)
     [field: NonSerialized] public Action OnRetryChanged;
@@ -159,10 +165,58 @@ public class PlayerData
         }
     }
 
-    // 진행도 setter
+    // 기존 저장은 최초 한 번만 현재 위치까지 해금한다. 이후에는 저장된 해금 기록이 기준이다.
+    public void InitializeStageProgress(int stageCount = int.MaxValue)
+    {
+        int maxStage = Mathf.Max(1, stageCount);
+        if (stageProgressVersion < 1)
+        {
+            highestUnlockedStage = Mathf.Max(highestUnlockedStage, currentStage);
+            stageProgressVersion = 1;
+        }
+
+        highestUnlockedStage = Mathf.Clamp(highestUnlockedStage, 1, maxStage);
+        SetCurrentStage(currentStage);
+    }
+
+    public int[] GetPendingIdleFishArray(FishGrade grade)
+    {
+        switch (grade)
+        {
+            case FishGrade.Common: return pendingIdleCommonFish;
+            case FishGrade.Rare: return pendingIdleRareFish;
+            case FishGrade.Unique: return pendingIdleUniqueFish;
+            case FishGrade.Epic: return pendingIdleEpicFish;
+            default: return null;
+        }
+    }
+
+    public void InitializePendingIdleFish()
+    {
+        // 기존 커먼 보상은 그대로 보존하고 새 등급 배열만 보완한다.
+        if (pendingIdleCommonFish == null) pendingIdleCommonFish = new int[8];
+        if (pendingIdleRareFish == null) pendingIdleRareFish = new int[4];
+        if (pendingIdleUniqueFish == null) pendingIdleUniqueFish = new int[2];
+        if (pendingIdleEpicFish == null) pendingIdleEpicFish = new int[1];
+    }
+
+    public bool UnlockNextStage(int completedStage, int stageCount)
+    {
+        if (completedStage < 1 || completedStage > highestUnlockedStage || completedStage >= stageCount)
+            return false;
+
+        int nextStage = completedStage + 1;
+        if (nextStage <= highestUnlockedStage)
+            return false;
+
+        highestUnlockedStage = nextStage;
+        return true;
+    }
+
+    // 현재 위치 변경만으로 잠긴 스테이지를 해금할 수 없다.
     public void SetCurrentStage(int stage)
     {
-        int clamped = Mathf.Max(1, stage);
+        int clamped = Mathf.Clamp(stage, 1, Mathf.Max(1, highestUnlockedStage));
         if (currentStage == clamped)
             return;
 

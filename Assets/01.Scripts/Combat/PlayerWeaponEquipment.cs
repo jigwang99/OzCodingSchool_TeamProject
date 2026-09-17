@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-// 애셋 UnitController.Start의 무작위 검 설정이 끝난 뒤 저장된 무기를 적용한다.
+// 일반 초기화가 끝난 뒤 저장된 무기를 적용한다. 에셋의 무작위 장비 초기화는 CatUnitView에서 막는다.
 [DefaultExecutionOrder(100)]
 [DisallowMultipleComponent]
 [RequireComponent(typeof(UnitAttack))]
@@ -59,7 +59,9 @@ public class PlayerWeaponEquipment : MonoBehaviour
     {
         if (catalog == null)
         {
+#if UNITY_EDITOR
             Debug.LogWarning("[PlayerWeaponEquipment] 무기 카탈로그를 연결하세요.", this);
+#endif
             return false;
         }
 
@@ -67,7 +69,9 @@ public class PlayerWeaponEquipment : MonoBehaviour
         Sprite sprite = weapon != null ? weapon.GetSprite() : null;
         if (sprite == null || !ResolveReferences())
         {
+#if UNITY_EDITOR
             Debug.LogWarning($"[PlayerWeaponEquipment] 무기를 장착할 수 없습니다: {weaponId}", this);
+#endif
             return false;
         }
 

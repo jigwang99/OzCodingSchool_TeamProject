@@ -6,41 +6,67 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Canvas), typeof(CanvasScaler))]
 public class CombatResultUI : MonoBehaviour
 {
+    [System.Serializable]
+    private sealed class RewardSlot
+    {
+        public FishGrade grade;
+        [Min(0)] public int species;
+        public CanvasGroup group;
+        public Text countLabel;
+    }
+
     [SerializeField] private StageManager stageManager;
     [SerializeField] private CombatRewardTracker rewardTracker;
-    [SerializeField] private Font font;
+    [Header("결과 색상")]
     [SerializeField] private Color clearColor = new Color(1f, 0.82f, 0.39f);
     [SerializeField] private Color failColor = new Color(1f, 0.48f, 0.46f);
 
-    private CanvasGroup panel;
-    private RectTransform panelRect;
-    private Text stageLabel;
-    private Text titleLabel;
-    private Text messageLabel;
-    private Text rewardLabel;
-    private Text countdownLabel;
-    private Image accent;
-    private Image progress;
+    [Header("씬에 배치된 UI")]
+    [SerializeField] private CanvasGroup panel;
+    [SerializeField] private RectTransform panelRect;
+    [SerializeField] private Text stageLabel;
+    [SerializeField] private Text titleLabel;
+    [SerializeField] private Text messageLabel;
+    [SerializeField] private Text rewardLabel;
+    [SerializeField] private Text countdownLabel;
+    [SerializeField] private Image accent;
+    [SerializeField] private Image progress;
+    [Header("이번 전투 드롭 (Business 인벤토리 순서)")]
+    [SerializeField] private RewardSlot[] rewardSlots;
+    [Header("드롭 목록 레이아웃")]
+    [SerializeField, Min(1)] private int rewardColumns = 4;
+    [SerializeField, Min(1f)] private float rewardRowHeight = 88f;
+    [Tooltip("목록 아래의 등급 안내, 메시지, 카운트다운, 진행 바")]
+    [SerializeField] private RectTransform[] rewardFooter;
+    private Vector2[] slotPositions;
+    private Vector2[] footerPositions;
+    private float fullPanelHeight;
+    private bool initialized;
     private float duration;
     private float visibleTime;
     private int displayedSeconds = -1;
 
     private void Awake()
     {
-        if (stageManager == null || rewardTracker == null || font == null)
+        if (stageManager == null || rewardTracker == null || panel == null || panelRect == null ||
+            stageLabel == null || titleLabel == null || messageLabel == null || rewardLabel == null ||
+            countdownLabel == null || accent == null || progress == null)
         {
-            Debug.LogError("[CombatResultUI] StageManager, CombatRewardTracker와 한글 폰트를 연결하세요.", this);
+#if UNITY_EDITOR
+            Debug.LogError("[CombatResultUI] 결과 데이터와 씬에 배치된 UI 참조를 연결하세요.", this);
+#endif
             enabled = false;
             return;
         }
 
-        BuildPanel();
+        CacheRewardLayout();
+        initialized = true;
         Hide();
     }
 
     private void OnEnable()
     {
-        if (stageManager == null || panel == null) return;
+        if (!initialized) return;
         stageManager.OnStageResult += Show;
         stageManager.OnStageStarted += Hide;
 
@@ -61,7 +87,7 @@ public class CombatResultUI : MonoBehaviour
 
     private void Update()
     {
-        if (panel == null || !panel.gameObject.activeSelf) return;
+        if (!initialized || !panel.gameObject.activeSelf) return;
 
         // 전투/재시작과 동일하게 일시정지와 배속을 따른다.
         visibleTime += Time.deltaTime;
@@ -76,6 +102,7 @@ public class CombatResultUI : MonoBehaviour
         messageLabel.text = result.Message;
         // CombatManager가 마지막 적의 드롭 이벤트를 처리한 뒤 결과를 알리므로 마지막 보상도 포함된다.
         rewardLabel.text = $"이번 전투 획득 물고기 ×{rewardTracker.TotalFishCount:N0}";
+        RefreshRewardSlots();
         Color color = result.IsClear ? clearColor : failColor;
         titleLabel.color = color;
         accent.color = color;
@@ -115,75 +142,65 @@ public class CombatResultUI : MonoBehaviour
 
     private void ResizePanel()
     {
-        if (panelRect == null) return;
-        float canvasWidth = ((RectTransform)transform).rect.width;
-        panelRect.sizeDelta = new Vector2(Mathf.Min(640f, Mathf.Max(240f, canvasWidth - 40f)), 304f);
+        if (!initialized || panelRect == null) return;
+        Rect bounds = ((RectTransform)transform).rect;
+        Rect authoredSize = panelRect.rect;
+        if (authoredSize.width <= 0f || authoredSize.height <= 0f) return;
+        // 씬에서 지정한 크기와 위치는 유지하고 작은 화면에 맞게 배율만 조절한다.
+        float scale = Mathf.Min(1f, (bounds.width - 40f) / authoredSize.width,
+            (bounds.height - 40f) / authoredSize.height);
+        panelRect.localScale = Vector3.one * Mathf.Max(0.1f, scale);
     }
 
-    private void BuildPanel()
+    private void RefreshRewardSlots()
     {
-        Image background = CreateImage("ResultPanel", transform, new Color(0.075f, 0.10f, 0.16f, 0.96f));
-        panelRect = background.rectTransform;
-        panelRect.anchorMin = panelRect.anchorMax = new Vector2(0.5f, 0.64f);
-        panel = background.gameObject.AddComponent<CanvasGroup>();
-        panel.interactable = false;
-        panel.blocksRaycasts = false;
+        if (rewardSlots == null) return;
 
-        accent = CreateImage("Accent", panelRect, clearColor);
-        SetRect(accent.rectTransform, new Vector2(0f, 1f), Vector2.one,
-            new Vector2(0f, -4f), Vector2.zero);
+        int visibleCount = 0;
+        foreach (RewardSlot slot in rewardSlots)
+        {
+            if (slot == null || slot.countLabel == null || slot.group == null) continue;
+            long count = rewardTracker.GetFishCount(slot.grade, slot.species);
+            slot.group.gameObject.SetActive(count > 0);
+            if (count <= 0) continue;
 
-        stageLabel = CreateText("Stage", 20, new Color(0.71f, 0.77f, 0.85f), 14f, 30f);
-        titleLabel = CreateText("Title", 42, clearColor, 47f, 55f);
-        messageLabel = CreateText("Message", 23, new Color(0.94f, 0.95f, 0.98f), 108f, 70f);
-        rewardLabel = CreateText("Rewards", 23, new Color(0.75f, 0.90f, 0.85f), 188f, 36f);
-        countdownLabel = CreateText("Countdown", 19, new Color(0.71f, 0.77f, 0.85f), 234f, 30f);
+            slot.countLabel.text = $"+{count:N0}";
+            slot.group.alpha = 1f;
+            // 매 결과마다 원래 슬롯 위치를 앞에서부터 채워 이전 전투의 빈칸을 남기지 않는다.
+            ((RectTransform)slot.group.transform).anchoredPosition = slotPositions[visibleCount++];
+        }
 
-        Image track = CreateImage("CountdownTrack", panelRect, new Color(1f, 1f, 1f, 0.12f));
-        SetRect(track.rectTransform, Vector2.zero, Vector2.right,
-            new Vector2(28f, 22f), new Vector2(-28f, 26f));
-        progress = CreateImage("Remaining", track.transform, clearColor);
-        SetRect(progress.rectTransform, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
-        ResizePanel();
+        int columns = Mathf.Max(1, rewardColumns);
+        int fullRows = Mathf.CeilToInt((float)rewardSlots.Length / columns);
+        int visibleRows = Mathf.CeilToInt((float)visibleCount / columns);
+        float removedHeight = (fullRows - visibleRows) * rewardRowHeight;
+        panelRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, fullPanelHeight - removedHeight);
+        for (int i = 0; i < footerPositions.Length; i++)
+        {
+            if (rewardFooter[i] != null)
+                rewardFooter[i].anchoredPosition = footerPositions[i] + Vector2.up * removedHeight;
+        }
+
+        if (rewardTracker.TotalFishCount == 0)
+            rewardLabel.text = "이번 전투에서 획득한 물고기가 없습니다";
     }
 
-    private Text CreateText(string objectName, int size, Color color, float top, float height)
+    private void CacheRewardLayout()
     {
-        var obj = new GameObject(objectName, typeof(RectTransform), typeof(Text));
-        obj.layer = gameObject.layer;
-        var text = obj.GetComponent<Text>();
-        text.rectTransform.SetParent(panelRect, false);
-        SetRect(text.rectTransform, Vector2.up, Vector2.one,
-            new Vector2(24f, -top - height), new Vector2(-24f, -top));
-        // TTF를 직접 사용해 기존 공용 TMP 비트맵 폰트를 수정하지 않고 한글을 표시한다.
-        text.font = font;
-        text.fontSize = size;
-        text.color = color;
-        text.alignment = TextAnchor.MiddleCenter;
-        text.resizeTextForBestFit = true;
-        text.resizeTextMinSize = 14;
-        text.resizeTextMaxSize = size;
-        text.supportRichText = false;
-        text.raycastTarget = false;
-        return text;
-    }
+        // 첫 결과 표시 전에 한 번만 저장해 결과창을 반복해 열어도 높이와 위치가 누적되지 않는다.
+        fullPanelHeight = panelRect.rect.height;
+        slotPositions = new Vector2[rewardSlots?.Length ?? 0];
+        for (int i = 0; i < slotPositions.Length; i++)
+        {
+            if (rewardSlots[i]?.group != null)
+                slotPositions[i] = ((RectTransform)rewardSlots[i].group.transform).anchoredPosition;
+        }
 
-    private Image CreateImage(string objectName, Transform parent, Color color)
-    {
-        var obj = new GameObject(objectName, typeof(RectTransform), typeof(Image));
-        obj.layer = gameObject.layer;
-        var image = obj.GetComponent<Image>();
-        image.rectTransform.SetParent(parent, false);
-        image.color = color;
-        image.raycastTarget = false;
-        return image;
-    }
-
-    private static void SetRect(RectTransform rect, Vector2 min, Vector2 max, Vector2 offsetMin, Vector2 offsetMax)
-    {
-        rect.anchorMin = min;
-        rect.anchorMax = max;
-        rect.offsetMin = offsetMin;
-        rect.offsetMax = offsetMax;
+        footerPositions = new Vector2[rewardFooter?.Length ?? 0];
+        for (int i = 0; i < footerPositions.Length; i++)
+        {
+            if (rewardFooter[i] != null)
+                footerPositions[i] = rewardFooter[i].anchoredPosition;
+        }
     }
 }
