@@ -148,43 +148,69 @@ namespace PixelRestaurant.Gacha
         // Pull
         // =========================
 
+
         public void Pull1()
         {
-            ExecuteGacha(1);
-
-            if (resultPopup != null)
-                resultPopup.SetActive(true);
+            if (ExecuteGacha(1))
+            {
+                if (resultPopup != null)
+                    resultPopup.SetActive(true);
+            }
         }
 
         public void Pull10()
         {
-            ExecuteGacha(10);
-
-            if (resultPopup != null)
-                resultPopup.SetActive(true);
+            if (ExecuteGacha(10))
+            {
+                if (resultPopup != null)
+                    resultPopup.SetActive(true);
+            }
         }
 
-        private void ExecuteGacha(int pullCount)
+        private bool ExecuteGacha(int pullCount)
         {
             Debug.Log($"[GachaUI] 가챠 버튼 클릭: {pullCount}회");
 
             if (GachaManager.Instance == null)
             {
                 Debug.LogError("[GachaUI] GachaManager.Instance가 없습니다.");
-                return;
+                return false;
             }
 
             if (CurrencyManager.instance == null)
             {
                 Debug.LogError("[GachaUI] CurrencyManager.instance가 없습니다.");
-                return;
+                return false;
             }
 
             if (pullCount != 1 && pullCount != 10)
             {
                 Debug.LogWarning("[GachaUI] 1회 또는 10회 뽑기만 가능합니다.");
-                return;
+                return false;
             }
+
+            // =========================
+            // 전체 뽑기 비용 확인
+            // =========================
+
+            BigNumber totalCost = new BigNumber(30 * pullCount);
+
+            BigNumber currentGold =
+                CurrencyManager.instance.GetCurrentGold();
+
+            // 필요한 골드가 부족하면 뽑기 실행하지 않음
+            if (currentGold < totalCost)
+            {
+                Debug.LogWarning(
+                    $"[GachaUI] 골드 부족! 필요: {totalCost}, 현재: {currentGold}"
+                );
+
+                return false;
+            }
+
+            // =========================
+            // 가챠 실행
+            // =========================
 
             List<GachaItem> results =
                 GachaManager.Instance.DrawGacha(
@@ -196,29 +222,18 @@ namespace PixelRestaurant.Gacha
             if (results == null || results.Count == 0)
             {
                 Debug.LogWarning("[GachaUI] 가챠 결과가 없습니다.");
-                return;
+                return false;
             }
 
-            // =====================================
-            // 뽑은 아이템 인벤토리에 추가
-            // =====================================
-            ShowGachaResults(results);
-
-            if (resultPopup != null)
-                resultPopup.SetActive(true);
-
-            UpdateDisplay();
-
-            // =====================================
-            // 결과 화면 표시
-            // =====================================
+            // =========================
+            // 결과 표시
+            // =========================
 
             ShowGachaResults(results);
 
-            if (resultPopup != null)
-                resultPopup.SetActive(true);
-
             UpdateDisplay();
+
+            return true;
         }
 
         // =========================

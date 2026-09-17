@@ -23,7 +23,7 @@ MonoBehaviour:
     weight: 1
     itemIcon: {fileID: 0}
     stats:
-      attackPower: 0
+      attackPower: 1
       goldBonusFlat: 0
       goldBonusRate: 0
   - itemId: Test2
@@ -34,7 +34,7 @@ MonoBehaviour:
     weight: 1
     itemIcon: {fileID: 0}
     stats:
-      attackPower: 0
+      attackPower: 2
       goldBonusFlat: 0
       goldBonusRate: 0
   - itemId: Test3
@@ -45,7 +45,7 @@ MonoBehaviour:
     weight: 1
     itemIcon: {fileID: 0}
     stats:
-      attackPower: 0
+      attackPower: 3
       goldBonusFlat: 0
       goldBonusRate: 0
   - itemId: Test4
@@ -56,7 +56,7 @@ MonoBehaviour:
     weight: 1
     itemIcon: {fileID: 0}
     stats:
-      attackPower: 0
+      attackPower: 4
       goldBonusFlat: 0
       goldBonusRate: 0
   - itemId: Test5
@@ -67,7 +67,7 @@ MonoBehaviour:
     weight: 1
     itemIcon: {fileID: 0}
     stats:
-      attackPower: 0
+      attackPower: 5
       goldBonusFlat: 0
       goldBonusRate: 0
   - itemId: Test6
@@ -78,7 +78,7 @@ MonoBehaviour:
     weight: 1
     itemIcon: {fileID: 0}
     stats:
-      attackPower: 0
+      attackPower: 6
       goldBonusFlat: 0
       goldBonusRate: 0
   - itemId: Test7
@@ -89,7 +89,7 @@ MonoBehaviour:
     weight: 1
     itemIcon: {fileID: 0}
     stats:
-      attackPower: 0
+      attackPower: 7
       goldBonusFlat: 0
       goldBonusRate: 0
   pityConfig:

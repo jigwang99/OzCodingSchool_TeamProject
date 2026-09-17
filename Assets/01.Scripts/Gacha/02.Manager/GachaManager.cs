@@ -94,9 +94,9 @@ namespace PixelRestaurant.Gacha
         /// 1회 / 10회 지원
         /// </summary>
         public List<GachaItem> DrawGacha(
-            GachaGroup group,
-            int pullCount,
-            BigNumber costPerPull)
+        GachaGroup group,
+        int pullCount,
+        BigNumber costPerPull)
         {
             var results = new List<GachaItem>();
 
@@ -155,6 +155,27 @@ namespace PixelRestaurant.Gacha
             );
 
             // =========================
+            // 전체 비용 사전 확인
+            // =========================
+
+            BigNumber totalCost = new BigNumber(
+                30 * pullCount
+            );
+
+            BigNumber currentGold =
+                CurrencyManager.instance.GetCurrentGold();
+
+            if (currentGold < totalCost)
+            {
+                Debug.LogWarning(
+                    $"[가챠] 골드 부족! " +
+                    $"필요: {totalCost}, 현재: {currentGold}"
+                );
+
+                return results;
+            }
+
+            // =========================
             // Pull
             // =========================
 
@@ -164,20 +185,22 @@ namespace PixelRestaurant.Gacha
                 // BigNumber 기준으로 골드 소비
                 if (!_currencyProvider.SpendGold(costPerPull))
                 {
-                    Debug.Log(
-                        $"[가챠] 골드 부족 ({i + 1}회에서 중단)"
+                    Debug.LogWarning(
+                        $"[가챠] 골드 소비 실패! " +
+                        $"{i + 1}회차에서 뽑기를 중단합니다."
                     );
 
-                    break;
+                    // 중간 실패이므로 결과 전체 취소
+                    results.Clear();
+
+                    return results;
                 }
 
                 // Step 2
-                // 현재 가챠 레벨 확인
                 int currentLevel =
                     _pitySystem.GetCurrentPityLevel(group);
 
                 // Step 3
-                // 레어리티 결정
                 GachaRarity rarity =
                     DrawRarity(
                         group,
@@ -186,7 +209,6 @@ namespace PixelRestaurant.Gacha
                     );
 
                 // Step 4
-                // 아이템 결정
                 GachaItem item =
                     DrawItem(
                         group,
@@ -200,15 +222,16 @@ namespace PixelRestaurant.Gacha
                         "[가챠] 아이템을 찾을 수 없습니다."
                     );
 
-                    break;
+                    // 뽑기 실패
+                    results.Clear();
+
+                    return results;
                 }
 
                 // Step 5
-                // 뽑기 횟수 증가
                 _pitySystem.IncreasePullCount(group);
 
                 // Step 6
-                // 레벨업 확인
                 if (_pitySystem.CheckAndLevelUp(
                     group,
                     poolData.PityConfig))
@@ -227,9 +250,24 @@ namespace PixelRestaurant.Gacha
                 );
             }
 
+            // =========================
+            // 최종 결과 검증
+            // =========================
+
+            if (results.Count != pullCount)
+            {
+                Debug.LogWarning(
+                    $"[가챠] 뽑기 실패! " +
+                    $"요청: {pullCount}회 / 결과: {results.Count}개"
+                );
+
+                results.Clear();
+                return results;
+            }
+
             Debug.Log(
-    $"[가챠] 뽑기 완료: {results.Count}개 획득"
-);
+                $"[가챠] 뽑기 완료: {results.Count}개 획득"
+            );
 
             if (results.Count > 0)
             {
