@@ -1,7 +1,8 @@
 using System;
 using UnityEngine;
+using PixelRestaurant.Gacha; // new
 
-public class CurrencyManager : Singleton<CurrencyManager>
+public class CurrencyManager : Singleton<CurrencyManager>, ICurrencyProvider // new , ICurrencyProvider 인터페이스 구현
 {
     private PlayerData data => GameManager.instance.PlayerData;
 
@@ -21,8 +22,6 @@ public class CurrencyManager : Singleton<CurrencyManager>
 
         data.gold += amount;
 
-        Debug.Log($"[CurrencyManager] 골드 획득: +{amount} / 현재 골드: {data.gold}");
-
         OnGoldChanged?.Invoke();
     }
 
@@ -33,18 +32,21 @@ public class CurrencyManager : Singleton<CurrencyManager>
             return false;
 
         if (data.gold < amount)
-        {
-            Debug.Log("[CurrencyManager] 골드가 부족합니다!");
             return false;
-        }
 
         data.gold -= amount;
-
-        Debug.Log($"[CurrencyManager] 골드 소비: -{amount} / 잔여 골드: {data.gold}");
 
         OnGoldChanged?.Invoke();
 
         return true;
+    }
+
+    //new 
+    //현재 골드 조회
+
+    public BigNumber GetCurrentGold()
+    {
+        return data.gold;
     }
 
     //특정 종의 물고기 획득
@@ -59,10 +61,6 @@ public class CurrencyManager : Singleton<CurrencyManager>
             return;
 
         fishArray[species] += count;
-
-#if UNITY_EDITOR || DEVELOPMENT_BUILD
-        Debug.Log($"[CurrencyManager] {grade} / 종 {species} 물고기 획득: +{count} / 현재: {fishArray[species]}");
-#endif
 
         OnFishChanged?.Invoke(grade);
     }
@@ -90,17 +88,12 @@ public class CurrencyManager : Singleton<CurrencyManager>
             return false;
 
         if (fishArray[species] < count)
-        {
-            Debug.Log($"[CurrencyManager] {grade} / 종 {species} 물고기가 부족합니다!");
-
             return false;
-        }
+
         if (FacilityManager.instance.NoUseFishChance < UnityEngine.Random.Range(0f, 1f))    //물고기 안쓰기 확률
         {
             fishArray[species] -= count;
         }
-
-        Debug.Log($"[CurrencyManager] {grade} / 종 {species} 물고기 소비: -{count} / 잔여: {fishArray[species]}");
 
         OnFishChanged?.Invoke(grade);
 
@@ -158,8 +151,6 @@ public class CurrencyManager : Singleton<CurrencyManager>
 
         if (usedCount > 0)
         {
-            Debug.Log($"[CurrencyManager] {grade} 물고기 소비: -{usedCount}마리");
-
             OnFishChanged?.Invoke(grade);
         }
 
