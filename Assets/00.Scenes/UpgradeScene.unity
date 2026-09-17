@@ -421,6 +421,7 @@ GameObject:
   - component: {fileID: 56310705}
   - component: {fileID: 56310704}
   - component: {fileID: 56310703}
+  - component: {fileID: 56310707}
   m_Layer: 5
   m_Name: HealthUpgrade
   m_TagString: Untagged
@@ -548,6 +549,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 56310701}
   m_CullTransparentMesh: 1
+--- !u!114 &56310707
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 56310701}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd496d23da0468344a823e7052bc152e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIButtonAnimation
+  hoverScale: {x: 1.1, y: 1.1, z: 1}
+  pressScale: {x: 0.92, y: 0.92, z: 1}
+  duration: 0.15
+  easeType: 27
 --- !u!1 &80911027
 GameObject:
   m_ObjectHideFlags: 0
@@ -1628,6 +1645,7 @@ GameObject:
   - component: {fileID: 607817118}
   - component: {fileID: 607817117}
   - component: {fileID: 607817116}
+  - component: {fileID: 607817119}
   m_Layer: 5
   m_Name: CombatButton
   m_TagString: Untagged
@@ -1785,6 +1803,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 607817114}
   m_CullTransparentMesh: 1
+--- !u!114 &607817119
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 607817114}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd496d23da0468344a823e7052bc152e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIButtonAnimation
+  hoverScale: {x: 1.1, y: 1.1, z: 1}
+  pressScale: {x: 0.92, y: 0.92, z: 1}
+  duration: 0.15
+  easeType: 27
 --- !u!1 &635684051
 GameObject:
   m_ObjectHideFlags: 0
@@ -3339,6 +3373,7 @@ GameObject:
   - component: {fileID: 1220878643}
   - component: {fileID: 1220878642}
   - component: {fileID: 1220878641}
+  - component: {fileID: 1220878645}
   m_Layer: 5
   m_Name: WeaponUpgrade
   m_TagString: Untagged
@@ -3466,6 +3501,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1220878639}
   m_CullTransparentMesh: 1
+--- !u!114 &1220878645
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1220878639}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd496d23da0468344a823e7052bc152e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIButtonAnimation
+  hoverScale: {x: 1.1, y: 1.1, z: 1}
+  pressScale: {x: 0.92, y: 0.92, z: 1}
+  duration: 0.15
+  easeType: 27
 --- !u!1 &1265793808
 GameObject:
   m_ObjectHideFlags: 0
@@ -4234,6 +4285,7 @@ GameObject:
   - component: {fileID: 1500394773}
   - component: {fileID: 1500394772}
   - component: {fileID: 1500394771}
+  - component: {fileID: 1500394775}
   m_Layer: 5
   m_Name: FishDropUpgrade
   m_TagString: Untagged
@@ -4361,6 +4413,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1500394769}
   m_CullTransparentMesh: 1
+--- !u!114 &1500394775
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1500394769}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd496d23da0468344a823e7052bc152e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIButtonAnimation
+  hoverScale: {x: 1.1, y: 1.1, z: 1}
+  pressScale: {x: 0.92, y: 0.92, z: 1}
+  duration: 0.15
+  easeType: 27
 --- !u!1 &1531567257
 GameObject:
   m_ObjectHideFlags: 0
@@ -4797,6 +4865,7 @@ GameObject:
   - component: {fileID: 1608291106}
   - component: {fileID: 1608291105}
   - component: {fileID: 1608291104}
+  - component: {fileID: 1608291107}
   m_Layer: 5
   m_Name: RestaurantButton
   m_TagString: Untagged
@@ -4954,6 +5023,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1608291102}
   m_CullTransparentMesh: 1
+--- !u!114 &1608291107
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1608291102}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd496d23da0468344a823e7052bc152e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIButtonAnimation
+  hoverScale: {x: 1.1, y: 1.1, z: 1}
+  pressScale: {x: 0.92, y: 0.92, z: 1}
+  duration: 0.15
+  easeType: 27
 --- !u!1001 &1611841562
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5987,6 +6072,7 @@ GameObject:
   - component: {fileID: 2080359005}
   - component: {fileID: 2080359004}
   - component: {fileID: 2080359003}
+  - component: {fileID: 2080359007}
   m_Layer: 5
   m_Name: RestaurantUpgrade
   m_TagString: Untagged
@@ -6114,6 +6200,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2080359001}
   m_CullTransparentMesh: 1
+--- !u!114 &2080359007
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2080359001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd496d23da0468344a823e7052bc152e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIButtonAnimation
+  hoverScale: {x: 1.1, y: 1.1, z: 1}
+  pressScale: {x: 0.92, y: 0.92, z: 1}
+  duration: 0.15
+  easeType: 27
 --- !u!1 &2138428153
 GameObject:
   m_ObjectHideFlags: 0
