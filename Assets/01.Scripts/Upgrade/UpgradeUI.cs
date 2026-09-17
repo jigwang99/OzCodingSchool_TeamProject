@@ -73,7 +73,7 @@ public class UpgradeUI : MonoBehaviour
 
         if (upgradeButtonText != null)
         {
-            upgradeButtonText.text = upgradeData.upgradeName;
+            upgradeButtonText.text = $"[ {upgradeData.upgradeName} ]";
         }
 
         PlayerData playerData = GameManager.instance.PlayerData;
@@ -82,14 +82,14 @@ public class UpgradeUI : MonoBehaviour
 
         if (currentLevel >= upgradeData.maxLevel)
         {
-            upgradeText.text = $"Lv. {currentLevel} / MAX";
+            upgradeText.text = $"최종 Lv. {currentLevel}";
             upgradeButton.interactable = false;
             return;
         }
 
         BigNumber cost = UpgradeManager.instance.GetUpgradeCost(upgradeData, currentLevel);
 
-        upgradeText.text = $"Lv. {currentLevel} / Price: {cost} G";
+        upgradeText.text = $"현재 Lv. {currentLevel} / {upgradeData.maxLevel} \n\n필요 골드 {cost} G";
 
         upgradeButton.interactable = true;
     }

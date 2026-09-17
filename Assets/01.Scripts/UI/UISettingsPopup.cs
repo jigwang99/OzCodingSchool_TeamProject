@@ -26,6 +26,7 @@ public class UISettingsPopup : MonoBehaviour
 
     [Header("Menu Return Button")]
     [SerializeField] private GameObject returnToMenuButton;
+    [SerializeField] private ExitPopup exitPopup;
 
     private void Start()
     {
@@ -71,6 +72,16 @@ public class UISettingsPopup : MonoBehaviour
     {
         if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
         {
+            if (exitPopup == null)
+            {
+                exitPopup = FindFirstObjectByType<ExitPopup>(FindObjectsInactive.Include);
+            }
+
+            if (exitPopup != null && exitPopup.gameObject.activeSelf)
+            {
+                return;
+            }
+
             Toggle();
         }
     }
@@ -160,12 +171,14 @@ public class UISettingsPopup : MonoBehaviour
 
     public void OnClickExitGame()
     {
-        Time.timeScale = 1f;
+        if (exitPopup == null)
+        {
+            exitPopup = FindFirstObjectByType<ExitPopup>(FindObjectsInactive.Include);
+        }
 
-#if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
-#else
-        Application.Quit();
-#endif
+        if (exitPopup != null)
+        {
+            exitPopup.OpenPopup();
+        }
     }
 }
