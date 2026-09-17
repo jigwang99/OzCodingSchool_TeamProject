@@ -13,21 +13,21 @@ public class UpgradeManager : Singleton<UpgradeManager>
     }
 
     // 업그레이드 시도
-    public bool TryUpgrade(UpgradeData data, PlayerData playerData)
+    public void TryUpgrade(UpgradeData data, PlayerData playerData)
     {
         if (data == null || playerData == null || playerData != GameManager.instance.PlayerData)
-            return false;
+            return;
 
         // 결제 시작 시 대상 무기를 고정한다.
         string weaponId = playerData.equippedWeaponId;
 
         if (data.type == UpgradeType.WeaponPower && !playerData.OwnsWeapon(weaponId))
-            return false;
+            return;
 
         int currentLevel = GetCurrentLevel(data, playerData);
 
         if (currentLevel >= data.maxLevel)
-            return false;
+            return;
 
         BigNumber cost = GetUpgradeCost(data, currentLevel);
 
@@ -44,11 +44,7 @@ public class UpgradeManager : Singleton<UpgradeManager>
 
             // 효과 반영
             OnUpgradePurchased?.Invoke(data, updatedLevel);
-
-            return true;
         }
-        else
-            return false;
     }
 
     // 타입별 현재 레벨 조회

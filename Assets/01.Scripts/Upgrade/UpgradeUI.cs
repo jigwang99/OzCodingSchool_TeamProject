@@ -39,9 +39,11 @@ public class UpgradeUI : MonoBehaviour
     {
         PlayerData playerData = GameManager.instance.PlayerData;
 
-        bool isSuccess = UpgradeManager.instance.TryUpgrade(upgradeData, playerData);
+        UpgradeManager.instance.TryUpgrade(upgradeData, playerData);
 
         RefreshUI();
+
+        SaveManager.instance.Save();
     }
 
     private void OnUpgradePurchased(UpgradeData data, int level)
