@@ -68,16 +68,22 @@ public class StageDataList : ScriptableObject
 
     public int Count => stageList != null ? stageList.Count : 0;
 
+    // 표시용 조회는 원본의 문자열만 반환해 적 배치 배열을 복제하지 않는다.
+    public string GetStageName(int stageNumber) => GetSource(stageNumber)?.StageName;
+
+    public StageDropTable GetDropTable(int stageNumber) => GetSource(stageNumber)?.DropTable;
+
     // stageNumber: 1부터 시작 (currentStage와 동일 규약).
-    // 범위를 벗어나면 마지막 스테이지로 고정 (= 최상위 스테이지 무한 반복 규칙 유지).
+    // 범위를 벗어나면 첫/마지막 스테이지로 고정한다.
     // 원본 오염 방지를 위해 항상 Clone을 반환.
-    public StageData GetClone(int stageNumber)
+    public StageData GetClone(int stageNumber) => GetSource(stageNumber)?.Clone();
+
+    private StageData GetSource(int stageNumber)
     {
         if (stageList == null || stageList.Count == 0)
             return null;
 
         int index = Mathf.Clamp(stageNumber - 1, 0, stageList.Count - 1);
-        StageData source = stageList[index];
-        return source != null ? source.Clone() : null;
+        return stageList[index];
     }
 }

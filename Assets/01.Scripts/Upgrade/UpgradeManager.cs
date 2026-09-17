@@ -27,10 +27,7 @@ public class UpgradeManager : Singleton<UpgradeManager>
         int currentLevel = GetCurrentLevel(data, playerData);
 
         if (currentLevel >= data.maxLevel)
-        {
-            Debug.Log($"{data.upgradeName} 최대 레벨 도달!");
             return false;
-        }
 
         BigNumber cost = GetUpgradeCost(data, currentLevel);
 
@@ -48,15 +45,10 @@ public class UpgradeManager : Singleton<UpgradeManager>
             // 효과 반영
             OnUpgradePurchased?.Invoke(data, updatedLevel);
 
-            Debug.Log($"{data.upgradeName} 업그레이드 완료! 레벨: {updatedLevel}, 남은 골드: {playerData.gold}");
-
             return true;
         }
         else
-        {
-            Debug.Log($"{data.upgradeName} 업그레이드 실패");
             return false;
-        }
     }
 
     // 타입별 현재 레벨 조회
@@ -65,6 +57,7 @@ public class UpgradeManager : Singleton<UpgradeManager>
         switch (data.type)
         {
             case UpgradeType.WeaponPower: return playerData.GetWeaponLevel(playerData.equippedWeaponId);
+            case UpgradeType.Health: return playerData.healthLevel;
             case UpgradeType.FishDropRate: return playerData.fishDropRateLevel;
             case UpgradeType.RestaurantExpansion: return playerData.restaurantLevel;
             default: return 1;
@@ -76,6 +69,7 @@ public class UpgradeManager : Singleton<UpgradeManager>
     {
         switch (data.type)
         {
+            case UpgradeType.Health: playerData.healthLevel++; break;
             case UpgradeType.FishDropRate: playerData.fishDropRateLevel++; break;
             case UpgradeType.RestaurantExpansion: playerData.restaurantLevel++; break;
         }

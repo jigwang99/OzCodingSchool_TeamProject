@@ -69,7 +69,9 @@ public class FishCountView : MonoBehaviour
             return;
 
         int count = subscribedCurrencyManager.GetFish(grade, species);
-        label.text = $"{grade} {species + 1}\n{count}";
+        //label.text = $"{grade} {species + 1}\n{count}";
+        BigNumber countDisplay = new BigNumber(count);
+        label.text = $"{grade} {species + 1}\n{countDisplay}";
     }
 
     // 기존 버튼 이벤트가 남아 있는 씬에서도 안전하게 동작하도록 유지한 호환용 진입점.
