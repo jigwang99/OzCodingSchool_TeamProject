@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2a17156e0bb5dd94d82d0e12893f03d3, type: 3}
-  m_Name: HealthData
+  m_Name: ChefData
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
-  id: 103
-  upgradeName: "\uCCB4\uB825 \uAC15\uD654"
-  type: 1
+  id: 202
+  upgradeName: "\uC170\uD504 \uC5C5\uADF8\uB808\uC774\uB4DC"
+  type: 4
   baseCost: 100
   costMultiplier: 1.15
   maxLevel: 999

@@ -60,6 +60,7 @@ public class UpgradeManager : Singleton<UpgradeManager>
             case UpgradeType.Health: return playerData.healthLevel;
             case UpgradeType.FishDropRate: return playerData.fishDropRateLevel;
             case UpgradeType.RestaurantExpansion: return playerData.restaurantLevel;
+            case UpgradeType.ChefCookingSkill: return playerData.chefCatLevel;
             default: return 1;
         }
     }
@@ -72,6 +73,7 @@ public class UpgradeManager : Singleton<UpgradeManager>
             case UpgradeType.Health: playerData.healthLevel++; break;
             case UpgradeType.FishDropRate: playerData.fishDropRateLevel++; break;
             case UpgradeType.RestaurantExpansion: playerData.restaurantLevel++; break;
+            case UpgradeType.ChefCookingSkill: playerData.chefCatLevel++; break;
         }
     }
 }
