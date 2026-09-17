@@ -276,8 +276,8 @@ public class FacilityManager : Singleton<FacilityManager> //시설 업그레이�
 
     public void InfoText()
     {
-        infoText.text = $"Chef : {CookCatNum}\n MakeSpeed : {MakeSpeed}\n GoldBonus : {GoldBonus}\n SpecialChance : {SpecialChance}\n NoUseFishChance : {NoUseFishChance}";
-        chefLevelText.text = $"{300 * (ChefCatLevel)}";
+        infoText.text = $" MakeSpeed : {MakeSpeed}\n GoldBonus : {GoldBonus}\n SpecialChance : {SpecialChance}\n NoUseFishChance : {NoUseFishChance}";
+        chefLevelText.text = $"Chef Level : {(ChefCatLevel)}";
         restaurantBuyText.text = $"{1000 * RestaurantLevel}";
         chefBuyText.text = $"{2000 * (CookCatNum + 1)}";
     }
