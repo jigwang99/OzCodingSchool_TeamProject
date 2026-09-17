@@ -47,15 +47,43 @@ public class FishDropSystem : MonoBehaviour
         if (currentTable == null || enemy == null)
             return;
 
-        float chance = Mathf.Clamp01(currentTable.DropChance * dropChanceMultiplier);
-        if (UnityEngine.Random.value > chance)
-            return; // 이번엔 드롭 없음
+        // 100%를 넘는 강화분도 보상으로 반영한다.
+        // 예: 130% = 1회 확정 + 30% 확률로 1회 추가, 220% = 2회 확정 + 20% 추가.
+        StageDropTable table = currentTable;
+        int dropCount = CalculateDropCount(table.DropChance * dropChanceMultiplier, UnityEngine.Random.value);
+        Vector3 sourcePosition = enemy.transform.position;
 
-        if (!TryRollGrade(currentTable, out StageDropTable.GradeWeight picked))
-            return;
+        for (int i = 0; i < dropCount; i++)
+        {
+            if (!TryRollFish(table, out FishGrade grade, out int species))
+                return;
 
-        int species = RollSpecies(picked);
-        OnFishDropped?.Invoke(new FishDrop(picked.grade, species, 1, enemy.transform.position));
+            // 추가 드롭도 별도로 추첨하여 기존 등급/종별 확률을 유지한다.
+            OnFishDropped?.Invoke(new FishDrop(grade, species, 1, sourcePosition));
+        }
+    }
+
+    internal static int CalculateDropCount(float expectedDrops, float roll)
+    {
+        if (expectedDrops <= 0f || float.IsNaN(expectedDrops) || float.IsInfinity(expectedDrops))
+            return 0;
+
+        int guaranteedDrops = Mathf.FloorToInt(expectedDrops);
+        float extraChance = expectedDrops - guaranteedDrops;
+        // 0%는 난수가 0이어도 지급하지 않고, 정수 배율은 확정 수량만 지급한다.
+        return guaranteedDrops + (roll < extraChance ? 1 : 0);
+    }
+
+    // 전투 드롭과 방치 생산이 같은 등급/종 가중치를 사용한다. 수량 결정은 호출자가 담당한다.
+    internal static bool TryRollFish(StageDropTable table, out FishGrade grade, out int species)
+    {
+        grade = default;
+        species = 0;
+        if (table == null || !TryRollGrade(table, out StageDropTable.GradeWeight picked))
+            return false;
+        grade = picked.grade;
+        species = RollSpecies(picked);
+        return true;
     }
 
     // 등급 가중치 기반 랜덤 추첨 → 선택된 등급 구성 전체를 반환
@@ -77,6 +105,8 @@ public class FishDropSystem : MonoBehaviour
         float roll = UnityEngine.Random.value * total;
         foreach (var gw in weights)
         {
+            if (gw.weight <= 0f) continue;
+            picked = gw;
             roll -= Mathf.Max(0f, gw.weight);
             if (roll <= 0f)
             {
@@ -85,7 +115,7 @@ public class FishDropSystem : MonoBehaviour
             }
         }
 
-        picked = weights[weights.Length - 1];
+        // Random.value가 1이거나 부동소수점 오차가 있어도 마지막 유효 등급을 사용한다.
         return true;
     }
 
@@ -107,12 +137,15 @@ public class FishDropSystem : MonoBehaviour
             return UnityEngine.Random.Range(0, count);
 
         float roll = UnityEngine.Random.value * total;
+        int lastPositive = 0;
         for (int i = 0; i < weights.Length; i++)
         {
+            if (weights[i] <= 0f) continue;
+            lastPositive = i;
             roll -= Mathf.Max(0f, weights[i]);
             if (roll <= 0f)
                 return i;
         }
-        return count - 1;
+        return lastPositive;
     }
 }

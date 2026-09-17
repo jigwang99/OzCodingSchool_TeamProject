@@ -8,6 +8,7 @@ public class EnemyController : BaseUnitController, IPoolable
     [SerializeField] private PoolType enemyType = PoolType.Crab_0001;
     [SerializeField, Min(0f)] private float detectionRange = 4f;
     [SerializeField, Min(0f)] private float despawnDelay = 0f; // 사망 후 반납까지 (연출 있으면 늘리기)
+    [SerializeField] private AudioClip attackSound;
 
     private Rigidbody2D enemyRigidbody;
     private Quaternion initialLocalRotation;
@@ -33,6 +34,18 @@ public class EnemyController : BaseUnitController, IPoolable
         transform.localRotation = initialLocalRotation;
         enemyRigidbody.rotation = transform.eulerAngles.z;
         base.OnEnable();
+        if (Attack != null) Attack.OnAttackHit += PlayAttackSound;
+    }
+
+    protected override void OnDisable()
+    {
+        if (Attack != null) Attack.OnAttackHit -= PlayAttackSound;
+        base.OnDisable();
+    }
+
+    private void PlayAttackSound(IDamageable target, DamageInfo damage)
+    {
+        if (attackSound != null) SoundManager.instance?.PlayEnemyAttackSFX(attackSound);
     }
 
     public void Init() => Revive();

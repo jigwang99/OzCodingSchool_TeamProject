@@ -16,11 +16,11 @@ public class UpgradeUI : MonoBehaviour
     [SerializeField] private GameObject successPopup;
     [SerializeField] private GameObject failPopup;
 
-    //private void Start()
-    //{
-    //    upgradeButton.onClick.AddListener(OnClickUpgrade);
-    //    RefreshUI();
-    //}
+    private void Start()
+    {
+        upgradeButton.onClick.AddListener(OnClickUpgrade);
+        RefreshUI();
+    }
 
     private void OnEnable()
     {
@@ -34,28 +34,28 @@ public class UpgradeUI : MonoBehaviour
             UpgradeManager.instance.OnUpgradePurchased -= OnUpgradePurchased;
     }
 
-    //private void OnDestroy()
-    //{
-    //    upgradeButton.onClick.RemoveListener(OnClickUpgrade);
-    //}
+    private void OnDestroy()
+    {
+        upgradeButton.onClick.RemoveListener(OnClickUpgrade);
+    }
 
-    //private void OnClickUpgrade()
-    //{
-    //    PlayerData playerData = GameManager.instance.PlayerData;
+    private void OnClickUpgrade()
+    {
+        PlayerData playerData = GameManager.instance.PlayerData;
 
-    //    bool isSuccess = UpgradeManager.instance.TryUpgrade(upgradeData, playerData);
+        bool isSuccess = UpgradeManager.instance.TryUpgrade(upgradeData, playerData);
 
-    //    RefreshUI();
+        RefreshUI();
 
-    //    if (isSuccess)
-    //    {
-    //        successPopup.SetActive(true);
-    //    }
-    //    else
-    //    {
-    //        failPopup.SetActive(true);
-    //    }
-    //}
+        if (isSuccess)
+        {
+            successPopup.SetActive(true);
+        }
+        else
+        {
+            failPopup.SetActive(true);
+        }
+    }
 
     private void OnUpgradePurchased(UpgradeData data, int level)
     {
@@ -73,7 +73,7 @@ public class UpgradeUI : MonoBehaviour
 
         if (upgradeButtonText != null)
         {
-            upgradeButtonText.text = upgradeData.upgradeName;
+            upgradeButtonText.text = $"[ {upgradeData.upgradeName} ]";
         }
 
         PlayerData playerData = GameManager.instance.PlayerData;
@@ -82,14 +82,14 @@ public class UpgradeUI : MonoBehaviour
 
         if (currentLevel >= upgradeData.maxLevel)
         {
-            upgradeText.text = $"Lv. {currentLevel} / MAX";
+            upgradeText.text = $"최종 Lv. {currentLevel}";
             upgradeButton.interactable = false;
             return;
         }
 
         BigNumber cost = UpgradeManager.instance.GetUpgradeCost(upgradeData, currentLevel);
 
-        upgradeText.text = $"Lv. {currentLevel} / Price: {cost} G";
+        upgradeText.text = $"현재 Lv. {currentLevel} / {upgradeData.maxLevel} \n\n필요 골드 {cost} G";
 
         upgradeButton.interactable = true;
     }

@@ -13,24 +13,21 @@ public class UpgradeManager : Singleton<UpgradeManager>
     }
 
     // 업그레이드 시도
-    public void TryUpgrade(UpgradeData data, PlayerData playerData)
+    public bool TryUpgrade(UpgradeData data, PlayerData playerData)
     {
         if (data == null || playerData == null || playerData != GameManager.instance.PlayerData)
-            return;
+            return false;
 
-        // 결제 시작 시 대상 무기를 고정한다. 골드 변경 이벤트에서 장비가 바뀌어도 대상이 바뀌지 않는다.
+        // 결제 시작 시 대상 무기를 고정한다.
         string weaponId = playerData.equippedWeaponId;
 
         if (data.type == UpgradeType.WeaponPower && !playerData.OwnsWeapon(weaponId))
-            return;
+            return false;
 
         int currentLevel = GetCurrentLevel(data, playerData);
 
         if (currentLevel >= data.maxLevel)
-        {
-            Debug.Log($"{data.upgradeName} 최대 레벨 도달!");
-            return;
-        }
+            return false;
 
         BigNumber cost = GetUpgradeCost(data, currentLevel);
 
@@ -40,19 +37,18 @@ public class UpgradeManager : Singleton<UpgradeManager>
                 playerData.TryIncreaseWeaponLevel(weaponId, data.maxLevel);
             else
                 SetNextLevel(data, playerData);
+
             int updatedLevel = data.type == UpgradeType.WeaponPower
                 ? playerData.GetWeaponLevel(weaponId)
                 : GetCurrentLevel(data, playerData);
 
-            // 효과 반영은 각 시스템의 바인더가 이 이벤트를 구독해 처리
+            // 효과 반영
             OnUpgradePurchased?.Invoke(data, updatedLevel);
 
-            Debug.Log($"{data.upgradeName} 업그레이드 완료! 레벨: {updatedLevel}, 남은 골드: {playerData.gold}");
+            return true;
         }
         else
-        {
-            Debug.Log($"{data.upgradeName} 업그레이드 실패");
-        }
+            return false;
     }
 
     // 타입별 현재 레벨 조회
@@ -61,6 +57,7 @@ public class UpgradeManager : Singleton<UpgradeManager>
         switch (data.type)
         {
             case UpgradeType.WeaponPower: return playerData.GetWeaponLevel(playerData.equippedWeaponId);
+            case UpgradeType.Health: return playerData.healthLevel;
             case UpgradeType.FishDropRate: return playerData.fishDropRateLevel;
             case UpgradeType.RestaurantExpansion: return playerData.restaurantLevel;
             default: return 1;
@@ -72,6 +69,7 @@ public class UpgradeManager : Singleton<UpgradeManager>
     {
         switch (data.type)
         {
+            case UpgradeType.Health: playerData.healthLevel++; break;
             case UpgradeType.FishDropRate: playerData.fishDropRateLevel++; break;
             case UpgradeType.RestaurantExpansion: playerData.restaurantLevel++; break;
         }

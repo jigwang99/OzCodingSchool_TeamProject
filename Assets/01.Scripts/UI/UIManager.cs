@@ -24,6 +24,12 @@ public class UIManager : MonoBehaviour
     {
         if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
         {
+            ExitPopup exitPopup = FindFirstObjectByType<ExitPopup>(FindObjectsInactive.Include);
+            if (exitPopup != null && exitPopup.gameObject.activeSelf)
+            {
+                return;
+            }
+
             if (settingsPopup != null)
             {
                 settingsPopup.Toggle();

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 // 드롭률 업그레이드 → FishDropSystem 배수 반영 (전투 씬 담당)
 // 로드 직후(OnEnable)와 구매 시(OnUpgradePurchased) 모두 여기서 반영한다.
@@ -42,7 +42,9 @@ public class FishDropUpgradeBinder : MonoBehaviour
     {
         if (fishDropSystem == null || dropRateUpgrade == null)
         {
+#if UNITY_EDITOR
             Debug.LogWarning("[FishDropUpgradeBinder] 참조가 비어 있습니다.");
+#endif
             return;
         }
 
