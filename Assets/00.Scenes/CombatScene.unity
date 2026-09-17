@@ -1312,6 +1312,7 @@ GameObject:
   - component: {fileID: 1543899957}
   - component: {fileID: 1543899958}
   - component: {fileID: 1543899959}
+  - component: {fileID: 1543899960}
   m_Layer: 0
   m_Name: PlayerCat
   m_TagString: Untagged
@@ -1498,6 +1499,19 @@ MonoBehaviour:
   flashDuration: 0.12
   hitOffset: {x: 0, y: 0.5, z: 0}
   damageColor: {r: 1, g: 0.4, b: 0.35, a: 1}
+--- !u!114 &1543899960
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1543899949}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c91a9c9b90244b8cb34f09e9ca79b49b, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerHealthUpgradeBinder
+  healthUpgrade: {fileID: 11400000, guid: 498ef281885e1144e87895b1a9338a94, type: 2}
 --- !u!1 &1762081858
 GameObject:
   m_ObjectHideFlags: 0
