@@ -8,3 +8,9 @@ public interface IUnitView
 {
     void RunAnimation(AnimationTypeEnum ani);
 }
+
+// 타격 후 남은 모션을 끝까지 보여주는 비주얼에서 선택적으로 구현한다.
+public interface IAttackRecoveryView
+{
+    bool IsFinishingAttack { get; }
+}

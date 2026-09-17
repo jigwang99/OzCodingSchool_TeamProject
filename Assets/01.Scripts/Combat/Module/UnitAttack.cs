@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEngine;
 
 public class UnitAttack : MonoBehaviour
@@ -40,7 +40,9 @@ public class UnitAttack : MonoBehaviour
         pendingAnimationIndex = animationIndex;
         pendingDamage = new DamageInfo(attackDamage, gameObject.GetInstanceID());
         nextAttackTime = Time.time + AttackInterval;
-        return window.Begin();
+        int attackId = window.Begin();
+        OnAttackStarted?.Invoke();
+        return attackId;
     }
 
     public bool ResolveAnimationHit(int animationIndex)
@@ -94,6 +96,7 @@ public class UnitAttack : MonoBehaviour
     }
 
     public event Action<IDamageable, DamageInfo> OnAttackHit;
+    public event Action OnAttackStarted;
 
     public bool IsInAttackRange(Transform target)
     {
@@ -109,7 +112,9 @@ public class UnitAttack : MonoBehaviour
         var info = new DamageInfo(attackDamage, gameObject.GetInstanceID(), isCritical);
         target.TakeDamage(info);
         OnAttackHit?.Invoke(target, info);
+#if UNITY_EDITOR
         Debug.Log($"{this.gameObject.name}이 공격");
+#endif
         return true;
     }
 

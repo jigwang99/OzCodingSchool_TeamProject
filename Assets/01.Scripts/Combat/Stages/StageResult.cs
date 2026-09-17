@@ -42,7 +42,7 @@ public readonly struct StageResult
 
             return RetryWasEnabled
                 ? $"현재 스테이지 {NextStageName}에서 재도전합니다."
-                : $"첫 스테이지 {NextStageName}에서 재도전합니다.\n재도전 모드로 전환되었습니다.";
+                : $"챕터 첫 스테이지 {NextStageName}에서 재도전합니다.\n재도전 모드로 전환되었습니다.";
         }
     }
 }

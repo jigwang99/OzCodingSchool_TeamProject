@@ -1,9 +1,14 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class RetryToggleUI : MonoBehaviour
 {
     [SerializeField] private Toggle retryToggle;
+    [SerializeField] private Image switchTrack;
+    [SerializeField] private RectTransform switchThumb;
+    [SerializeField] private Text stateLabel;
+    [SerializeField] private Color onColor = new Color32(88, 153, 126, 255);
+    [SerializeField] private Color offColor = new Color32(142, 130, 115, 255);
 
     private PlayerData boundData; // 구독한 데이터 인스턴스 추적 (정확한 해제용)
 
@@ -12,11 +17,15 @@ public class RetryToggleUI : MonoBehaviour
         if (retryToggle == null)
             retryToggle = GetComponent<Toggle>();
 
+        RefreshVisuals(retryToggle.isOn);
+
         PlayerData data = GameManager.instance != null ? GameManager.instance.PlayerData : null;
         if (data == null)
         {
             // GameManager 초기화보다 UI가 먼저 뜨는 순서 문제. 조용히 먹통되지 않도록 경고.
+#if UNITY_EDITOR
             Debug.LogWarning("[RetryToggleUI] PlayerData가 아직 없습니다. (GameManager 초기화 순서 확인)");
+#endif
             return;
         }
 
@@ -62,5 +71,25 @@ public class RetryToggleUI : MonoBehaviour
 
         // onValueChanged를 발생시키지 않고 표시만 갱신 → OnUserToggled와 무한 왕복 방지
         retryToggle.SetIsOnWithoutNotify(boundData.isRetryEnabled);
+        RefreshVisuals(boundData.isRetryEnabled);
+    }
+
+    private void RefreshVisuals(bool isOn)
+    {
+        if (switchTrack != null)
+            switchTrack.color = isOn ? onColor : offColor;
+        if (switchThumb != null)
+            switchThumb.anchoredPosition = new Vector2(isOn ? 20f : -20f, 0f);
+        if (stateLabel != null)
+        {
+            stateLabel.text = isOn ? "ON" : "OFF";
+            stateLabel.rectTransform.anchoredPosition = new Vector2(isOn ? -12f : 12f, 0f);
+        }
+    }
+
+    private void OnValidate()
+    {
+        if (retryToggle != null)
+            RefreshVisuals(retryToggle.isOn);
     }
 }
