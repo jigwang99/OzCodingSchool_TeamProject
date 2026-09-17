@@ -8,6 +8,7 @@ public class MakeFood : MonoBehaviour
 {
     public Slider makeTimeBar;
     public TextMeshProUGUI makeTimeText;
+    public TextMeshProUGUI makeTimeText2;
     public GameObject[] effects;
 
     Animator animator;
@@ -39,6 +40,7 @@ public class MakeFood : MonoBehaviour
             timer += Time.deltaTime;
             makeTimeBar.value = timer / myFoodMakeSpeed;
             makeTimeText.text = $"{timer:F1} / {myFoodMakeSpeed:F1}";
+            makeTimeText2.text = $"{timer:F1} / {myFoodMakeSpeed:F1}";
 
             yield return null;
         }
@@ -59,6 +61,7 @@ public class MakeFood : MonoBehaviour
         customer.myFood = foodObject;
         makeTimeBar.value = 0;
         makeTimeText.text = $"";
+        makeTimeText2.text = $"";
 
         animator.SetBool("Idle", true);
         animator.SetBool("Cook", false);
