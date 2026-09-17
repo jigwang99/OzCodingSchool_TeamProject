@@ -7,6 +7,7 @@ public class TitleSceneManager : MonoBehaviour
     [SerializeField] private string gameSceneName = "MainScene";
     [SerializeField] private AudioClip startButtonSound;
     [SerializeField] private UISettingsPopup settingsPopup;
+    [SerializeField] private ExitPopup exitPopup;
 
     private void Awake()
     {
@@ -44,10 +45,14 @@ public class TitleSceneManager : MonoBehaviour
 
     public void OnClickExit()
     {
-#if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
-#else
-        Application.Quit();
-#endif
+        if (exitPopup == null)
+        {
+            exitPopup = FindFirstObjectByType<ExitPopup>(FindObjectsInactive.Include);
+        }
+
+        if (exitPopup != null)
+        {
+            exitPopup.OpenPopup();
+        }
     }
 }

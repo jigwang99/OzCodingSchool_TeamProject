@@ -26,8 +26,6 @@ public class SceneTimeTester : MonoBehaviour
                     timeInfoText.text = $"[{currentSceneName}]\n기록 없음 (0초)";
                 }
             }
-
-            Debug.Log($"[{currentSceneName}] 진입! 측정된 비운 시간: {awaySeconds:F1}초");
         }
         else
         {
