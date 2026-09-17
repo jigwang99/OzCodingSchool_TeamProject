@@ -53,7 +53,9 @@ public class WeaponInventoryUI : MonoBehaviour
             modal == null || panel == null || openButton == null || equipButton == null ||
             collectionLabel == null || detailLabel == null || equipLabel == null || slots.Count == 0)
         {
+#if UNITY_EDITOR
             Debug.LogError("[WeaponInventoryUI] 씬의 UI 및 데이터 참조를 연결하세요.", this);
+#endif
             enabled = false;
             return;
         }
@@ -64,7 +66,9 @@ public class WeaponInventoryUI : MonoBehaviour
                 slot.countBackground == null || slot.level == null || slot.count == null || slot.badge == null ||
                 (slot.weapon = equipment.Catalog.Find(slot.weaponId)) == null)
             {
+#if UNITY_EDITOR
                 Debug.LogError("[WeaponInventoryUI] 슬롯의 무기 ID 또는 UI 참조를 확인하세요.", this);
+#endif
                 enabled = false;
                 return;
             }

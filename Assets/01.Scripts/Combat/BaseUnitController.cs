@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 [RequireComponent(typeof(UnitHealth), typeof(UnitMove), typeof(UnitAttack))]
 public abstract class BaseUnitController : MonoBehaviour
@@ -42,7 +42,9 @@ public abstract class BaseUnitController : MonoBehaviour
             unitView = GetComponentInChildren<IUnitView>(true);
 
         if (unitViewSource != null && unitView == null)
+#if UNITY_EDITOR
             Debug.LogWarning($"[{name}] unitViewSource가 IUnitView를 구현하지 않습니다. 연결을 확인하세요.");
+#endif
 
         StateMachine = new StateMachine();
         IdleState = new UnitIdleState(this);

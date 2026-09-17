@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -57,7 +57,9 @@ public class StageManager : MonoBehaviour
     {
         if (combatManager == null || enemySpawner == null || playerCat == null || StageCount == 0)
         {
+#if UNITY_EDITOR
             Debug.LogError("[StageManager] 참조가 비어 있습니다.");
+#endif
             return;
         }
 
@@ -129,7 +131,9 @@ public class StageManager : MonoBehaviour
         StageData data = stageDataList?.GetClone(CurrentStage);
         if (!CombatObjectPoolManager.instance.CanPrepare(data))
         {
+#if UNITY_EDITOR
             Debug.LogError("[StageManager] 스테이지 데이터 또는 적 프리팹 등록을 확인하세요.", this);
+#endif
             return;
         }
         isChangingStage = true;

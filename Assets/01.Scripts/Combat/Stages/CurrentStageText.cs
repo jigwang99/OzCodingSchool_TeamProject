@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using TMPro;
 
 public class CurrentStageText : MonoBehaviour
@@ -17,7 +17,9 @@ public class CurrentStageText : MonoBehaviour
         PlayerData data = GameManager.instance != null ? GameManager.instance.PlayerData : null;
         if (data == null)
         {
+#if UNITY_EDITOR
             Debug.LogWarning("[CurrentStageText] PlayerData가 아직 없습니다. (GameManager 초기화 순서 확인)");
+#endif
             return;
         }
 

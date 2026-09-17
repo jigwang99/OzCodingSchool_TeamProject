@@ -34,7 +34,9 @@ public class IdleFishRewardUI : MonoBehaviour
         if (modal == null || panel == null || timeLabel == null || totalLabel == null ||
             claimButton == null || rewardSlots == null || rewardSlots.Length != 15 || footer == null)
         {
+#if UNITY_EDITOR
             Debug.LogError("[IdleFishRewardUI] 미접속 보상 UI 참조를 확인하세요.", this);
+#endif
             enabled = false;
             return;
         }
@@ -44,7 +46,9 @@ public class IdleFishRewardUI : MonoBehaviour
             if (rewardSlots[i]?.root == null || rewardSlots[i].countLabel == null)
             {
                 enabled = false;
+#if UNITY_EDITOR
                 Debug.LogError("[IdleFishRewardUI] 물고기 슬롯 참조를 확인하세요.", this);
+#endif
                 return;
             }
             slotPositions[i] = rewardSlots[i].root.anchoredPosition;
@@ -64,7 +68,9 @@ public class IdleFishRewardUI : MonoBehaviour
         manager = GameManager.instance.GetComponent<IdleFishManager>();
         if (manager == null)
         {
+#if UNITY_EDITOR
             Debug.LogError("[IdleFishRewardUI] IdleFishManager를 찾을 수 없습니다.", this);
+#endif
             return;
         }
         manager.OnPendingRewardsChanged += Refresh;

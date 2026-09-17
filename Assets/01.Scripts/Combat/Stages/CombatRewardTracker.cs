@@ -20,7 +20,9 @@ public class CombatRewardTracker : MonoBehaviour
     {
         if (stageManager == null || fishDropSystem == null)
         {
+#if UNITY_EDITOR
             Debug.LogError("[CombatRewardTracker] StageManager와 FishDropSystem을 연결하세요.", this);
+#endif
             return;
         }
 

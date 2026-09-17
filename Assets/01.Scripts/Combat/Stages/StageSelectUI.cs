@@ -38,7 +38,9 @@ public class StageSelectUI : MonoBehaviour
         if (stageManager == null || stageManager.StageCount == 0 || modal == null ||
             panel == null || openButton == null || hint == null || stages == null || stages.Count == 0)
         {
+#if UNITY_EDITOR
             Debug.LogError("[StageSelectUI] 스테이지 데이터와 씬의 UI 참조를 확인하세요.", this);
+#endif
             enabled = false;
             return;
         }
@@ -49,7 +51,9 @@ public class StageSelectUI : MonoBehaviour
             if (stage == null || stage.button == null || stage.button.image == null || stage.label == null ||
                 stage.stageNumber < 1 || stage.stageNumber > stageManager.StageCount || !numbers.Add(stage.stageNumber))
             {
+#if UNITY_EDITOR
                 Debug.LogError("[StageSelectUI] 버튼 참조와 중복되지 않는 스테이지 번호를 확인하세요.", this);
+#endif
                 enabled = false;
                 return;
             }

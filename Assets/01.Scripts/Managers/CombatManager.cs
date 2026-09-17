@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -39,7 +39,9 @@ public class CombatManager : MonoBehaviour
 
         if (aliveEnemyCount <= 0)
         {
+#if UNITY_EDITOR
             Debug.LogWarning("[CombatManager] 스폰된 적이 없어 판정을 시작하지 않습니다. (스폰 위치 확인)");
+#endif
             return;
         }
 

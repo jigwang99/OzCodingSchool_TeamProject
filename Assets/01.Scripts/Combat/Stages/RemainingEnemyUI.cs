@@ -12,7 +12,9 @@ public class RemainingEnemyUI : MonoBehaviour
     {
         if (combatManager == null || countLabel == null)
         {
+#if UNITY_EDITOR
             Debug.LogError("[RemainingEnemyUI] CombatManager와 수량 텍스트를 연결하세요.", this);
+#endif
             enabled = false;
             return;
         }

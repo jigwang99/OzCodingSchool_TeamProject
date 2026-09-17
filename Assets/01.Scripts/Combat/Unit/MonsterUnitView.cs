@@ -23,9 +23,11 @@ public class MonsterUnitView : MonoBehaviour, IUnitView
     [Header("전환")]
     [SerializeField, Min(0f)] private float crossFade = 0.1f; // 0이면 즉시 전환(Play), >0이면 CrossFade
 
+#if UNITY_EDITOR
     [Header("디버그")]
     [Tooltip("켜면 시작 시 이 몬스터가 가진 클립 이름을 콘솔에 전부 출력한다. (매핑 값 채울 때 사용)")]
     [SerializeField] private bool logClipNames = false;
+#endif
 
     private Animator animator;
     private Transform[] poseTransforms;
@@ -39,12 +41,14 @@ public class MonsterUnitView : MonoBehaviour, IUnitView
     {
         EnsureInitialized();
 
+#if UNITY_EDITOR
         if (logClipNames)
         {
             var names = monster.GetAnimationNames();
             Debug.Log($"[MonsterUnitView] {name} 클립 목록: " +
                       (names != null && names.Count > 0 ? string.Join(", ", names) : "(없음)"));
         }
+#endif
     }
 
     private void OnEnable() => ResetPose();

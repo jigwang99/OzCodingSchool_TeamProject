@@ -31,6 +31,10 @@ public class CatUnitView : MonoBehaviour, IUnitView, IAttackRecoveryView
     {
         if (controller == null)
             controller = GetComponent<UnitController>();
+        // 전투 장비는 PlayerWeaponEquipment와 프리팹이 관리한다.
+        // 에셋의 Start가 Resources에서 무작위 검/방패를 찾지 않도록 막는다.
+        // 비활성 컴포넌트의 RunAnimation 메서드는 계속 직접 호출할 수 있다.
+        controller.enabled = false;
         unitAttack = GetComponentInParent<UnitAttack>();
         animator = GetComponent<Animator>();
     }

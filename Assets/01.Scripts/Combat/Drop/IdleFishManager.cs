@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Globalization;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -77,7 +77,9 @@ public class IdleFishManager : MonoBehaviour
         stageDataList = Resources.Load<StageDataList>("Combat/StageDataList");
         if (stageDataList == null || stageDataList.Count == 0)
         {
+#if UNITY_EDITOR
             Debug.LogError("[IdleFishManager] 스테이지 보상 테이블을 찾을 수 없습니다.", this);
+#endif
             enabled = false;
             return;
         }

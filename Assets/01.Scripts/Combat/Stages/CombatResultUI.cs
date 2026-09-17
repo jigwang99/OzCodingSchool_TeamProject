@@ -52,7 +52,9 @@ public class CombatResultUI : MonoBehaviour
             stageLabel == null || titleLabel == null || messageLabel == null || rewardLabel == null ||
             countdownLabel == null || accent == null || progress == null)
         {
+#if UNITY_EDITOR
             Debug.LogError("[CombatResultUI] 결과 데이터와 씬에 배치된 UI 참조를 연결하세요.", this);
+#endif
             enabled = false;
             return;
         }

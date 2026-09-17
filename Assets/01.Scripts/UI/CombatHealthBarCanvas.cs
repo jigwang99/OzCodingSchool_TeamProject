@@ -33,7 +33,9 @@ public class CombatHealthBarCanvas : MonoBehaviour
         if (targetCamera == null) targetCamera = Camera.main;
         if (targetCamera == null || stageManager == null || enemySpawner == null || player == null || barPrefab == null)
         {
+#if UNITY_EDITOR
             Debug.LogError("[CombatHealthBarCanvas] 카메라, 전투 참조와 체력바 프리팹을 연결하세요.", this);
+#endif
             enabled = false;
         }
     }
