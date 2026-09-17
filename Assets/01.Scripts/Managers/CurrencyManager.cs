@@ -1,7 +1,8 @@
 using System;
 using UnityEngine;
+using PixelRestaurant.Gacha; // new
 
-public class CurrencyManager : Singleton<CurrencyManager>
+public class CurrencyManager : Singleton<CurrencyManager>, ICurrencyProvider // new , ICurrencyProvider 인터페이스 구현
 {
     private PlayerData data => GameManager.instance.PlayerData;
 
@@ -38,6 +39,14 @@ public class CurrencyManager : Singleton<CurrencyManager>
         OnGoldChanged?.Invoke();
 
         return true;
+    }
+
+    //new 
+    //현재 골드 조회
+
+    public BigNumber GetCurrentGold()
+    {
+        return data.gold;
     }
 
     //특정 종의 물고기 획득
