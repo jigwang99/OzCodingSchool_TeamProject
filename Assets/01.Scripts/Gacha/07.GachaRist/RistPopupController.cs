@@ -116,9 +116,6 @@ namespace PixelRestaurant.Gacha
 
             if (GachaManager.Instance == null)
             {
-                Debug.LogError(
-                    "[Rist] GachaManager를 찾을 수 없습니다."
-                );
 
                 return;
             }
@@ -128,9 +125,6 @@ namespace PixelRestaurant.Gacha
 
             if (poolData == null)
             {
-                Debug.LogWarning(
-                    $"[Rist] {group} 가챠 풀이 없습니다."
-                );
 
                 return;
             }
@@ -171,19 +165,12 @@ namespace PixelRestaurant.Gacha
         {
             if (content == null)
             {
-                Debug.LogError(
-                    "[Rist] Content가 연결되지 않았습니다."
-                );
 
                 return;
             }
 
             if (itemCardPrefab == null)
             {
-                Debug.LogError(
-                    "[Rist] RistItemCard Prefab이 연결되지 않았습니다."
-                );
-
                 return;
             }
 

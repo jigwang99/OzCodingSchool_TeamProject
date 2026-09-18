@@ -29,9 +29,7 @@ namespace PixelRestaurant.Gacha
 
                     if (_instance == null)
                     {
-                        Debug.LogError(
-                            "[가챠 스탯] GachaStatManager를 찾을 수 없습니다!"
-                        );
+                       
                     }
                 }
 
@@ -68,9 +66,7 @@ namespace PixelRestaurant.Gacha
 
             DontDestroyOnLoad(gameObject);
 
-            Debug.Log(
-                "[가챠 스탯] GachaStatManager 초기화 완료"
-            );
+         
         }
 
         // ============================================
@@ -118,11 +114,7 @@ namespace PixelRestaurant.Gacha
                 }
             }
 
-            Debug.Log(
-                $"[가챠 스탯] 적용 완료 - " +
-                $"가구 골드 +{_furnitureGoldBonusFlat}, " +
-                $"레시피 골드 +{_recipeGoldBonusRate}%"
-            );
+           
         }
 
         // ============================================
@@ -142,18 +134,13 @@ namespace PixelRestaurant.Gacha
 
             if (GachaInventory.Instance == null)
             {
-                Debug.LogWarning(
-                    "[가챠 스탯] GachaInventory가 없습니다."
-                );
+               
 
                 return;
             }
 
             if (GachaManager.Instance == null)
             {
-                Debug.LogWarning(
-                    "[가챠 스탯] GachaManager가 없습니다."
-                );
 
                 return;
             }
@@ -204,11 +191,6 @@ namespace PixelRestaurant.Gacha
                 }
             }
 
-            Debug.Log(
-                $"[가챠 스탯] 인벤토리 기준 재계산 완료 - " +
-                $"가구 골드 +{_furnitureGoldBonusFlat}, " +
-                $"레시피 골드 +{_recipeGoldBonusRate}%"
-            );
         }
 
         // ============================================
@@ -280,9 +262,7 @@ namespace PixelRestaurant.Gacha
             _furnitureGoldBonusFlat = 0;
             _recipeGoldBonusRate = 0f;
 
-            Debug.Log(
-                "[가챠 스탯] 스탯 초기화 완료"
-            );
+           
         }
     }
 }

@@ -22,6 +22,7 @@ MonoBehaviour:
     grade: 1
     weight: 1
     itemIcon: {fileID: 0}
+    linkedWeaponId: swords_0
     stats:
       attackPower: 1
       goldBonusFlat: 0
@@ -29,10 +30,11 @@ MonoBehaviour:
   - itemId: Test2
     itemName: 2
     group: 0
-    rarity: 1
+    rarity: 0
     grade: 2
     weight: 1
     itemIcon: {fileID: 0}
+    linkedWeaponId: swords_1
     stats:
       attackPower: 2
       goldBonusFlat: 0
@@ -40,10 +42,11 @@ MonoBehaviour:
   - itemId: Test3
     itemName: 3
     group: 0
-    rarity: 2
+    rarity: 0
     grade: 3
     weight: 1
     itemIcon: {fileID: 0}
+    linkedWeaponId: swords_2
     stats:
       attackPower: 3
       goldBonusFlat: 0
@@ -51,10 +54,11 @@ MonoBehaviour:
   - itemId: Test4
     itemName: 4
     group: 0
-    rarity: 3
+    rarity: 0
     grade: 4
     weight: 1
     itemIcon: {fileID: 0}
+    linkedWeaponId: swords_3
     stats:
       attackPower: 4
       goldBonusFlat: 0
@@ -62,10 +66,11 @@ MonoBehaviour:
   - itemId: Test5
     itemName: 5
     group: 0
-    rarity: 3
-    grade: 5
+    rarity: 1
+    grade: 2
     weight: 1
     itemIcon: {fileID: 0}
+    linkedWeaponId: swords_4
     stats:
       attackPower: 5
       goldBonusFlat: 0
@@ -73,10 +78,11 @@ MonoBehaviour:
   - itemId: Test6
     itemName: 6
     group: 0
-    rarity: 3
+    rarity: 1
     grade: 6
     weight: 1
     itemIcon: {fileID: 0}
+    linkedWeaponId: swords_5
     stats:
       attackPower: 6
       goldBonusFlat: 0
@@ -84,10 +90,95 @@ MonoBehaviour:
   - itemId: Test7
     itemName: 7
     group: 0
-    rarity: 3
+    rarity: 2
     grade: 6
     weight: 1
     itemIcon: {fileID: 0}
+    linkedWeaponId: swords_6
+    stats:
+      attackPower: 7
+      goldBonusFlat: 0
+      goldBonusRate: 0
+  - itemId: Test8
+    itemName: 8
+    group: 0
+    rarity: 2
+    grade: 6
+    weight: 2
+    itemIcon: {fileID: 0}
+    linkedWeaponId: swords_7
+    stats:
+      attackPower: 7
+      goldBonusFlat: 0
+      goldBonusRate: 0
+  - itemId: Test9
+    itemName: 9
+    group: 0
+    rarity: 2
+    grade: 6
+    weight: 2
+    itemIcon: {fileID: 0}
+    linkedWeaponId: swords_8
+    stats:
+      attackPower: 7
+      goldBonusFlat: 0
+      goldBonusRate: 0
+  - itemId: Test10
+    itemName: 10
+    group: 0
+    rarity: 3
+    grade: 6
+    weight: 2
+    itemIcon: {fileID: 0}
+    linkedWeaponId: swords_9
+    stats:
+      attackPower: 7
+      goldBonusFlat: 0
+      goldBonusRate: 0
+  - itemId: Test11
+    itemName: 11
+    group: 0
+    rarity: 3
+    grade: 6
+    weight: 2
+    itemIcon: {fileID: 0}
+    linkedWeaponId: swords_10
+    stats:
+      attackPower: 7
+      goldBonusFlat: 0
+      goldBonusRate: 0
+  - itemId: Test12
+    itemName: 12
+    group: 0
+    rarity: 3
+    grade: 6
+    weight: 2
+    itemIcon: {fileID: 0}
+    linkedWeaponId: swords_11
+    stats:
+      attackPower: 7
+      goldBonusFlat: 0
+      goldBonusRate: 0
+  - itemId: Test13
+    itemName: 13
+    group: 0
+    rarity: 3
+    grade: 6
+    weight: 2
+    itemIcon: {fileID: 0}
+    linkedWeaponId: swords_12
+    stats:
+      attackPower: 7
+      goldBonusFlat: 0
+      goldBonusRate: 0
+  - itemId: Test14
+    itemName: 14
+    group: 0
+    rarity: 3
+    grade: 6
+    weight: 2
+    itemIcon: {fileID: 0}
+    linkedWeaponId: swords_13
     stats:
       attackPower: 7
       goldBonusFlat: 0

@@ -48,23 +48,22 @@ namespace PixelRestaurant.Gacha
         private void ValidateItemId()
         {
             if (string.IsNullOrEmpty(itemId))
-                Debug.LogError($"[{itemName}] itemId는 필수입니다!");
+             
 
             if (grade < 1 || grade > 4)
-                Debug.LogError($"[{itemName}] grade는 1~4 사이여야 합니다!");
+        
 
             if (weight <= 0)
-                Debug.LogWarning($"[{itemName}] weight는 0보다 커야 합니다!");
+            
 
             if (itemIcon == null)
-                Debug.LogWarning($"[{itemName}] 아이콘이 등록되지 않았습니다!");
+             
 
             if (group == GachaGroup.Weapon &&
                 string.IsNullOrEmpty(linkedWeaponId))
             {
-                Debug.LogWarning(
-                    $"[{itemName}] 실제 무기 연결 ID(Linked Weapon Id)가 없습니다!"
-                );
+         
+             
             }
         }
 #endif

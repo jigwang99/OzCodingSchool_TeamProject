@@ -49,10 +49,7 @@ namespace PixelRestaurant.Gacha
         {
             if (weaponEquipment == null)
             {
-                Debug.LogError(
-                    "[°¡Ã­ ¹«±â Adapter] " +
-                    "PlayerWeaponEquipment°¡ ¾ø½À´Ï´Ù."
-                );
+              
 
                 return;
             }
@@ -76,18 +73,9 @@ namespace PixelRestaurant.Gacha
 
                 if (success)
                 {
-                    Debug.Log(
-                        $"[°¡Ã­ ¹«±â Adapter] " +
-                        $"{item.ItemName} È¹µæ ¿Ï·á"
-                    );
+                   
                 }
-                else
-                {
-                    Debug.LogWarning(
-                        $"[°¡Ã­ ¹«±â Adapter] " +
-                        $"{item.ItemId} È¹µæ ½ÇÆÐ"
-                    );
-                }
+              
             }
         }
     }

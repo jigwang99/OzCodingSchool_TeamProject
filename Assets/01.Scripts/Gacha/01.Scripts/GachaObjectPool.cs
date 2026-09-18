@@ -38,7 +38,6 @@ namespace PixelRestaurant.Gacha
         {
             if (prefab == null)
             {
-                Debug.LogError($"[{poolName}] prefab이 할당되지 않았습니다!");
                 return;
             }
 
@@ -50,7 +49,6 @@ namespace PixelRestaurant.Gacha
                 CreateNewObject();
             }
 
-            Debug.Log($"[{poolName}] 초기화 완료: {initialPoolSize}개 생성");
         }
 
         /// <summary>
@@ -82,7 +80,6 @@ namespace PixelRestaurant.Gacha
                 // 풀이 부족하면 새로 생성
                 CreateNewObject();
                 obj = _availableObjects.Dequeue();
-                Debug.LogWarning($"[{poolName}] 부족으로 새로운 객체 생성");
             }
 
             obj.SetActive(true);
@@ -112,15 +109,7 @@ namespace PixelRestaurant.Gacha
 
             _availableObjects.Clear();
             _allObjects.Clear();
-            Debug.Log($"[{poolName}] 초기화됨");
         }
 
-        /// <summary>
-        /// 현재 풀 상태 출력 (디버그용)
-        /// </summary>
-        public void DebugPrintStatus()
-        {
-            Debug.Log($"[{poolName}] 상태 - 사용 가능: {_availableObjects.Count}, 전체: {_allObjects.Count}");
-        }
     }
 }
