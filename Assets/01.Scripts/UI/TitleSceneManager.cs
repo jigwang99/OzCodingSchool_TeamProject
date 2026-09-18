@@ -1,45 +1,57 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.InputSystem;
 
 public class TitleSceneManager : MonoBehaviour
 {
-    [SerializeField] private string gameSceneName = "MainScene";
+    [SerializeField] private string gameSceneName = "BusinessScene";
     [SerializeField] private AudioClip startButtonSound;
+    [SerializeField] private LoadingScreen loadingScreen;
     [SerializeField] private UISettingsPopup settingsPopup;
     [SerializeField] private ExitPopup exitPopup;
 
     private void Awake()
     {
+        Time.timeScale = 1f;
+        AudioListener.pause = false;
+
+        if (loadingScreen == null)
+        {
+            loadingScreen = FindAnyObjectByType<LoadingScreen>(FindObjectsInactive.Include);
+        }
+
         if (settingsPopup == null)
         {
-            settingsPopup = FindObjectOfType<UISettingsPopup>(true);
+            settingsPopup = FindAnyObjectByType<UISettingsPopup>(FindObjectsInactive.Include);
         }
     }
+
     public void OnClickStart()
     {
-        SceneManager.LoadScene(gameSceneName);
-
         if (SoundManager.instance != null && startButtonSound != null)
         {
             SoundManager.instance.PlaySFX(startButtonSound);
         }
 
+        if (loadingScreen != null)
+        {
+            loadingScreen.LoadScene(gameSceneName);
+        }
+        else
+        {
+            SceneManager.LoadScene(gameSceneName);
+        }
     }
 
     public void OnClickSettings()
     {
+        if (settingsPopup == null)
+        {
+            settingsPopup = FindAnyObjectByType<UISettingsPopup>(FindObjectsInactive.Include);
+        }
+
         if (settingsPopup != null)
         {
             settingsPopup.gameObject.SetActive(true);
-        }
-        else
-        {
-            settingsPopup = FindObjectOfType<UISettingsPopup>(true);
-            if (settingsPopup != null)
-            {
-                settingsPopup.gameObject.SetActive(true);
-            }
         }
     }
 
@@ -47,7 +59,7 @@ public class TitleSceneManager : MonoBehaviour
     {
         if (exitPopup == null)
         {
-            exitPopup = FindFirstObjectByType<ExitPopup>(FindObjectsInactive.Include);
+            exitPopup = FindAnyObjectByType<ExitPopup>(FindObjectsInactive.Include);
         }
 
         if (exitPopup != null)
