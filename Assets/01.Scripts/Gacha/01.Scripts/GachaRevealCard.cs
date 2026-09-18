@@ -14,6 +14,7 @@ namespace PixelRestaurant.Gacha
     {
         [Header("Card")]
         [SerializeField] private Image cardImage;
+        [SerializeField] private RectTransform cardScaleTarget;
         [SerializeField] private Image hoverOutline;
 
         [Header("Back / Front")]
@@ -47,6 +48,19 @@ namespace PixelRestaurant.Gacha
         {
             _rectTransform = GetComponent<RectTransform>();
 
+            if (cardScaleTarget == null && cardImage != null)
+                cardScaleTarget = cardImage.rectTransform;
+
+            if (cardScaleTarget != null &&
+                cardScaleTarget != transform && !cardScaleTarget.IsChildOf(transform))
+            {
+                Debug.LogError("Card Scale Target must belong to this card.", this);
+                cardScaleTarget = null;
+            }
+
+            if (cardScaleTarget != null)
+                _originalScale = cardScaleTarget.localScale;
+
             _canvasGroup = GetComponent<CanvasGroup>();
 
             if (_canvasGroup == null)
@@ -79,7 +93,11 @@ namespace PixelRestaurant.Gacha
             _isMoving = false;
 
             _originalPosition = _rectTransform.anchoredPosition;
-            _originalScale = _rectTransform.localScale;
+            if (cardScaleTarget != null)
+            {
+                cardScaleTarget.DOKill();
+                cardScaleTarget.localScale = _originalScale;
+            }
 
             _canvasGroup.alpha = 1f;
 
@@ -135,20 +153,20 @@ namespace PixelRestaurant.Gacha
 
             _isRevealed = true;
 
-            // 클릭한 순간 약간 커졌다가 원래 크기로
-            transform.DOScale(
-                _originalScale * 1.08f,
-                0.12f
-            )
-            .SetEase(Ease.OutQuad)
-            .OnComplete(() =>
-            {
-                transform.DOScale(
-                    _originalScale,
-                    0.18f
-                )
-                .SetEase(Ease.OutBack);
-            });
+            //// 클릭한 순간 약간 커졌다가 원래 크기로
+            //if (cardScaleTarget != null) cardScaleTarget.DOScale(
+            //    _originalScale * 1.08f,
+            //    0.12f
+            //)
+            //.SetEase(Ease.OutQuad)
+            //.OnComplete(() =>
+            //{
+            //    cardScaleTarget.DOScale(
+            //        _originalScale,
+            //        0.18f
+            //    )
+            //    .SetEase(Ease.OutBack);
+            //});
 
             // 뒷면을 서서히 어둡게
             if (cardImage != null)
@@ -254,9 +272,6 @@ namespace PixelRestaurant.Gacha
 
             if (inventoryTarget == null)
             {
-                Debug.LogWarning(
-                    "[GachaRevealCard] inventoryTarget이 없습니다."
-                );
 
                 Disappear();
                 return;
@@ -274,8 +289,8 @@ namespace PixelRestaurant.Gacha
             DG.Tweening.Sequence sequence = DOTween.Sequence();
 
             // 카드 축소
-            sequence.Append(
-                transform.DOScale(
+            if (cardScaleTarget != null) sequence.Append(
+                cardScaleTarget.DOScale(
                     _originalScale * 0.35f,
                     0.35f
                 )

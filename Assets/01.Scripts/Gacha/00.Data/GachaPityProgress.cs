@@ -32,7 +32,6 @@ namespace PixelRestaurant.Gacha
             totalPullCount++;
             currentLevelPullCount++;
 
-            Debug.Log($"[천장] 뽑기 횟수 증가 → 누적: {totalPullCount}, 현재 레벨: {currentLevelPullCount}");
         }
 
         /// <summary>
@@ -45,7 +44,6 @@ namespace PixelRestaurant.Gacha
             currentLevelPullCount = 0;
             currentPityLevel++;
 
-            Debug.Log($"[천장 레벨업] Level {currentPityLevel}로 상승 (누적: {totalPullCount}회)");
         }
 
         /// <summary>
@@ -57,7 +55,6 @@ namespace PixelRestaurant.Gacha
             currentLevelPullCount = 0;
             currentPityLevel = 1;
 
-            Debug.Log("[천장] 진행도 리셋됨");
         }
 
         /// <summary>
@@ -65,10 +62,7 @@ namespace PixelRestaurant.Gacha
         /// </summary>
         public void DebugPrint(string groupName)
         {
-            Debug.Log($"[{groupName} 천장 진행도]" +
-                $"\n  - 누적: {totalPullCount}회" +
-                $"\n  - 현재 레벨: {currentPityLevel}" +
-                $"\n  - 현재 진행: {currentLevelPullCount}회");
+            
         }
     }
 }

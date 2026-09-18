@@ -65,9 +65,8 @@ namespace PixelRestaurant.Gacha
             RegisterTabEvents();
             RegisterTestEvents();
 
-            Debug.Log(
-                "[인벤토리 UI] 초기화 완료"
-            );
+            
+
         }
         private void RegisterTestEvents()
         {
@@ -129,9 +128,7 @@ namespace PixelRestaurant.Gacha
 
             if (inventoryPopup == null)
             {
-                Debug.LogError(
-                    "[인벤토리 UI] inventoryPopup이 설정되지 않았습니다."
-                );
+              
 
                 return;
             }
@@ -140,9 +137,7 @@ namespace PixelRestaurant.Gacha
 
             RefreshInventoryDisplay();
 
-            Debug.Log(
-                "[인벤토리 UI] 인벤토리 팝업 열림"
-            );
+        
         }
 
         // =========================================================
@@ -156,9 +151,6 @@ namespace PixelRestaurant.Gacha
 
             inventoryPopup.SetActive(false);
 
-            Debug.Log(
-                "[인벤토리 UI] 인벤토리 팝업 닫힘"
-            );
         }
 
         // =========================================================
@@ -182,9 +174,6 @@ namespace PixelRestaurant.Gacha
 
             RefreshInventoryDisplay();
 
-            Debug.Log(
-                $"[인벤토리 UI] 탭 선택: {group}"
-            );
         }
 
         // =========================================================
@@ -198,19 +187,13 @@ namespace PixelRestaurant.Gacha
 
             if (inventory == null)
             {
-                Debug.LogError(
-                    "[인벤토리 UI] GachaInventory를 찾을 수 없습니다."
-                );
+               
 
                 return;
             }
 
             if (GachaManager.Instance == null)
             {
-                Debug.LogError(
-                    "[인벤토리 UI] GachaManager를 찾을 수 없습니다."
-                );
-
                 return;
             }
 
@@ -221,9 +204,7 @@ namespace PixelRestaurant.Gacha
 
             if (poolData == null)
             {
-                Debug.LogError(
-                    $"[인벤토리 UI] {_currentTab} Pool을 찾을 수 없습니다."
-                );
+                
 
                 return;
             }
@@ -284,9 +265,6 @@ namespace PixelRestaurant.Gacha
 
             if (itemIds.Count == 0)
             {
-                Debug.Log(
-                    $"[인벤토리 UI] {_currentTab} 아이템이 없습니다."
-                );
 
                 return;
             }
@@ -304,9 +282,6 @@ namespace PixelRestaurant.Gacha
                 );
             }
 
-            Debug.Log(
-                $"[인벤토리 UI] {itemIds.Count}개 아이템 표시"
-            );
         }
 
         // =========================================================
@@ -340,18 +315,11 @@ namespace PixelRestaurant.Gacha
         {
             if (itemCardPrefab == null)
             {
-                Debug.LogError(
-                    "[인벤토리 UI] itemCardPrefab이 설정되지 않았습니다."
-                );
-
                 return;
             }
 
             if (inventoryGrid == null)
             {
-                Debug.LogError(
-                    "[인벤토리 UI] inventoryGrid가 설정되지 않았습니다."
-                );
 
                 return;
             }
@@ -367,9 +335,6 @@ namespace PixelRestaurant.Gacha
 
             if (item == null)
             {
-                Debug.LogError(
-                    $"[인벤토리 UI] {itemId} 아이템을 찾을 수 없습니다."
-                );
 
                 return;
             }
@@ -428,13 +393,6 @@ namespace PixelRestaurant.Gacha
                     count
                 );
             }
-            else
-            {
-                Debug.LogError(
-                    $"[인벤토리 UI] {card.name}에 " +
-                    "GachaResultItemDisplay가 없습니다."
-                );
-            }
 
             // -----------------------------------------------------
             // NEW 버튼
@@ -489,10 +447,6 @@ namespace PixelRestaurant.Gacha
                     newBadgeTransform.gameObject
                         .SetActive(false);
 
-                    Debug.Log(
-                        $"[인벤토리 UI] " +
-                        $"{item.ItemName} NEW 표시 제거"
-                    );
                 }
             );
         }
@@ -567,9 +521,6 @@ namespace PixelRestaurant.Gacha
 
             if (inventory == null)
             {
-                Debug.LogError(
-                    "[인벤토리 UI] GachaInventory를 찾을 수 없습니다."
-                );
 
                 return;
             }
@@ -586,9 +537,6 @@ namespace PixelRestaurant.Gacha
                 SaveManager.instance.Save();
             }
 
-            Debug.Log(
-                "[인벤토리 UI] 가챠 인벤토리 초기화 완료"
-            );
         }
     }
 

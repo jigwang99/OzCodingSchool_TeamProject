@@ -26,7 +26,6 @@ namespace PixelRestaurant.Gacha
                     _instance = FindObjectOfType<GachaPitySystem>();
                     if (_instance == null)
                     {
-                        Debug.LogError("[천장 시스템] GachaPitySystem을 찾을 수 없습니다!");
                     }
                 }
                 return _instance;
@@ -45,7 +44,6 @@ namespace PixelRestaurant.Gacha
             DontDestroyOnLoad(gameObject);
 
             InitializeProgress();
-            Debug.Log("[천장 시스템] 초기화 완료");
         }
 
         /// <summary>
@@ -139,7 +137,6 @@ namespace PixelRestaurant.Gacha
             if (progress.CurrentLevelPullCount >= requiredCount)
             {
                 progress.LevelUp();
-                Debug.Log($"[천장 레벨업] {group} → Level {progress.CurrentPityLevel}");
                 return true;
             }
 
@@ -198,17 +195,6 @@ namespace PixelRestaurant.Gacha
             return config.GetWeight(currentLevel, rarity);
         }
 
-        /// <summary>
-        /// 모든 그룹의 진행도 출력 (디버그용)
-        /// </summary>
-        public void DebugPrintAllProgress()
-        {
-            Debug.Log("=== [천장 시스템] 모든 그룹 진행도 ===");
-            foreach (var kvp in _progressPerGroup)
-            {
-                kvp.Value.DebugPrint(kvp.Key.ToString());
-            }
-        }
 
         /// <summary>
         /// 특정 그룹 진행도 리셋 (테스트용)
@@ -231,7 +217,6 @@ namespace PixelRestaurant.Gacha
             {
                 _progressPerGroup[group].Reset();
             }
-            Debug.Log("[천장 시스템] 모든 진행도 리셋됨");
         }
     }
 }

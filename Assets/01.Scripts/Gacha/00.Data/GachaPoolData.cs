@@ -49,7 +49,7 @@ namespace PixelRestaurant.Gacha
         {
             if (pityConfig == null)
             {
-                Debug.LogError($"[{poolName}] pityConfig가 할당되지 않았습니다!");
+        
                 return 0;
             }
 
@@ -65,19 +65,17 @@ namespace PixelRestaurant.Gacha
         {
             if (string.IsNullOrEmpty(poolName))
             {
-                Debug.LogError("[가챠 풀] poolName이 비어있습니다!", this);
                 return;
             }
 
             if (items.Count == 0)
             {
-                Debug.LogWarning($"[{poolName}] 아이템이 하나도 없습니다!", this);
                 return;
             }
 
             if (pityConfig == null)
             {
-                Debug.LogError($"[{poolName}] pityConfig가 할당되지 않았습니다!", this);
+    
                 return;
             }
 
@@ -87,14 +85,13 @@ namespace PixelRestaurant.Gacha
             {
                 if (itemIds.Contains(item.ItemId))
                 {
-                    Debug.LogError($"[{poolName}] 중복된 itemId: {item.ItemId}", this);
+              
                 }
                 itemIds.Add(item.ItemId);
 
                 // 그룹 일치성 확인
                 if (item.Group != group)
                 {
-                    Debug.LogWarning($"[{poolName}] 아이템 {item.ItemName}의 그룹이 다릅니다!", this);
                 }
             }
 
@@ -104,7 +101,6 @@ namespace PixelRestaurant.Gacha
             int uniqueCount = GetItemsByRarity(GachaRarity.Unique).Count;
             int epicCount = GetItemsByRarity(GachaRarity.Epic).Count;
 
-            Debug.Log($"[{poolName}] 검증 완료 - Common: {commonCount}, Rare: {rareCount}, Unique: {uniqueCount}, Epic: {epicCount}", this);
         }
 #endif
     }

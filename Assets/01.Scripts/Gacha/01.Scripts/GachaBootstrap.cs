@@ -34,9 +34,7 @@ public class GachaBootstrap : MonoBehaviour
 
         if (currency == null)
         {
-            Debug.LogError(
-                "[Bootstrap] 공용 CurrencyManager를 찾을 수 없습니다."
-            );
+            
 
             return;
         }
@@ -48,8 +46,6 @@ public class GachaBootstrap : MonoBehaviour
             currency
         );
 
-        Debug.Log(
-            "[Bootstrap] GachaManager initialized with pools."
-        );
+       
     }
 }

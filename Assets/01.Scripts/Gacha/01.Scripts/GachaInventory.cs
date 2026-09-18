@@ -33,7 +33,6 @@ namespace PixelRestaurant.Gacha
                     _instance = FindObjectOfType<GachaInventory>();
                     if (_instance == null)
                     {
-                        Debug.LogError("[가챠 인벤토리] GachaInventory를 찾을 수 없습니다!");
                     }
                 }
                 return _instance;
@@ -47,20 +46,19 @@ namespace PixelRestaurant.Gacha
                 Destroy(gameObject);
                 return;
             }
-
             _instance = this;
-            DontDestroyOnLoad(gameObject);
-
-            // 초기화
-            if (_items == null)
-                _items = new Dictionary<string, int>();
-
-            if (_newItems == null)
-                _newItems = new HashSet<string>();
-
-            Debug.Log("[가챠 인벤토리] 초기화 완료");
+            DontDestroyOnLoad(gameObject); 
         }
-
+        private void SaveGameData()
+        {
+            if (SaveManager.instance != null)
+            {
+                // 인수를 넣지 않고 Save() 호출
+                SaveManager.instance.Save();
+               
+            }
+            
+        }
         /// <summary>
         /// 아이템 추가 (뽑기 후 호출)
         /// </summary>
@@ -68,29 +66,103 @@ namespace PixelRestaurant.Gacha
         /// <param name="count">개수 (기본값 1)</param>
         public void AddItem(string itemId, int count = 1)
         {
-            if (string.IsNullOrEmpty(itemId))
+            if (string.IsNullOrEmpty(itemId) || count <= 0)
             {
-                Debug.LogError("[가챠 인벤토리] itemId가 비어있습니다!");
                 return;
             }
 
             if (!_items.ContainsKey(itemId))
+            {
                 _items[itemId] = 0;
+            }
 
             int previousCount = _items[itemId];
             _items[itemId] += count;
 
-            // 첫 획득 시 NEW에 추가
             if (previousCount == 0)
+            {
                 _newItems.Add(itemId);
+            }
 
+            // 전투 무기 목록에 반영
+            SyncWeaponToPlayerData(itemId, count);
+
+            // 가챠 인벤토리 전체를 PlayerData에 직접 반영
+            SyncInventoryToPlayerData();
+
+            // UI 등에 변경 사실 알림
             OnInventoryChanged?.Invoke();
 
-            Debug.Log(
-                $"[가챠 인벤토리] {itemId} 획득 → 총 {_items[itemId]}개"
-            );
+            // PlayerData 반영이 끝난 뒤 실제 저장
+            SaveGameData();
         }
+        private void SyncInventoryToPlayerData()
+        {
+            if (GameManager.instance == null)
+            {
+             
+                return;
+            }
 
+            PlayerData playerData = GameManager.instance.PlayerData;
+
+            if (playerData == null)
+            {
+              
+                return;
+            }
+
+            if (playerData.gachaInventory == null)
+            {
+                playerData.gachaInventory =
+                    new GachaInventoryData();
+            }
+
+            if (playerData.gachaInventory.items == null)
+            {
+                playerData.gachaInventory.items =
+                    new List<GachaOwnedItemData>();
+            }
+
+            playerData.gachaInventory.items.Clear();
+
+            foreach (var pair in _items)
+            {
+                playerData.gachaInventory.items.Add(
+                    new GachaOwnedItemData
+                    {
+                        itemId = pair.Key,
+                        count = pair.Value,
+                        isNew = _newItems.Contains(pair.Key)
+                    }
+                );
+            }
+        }
+        // [추가할 헬퍼 함수] GachaInventory 클래스 내부에 아래 함수를 통째로 붙여넣어 줘
+        private void SyncWeaponToPlayerData(string gachaItemId, int count)
+        {
+            if (GameManager.instance == null || GameManager.instance.PlayerData == null) return;
+
+            // 프로젝트 내에 있는 모든 GachaPoolData 에셋을 찾아 검사합니다.
+            var allPools = Resources.FindObjectsOfTypeAll<GachaPoolData>();
+            foreach (var poolData in allPools)
+            {
+                if (poolData == null || poolData.Items == null) continue;
+
+                var gachaItem = poolData.Items.Find(i => i.ItemId == gachaItemId);
+                if (gachaItem != null)
+                {
+                    if (gachaItem.Group == GachaGroup.Weapon && !string.IsNullOrEmpty(gachaItem.LinkedWeaponId))
+                    {
+                        GameManager.instance.PlayerData.AddWeapon(gachaItem.LinkedWeaponId, count);
+                     
+                    }
+                    return;
+                }
+
+            }
+
+        }
         /// <summary>
         /// 보유 개수 조회
         /// </summary>
@@ -121,9 +193,6 @@ namespace PixelRestaurant.Gacha
             {
                 OnInventoryChanged?.Invoke();
 
-                Debug.Log(
-                    $"[가챠 인벤토리] {itemId} NEW 표시 제거"
-                );
             }
         }
 
@@ -141,10 +210,6 @@ namespace PixelRestaurant.Gacha
 
             if (poolData == null)
             {
-                Debug.LogError(
-                    "[가챠 인벤토리] poolData가 null입니다."
-                );
-
                 return result;
             }
 
@@ -209,17 +274,7 @@ namespace PixelRestaurant.Gacha
         /// <summary>
         /// 인벤토리 전체 출력 (디버그용)
         /// </summary>
-        public void DebugPrintAllItems()
-        {
-            Debug.Log("=== [가챠 인벤토리] ===");
-            foreach (var kvp in _items)
-            {
-                string newTag = _newItems.Contains(kvp.Key) ? "[NEW]" : "";
-                Debug.Log($"{kvp.Key} x{kvp.Value} {newTag}");
-            }
-            Debug.Log($"총 종류: {_items.Count}");
-        }
-
+        
         /// <summary>
         /// 인벤토리 리셋 (테스트용)
         /// </summary>
@@ -230,15 +285,12 @@ namespace PixelRestaurant.Gacha
 
             OnInventoryChanged?.Invoke();
 
-            Debug.Log("[가챠 인벤토리] 초기화됨");
         }
         public void LoadFromPlayerData()
         {
             if (GameManager.instance == null)
             {
-                Debug.LogError(
-                    "[가챠 인벤토리] GameManager를 찾을 수 없습니다."
-                );
+               
                 return;
             }
 
@@ -247,17 +299,13 @@ namespace PixelRestaurant.Gacha
 
             if (playerData == null)
             {
-                Debug.LogError(
-                    "[가챠 인벤토리] PlayerData가 없습니다."
-                );
+                
                 return;
             }
 
             if (playerData.gachaInventory == null)
             {
-                Debug.Log(
-                    "[가챠 인벤토리] 저장된 가챠 데이터가 없습니다."
-                );
+                
                 return;
             }
 
@@ -283,10 +331,7 @@ namespace PixelRestaurant.Gacha
                 }
             }
 
-            Debug.Log(
-                $"[가챠 인벤토리] 저장 데이터 복원 완료: " +
-                $"{_items.Count}종"
-            );
+            
         }
     }
 }

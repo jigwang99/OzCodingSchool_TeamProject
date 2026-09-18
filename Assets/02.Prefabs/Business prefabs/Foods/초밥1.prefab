@@ -104,6 +104,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a1ba2b44bbc4d543ac78f335d6fdcba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Food
+  originalScale: {x: 0, y: 0, z: 0}
   foodName: "\uCD08\uBC25"
   fishCount: 1
   fishRare: 0

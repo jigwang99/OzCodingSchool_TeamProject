@@ -39,9 +39,8 @@ namespace PixelRestaurant.Gacha
 
                     if (_instance == null)
                     {
-                        Debug.LogError(
-                            "[가챠 매니저] GachaManager를 찾을 수 없습니다!"
-                        );
+                   
+                      
                     }
                 }
 
@@ -60,16 +59,13 @@ namespace PixelRestaurant.Gacha
             _instance = this;
             DontDestroyOnLoad(gameObject);
 
-            Debug.Log($"[가챠] CurrencyManager 확인: {CurrencyManager.instance}");
 
             if (CurrencyManager.instance != null)
             {
                 _currencyProvider = CurrencyManager.instance;
-                Debug.Log("[가챠] CurrencyProvider 연결 완료");
             }
             else
             {
-                Debug.LogError("[가챠] CurrencyManager.instance가 아직 없습니다!");
             }
         }
         /// <summary>
@@ -86,7 +82,6 @@ namespace PixelRestaurant.Gacha
             _inventory = inventory;
             _currencyProvider = currencyProvider;
 
-            Debug.Log("[가챠 매니저] 초기화 완료");
         }
 
         /// <summary>
@@ -106,18 +101,14 @@ namespace PixelRestaurant.Gacha
 
             if (pullCount != 1 && pullCount != 10)
             {
-                Debug.LogWarning(
-                    "[가챠] 지원되지 않는 뽑기 횟수입니다. 지원: 1, 10"
-                );
+        
 
                 return results;
             }
 
             if (_pools == null || !_pools.ContainsKey(group))
             {
-                Debug.LogError(
-                    $"[가챠] {group} 그룹의 풀을 찾을 수 없습니다."
-                );
+   
 
                 return results;
             }
@@ -128,31 +119,24 @@ namespace PixelRestaurant.Gacha
 
                 if (_currencyProvider == null)
                 {
-                    Debug.LogError(
-                        "[가챠] CurrencyManager를 찾을 수 없습니다!"
-                    );
+                  
 
                     return results;
                 }
 
-                Debug.Log("[가챠] CurrencyProvider 자동 연결 완료");
             }
 
             if (_pitySystem == null)
             {
-                Debug.LogError(
-                    "[가챠] PitySystem이 설정되지 않았습니다!"
-                );
+           
+               
 
                 return results;
             }
 
             GachaPoolData poolData = _pools[group];
 
-            Debug.Log(
-                $"[가챠] {pullCount}회 뽑기 시작 " +
-                $"({group}, 비용: {costPerPull} x {pullCount})"
-            );
+
 
             // =========================
             // 전체 비용 사전 확인
@@ -167,10 +151,7 @@ namespace PixelRestaurant.Gacha
 
             if (currentGold < totalCost)
             {
-                Debug.LogWarning(
-                    $"[가챠] 골드 부족! " +
-                    $"필요: {totalCost}, 현재: {currentGold}"
-                );
+              
 
                 return results;
             }
@@ -185,10 +166,7 @@ namespace PixelRestaurant.Gacha
                 // BigNumber 기준으로 골드 소비
                 if (!_currencyProvider.SpendGold(costPerPull))
                 {
-                    Debug.LogWarning(
-                        $"[가챠] 골드 소비 실패! " +
-                        $"{i + 1}회차에서 뽑기를 중단합니다."
-                    );
+               
 
                     // 중간 실패이므로 결과 전체 취소
                     results.Clear();
@@ -218,9 +196,6 @@ namespace PixelRestaurant.Gacha
 
                 if (item == null)
                 {
-                    Debug.LogError(
-                        "[가챠] 아이템을 찾을 수 없습니다."
-                    );
 
                     // 뽑기 실패
                     results.Clear();
@@ -236,18 +211,13 @@ namespace PixelRestaurant.Gacha
                     group,
                     poolData.PityConfig))
                 {
-                    Debug.Log(
-                        $"[가챠] {group} 천장 레벨업 → 확률 변경"
-                    );
+                    
                 }
 
                 results.Add(item);
                 _lastDrawnItem = item;
 
-                Debug.Log(
-                    $"[가챠] {i + 1}회: " +
-                    $"{item.GetDisplayName()} 획득 ({rarity})"
-                );
+               
             }
 
             // =========================
@@ -256,25 +226,44 @@ namespace PixelRestaurant.Gacha
 
             if (results.Count != pullCount)
             {
-                Debug.LogWarning(
-                    $"[가챠] 뽑기 실패! " +
-                    $"요청: {pullCount}회 / 결과: {results.Count}개"
-                );
+                
 
                 results.Clear();
                 return results;
             }
 
-            Debug.Log(
-                $"[가챠] 뽑기 완료: {results.Count}개 획득"
-            );
 
             if (results.Count > 0)
             {
+                // 뽑기 결과를 가챠 인벤토리에 직접 추가
+                if (_inventory == null)
+                {
+                    _inventory = GachaInventory.Instance;
+                }
+
+                if (_inventory != null)
+                {
+                    foreach (GachaItem item in results)
+                    {
+                        if (item == null ||
+                            string.IsNullOrEmpty(item.ItemId))
+                        {
+                            continue;
+                        }
+
+                        _inventory.AddItem(item.ItemId, 1);
+
+                    }
+                }
+              
+
+                // 결과 표시와 다른 시스템에 알림
                 OnGachaItemsDrawn?.Invoke(results);
             }
 
             return results;
+
+           
         }
 
         // =========================
@@ -320,10 +309,7 @@ namespace PixelRestaurant.Gacha
 
             if (totalWeight <= 0)
             {
-                Debug.LogError(
-                    $"[가챠] {group} Level {pityLevel}의 " +
-                    "가중치가 0입니다!"
-                );
+              
 
                 return GachaRarity.Common;
             }
@@ -365,10 +351,7 @@ namespace PixelRestaurant.Gacha
 
             if (candidates.Count == 0)
             {
-                Debug.LogWarning(
-                    $"[가챠] {group} {rarity} 아이템이 없습니다!"
-                );
-
+            
                 return null;
             }
 
@@ -381,10 +364,6 @@ namespace PixelRestaurant.Gacha
 
             if (totalWeight <= 0)
             {
-                Debug.LogError(
-                    $"[가챠] {rarity} 아이템의 " +
-                    "총 가중치가 0입니다!"
-                );
 
                 return candidates[0];
             }
@@ -414,10 +393,6 @@ namespace PixelRestaurant.Gacha
         {
             if (!_pools.ContainsKey(group))
             {
-                Debug.LogError(
-                    $"[가챠] {group} 그룹의 풀을 찾을 수 없습니다."
-                );
-
                 return null;
             }
 

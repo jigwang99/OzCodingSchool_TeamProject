@@ -33,9 +33,7 @@ namespace PixelRestaurant.Gacha
 
                     if (_instance == null)
                     {
-                        Debug.LogError(
-                            "[결과 처리] GachaResultHandler를 찾을 수 없습니다!"
-                        );
+                        
                     }
                 }
 
@@ -64,14 +62,10 @@ namespace PixelRestaurant.Gacha
 
             if (_objectPool == null)
             {
-                Debug.LogError(
-                    "[결과 처리] GachaObjectPool을 찾을 수 없습니다!"
-                );
+               
             }
 
-            Debug.Log(
-                "[결과 처리] 초기화 완료"
-            );
+            
         }
 
         // =========================================================
@@ -94,27 +88,21 @@ namespace PixelRestaurant.Gacha
 
             if (item == null)
             {
-                Debug.LogError(
-                    "[결과 처리] 아이템이 null입니다."
-                );
+               
 
                 return null;
             }
 
             if (_objectPool == null)
             {
-                Debug.LogError(
-                    "[결과 처리] GachaObjectPool이 없습니다."
-                );
+               
 
                 return null;
             }
 
             if (parent == null)
             {
-                Debug.LogError(
-                    "[결과 처리] parent가 null입니다."
-                );
+              
 
                 return null;
             }
@@ -128,10 +116,6 @@ namespace PixelRestaurant.Gacha
 
             if (resultCard == null)
             {
-                Debug.LogError(
-                    "[결과 처리] 오브젝트 풀에서 카드를 가져올 수 없습니다."
-                );
-
                 return null;
             }
 
@@ -183,10 +167,7 @@ namespace PixelRestaurant.Gacha
 
             if (itemDisplay == null)
             {
-                Debug.LogError(
-                    $"[결과 처리] {resultCard.name}에 " +
-                    "GachaResultItemDisplay가 없습니다."
-                );
+            
 
                 // 잘못된 카드이므로 풀에 반환
                 _objectPool.ReturnObject(resultCard);
@@ -222,10 +203,8 @@ namespace PixelRestaurant.Gacha
 
             resultCard.SetActive(true);
 
-            Debug.Log(
-                $"[결과 처리] {item.GetDisplayName()} 결과 표시 " +
-                $"(NEW: {isNew})"
-            );
+          
+            
 
             // -----------------------------------------------------
             // 생성된 카드를 UIController에게 반환
@@ -243,9 +222,7 @@ namespace PixelRestaurant.Gacha
         {
             _objectPool = pool;
 
-            Debug.Log(
-                "[결과 처리] 오브젝트 풀 설정됨"
-            );
+          
         }
     }
 }

@@ -4,63 +4,95 @@ namespace PixelRestaurant.Gacha
 {
     /// <summary>
     /// GachaInventory의 변경 내용을
-    /// PlayerData의 저장 데이터로 연결한다.
+    /// PlayerData의 저장 데이터로 동기화한다.
     /// </summary>
     public class GachaInventorySaveAdapter : MonoBehaviour
     {
-        [SerializeField]
         private GachaInventory gachaInventory;
+        private bool isSubscribed;
 
-        private void Awake()
+        private void OnEnable()
         {
-            if (gachaInventory == null)
-                gachaInventory = GachaInventory.Instance;
+            Subscribe();
         }
 
         private void Start()
         {
+            // 씬 재입장 시에도 현재 살아 있는 싱글톤을 사용
+            Subscribe();
+
             if (gachaInventory != null)
             {
                 gachaInventory.LoadFromPlayerData();
+          
             }
         }
 
-        private void OnEnable()
+        private void Subscribe()
         {
-            if (gachaInventory != null)
+            GachaInventory currentInventory = GachaInventory.Instance;
+
+            if (currentInventory == null)
             {
-                gachaInventory.OnInventoryChanged
-                    += SyncInventoryToPlayerData;
+                return;
             }
+
+            // 이미 같은 인벤토리를 구독하고 있다면 중복 구독 방지
+            if (isSubscribed && gachaInventory == currentInventory)
+            {
+                return;
+            }
+
+            // 이전 인벤토리를 구독하고 있었다면 해제
+            Unsubscribe();
+
+            gachaInventory = currentInventory;
+            gachaInventory.OnInventoryChanged += SyncInventoryToPlayerData;
+            isSubscribed = true;
+
+
         }
 
         private void OnDisable()
         {
-            if (gachaInventory != null)
+            Unsubscribe();
+        }
+
+        private void OnDestroy()
+        {
+            Unsubscribe();
+        }
+
+        private void Unsubscribe()
+        {
+            if (isSubscribed && gachaInventory != null)
             {
-                gachaInventory.OnInventoryChanged
-                    -= SyncInventoryToPlayerData;
+                gachaInventory.OnInventoryChanged -= SyncInventoryToPlayerData;
             }
+
+            isSubscribed = false;
+            gachaInventory = null;
         }
 
         private void SyncInventoryToPlayerData()
         {
-            if (GameManager.instance == null)
+
+            if (gachaInventory == null)
             {
-                Debug.LogError(
-                    "[가챠 저장 Adapter] GameManager가 없습니다."
-                );
+            
                 return;
             }
 
-            PlayerData playerData =
-                GameManager.instance.PlayerData;
+            if (GameManager.instance == null)
+            {
+          
+                return;
+            }
+
+            PlayerData playerData = GameManager.instance.PlayerData;
 
             if (playerData == null)
             {
-                Debug.LogError(
-                    "[가챠 저장 Adapter] PlayerData가 없습니다."
-                );
                 return;
             }
 
@@ -70,32 +102,27 @@ namespace PixelRestaurant.Gacha
                     new GachaInventoryData();
             }
 
+            if (playerData.gachaInventory.items == null)
+            {
+                playerData.gachaInventory.items =
+                    new System.Collections.Generic.List<GachaOwnedItemData>();
+            }
+
             playerData.gachaInventory.items.Clear();
 
-            foreach (var pair in
-                     gachaInventory.GetAllItems())
+            foreach (var pair in gachaInventory.GetAllItems())
             {
                 playerData.gachaInventory.items.Add(
                     new GachaOwnedItemData
                     {
                         itemId = pair.Key,
                         count = pair.Value,
-                        isNew =
-                            gachaInventory.IsNewItem(pair.Key)
+                        isNew = gachaInventory.IsNewItem(pair.Key)
                     }
                 );
             }
 
-            Debug.Log(
-                "[가챠 저장 Adapter] " +
-                "PlayerData에 인벤토리 동기화 완료"
-            );
-
-            // 테스트 단계에서는 즉시 저장
-            //if (SaveManager.Instance != null)
-            //{
-            //    SaveManager.Instance.Save();
-            //}
+       
         }
     }
 }
