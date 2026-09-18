@@ -66,6 +66,12 @@ namespace PixelRestaurant.Gacha
         /// <param name="count">개수 (기본값 1)</param>
         public void AddItem(string itemId, int count = 1)
         {
+            AddItem(itemId, count, saveImmediately: true);
+        }
+
+        // DrawGacha defers disk writes until the entire result has been awarded.
+        internal void AddItem(string itemId, int count, bool saveImmediately)
+        {
             if (string.IsNullOrEmpty(itemId) || count <= 0)
             {
                 return;
@@ -94,7 +100,8 @@ namespace PixelRestaurant.Gacha
             OnInventoryChanged?.Invoke();
 
             // PlayerData 반영이 끝난 뒤 실제 저장
-            SaveGameData();
+            if (saveImmediately)
+                SaveGameData();
         }
         private void SyncInventoryToPlayerData()
         {
