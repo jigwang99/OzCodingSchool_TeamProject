@@ -193,9 +193,9 @@ namespace PixelRestaurant.Gacha
             }
 
             itemDisplay.SetItemInfo(
-      item,
-      isNew
-  );
+                item,
+                isNew
+            );
 
             // -----------------------------------------------------
             // 카드 공개 연출 설정
