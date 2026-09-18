@@ -12,10 +12,6 @@ public class UpgradeUI : MonoBehaviour
     [SerializeField] private Button upgradeButton;
     [SerializeField] private TMP_Text upgradeButtonText;
 
-    [Header("POPUP")]
-    [SerializeField] private GameObject successPopup;
-    [SerializeField] private GameObject failPopup;
-
     private void Start()
     {
         upgradeButton.onClick.AddListener(OnClickUpgrade);
@@ -43,18 +39,11 @@ public class UpgradeUI : MonoBehaviour
     {
         PlayerData playerData = GameManager.instance.PlayerData;
 
-        bool isSuccess = UpgradeManager.instance.TryUpgrade(upgradeData, playerData);
+        UpgradeManager.instance.TryUpgrade(upgradeData, playerData);
 
         RefreshUI();
 
-        if (isSuccess)
-        {
-            successPopup.SetActive(true);
-        }
-        else
-        {
-            failPopup.SetActive(true);
-        }
+        SaveManager.instance.Save();
     }
 
     private void OnUpgradePurchased(UpgradeData data, int level)
@@ -82,14 +71,14 @@ public class UpgradeUI : MonoBehaviour
 
         if (currentLevel >= upgradeData.maxLevel)
         {
-            upgradeText.text = $"최종 Lv. {currentLevel}";
+            upgradeText.text = $"현재 Lv. {currentLevel}";
             upgradeButton.interactable = false;
             return;
         }
 
         BigNumber cost = UpgradeManager.instance.GetUpgradeCost(upgradeData, currentLevel);
 
-        upgradeText.text = $"현재 Lv. {currentLevel} / {upgradeData.maxLevel} \n\n필요 골드 {cost} G";
+        upgradeText.text = $"현재 Lv. {currentLevel} \n\n필요 골드 {cost} G";
 
         upgradeButton.interactable = true;
     }
