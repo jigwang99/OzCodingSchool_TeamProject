@@ -17,4 +17,5 @@ MonoBehaviour:
   type: 0
   baseCost: 100
   costMultiplier: 1.15
-  maxLevel: 3
+  maxLevel: 999
+  dropChanceMultiplierPerLevel: 0.3
