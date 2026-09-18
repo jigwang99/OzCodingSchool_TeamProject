@@ -15,7 +15,7 @@ MonoBehaviour:
   id: 201
   upgradeName: "\uC2DD\uB2F9 \uC5C5\uADF8\uB808\uC774\uB4DC"
   type: 3
-  baseCost: 100
+  baseCost: 2000
   costMultiplier: 1.15
   maxLevel: 3
   dropChanceMultiplierPerLevel: 0.3
