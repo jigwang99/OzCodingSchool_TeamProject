@@ -193,9 +193,30 @@ namespace PixelRestaurant.Gacha
             }
 
             itemDisplay.SetItemInfo(
-                item,
-                isNew
-            );
+      item,
+      isNew
+  );
+
+            // -----------------------------------------------------
+            // 카드 공개 연출 설정
+            // -----------------------------------------------------
+
+            GachaRevealCard revealCard =
+                resultCard.GetComponent<GachaRevealCard>();
+
+            if (revealCard != null)
+            {
+                revealCard.Setup(
+                    item,
+                    null
+                );
+            }
+
+            // -----------------------------------------------------
+            // 카드 활성화
+            // -----------------------------------------------------
+
+            resultCard.SetActive(true);
 
             // -----------------------------------------------------
             // 카드 활성화
