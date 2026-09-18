@@ -12,15 +12,23 @@ public class EnemyController : BaseUnitController, IPoolable
 
     private Rigidbody2D enemyRigidbody;
     private Quaternion initialLocalRotation;
+    private Vector3 homePosition;
+    private bool chasing;
+    private bool returningHome;
+    private ReturnHomeState returnState;
 
     public float DetectionRange => detectionRange;
     public Enum PoolKey => enemyType;
+    public Vector3 HomePosition => homePosition;
+    public bool IsReturningHome => returningHome;
+    protected override bool InitiallyFacesRight => false;
 
     protected override void Awake()
     {
         base.Awake();
         enemyRigidbody = GetComponent<Rigidbody2D>();
         initialLocalRotation = transform.localRotation;
+        returnState = new ReturnHomeState(this);
 
         // 좌우로 이동하는 적이 충돌 때문에 넘어지지 않도록 기존 제약에 회전 고정을 추가한다.
         enemyRigidbody.constraints |= RigidbodyConstraints2D.FreezeRotation;
@@ -48,11 +56,85 @@ public class EnemyController : BaseUnitController, IPoolable
         if (attackSound != null) SoundManager.instance?.PlayEnemyAttackSFX(attackSound);
     }
 
-    public void Init() => Revive();
+    public void Init()
+    {
+        homePosition = transform.position;
+        chasing = returningHome = false;
+        ClearTarget();
+        Revive();
+    }
     public void ReturnToPool() => PrepareForPool();
 
     public override bool IsTargetDetected =>
-        HasTarget && Mathf.Abs(transform.position.x - Target.transform.position.x) <= detectionRange;
+        !returningHome && HasTarget && IsOnSameFloor(Target) &&
+        (chasing || Mathf.Abs(transform.position.x - Target.transform.position.x) <= detectionRange);
+
+    public override bool CanEngage(BaseUnitController other) =>
+        !returningHome && IsTargetDetected && base.CanEngage(other);
+
+    protected override void Update()
+    {
+        if (!Health.IsDead && !returningHome)
+        {
+            if (chasing && (!HasTarget || !IsOnSameFloor(Target)))
+            {
+                chasing = false;
+                returningHome = true;
+                StateMachine.ChangeState(returnState);
+            }
+            else if (IsTargetDetected) chasing = true;
+        }
+        base.Update();
+    }
+
+    public override void PerformMove()
+    {
+        if (!IsTargetDetected) { Move.Stop(); return; }
+        Vector3 destination = Target.transform.position;
+        if (FloorMap != null)
+        {
+            int homeFloor = FloorMap.GetFloorIndex(homePosition);
+            if (homeFloor < 0) { Move.Stop(); return; }
+            destination = FloorMap.ClampToFloor(destination, homeFloor);
+        }
+        FaceDirection(destination.x - transform.position.x);
+        Move.MoveToX(destination.x);
+    }
+
+    public override void PrepareForPool()
+    {
+        chasing = returningHome = false;
+        base.PrepareForPool();
+    }
+
+    private sealed class ReturnHomeState : UnitBaseState
+    {
+        private readonly EnemyController enemy;
+        public ReturnHomeState(EnemyController enemy) : base(enemy) => this.enemy = enemy;
+        public override void Enter()
+        {
+            enemy.Attack.CancelPendingHit();
+            enemy.Move.Stop();
+            enemy.PlayAnimation(StudioNAP.AnimationTypeEnum.Run);
+        }
+        public override void Exit() => enemy.Move.Stop();
+        public override void Update() { }
+        public override void FixedUpdate()
+        {
+            float delta = enemy.homePosition.x - enemy.transform.position.x;
+            if (Mathf.Abs(delta) <= 0.03f)
+            {
+                Vector2 position = enemy.enemyRigidbody.position;
+                position.x = enemy.homePosition.x;
+                enemy.enemyRigidbody.position = position;
+                enemy.returningHome = false;
+                enemy.StateMachine.ChangeState(enemy.IdleState);
+                return;
+            }
+            enemy.FaceDirection(delta);
+            enemy.Move.MoveToX(enemy.homePosition.x);
+        }
+    }
 
     // 사망 시 호출: 이번 프레임 이벤트(드롭/리타겟)가 끝난 뒤 풀로 반납.
     public void DespawnAfterDeath()

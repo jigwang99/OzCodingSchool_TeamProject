@@ -17,6 +17,7 @@ public class EnemySpawner : MonoBehaviour
     private PlayercatController player;
     private bool running;
     private float nextCheck;
+    private CombatFloorMap floorMap;
 
     public IReadOnlyList<EnemyController> Spawned => active;
     public bool HasPendingEnemies => pending.Count > 0;
@@ -28,11 +29,13 @@ public class EnemySpawner : MonoBehaviour
         if (activationCamera != null) cameraFollow = activationCamera.GetComponent<CombatCameraFollow>();
     }
 
-    public void PrepareStage(StageData data, Vector3 spawnOrigin, PlayercatController target)
+    public void PrepareStage(StageData data, Vector3 spawnOrigin, PlayercatController target, CombatFloorMap map = null)
     {
         stage = data;
         origin = spawnOrigin;
         player = target;
+        floorMap = map;
+        player.ConfigureNavigation(this, floorMap);
         // 플레이어가 시작점으로 이동한 직후에는 카메라도 먼저 맞춘다.
         // 이전 스테이지 끝의 카메라 위치로 활성화 범위를 계산하지 않는다.
         if (cameraFollow != null) cameraFollow.SnapToTarget();
@@ -74,7 +77,12 @@ public class EnemySpawner : MonoBehaviour
             if (enemy == null) throw new InvalidOperationException("준비된 몬스터 풀을 찾을 수 없습니다.");
             enemy.Health.SetMaxHp(stage.EnemyMaxHp);
             enemy.Attack.SetAttackDamage(stage.EnemyDamage);
+            enemy.SetFloorMap(floorMap);
             enemy.SetTarget(player);
+            enemy.Move.IgnoreUnitCollisions(player.Move);
+            foreach (EnemyController other in active)
+                if (other != null && other.gameObject.activeInHierarchy)
+                    enemy.Move.IgnoreUnitCollisions(other.Move);
             enemy.enabled = running;
             active.Add(enemy);
             pending.RemoveAt(i);
@@ -112,18 +120,41 @@ public class EnemySpawner : MonoBehaviour
         stage = null;
     }
 
-    public EnemyController GetNearestAlive(Vector3 from)
+    public EnemyController GetNearestAlive(Vector3 from, int preferredFloor = -1)
     {
         EnemyController nearest = null;
         float bestSqr = float.MaxValue;
+        bool bestOnFloor = false;
         foreach (EnemyController enemy in active)
         {
             if (enemy == null || !enemy.gameObject.activeSelf || enemy.Health.IsDead) continue;
+            bool onFloor = preferredFloor >= 0 && enemy.CurrentFloor == preferredFloor;
             float sqr = ((Vector2)(enemy.transform.position - from)).sqrMagnitude;
-            if (sqr >= bestSqr) continue;
+            if (nearest != null && (bestOnFloor && !onFloor || bestOnFloor == onFloor && sqr >= bestSqr)) continue;
             bestSqr = sqr;
+            bestOnFloor = onFloor;
             nearest = enemy;
         }
         return nearest;
+    }
+
+    public bool TryGetPendingDestination(Vector3 from, int preferredFloor, out Vector3 destination)
+    {
+        destination = from;
+        bool found = false;
+        bool bestOnFloor = false;
+        float bestSqr = float.MaxValue;
+        foreach (int index in pending)
+        {
+            Vector3 position = origin + (Vector3)stage.SpawnOffsets[index];
+            bool onFloor = floorMap == null || floorMap.GetFloorIndex(position) == preferredFloor;
+            float sqr = ((Vector2)(position - from)).sqrMagnitude;
+            if (found && (bestOnFloor && !onFloor || bestOnFloor == onFloor && sqr >= bestSqr)) continue;
+            found = true;
+            bestOnFloor = onFloor;
+            bestSqr = sqr;
+            destination = position;
+        }
+        return found;
     }
 }

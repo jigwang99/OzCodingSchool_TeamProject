@@ -92,7 +92,7 @@ public class UnitAttack : MonoBehaviour
         return isActiveAndEnabled && owner != null && owner.isActiveAndEnabled
             && owner.Health != null && !owner.Health.IsDead && owner.Target == target
             && target != null && target.isActiveAndEnabled && target.Health != null
-            && !target.Health.IsDead && IsInAttackRange(target.transform);
+            && !target.Health.IsDead && owner.CanEngage(target) && IsInAttackRange(target.transform);
     }
 
     public event Action<IDamageable, DamageInfo> OnAttackHit;
@@ -100,7 +100,8 @@ public class UnitAttack : MonoBehaviour
 
     public bool IsInAttackRange(Transform target)
     {
-        return target != null && Mathf.Abs(transform.position.x - target.position.x) <= attackRange;
+        return target != null && owner != null && owner.CanEngage(target.GetComponent<BaseUnitController>())
+            && Mathf.Abs(transform.position.x - target.position.x) <= attackRange;
     }
 
     public bool Attack(IDamageable target, bool isCritical = false)
