@@ -30,7 +30,7 @@ public abstract class BaseUnitController : MonoBehaviour
     public bool IsFinishingAttack => unitView is IAttackRecoveryView recovery && recovery.IsFinishingAttack;
 
     public bool HasTarget => Target != null && Target.gameObject.activeInHierarchy && !Target.Health.IsDead;
-    public bool IsTargetInAttackRange => HasTarget && CanEngage(Target) && Attack.IsInAttackRange(Target.transform);
+    public bool IsTargetInAttackRange => HasTarget && Attack.IsUnitInAttackRange(Target);
 
     public void SetFloorMap(CombatFloorMap map) => FloorMap = map;
 
@@ -39,7 +39,9 @@ public abstract class BaseUnitController : MonoBehaviour
         if (other == null || IsChangingFloors || other.IsChangingFloors) return false;
         if (FloorMap == null && other.FloorMap == null)
             return Mathf.Abs(transform.position.y - other.transform.position.y) <= 0.75f;
-        return FloorMap == other.FloorMap && CurrentFloor >= 0 && CurrentFloor == other.CurrentFloor;
+        if (FloorMap != other.FloorMap) return false;
+        int currentFloor = CurrentFloor;
+        return currentFloor >= 0 && currentFloor == other.CurrentFloor;
     }
 
     public virtual bool CanEngage(BaseUnitController other) => IsOnSameFloor(other);
@@ -49,7 +51,7 @@ public abstract class BaseUnitController : MonoBehaviour
         if (facingRoot == null || Mathf.Abs(direction) < 0.001f) return;
         Vector3 scale = initialVisualScale;
         scale.x *= (direction > 0f) == InitiallyFacesRight ? 1f : -1f;
-        facingRoot.localScale = scale;
+        if (facingRoot.localScale != scale) facingRoot.localScale = scale;
     }
 
     // 타겟을 '교전 대상'으로 인식했는가.

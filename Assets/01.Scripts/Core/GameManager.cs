@@ -12,11 +12,16 @@ public class GameManager : Singleton<GameManager>
         if (instance != this)
             return;
 
+        QualitySettings.vSyncCount = 0;
+        Application.targetFrameRate = 60;
+
         LoadPlayerData();
 
-        // 씬에 별도 배치하지 않아도 방치 보상은 게임 전체에서 계속 동작해야 한다.
+        // 씬에 별도 배치하지 않아도 방치 보상은 게임 전체에서 계속 동작해야 함.
         if (GetComponent<IdleFishManager>() == null)
             gameObject.AddComponent<IdleFishManager>();
+
+
     }
 
     private void LoadPlayerData()

@@ -1,11 +1,14 @@
 ﻿using UnityEngine;
 
+using System.Collections.Generic;
+
 [RequireComponent(typeof(Rigidbody2D))]
 public class UnitMove : MonoBehaviour
 {
     [SerializeField, Min(0f)] private float moveSpeed = 2f;
 
     private Rigidbody2D unitRigidbody;
+    private readonly List<Collider2D> collisionBuffer = new List<Collider2D>(2);
 
     public float MoveSpeed => moveSpeed;
     public bool IsMoving => unitRigidbody.linearVelocity.sqrMagnitude > 0f;
@@ -51,10 +54,11 @@ public class UnitMove : MonoBehaviour
     public void IgnoreUnitCollisions(UnitMove other)
     {
         if (other == null || other == this) return;
-        Collider2D[] ownColliders = GetComponentsInChildren<Collider2D>();
-        Collider2D[] otherColliders = other.GetComponentsInChildren<Collider2D>();
-        foreach (Collider2D own in ownColliders)
-            foreach (Collider2D obstacle in otherColliders)
+        // 풀 재활성화와 런타임 콜라이더 변경을 반영하면서 검색 결과 배열은 할당하지 않는다.
+        GetComponentsInChildren<Collider2D>(collisionBuffer);
+        other.GetComponentsInChildren<Collider2D>(other.collisionBuffer);
+        foreach (Collider2D own in collisionBuffer)
+            foreach (Collider2D obstacle in other.collisionBuffer)
                 Physics2D.IgnoreCollision(own, obstacle);
     }
 }

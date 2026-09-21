@@ -665,6 +665,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b22c3f8549810724589ea466661f016a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
+  randomizeSpawns: 1
+  useFullMapWidth: 1
+  spawnXRange: {x: 0, y: 20}
+  spawnEdgePadding: 0.8
+  minimumSpawnSpacing: 1.25
+  playerSpawnClearance: 3
   activationDistance: 12
   activationCheckInterval: 0.1
   activationCamera: {fileID: 2132697593}
@@ -709,7 +715,7 @@ Transform:
   m_GameObject: {fileID: 772105238}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4, y: -3, z: 0}
+  m_LocalPosition: {x: 13.65, y: -3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -866,8 +872,8 @@ Transform:
   m_GameObject: {fileID: 928199309}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 9, y: -4, z: 0}
-  m_LocalScale: {x: 30, y: 1, z: 1}
+  m_LocalPosition: {x: 13.65, y: -4, z: 0}
+  m_LocalScale: {x: 54.6, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -1168,6 +1174,7 @@ MonoBehaviour:
   playerCat: {fileID: 1543899952}
   fishDropSystem: {fileID: 397242959}
   floorMap: {fileID: 8893000000000000002}
+  combatBackground: {fileID: 8869200000000000000}
   playerSpawnPoint: {fileID: 772105239}
   stageDataList: {fileID: 11400000, guid: 82f2e6c4d84de7543a3da7639204bbbc, type: 2}
   enemySpawnOrigin: {fileID: 547176849}
@@ -1331,7 +1338,7 @@ Transform:
   m_GameObject: {fileID: 1543899949}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4, y: -3, z: 0}
+  m_LocalPosition: {x: 13.65, y: -3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1352,8 +1359,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayercatController
   unitViewSource: {fileID: 1440917490}
   detectionInterval: 0.5
-  floorTravelDuration: 0.65
-  jumpArcHeight: 0.6
+  jumpGravity: 60
+  jumpApexClearance: 0.35
+  jumpHorizontalReach: 3
   attackSound: {fileID: 8300000, guid: fd9b77b7a58c2c040962a32cd44e6d8b, type: 3}
 --- !u!114 &1543899953
 MonoBehaviour:
@@ -23148,7 +23156,7 @@ MonoBehaviour:
   barPrefab: {fileID: 1259596661066934526, guid: 2e1e07bd9a332a945b3ff043b232b2db, type: 3}
   initialPoolSize: 8
   playerOffset: {x: 0, y: 3, z: 0}
-  enemyOffset: {x: 0, y: 3, z: 0}
+  enemyOffset: {x: 0, y: 0.15, z: 0}
 --- !u!1 &8869500000000000000
 GameObject:
   m_ObjectHideFlags: 0
@@ -32577,14 +32585,20 @@ MonoBehaviour:
   - {fileID: 928199310}
   - {fileID: 8893000000000000012}
   - {fileID: 8893000000000000022}
-  connectionX:
-  - 20
-  - -2
   standingOffset: 0.5
   floorTolerance: 0.65
+  levelSpacing: 2.6
+  zoneEdgePadding: 0.8
   surfaceColor: {r: 0.94, g: 0.78, b: 0.46, a: 1}
   rockColor: {r: 0.36, g: 0.29, b: 0.24, a: 1}
-  connectionColor: {r: 0.4, g: 0.95, b: 0.9, a: 0.8}
+  hideGroundVisual: 1
+  chapterPalettes:
+  - surface: {r: 0.96, g: 0.83, b: 0.5, a: 1}
+    rock: {r: 0.63, g: 0.45, b: 0.24, a: 1}
+  - surface: {r: 0.58, g: 0.84, b: 0.75, a: 1}
+    rock: {r: 0.13, g: 0.43, b: 0.53, a: 1}
+  - surface: {r: 0.19, g: 0.39, b: 0.61, a: 1}
+    rock: {r: 0.035, g: 0.1, b: 0.25, a: 1}
 --- !u!1 &8893000000000000010
 GameObject:
   m_ObjectHideFlags: 0
@@ -32657,8 +32671,8 @@ Transform:
   m_GameObject: {fileID: 8893000000000000010}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 9, y: -1.08, z: 0}
-  m_LocalScale: {x: 28, y: 0.36, z: 1}
+  m_LocalPosition: {x: -4.55, y: -1.08, z: 0}
+  m_LocalScale: {x: 16.6, y: 0.36, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8893000000000000001}
@@ -32735,8 +32749,8 @@ Transform:
   m_GameObject: {fileID: 8893000000000000020}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 9, y: 1.52, z: 0}
-  m_LocalScale: {x: 26, y: 0.36, z: 1}
+  m_LocalPosition: {x: 31.85, y: -1.08, z: 0}
+  m_LocalScale: {x: 16.6, y: 0.36, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8893000000000000001}

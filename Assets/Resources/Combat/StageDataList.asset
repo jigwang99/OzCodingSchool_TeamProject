@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::StageDataList
   stageList:
   - stageName: 1-1
+    elevatedFloorCounts: {x: 1, y: 0, z: 1}
     spawnOffsets:
     - {x: 2, y: -3}
     - {x: 20, y: -0.4}
@@ -30,6 +31,7 @@ MonoBehaviour:
     enemyDamage: 1
     dropTable: {fileID: 11400000, guid: b0925c4738e94adea23f07d665098f41, type: 2}
   - stageName: 1-2
+    elevatedFloorCounts: {x: 0, y: 1, z: 2}
     spawnOffsets:
     - {x: 2, y: -3}
     - {x: 20, y: -0.4}
@@ -48,6 +50,7 @@ MonoBehaviour:
     enemyDamage: 1.25
     dropTable: {fileID: 11400000, guid: b0925c4738e94adea23f07d665098f41, type: 2}
   - stageName: 1-3
+    elevatedFloorCounts: {x: 1, y: 0, z: 2}
     spawnOffsets:
     - {x: 2, y: -3}
     - {x: 20, y: -0.4}
@@ -68,6 +71,7 @@ MonoBehaviour:
     enemyDamage: 1.5
     dropTable: {fileID: 11400000, guid: b0925c4738e94adea23f07d665098f41, type: 2}
   - stageName: 1-4
+    elevatedFloorCounts: {x: 2, y: 1, z: 0}
     spawnOffsets:
     - {x: 2, y: -3}
     - {x: 20, y: -0.4}
@@ -90,6 +94,7 @@ MonoBehaviour:
     enemyDamage: 1.75
     dropTable: {fileID: 11400000, guid: b0925c4738e94adea23f07d665098f41, type: 2}
   - stageName: 1-5
+    elevatedFloorCounts: {x: 0, y: 0, z: 2}
     spawnOffsets:
     - {x: 10, y: 2.2}
     enemyTypes: 06000000
@@ -97,6 +102,7 @@ MonoBehaviour:
     enemyDamage: 6
     dropTable: {fileID: 11400000, guid: b0925c4738e94adea23f07d665098f41, type: 2}
   - stageName: 2-1
+    elevatedFloorCounts: {x: 2, y: 0, z: 1}
     spawnOffsets:
     - {x: 2, y: -3}
     - {x: 20, y: -0.4}
@@ -115,6 +121,7 @@ MonoBehaviour:
     enemyDamage: 2
     dropTable: {fileID: 11400000, guid: 6794b23a10534f4da598c2e07f93168b, type: 2}
   - stageName: 2-2
+    elevatedFloorCounts: {x: 1, y: 2, z: 0}
     spawnOffsets:
     - {x: 2, y: -3}
     - {x: 20, y: -0.4}
@@ -135,6 +142,7 @@ MonoBehaviour:
     enemyDamage: 2.25
     dropTable: {fileID: 11400000, guid: 6794b23a10534f4da598c2e07f93168b, type: 2}
   - stageName: 2-3
+    elevatedFloorCounts: {x: 0, y: 2, z: 1}
     spawnOffsets:
     - {x: 2, y: -3}
     - {x: 20, y: -0.4}
@@ -157,6 +165,7 @@ MonoBehaviour:
     enemyDamage: 2.5
     dropTable: {fileID: 11400000, guid: 6794b23a10534f4da598c2e07f93168b, type: 2}
   - stageName: 2-4
+    elevatedFloorCounts: {x: 2, y: 1, z: 2}
     spawnOffsets:
     - {x: 2, y: -3}
     - {x: 20, y: -0.4}
@@ -181,6 +190,7 @@ MonoBehaviour:
     enemyDamage: 2.75
     dropTable: {fileID: 11400000, guid: 6794b23a10534f4da598c2e07f93168b, type: 2}
   - stageName: 2-5
+    elevatedFloorCounts: {x: 0, y: 2, z: 0}
     spawnOffsets:
     - {x: 10, y: 2.2}
     enemyTypes: 0e000000
@@ -188,6 +198,7 @@ MonoBehaviour:
     enemyDamage: 8
     dropTable: {fileID: 11400000, guid: 6794b23a10534f4da598c2e07f93168b, type: 2}
   - stageName: 3-1
+    elevatedFloorCounts: {x: 1, y: 2, z: 1}
     spawnOffsets:
     - {x: 2, y: -3}
     - {x: 20, y: -0.4}
@@ -208,6 +219,7 @@ MonoBehaviour:
     enemyDamage: 3
     dropTable: {fileID: 11400000, guid: ea870f5f24b942e5bc63a409731a6d22, type: 2}
   - stageName: 3-2
+    elevatedFloorCounts: {x: 2, y: 0, z: 2}
     spawnOffsets:
     - {x: 2, y: -3}
     - {x: 20, y: -0.4}
@@ -230,6 +242,7 @@ MonoBehaviour:
     enemyDamage: 3.25
     dropTable: {fileID: 11400000, guid: ea870f5f24b942e5bc63a409731a6d22, type: 2}
   - stageName: 3-3
+    elevatedFloorCounts: {x: 2, y: 2, z: 0}
     spawnOffsets:
     - {x: 2, y: -3}
     - {x: 20, y: -0.4}
@@ -254,6 +267,7 @@ MonoBehaviour:
     enemyDamage: 3.5
     dropTable: {fileID: 11400000, guid: ea870f5f24b942e5bc63a409731a6d22, type: 2}
   - stageName: 3-4
+    elevatedFloorCounts: {x: 0, y: 2, z: 2}
     spawnOffsets:
     - {x: 2, y: -3}
     - {x: 20, y: -0.4}
@@ -280,6 +294,7 @@ MonoBehaviour:
     enemyDamage: 3.75
     dropTable: {fileID: 11400000, guid: ea870f5f24b942e5bc63a409731a6d22, type: 2}
   - stageName: 3-5
+    elevatedFloorCounts: {x: 2, y: 1, z: 1}
     spawnOffsets:
     - {x: 10, y: 2.2}
     enemyTypes: 0a000000
