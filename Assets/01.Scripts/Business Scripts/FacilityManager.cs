@@ -13,6 +13,8 @@ public class FacilityManager : Singleton<FacilityManager> //시설 업그레이�
     public int CookCatNum { get => data.cookCatNum; set => data.cookCatNum = value; }
     public int RestaurantLevel { get => data.restaurantLevel; set => data.restaurantLevel = value; }
     public int[] FoodMachine => data.foodMachine;
+    public int[] FoodMachine2 => data.foodMachine2;
+    public int[] MachineCount => data.MachineCount;
 
     // 업그레이드 효과값 → PlayerData 프록시 (기존 이름 유지 → 외부 호출부 안 깨짐)
     public float MakeSpeed { get => data.MakeSpeed; set => data.MakeSpeed = value; }
@@ -30,7 +32,7 @@ public class FacilityManager : Singleton<FacilityManager> //시설 업그레이�
     int refrigerator;
     int oven;
 
-    public Button gasstoveBtn;
+    public Button gasstoveBtn;  //가구 추가 1
     public Button microwaveOvenBtn;
     public Button steamerBtn;
     public Button deepfryerBtn;
@@ -45,11 +47,19 @@ public class FacilityManager : Singleton<FacilityManager> //시설 업그레이�
     public TextMeshProUGUI chefLevelText;
 
     public TextMeshProUGUI infoText;
-    
+
     public TextMeshProUGUI chefBuyText;
     public TextMeshProUGUI cheflevelBuyText;
     public TextMeshProUGUI restaurantBuyText;
 
+    public GameObject selectMachinesParentObj;   //가구 추가 2
+    public Sprite[] selectMachinesImgs;
+    public Image selectMachinesPopup;
+    public TextMeshProUGUI selectMachinesText;
+    Button[] selectMachinesObjs;
+    GameObject nowSelectMachine;
+    int nowSelectMachineNum;
+    public TextMeshProUGUI[] selectMachineCountText;
 
     private void Start()
     {
@@ -70,11 +80,25 @@ public class FacilityManager : Singleton<FacilityManager> //시설 업그레이�
         if (ChefCatLevel >= 9) { ChefCatLevel = 9; chefLevelBtn.interactable = false; }
 
         chefLevelText.text = $"Chef Level : {ChefCatLevel}";
+        selectMachinesObjs = selectMachinesParentObj.GetComponentsInChildren<Button>();
         UpgradeRestaurant();
 
         // 식당 레벨만큼만 직원 고용 가능
         chefBtn.interactable = CookCatNum < RestaurantLevel;
         InfoText();
+
+        selectMachinesText.text = "";
+        for (int i = 0; i < selectMachinesObjs.Length; i++)
+        {
+            if (FoodMachine2[i] != 0)   //저장 데이터가 0 이 아닐시 ( 가구 선택이 되있을시)
+            {
+                selectMachinesObjs[i].transform.GetChild(1).gameObject.SetActive(false);//+모양 비활성화
+                selectMachinesObjs[i].transform.GetChild(2).gameObject.SetActive(true);//가구 이미지 활성화
+                selectMachinesObjs[i].transform.GetChild(2).GetComponent<Image>().sprite = selectMachinesImgs[FoodMachine2[i] - 1];//숫자 이미지 추가
+            }
+        }
+        for (int i = 0; i < selectMachineCountText.Length; i++)
+            selectMachineCountText[i].text = MachineCount[i].ToString();
     }
     public void OnClickGasstoveBtn(Button btn)
     {
@@ -254,14 +278,24 @@ public class FacilityManager : Singleton<FacilityManager> //시설 업그레이�
         CurrencyManager.instance.AddGold(new BigNumber(goldAmount));
     }
 
-    public void UpgradeRestaurant()
+    public void UpgradeRestaurant() //레스토랑 업그레이드 시 셰프 위치, 레스토랑 변경
     {
+        selectMachinesObjs[2].gameObject.SetActive(false);
+        selectMachinesObjs[3].gameObject.SetActive(false);
+        selectMachinesObjs[4].gameObject.SetActive(false);
+
         if (RestaurantLevel == 2)
         {
             restaurants[0].gameObject.SetActive(false);
             restaurants[1].gameObject.SetActive(true);
             restaurants[2].gameObject.SetActive(false);
             restaurants[1].GetComponent<RestaurantPosition>().seats.ResetSeats();
+
+            selectMachinesObjs[2].gameObject.SetActive(true);
+            for (int i = 0; i < 3; i++)
+                selectMachinesObjs[i].transform.localScale = new Vector3(.8f, .8f, .8f);
+            selectMachinesObjs[0].transform.localPosition = new Vector3(-63, -43, 0);
+            selectMachinesObjs[1].transform.localPosition = new Vector3(723, 33, 0);
         }
         else if (RestaurantLevel == 3)
         {
@@ -269,9 +303,130 @@ public class FacilityManager : Singleton<FacilityManager> //시설 업그레이�
             restaurants[1].gameObject.SetActive(false);
             restaurants[2].gameObject.SetActive(true);
             restaurants[2].GetComponent<RestaurantPosition>().seats.ResetSeats();
+
+            selectMachinesObjs[2].gameObject.SetActive(true);
+            selectMachinesObjs[3].gameObject.SetActive(true);
+            selectMachinesObjs[4].gameObject.SetActive(true);
+            for (int i = 0; i < 5; i++)
+                selectMachinesObjs[i].transform.localScale = new Vector3(.6f, .6f, .6f);
+            selectMachinesObjs[0].transform.localPosition = new Vector3(-224, -10, 0);
+            selectMachinesObjs[1].transform.localPosition = new Vector3(64, 1, 0);
+            selectMachinesObjs[2].transform.localPosition = new Vector3(352, 1, 0);
         }
         chefBtn.interactable = CookCatNum < RestaurantLevel;
         ProductionManager.instance.ChefPosition();
+    }
+
+    public void SelectMachines2(GameObject selectMachine)  // + 추가 버튼 누르면 팝업
+    {
+        nowSelectMachine = selectMachine;
+
+        selectMachinesPopup.gameObject.SetActive(true);
+    }
+    public void SelectMachines2Select(int index)    //팝업에서 가구 1~6 선택
+    {
+        nowSelectMachineNum = index;
+        switch (index)
+        {
+            case 0:
+                selectMachinesText.text = $"Gas Stove\r\n\r\n\n Food Make Speed + 0.1";
+                break;
+            case 1:
+                selectMachinesText.text = $"Refrigerator\r\n\r\n\n No Use Fish Chance += 0.05";
+                break;
+            case 2:
+                selectMachinesText.text = $"Deepfryer\r\n\r\n Make Speed + 0.2\n Gold Bonus + 0.05";
+                break;
+            case 3:
+                selectMachinesText.text = $"Oven\r\n\r\n\n Food Make Speed + 0.1";
+                break;
+            case 4:
+                selectMachinesText.text = $"Microwave Oven\r\n\r\n\n GoldBonus + 0.15";
+                break;
+            case 5:
+                selectMachinesText.text = $"Steamer\r\n\r\n Make Speed + 0.05\n GoldBonus + 0.05";
+                break;
+        }
+    }
+    public void SelectMachines2Use()    //팝업에서 가구 1~6 선택
+    {
+        int slotIndex = -1;
+
+        // 지금 선택한 슬롯 번호 찾기
+        for (int i = 0; i < selectMachinesObjs.Length; i++)
+        {
+            if (selectMachinesObjs[i].gameObject == nowSelectMachine)
+            {
+                slotIndex = i;
+                break;
+            }
+        }
+
+        if (slotIndex == -1)
+            return;
+
+
+        // =========================
+        // 1. 기존 가구 효과 제거
+        // =========================
+
+        // 저장값:
+        // 0 = 비어있음
+        // 1~6 = 가구
+        int oldSavedMachine = FoodMachine2[slotIndex];
+
+        if (oldSavedMachine != 0)
+        {
+            int oldMachineNum = oldSavedMachine - 1;
+
+            RemoveMachineEffect(oldMachineNum);
+            MachineCount[oldMachineNum]++; // 기존 가구 돌려받음
+        }
+
+
+        // =========================
+        // 2. 새 가구 효과 추가
+        // =========================
+
+        // 보유 개수 없으면 설치 불가
+        if (MachineCount[nowSelectMachineNum] <= 0)
+            return;
+
+        MachineCount[nowSelectMachineNum]--; // 하나 사용
+        AddMachineEffect(nowSelectMachineNum);
+
+
+        // =========================
+        // 3. 이미지 변경
+        // =========================
+
+        nowSelectMachine.transform.GetChild(1).gameObject.SetActive(false);
+        nowSelectMachine.transform.GetChild(2).gameObject.SetActive(true);
+
+        nowSelectMachine.transform.GetChild(2)
+            .GetComponent<Image>().sprite =
+            selectMachinesImgs[nowSelectMachineNum];
+
+
+        // =========================
+        // 4. 새 가구 저장
+        // =========================
+
+        FoodMachine2[slotIndex] = nowSelectMachineNum + 1;
+
+        SaveManager.instance.Save();
+
+        InfoText();
+
+        for (int i = 0; i < selectMachineCountText.Length; i++)
+            selectMachineCountText[i].text = MachineCount[i].ToString();
+
+        selectMachinesPopup.gameObject.SetActive(false);
+    }
+
+    public void SelectMachines2Close()    //팝업에서 가구 1~6 선택
+    {
+        selectMachinesPopup.gameObject.SetActive(false);
     }
 
     public void InfoText()
@@ -280,5 +435,69 @@ public class FacilityManager : Singleton<FacilityManager> //시설 업그레이�
         chefLevelText.text = $"Chef Level : {(ChefCatLevel)}";
         restaurantBuyText.text = $"{1000 * RestaurantLevel}";
         chefBuyText.text = $"{2000 * (CookCatNum + 1)}";
+    }
+
+    private void AddMachineEffect(int machineNum)
+    {
+        switch (machineNum)
+        {
+            case 0: // 가스레인지
+                MakeSpeed += 0.1f;
+                break;
+
+            case 1: // 냉장고
+                NoUseFishChance += 0.05f;
+                break;
+
+            case 2: // 튀김기
+                MakeSpeed += 0.2f;
+                GoldBonus += 0.05f;
+                break;
+
+            case 3: // 오븐
+                SpecialChance += 0.3f;
+                break;
+
+            case 4: // 전자레인지
+                GoldBonus += 0.15f;
+                break;
+
+            case 5: // 찜기
+                MakeSpeed += 0.05f;
+                GoldBonus += 0.05f;
+                break;
+        }
+    }
+
+    private void RemoveMachineEffect(int machineNum)
+    {
+        switch (machineNum)
+        {
+            case 0:
+                MakeSpeed -= 0.1f;
+                break;
+
+            case 1:
+                NoUseFishChance -= 0.05f;
+                break;
+
+            case 2:
+                MakeSpeed -= 0.2f;
+                GoldBonus -= 0.05f;
+                break;
+
+            case 3:
+                SpecialChance -= 0.3f;
+                break;
+
+            case 4:
+                GoldBonus -= 0.15f;
+                break;
+
+            case 5:
+                MakeSpeed -= 0.05f;
+                GoldBonus -= 0.05f;
+                break;
+        }
     }
 }

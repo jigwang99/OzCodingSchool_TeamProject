@@ -67,6 +67,8 @@ public class PlayerData
                                            // 3 튀김기
                                            // 4 냉장고
                                            // 5 오븐
+    public int[] foodMachine2 = new int[5]; // 가구선택 5칸
+    public int[] MachineCount = new int[6];
 
     // 식당 업그레이드 효과값
     public float MakeSpeed = 0f;
