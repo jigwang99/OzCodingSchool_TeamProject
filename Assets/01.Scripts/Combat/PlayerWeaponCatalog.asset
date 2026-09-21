@@ -14,23 +14,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerWeaponCatalog
   weapons:
   - id: swords_0
-    prefab: {fileID: 5108586841713532949, guid: 5e2b871da22838340ac81521a5aa6175, type: 3}
+    prefab: {fileID: 5108586841713532949, guid: db8107fea9a26cd478986e6d3350f99d, type: 3}
     baseDamage: 10
     damagePerLevel: 5
   - id: swords_1
-    prefab: {fileID: 3038567190503479868, guid: 86cacb35418d0014282b84ae8adeb091, type: 3}
+    prefab: {fileID: 3038567190503479868, guid: f8acff7d4ed49684483dd770447b98ba, type: 3}
     baseDamage: 15
     damagePerLevel: 5
   - id: swords_2
-    prefab: {fileID: 85547855024863184, guid: 049fd5c586e1bc147b002f17f085284f, type: 3}
+    prefab: {fileID: 85547855024863184, guid: 7896eebfe7101ff42b89600188e52a66, type: 3}
     baseDamage: 20
     damagePerLevel: 5
   - id: swords_3
-    prefab: {fileID: 4997258140202185063, guid: 4ab12087b014ed944ae76bb304e2889d, type: 3}
+    prefab: {fileID: 4997258140202185063, guid: 8a6e8349c98ddea48bf1427c8856e489, type: 3}
     baseDamage: 25
     damagePerLevel: 5
   - id: swords_4
-    prefab: {fileID: 7486135362970670261, guid: 3c531bbd0e554294dbd197977b0f0fa9, type: 3}
+    prefab: {fileID: 7486135362970670261, guid: 79a3ec560a5661444916fd104b475f3b, type: 3}
     baseDamage: 30
     damagePerLevel: 5
   - id: swords_5

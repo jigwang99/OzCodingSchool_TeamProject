@@ -40,18 +40,7 @@ namespace PixelRestaurant.Gacha
 
         private void Start()
         {
-            // 폰트 크기는 2단계에서 수정 예정
-            if (itemNameText != null)
-                itemNameText.fontSize = 60;
-
-            if (rarityText != null)
-                rarityText.fontSize = 20;
-
-            if (gradeText != null)
-                gradeText.fontSize = 20;
-
-            if (countText != null)
-                countText.fontSize = 20;
+      
         }
 
         /// <summary>
