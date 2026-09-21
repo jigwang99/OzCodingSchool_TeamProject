@@ -6,7 +6,8 @@ public enum UpgradeType
     Health,
     FishDropRate,
     RestaurantExpansion,
-    ChefCookingSkill
+    ChefCookingSkill,
+    GachaRate
 }
 
 [CreateAssetMenu(fileName = "UpgradeData", menuName = "Upgrade/UpgradeData")]
@@ -40,7 +41,6 @@ public class UpgradeData : ScriptableObject
         return 1f + Mathf.Max(0, level - 1) * dropChanceMultiplierPerLevel;
     }
 
-    //일단 레벨마다 +20해둠
     public float GetMaxHealth(int level)
     {
         return 100f + (level - 1) * 20f;
