@@ -92,7 +92,7 @@ public class UnitAttack : MonoBehaviour
         return isActiveAndEnabled && owner != null && owner.isActiveAndEnabled
             && owner.Health != null && !owner.Health.IsDead && owner.Target == target
             && target != null && target.isActiveAndEnabled && target.Health != null
-            && !target.Health.IsDead && IsInAttackRange(target.transform);
+            && !target.Health.IsDead && IsUnitInAttackRange(target);
     }
 
     public event Action<IDamageable, DamageInfo> OnAttackHit;
@@ -100,8 +100,13 @@ public class UnitAttack : MonoBehaviour
 
     public bool IsInAttackRange(Transform target)
     {
-        return target != null && Mathf.Abs(transform.position.x - target.position.x) <= attackRange;
+        return target != null && IsUnitInAttackRange(target.GetComponent<BaseUnitController>());
     }
+
+    // 이미 알고 있는 컨트롤러를 전달해 반복 GetComponent와 층 판정을 줄인다.
+    public bool IsUnitInAttackRange(BaseUnitController target) =>
+        target != null && owner != null &&
+        Mathf.Abs(transform.position.x - target.transform.position.x) <= attackRange && owner.CanEngage(target);
 
     public bool Attack(IDamageable target, bool isCritical = false)
     {

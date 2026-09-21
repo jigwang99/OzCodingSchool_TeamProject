@@ -7,6 +7,8 @@ public class StageData
 {
     [Header("Info")]
     [SerializeField] private string stageName;
+    [Header("Map: 좌 / 중앙 / 우 공중 발판 수 (각 0~2)")]
+    [SerializeField] private Vector3Int elevatedFloorCounts = new Vector3Int(1, 0, 2);
 
     [Header("Enemy Placement (스폰 기준점 기준 오프셋, 길이 = 적 수)")]
     [SerializeField] private Vector2[] spawnOffsets;
@@ -22,6 +24,9 @@ public class StageData
     [SerializeField] private StageDropTable dropTable;
 
     public string StageName => stageName;
+    public Vector3Int ElevatedFloorCounts => new Vector3Int(
+        Mathf.Clamp(elevatedFloorCounts.x, 0, 2), Mathf.Clamp(elevatedFloorCounts.y, 0, 2),
+        Mathf.Clamp(elevatedFloorCounts.z, 0, 2));
     public Vector2[] SpawnOffsets => spawnOffsets;
     public int EnemyCount => spawnOffsets != null ? spawnOffsets.Length : 0;
     public float EnemyMaxHp => enemyMaxHp;
@@ -29,7 +34,7 @@ public class StageData
     public StageDropTable DropTable => dropTable;
 
     public StageData(string stageName, Vector2[] spawnOffsets, float enemyMaxHp,
-        float enemyDamage, StageDropTable dropTable, PoolType[] enemyTypes = null)
+        float enemyDamage, StageDropTable dropTable, PoolType[] enemyTypes = null, Vector3Int? elevatedFloorCounts = null)
     {
         this.stageName = stageName;
         this.spawnOffsets = spawnOffsets;
@@ -37,6 +42,7 @@ public class StageData
         this.enemyDamage = enemyDamage;
         this.dropTable = dropTable;
         this.enemyTypes = enemyTypes;
+        this.elevatedFloorCounts = elevatedFloorCounts ?? new Vector3Int(1, 0, 2);
     }
 
     public PoolType GetEnemyType(int spawnIndex)
@@ -58,7 +64,7 @@ public class StageData
         PoolType[] clonedTypes = enemyTypes != null
             ? (PoolType[])enemyTypes.Clone()
             : Array.Empty<PoolType>();
-        return new StageData(stageName, clonedOffsets, enemyMaxHp, enemyDamage, dropTable, clonedTypes);
+        return new StageData(stageName, clonedOffsets, enemyMaxHp, enemyDamage, dropTable, clonedTypes, elevatedFloorCounts);
     }
 }
 [CreateAssetMenu(fileName = "StageDataList", menuName = "Combat/Stage Data List")]

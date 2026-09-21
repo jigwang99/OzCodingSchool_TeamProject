@@ -13,7 +13,8 @@ public class CombatHealthBarCanvas : MonoBehaviour
     [SerializeField] private HealthBarUI barPrefab;
     [SerializeField, Min(0)] private int initialPoolSize = 8;
     [SerializeField] private Vector3 playerOffset = new Vector3(0f, 3f, 0f);
-    [SerializeField] private Vector3 enemyOffset = new Vector3(0f, 3f, 0f);
+    [Tooltip("적 외형 상단에서 체력바까지의 여백. 생성 시 대기 자세를 기준으로 높이를 고정합니다.")]
+    [SerializeField] private Vector3 enemyOffset = new Vector3(0f, 0.15f, 0f);
 
     private sealed class Entry
     {
@@ -26,6 +27,7 @@ public class CombatHealthBarCanvas : MonoBehaviour
     private readonly List<Entry> entries = new();
     private readonly Stack<HealthBarUI> available = new();
     private readonly Stack<Entry> spareEntries = new();
+    private readonly List<SpriteRenderer> spriteBuffer = new List<SpriteRenderer>(16);
     private bool initialized;
 
     private void Awake()
@@ -78,7 +80,26 @@ public class CombatHealthBarCanvas : MonoBehaviour
 
     private void RegisterEnemy(EnemyController enemy)
     {
-        if (initialized) Register(enemy, enemyOffset);
+        if (!initialized || enemy == null) return;
+        Vector3 offset = enemyOffset;
+        float top = float.NegativeInfinity;
+        enemy.GetComponentsInChildren<SpriteRenderer>(spriteBuffer);
+        foreach (SpriteRenderer sprite in spriteBuffer)
+        {
+            if (!sprite.enabled || sprite.sprite == null) continue;
+            top = Mathf.Max(top, sprite.bounds.max.y);
+        }
+        // 임시 외형처럼 스프라이트가 없으면 콜라이더 상단을 기준으로 한다.
+        if (float.IsNegativeInfinity(top))
+        {
+            Collider2D body = enemy.GetComponent<Collider2D>();
+            top = body != null ? body.bounds.max.y : enemy.transform.position.y;
+        }
+        Vector3 anchor = enemy.transform.position;
+        anchor.y = top;
+        offset.y += enemy.transform.InverseTransformPoint(anchor).y;
+        // 등록 시 한 번 계산하여 공격/걷기 애니메이션에 따라 체력바가 출렁이지 않게 한다.
+        Register(enemy, offset);
     }
 
     private void Register(BaseUnitController unit, Vector3 offset)

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-// 카메라 추적이 끝난 뒤, 두 장의 배경을 화면 좌측이 속한 구간에 맞춰 재배치한다.
+// 두 장의 배경을 이어 붙인 유한 맵. 카메라 이동으로 각 이미지의 양 끝까지 볼 수 있다.
 [DefaultExecutionOrder(100)]
 public class CombatInfiniteBackground : MonoBehaviour
 {
@@ -37,8 +37,16 @@ public class CombatInfiniteBackground : MonoBehaviour
     private Vector2 referenceSpriteSize;
     private float originalWidth;
     private float anchorLeft;
-    private float previousScale = -1f;
-    private int previousSegment = int.MinValue;
+    private bool initialized;
+
+    public Vector2 MapHorizontalRange => new Vector2(anchorLeft, anchorLeft + originalWidth * 2f);
+
+    public bool PrepareStage(int stageNumber)
+    {
+        if (!Initialize()) return false;
+        ApplyBackground(Mathf.Max(1, stageNumber));
+        return true;
+    }
 
     private void OnEnable()
     {
@@ -60,8 +68,11 @@ public class CombatInfiniteBackground : MonoBehaviour
         }
     }
 
-    private void Start()
+    private void Start() => PrepareStage(stageManager != null ? stageManager.CurrentStageNumber : 1);
+
+    private bool Initialize()
     {
+        if (initialized) return true;
         if (targetCamera == null) targetCamera = Camera.main;
         if (targetCamera == null || first == null || second == null || first == second ||
             first.sprite == null || first.sprite != second.sprite)
@@ -70,7 +81,7 @@ public class CombatInfiniteBackground : MonoBehaviour
             Debug.LogError("[CombatInfiniteBackground] 카메라와 같은 스프라이트를 사용하는 배경 두 장을 연결하세요.", this);
 #endif
             enabled = false;
-            return;
+            return false;
         }
 
         firstScale = first.transform.localScale;
@@ -87,17 +98,21 @@ public class CombatInfiniteBackground : MonoBehaviour
         if (originalWidth <= 0f)
         {
             enabled = false;
-            return;
+            return false;
         }
+        initialized = true;
         ApplyAmbientMaterial();
-        ApplyStageBackground();
+        return true;
     }
 
     private void ApplyStageBackground()
+        => PrepareStage(stageManager != null ? stageManager.CurrentStageNumber : 1);
+
+    private void ApplyBackground(int stageNumber)
     {
         if (originalWidth <= 0f) return;
         // 챕터별 5개 스테이지. 전환 페이드의 검은 화면에서 호출된다.
-        int chapter = stageManager != null ? (Mathf.Max(1, stageManager.CurrentStageNumber) - 1) / 5 : 0;
+        int chapter = (stageNumber - 1) / 5;
         currentChapter = chapter;
         if (chapterBackgrounds != null && chapter < chapterBackgrounds.Length && chapterBackgrounds[chapter] != null)
         {
@@ -113,15 +128,12 @@ public class CombatInfiniteBackground : MonoBehaviour
                     authoredSecondScale.y * referenceSpriteSize.y / size.y, authoredSecondScale.z);
             }
         }
-        previousScale = -1f;
-        previousSegment = int.MinValue;
         UpdateTiles();
         UpdateAmbient();
     }
 
     private void LateUpdate()
     {
-        UpdateTiles();
         // 배속과 일시정지를 따르며, 재도전 때 시간을 초기화하지 않아 움직임이 튀지 않는다.
         ambientTime += Time.deltaTime * ambientSpeed;
         UpdateAmbient();
@@ -159,28 +171,11 @@ public class CombatInfiniteBackground : MonoBehaviour
 
     private void UpdateTiles()
     {
-        if (originalWidth <= 0f || targetCamera == null) return;
-        float depth = Vector3.Dot(first.transform.position - targetCamera.transform.position,
-            targetCamera.transform.forward);
-        float left = targetCamera.ViewportToWorldPoint(new Vector3(0f, 0.5f, depth)).x;
-        float right = targetCamera.ViewportToWorldPoint(new Vector3(1f, 0.5f, depth)).x;
-        float viewLeft = Mathf.Min(left, right);
-
-        // 두 장으로 언제나 화면을 덮도록, 초광폭 화면에서는 가로 폭만 보정한다.
-        float scale = Mathf.Max(1f, (Mathf.Abs(right - left) + 0.1f) / originalWidth);
-        float width = originalWidth * scale;
-        int segment = Mathf.FloorToInt((viewLeft - anchorLeft) / width);
-        if (segment == previousSegment && Mathf.Approximately(scale, previousScale)) return;
-
-        first.transform.localScale = new Vector3(firstScale.x * scale, firstScale.y, firstScale.z);
-        second.transform.localScale = new Vector3(secondScale.x * scale, secondScale.y, secondScale.z);
-
-        // 각 장의 반전 방향을 유지한다. 음수 이동과 여러 구간의 순간이동도 한 번에 처리한다.
-        bool firstOnLeft = segment % 2 == 0;
-        PlaceLeftEdge(first, anchorLeft + (firstOnLeft ? segment : segment + 1) * width);
-        PlaceLeftEdge(second, anchorLeft + (firstOnLeft ? segment + 1 : segment) * width);
-        previousSegment = segment;
-        previousScale = scale;
+        if (originalWidth <= 0f) return;
+        first.transform.localScale = firstScale;
+        second.transform.localScale = secondScale;
+        PlaceLeftEdge(first, anchorLeft);
+        PlaceLeftEdge(second, anchorLeft + originalWidth);
     }
 
     private static void PlaceLeftEdge(SpriteRenderer tile, float left)

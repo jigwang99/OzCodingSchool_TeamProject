@@ -14,14 +14,18 @@ public class GameManager : Singleton<GameManager>
         if (instance != this)
             return;
 
+        QualitySettings.vSyncCount = 0;
+        Application.targetFrameRate = 60;
         // [추가] 백그라운드에서도 게임이 멈추지 않고 진행되도록 설정
         Application.runInBackground = true;
 
         LoadPlayerData();
 
-        // 씬에 별도 배치하지 않아도 방치 보상은 게임 전체에서 계속 동작해야 한다.
+        // 씬에 별도 배치하지 않아도 방치 보상은 게임 전체에서 계속 동작해야 함.
         if (GetComponent<IdleFishManager>() == null)
             gameObject.AddComponent<IdleFishManager>();
+
+
     }
 
     // [추가] 창 포커스를 잃으면(다른 창 클릭) 소리를 끄고, 돌아오면 다시 켬
