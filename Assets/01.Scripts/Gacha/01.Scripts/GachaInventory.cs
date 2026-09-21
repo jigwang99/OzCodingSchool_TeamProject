@@ -67,6 +67,7 @@ namespace PixelRestaurant.Gacha
         public void AddItem(string itemId, int count = 1)
         {
             AddItem(itemId, count, saveImmediately: true);
+
         }
 
         // DrawGacha defers disk writes until the entire result has been awarded.
@@ -92,10 +93,12 @@ namespace PixelRestaurant.Gacha
 
             // 전투 무기 목록에 반영
             SyncWeaponToPlayerData(itemId, count);
-
+            // 가챠 가구 목록에 반영
+            SyncFurnitureToPlayerData(itemId, count);
             // 가챠 인벤토리 전체를 PlayerData에 직접 반영
             SyncInventoryToPlayerData();
-
+            // 가챠 레시피 목록에 반영
+            SyncRecipeToPlayerData(itemId, count);
             // UI 등에 변경 사실 알림
             OnInventoryChanged?.Invoke();
 
@@ -103,6 +106,8 @@ namespace PixelRestaurant.Gacha
             if (saveImmediately)
                 SaveGameData();
         }
+
+
         private void SyncInventoryToPlayerData()
         {
             if (GameManager.instance == null)
@@ -162,13 +167,143 @@ namespace PixelRestaurant.Gacha
                     if (gachaItem.Group == GachaGroup.Weapon && !string.IsNullOrEmpty(gachaItem.LinkedWeaponId))
                     {
                         GameManager.instance.PlayerData.AddWeapon(gachaItem.LinkedWeaponId, count);
-                     
+
                     }
                     return;
                 }
 
             }
 
+        }
+        private void SyncFurnitureToPlayerData(
+     string itemId,
+     int count)
+        {
+            if (GameManager.instance == null ||
+                GameManager.instance.PlayerData == null)
+                return;
+
+            if (count <= 0)
+                return;
+
+            int furnitureIndex = -1;
+
+            // 실제 가챠 아이템 ID에 맞게 수정
+            switch (itemId)
+            {
+                case "furniture_0":
+                    furnitureIndex = 0;
+                    break;
+
+                case "furniture_1":
+                    furnitureIndex = 1;
+                    break;
+
+                case "furniture_2":
+                    furnitureIndex = 2;
+                    break;
+
+                case "furniture_3":
+                    furnitureIndex = 3;
+                    break;
+
+                case "furniture_4":
+                    furnitureIndex = 4;
+                    break;
+
+                case "furniture_5":
+                    furnitureIndex = 5;
+                    break;
+            }
+
+            if (furnitureIndex == -1)
+                return;
+
+            PlayerData playerData =
+                GameManager.instance.PlayerData;
+
+            if (playerData.foodMachine == null ||
+                furnitureIndex >= playerData.foodMachine.Length)
+                return;
+
+            // 가챠에서 획득한 가구 개수 누적
+            if (playerData.foodMachine[furnitureIndex]
+                > int.MaxValue - count)
+                return;
+
+            playerData.foodMachine[furnitureIndex] += count;
+        }
+        private void SyncRecipeToPlayerData(
+    string gachaItemId,
+    int count)
+        {
+            if (GameManager.instance == null ||
+                GameManager.instance.PlayerData == null)
+                return;
+
+            if (string.IsNullOrEmpty(gachaItemId) ||
+                count <= 0)
+                return;
+
+            var allPools =
+                Resources.FindObjectsOfTypeAll<GachaPoolData>();
+
+            foreach (var poolData in allPools)
+            {
+                if (poolData == null ||
+                    poolData.Items == null)
+                    continue;
+
+                var gachaItem = poolData.Items.Find(
+                    item => item != null &&
+                            item.ItemId == gachaItemId &&
+                            item.Group == GachaGroup.Recipe
+                );
+
+                if (gachaItem == null)
+                    continue;
+
+                if (string.IsNullOrWhiteSpace(
+                    gachaItem.LinkedRecipeId))
+                {
+                    
+
+
+                    return;
+                }
+                PlayerData playerData =
+                    GameManager.instance.PlayerData;
+
+                string recipeId = gachaItem.LinkedRecipeId;
+
+                // 레시피 목록이 없으면 초기화
+                if (playerData.ownedRecipes == null)
+                {
+                    playerData.ownedRecipes =
+                        new List<OwnedRecipeData>();
+                }
+
+                // 이미 보유하고 있는 레시피인지 확인
+                bool alreadyOwned = playerData.ownedRecipes.Exists(
+                    recipe => recipe != null &&
+                              recipe.recipeId == recipeId
+                );
+
+                // 처음 획득한 레시피만 추가
+                if (!alreadyOwned)
+                {
+                    playerData.ownedRecipes.Add(
+                        new OwnedRecipeData
+                        {
+                            recipeId = recipeId,
+                            count = 1
+                        }
+                    );
+                }
+                   
+
+                return;
+            }
         }
         /// <summary>
         /// 보유 개수 조회
@@ -278,21 +413,8 @@ namespace PixelRestaurant.Gacha
             return _items.ContainsKey(itemId) && _items[itemId] > 0;
         }
 
-        /// <summary>
-        /// 인벤토리 전체 출력 (디버그용)
-        /// </summary>
-        
-        /// <summary>
-        /// 인벤토리 리셋 (테스트용)
-        /// </summary>
-        public void Clear()
-        {
-            _items.Clear();
-            _newItems.Clear();
-
-            OnInventoryChanged?.Invoke();
-
-        }
+    
+      
         public void LoadFromPlayerData()
         {
             if (GameManager.instance == null)
