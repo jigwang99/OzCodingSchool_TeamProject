@@ -4,6 +4,8 @@ public class GameManager : Singleton<GameManager>
 {
     public PlayerData PlayerData { get; private set; }
 
+    private float lastMasterVolume = 1f;
+
     protected override void Awake()
     {
         isDontDestroy = true;
@@ -25,7 +27,18 @@ public class GameManager : Singleton<GameManager>
     // [추가] 창 포커스를 잃으면(다른 창 클릭) 소리를 끄고, 돌아오면 다시 켬
     private void OnApplicationFocus(bool hasFocus)
     {
-        AudioListener.pause = !hasFocus;
+        if (hasFocus)
+        {
+            // 게임으로 돌아왔을 때는 이전 볼륨으로 복구
+            AudioListener.volume = lastMasterVolume;
+        }
+        else
+        {
+            // 백그라운드로 나갈 때는 현재 볼륨을 저장하고 0으로 만듦
+            // (소리는 일시정지되지 않고 무음 상태로 실시간 소모됨)
+            lastMasterVolume = AudioListener.volume;
+            AudioListener.volume = 0f;
+        }
     }
 
     private void LoadPlayerData()
