@@ -1,20 +1,28 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class HamburgerMenuUI : MonoBehaviour
 {
     [Header("UI 연결")]
     [SerializeField] private RectTransform menuRect;
+    [SerializeField] private string titleSceneName = "TitleScene";
 
     [Header("애니메이션 설정")]
     [SerializeField] private float duration = 0.15f;
 
+    private CanvasGroup rootCanvasGroup;
     private CanvasGroup menuCanvasGroup;
     private bool isOpen = false;
     private Coroutine menuCoroutine;
 
     private void Awake()
     {
+        if (!TryGetComponent(out rootCanvasGroup))
+        {
+            rootCanvasGroup = gameObject.AddComponent<CanvasGroup>();
+        }
+
         if (menuRect != null)
         {
             menuRect.pivot = new Vector2(0.5f, 1f);
@@ -28,13 +36,65 @@ public class HamburgerMenuUI : MonoBehaviour
         SetMenuStateImmediate(false);
     }
 
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+        SetMenuStateImmediate(false);
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void Start()
+    {
+        string currentScene = SceneManager.GetActiveScene().name;
+        CheckTitleScene(currentScene);
+        RefreshChildButtons(currentScene);
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (menuCoroutine != null)
+            StopCoroutine(menuCoroutine);
+
+        SetMenuStateImmediate(false);
+        CheckTitleScene(scene.name);
+        RefreshChildButtons(scene.name);
+    }
+
+    private void CheckTitleScene(string currentSceneName)
+    {
+        bool isTitle = (currentSceneName == titleSceneName);
+
+        if (rootCanvasGroup != null)
+        {
+            rootCanvasGroup.alpha = isTitle ? 0f : 1f;
+            rootCanvasGroup.blocksRaycasts = !isTitle;
+            rootCanvasGroup.interactable = !isTitle;
+        }
+    }
+
+    private void RefreshChildButtons(string currentSceneName)
+    {
+        SceneTransitionButton[] buttons = GetComponentsInChildren<SceneTransitionButton>(true);
+        foreach (var btn in buttons)
+        {
+            btn.CheckAndToggleVisibility(currentSceneName);
+        }
+    }
+
     private void Update()
     {
+        if (SceneManager.GetActiveScene().name == titleSceneName) return;
+
         if (Input.GetKeyDown(KeyCode.Tab))
         {
             ToggleMenu();
         }
     }
+
     public void ToggleMenu()
     {
         if (isOpen)
@@ -77,14 +137,21 @@ public class HamburgerMenuUI : MonoBehaviour
 
         menuCoroutine = StartCoroutine(AnimateMenuRoutine(targetScaleY, targetAlpha));
     }
+
     public void OnClickSettingButton()
     {
+        CloseMenu();
+
         if (UIManager.Instance != null)
         {
             UIManager.Instance.OpenSettingsPopup();
         }
+    }
 
+    public void OnClickSceneButton(string sceneName)
+    {
         CloseMenu();
+        SceneManager.LoadScene(sceneName);
     }
 
     private IEnumerator AnimateMenuRoutine(float targetScaleY, float targetAlpha)
@@ -111,7 +178,5 @@ public class HamburgerMenuUI : MonoBehaviour
 
         menuRect.localScale = targetScale;
         menuCanvasGroup.alpha = targetAlpha;
-
-
     }
 }
