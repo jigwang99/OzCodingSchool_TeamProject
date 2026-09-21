@@ -55,7 +55,7 @@ public class PlayerData
     public List<OwnedRecipeData> ownedRecipes = new List<OwnedRecipeData>();
 
     // 무기,가구,레시피 아이템
-    public GachaInventoryData gachaInventory =  new GachaInventoryData();
+    public GachaInventoryData gachaInventory = new GachaInventoryData();
 
     // 식당 상태 (구 PlayerPrefs 저장분)
     public int chefCatLevel = 1;         // 셰프고양이 레벨

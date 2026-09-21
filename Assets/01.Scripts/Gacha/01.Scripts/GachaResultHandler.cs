@@ -1,21 +1,7 @@
-﻿
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace PixelRestaurant.Gacha
 {
-    /// <summary>
-    /// 가챠 결과를 UI 카드로 표시한다.
-    ///
-    /// 역할:
-    /// 1. ObjectPool에서 결과 카드 가져오기
-    /// 2. 결과 위치 설정
-    /// 3. 아이템 정보 전달
-    /// 4. 카드 반환
-    ///
-    /// 주의:
-    /// 인벤토리에 아이템을 추가하지 않는다.
-    /// 인벤토리 추가는 GachaUIController에서 한 번만 담당한다.
-    /// </summary>
     public class GachaResultHandler : MonoBehaviour
     {
         private static GachaResultHandler _instance;
@@ -30,20 +16,30 @@ namespace PixelRestaurant.Gacha
                 {
                     _instance =
                         FindObjectOfType<GachaResultHandler>();
-
-                    if (_instance == null)
-                    {
-                        
-                    }
                 }
 
                 return _instance;
             }
         }
 
-        // =========================================================
-        // 초기화
-        // =========================================================
+        [Header("Card Spawn")]
+        [SerializeField]
+        private Vector2 spawnPosition = Vector2.zero;
+
+        [Header("Card Layout")]
+        [SerializeField]
+        private int cardsPerRow = 5;
+
+        [SerializeField]
+        private Vector2 cardSpacing =
+            new Vector2(120f, 160f);
+
+        [SerializeField]
+        private Vector2 layoutCenter = Vector2.zero;
+
+        [Header("Inventory Target")]
+        [SerializeField]
+        private RectTransform inventoryTarget;
 
         private void Awake()
         {
@@ -57,173 +53,177 @@ namespace PixelRestaurant.Gacha
 
             DontDestroyOnLoad(gameObject);
 
-            _objectPool =
-                GetComponent<GachaObjectPool>();
+            _objectPool = GetComponent<GachaObjectPool>();
 
             if (_objectPool == null)
             {
-               
+                Debug.LogError(
+                    "GachaObjectPool is missing.",
+                    this
+                );
             }
-
-            
         }
 
-        // =========================================================
-        // 결과 처리
-        // =========================================================
-
-        /// <summary>
-        /// 가챠 결과를 카드로 표시한다.
-        /// </summary>
-        /// <param name="item">뽑은 아이템</param>
-        /// <param name="parent">카드를 생성할 부모</param>
-        /// <returns>생성된 결과 카드</returns>
+        // 기존 호출 방식 유지
         public GameObject HandleGachaResult(
             GachaItem item,
             Transform parent)
         {
-            // -----------------------------------------------------
-            // 기본 검증
-            // -----------------------------------------------------
+            return HandleGachaResult(
+                item,
+                parent,
+                0,
+                1
+            );
+        }
 
-            if (item == null)
+        // 여러 장의 카드 배치 지원
+        public GameObject HandleGachaResult(
+            GachaItem item,
+            Transform parent,
+            int cardIndex,
+            int totalCards)
+        {
+            if (item == null ||
+                parent == null ||
+                _objectPool == null)
             {
-               
-
                 return null;
             }
 
-            if (_objectPool == null)
+            RectTransform parentRect =
+                parent as RectTransform;
+
+            if (parentRect == null)
             {
-               
+                Debug.LogError(
+                    "Result parent must be a RectTransform.",
+                    this
+                );
 
                 return null;
             }
-
-            if (parent == null)
-            {
-              
-
-                return null;
-            }
-
-            // -----------------------------------------------------
-            // ObjectPool에서 카드 가져오기
-            // -----------------------------------------------------
 
             GameObject resultCard =
                 _objectPool.GetObject();
 
             if (resultCard == null)
-            {
                 return null;
-            }
-
-            // -----------------------------------------------------
-            // 결과 위치 설정
-            // -----------------------------------------------------
 
             RectTransform cardRect =
                 resultCard.GetComponent<RectTransform>();
 
-            resultCard.transform.SetParent(
-                parent,
-                false
-            );
+            GachaRevealCard revealCard =
+                resultCard.GetComponent<GachaRevealCard>();
 
-            // UI 카드라면 anchoredPosition을 사용하는 것이 안전하다.
-            if (cardRect != null)
+            if (cardRect == null || revealCard == null)
             {
-                cardRect.anchoredPosition =
-                    Vector2.zero;
+                Debug.LogError(
+                    "Result card is missing required components.",
+                    resultCard
+                );
 
-                cardRect.localRotation =
-                    Quaternion.identity;
-
-                cardRect.localScale =
-                    Vector3.one;
-            }
-            else
-            {
-                resultCard.transform.localPosition =
-                    Vector3.zero;
-
-                resultCard.transform.localRotation =
-                    Quaternion.identity;
-
-                resultCard.transform.localScale =
-                    Vector3.one;
-            }
-
-            resultCard.name =
-                $"{item.ItemName}_ResultCard";
-
-            // -----------------------------------------------------
-            // 카드에 아이템 정보 전달
-            // -----------------------------------------------------
-
-            GachaResultItemDisplay itemDisplay =
-                resultCard.GetComponent<GachaResultItemDisplay>();
-
-            if (itemDisplay == null)
-            {
-            
-
-                // 잘못된 카드이므로 풀에 반환
                 _objectPool.ReturnObject(resultCard);
 
                 return null;
             }
 
-            // -----------------------------------------------------
-            // NEW 여부 확인
-            // -----------------------------------------------------
+            // 부모 설정
+            cardRect.SetParent(parentRect, false);
 
-            GachaInventory inventory =
-                GachaInventory.Instance;
+            // 풀에서 재사용한 카드의 기본 Transform 복원
+            cardRect.anchorMin =
+                new Vector2(0.5f, 0.5f);
 
-            bool isNew = false;
+            cardRect.anchorMax =
+                new Vector2(0.5f, 0.5f);
 
-            if (inventory != null)
-            {
-                isNew =
-                    inventory.IsNewItem(
-                        item.ItemId
-                    );
-            }
+            cardRect.pivot =
+                new Vector2(0.5f, 0.5f);
 
-            itemDisplay.SetItemInfo(
-                item,
-                isNew
-            );
+            cardRect.localScale = Vector3.one;
+            cardRect.localRotation = Quaternion.identity;
 
-            // -----------------------------------------------------
-            // 카드 활성화
-            // -----------------------------------------------------
+            cardRect.anchoredPosition = spawnPosition;
 
+            resultCard.name =
+                $"{item.ItemName}_ResultCard";
+
+            // 재사용 카드 활성화
             resultCard.SetActive(true);
 
-          
-            
+            // 아이템 정보 및 연출 초기화
+            revealCard.Setup(
+                item,
+                inventoryTarget
+            );
 
-            // -----------------------------------------------------
-            // 생성된 카드를 UIController에게 반환
-            // -----------------------------------------------------
+            // 각 카드의 목표 위치 계산
+            Vector2 targetPosition =
+                CalculateCardPosition(
+                    cardIndex,
+                    totalCards
+                );
+
+            // Back 카드 등장 연출
+            revealCard.PlaySpawnAnimation(
+                spawnPosition,
+                targetPosition
+            );
 
             return resultCard;
         }
 
-        // =========================================================
-        // ObjectPool 설정
-        // =========================================================
+        // 카드별 목표 좌표 계산
+        private Vector2 CalculateCardPosition(
+            int index,
+            int totalCards)
+        {
+            if (totalCards <= 1)
+            {
+                return layoutCenter;
+            }
+
+            int columns = Mathf.Max(1, cardsPerRow);
+
+            int row = index / columns;
+            int column = index % columns;
+
+            int totalRows =
+                Mathf.CeilToInt(
+                    (float)totalCards / columns
+                );
+
+            // 마지막 행에 카드가 적어도 가운데 정렬
+            int rowStart = row * columns;
+
+            int cardsInRow = Mathf.Min(
+                columns,
+                totalCards - rowStart
+            );
+
+            float x =
+                (column - (cardsInRow - 1) * 0.5f)
+                * cardSpacing.x;
+
+            float y =
+                ((totalRows - 1) * 0.5f - row)
+                * cardSpacing.y;
+
+            return layoutCenter + new Vector2(x, y);
+        }
 
         public void SetObjectPool(
             GachaObjectPool pool)
         {
             _objectPool = pool;
+        }
 
-          
+        // 씬에 배치된 인벤토리 버튼을 연결할 때 사용
+        public void SetInventoryTarget(
+            RectTransform target)
+        {
+            inventoryTarget = target;
         }
     }
 }
-
