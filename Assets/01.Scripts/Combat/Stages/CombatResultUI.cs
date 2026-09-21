@@ -1,7 +1,7 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
-// CombatScene의 전용 Canvas에만 배치한다. 진행/재시작은 StageManager가 전담한다.
+// CombatScene의 전용 Canvas에만 배치. 진행/재시작은 StageManager가 전담.
 [DisallowMultipleComponent]
 [RequireComponent(typeof(Canvas), typeof(CanvasScaler))]
 public class CombatResultUI : MonoBehaviour
