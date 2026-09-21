@@ -259,6 +259,7 @@ namespace PixelRestaurant.Gacha
                     GameManager.instance.PlayerData;
 
                 string recipeId = gachaItem.LinkedRecipeId;
+ 
 
                 // 레시피 목록이 없으면 초기화
                 if (playerData.ownedRecipes == null)
@@ -271,11 +272,14 @@ namespace PixelRestaurant.Gacha
                 bool alreadyOwned = playerData.ownedRecipes.Exists(
                     recipe => recipe != null &&
                               recipe.recipeId == recipeId
+
                 );
 
                 // 처음 획득한 레시피만 추가
                 if (!alreadyOwned)
-                {
+                
+
+
                     playerData.ownedRecipes.Add(
                         new OwnedRecipeData
                         {
@@ -288,7 +292,7 @@ namespace PixelRestaurant.Gacha
 
                 return;
             }
-        }
+       
         /// <summary>
         /// 보유 개수 조회
         /// </summary>

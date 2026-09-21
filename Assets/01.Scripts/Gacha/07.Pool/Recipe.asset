@@ -17,132 +17,56 @@ MonoBehaviour:
   items:
   - itemId: 001
     itemName: AceSpade
-    group: 0
+    group: 2
     rarity: 0
     grade: 1
     weight: 4
-    itemIcon: {fileID: 0}
+    itemIcon: {fileID: -4261018228057752908, guid: fb3f70245531e1442ae7e4b8b093f5aa, type: 3}
+    linkedWeaponId: 
+    linkedFurnitureId: 
+    linkedRecipeId: recipe_0
     stats:
       attackPower: 1
       goldBonusFlat: 0
       goldBonusRate: 0
   - itemId: 002
     itemName: TwoSpade
-    group: 0
+    group: 2
     rarity: 0
     grade: 2
     weight: 3
-    itemIcon: {fileID: 0}
+    itemIcon: {fileID: -5011394437853923541, guid: fb3f70245531e1442ae7e4b8b093f5aa, type: 3}
+    linkedWeaponId: 
+    linkedFurnitureId: 
+    linkedRecipeId: recipe_3
     stats:
       attackPower: 0
       goldBonusFlat: 0
       goldBonusRate: 0
   - itemId: 003
     itemName: TreeSpade
-    group: 0
+    group: 2
     rarity: 0
     grade: 3
     weight: 2
-    itemIcon: {fileID: 0}
+    itemIcon: {fileID: -211345686528130792, guid: fb3f70245531e1442ae7e4b8b093f5aa, type: 3}
+    linkedWeaponId: 
+    linkedFurnitureId: 
+    linkedRecipeId: recipe_6
     stats:
       attackPower: 0
       goldBonusFlat: 0
       goldBonusRate: 0
   - itemId: 004
     itemName: FourSpade
-    group: 0
+    group: 2
     rarity: 0
     grade: 4
     weight: 1
-    itemIcon: {fileID: 0}
-    stats:
-      attackPower: 0
-      goldBonusFlat: 0
-      goldBonusRate: 0
-  - itemId: 005
-    itemName: FiveSpade
-    group: 0
-    rarity: 1
-    grade: 1
-    weight: 4
-    itemIcon: {fileID: 0}
-    stats:
-      attackPower: 0
-      goldBonusFlat: 0
-      goldBonusRate: 0
-  - itemId: 006
-    itemName: SixSpade
-    group: 0
-    rarity: 1
-    grade: 2
-    weight: 3
-    itemIcon: {fileID: 0}
-    stats:
-      attackPower: 0
-      goldBonusFlat: 0
-      goldBonusRate: 0
-  - itemId: 007
-    itemName: SevenSpade
-    group: 0
-    rarity: 1
-    grade: 3
-    weight: 2
-    itemIcon: {fileID: 0}
-    stats:
-      attackPower: 0
-      goldBonusFlat: 0
-      goldBonusRate: 0
-  - itemId: 008
-    itemName: EightSpade
-    group: 0
-    rarity: 1
-    grade: 4
-    weight: 1
-    itemIcon: {fileID: 0}
-    stats:
-      attackPower: 0
-      goldBonusFlat: 0
-      goldBonusRate: 0
-  - itemId: 009
-    itemName: NineSpade
-    group: 0
-    rarity: 2
-    grade: 1
-    weight: 1
-    itemIcon: {fileID: 0}
-    stats:
-      attackPower: 0
-      goldBonusFlat: 0
-      goldBonusRate: 0
-  - itemId: 010
-    itemName: TenSpade
-    group: 0
-    rarity: 2
-    grade: 2
-    weight: 1
-    itemIcon: {fileID: 0}
-    stats:
-      attackPower: 0
-      goldBonusFlat: 0
-      goldBonusRate: 0
-  - itemId: 011
-    itemName: ElevenSpade
-    group: 0
-    rarity: 3
-    grade: 1
-    weight: 1
-    itemIcon: {fileID: 0}
-    stats:
-      attackPower: 0
-      goldBonusFlat: 0
-      goldBonusRate: 0
-  - itemId: 012
-    itemName: TwelveSpade
-    group: 0
-    rarity: 3
-    grade: 2
-    weight: 1
-    itemIcon: {fileID: 0}
+    itemIcon: {fileID: -8808243382295292962, guid: fb3f70245531e1442ae7e4b8b093f5aa, type: 3}
+    linkedWeaponId: 
+    linkedFurnitureId: 
+    linkedRecipeId: recipe_8
     stats:
       attackPower: 0
       goldBonusFlat: 0

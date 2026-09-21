@@ -237,7 +237,14 @@ namespace PixelRestaurant.Gacha
                     break;
             }
         }
-
+        // 모두 뒤집기 버튼에서 호출
+        public void RevealCard()
+        {
+            if (_state == CardState.Waiting)
+            {
+                PlayFlipAnimation();
+            }
+        }
         // 카드 Y축 뒤집기
         private void PlayFlipAnimation()
         {

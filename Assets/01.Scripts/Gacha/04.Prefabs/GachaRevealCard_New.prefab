@@ -483,8 +483,8 @@ MonoBehaviour:
   flipEase: 4
   commonSpawnVFX: {fileID: 6331782408362367258}
   rareSpawnVFX: {fileID: 2249138244431311048}
-  uniqueSpawnVFX: {fileID: 5764192838093351214}
-  epicSpawnVFX: {fileID: 6721547512638305362}
+  uniqueSpawnVFX: {fileID: 6721547512638305362}
+  epicSpawnVFX: {fileID: 5764192838093351214}
   commonRevealVFX: {fileID: 5013135128852327472}
   rareRevealVFX: {fileID: 6097131250936709245}
   uniqueRevealVFX: {fileID: 8020944104324586807}

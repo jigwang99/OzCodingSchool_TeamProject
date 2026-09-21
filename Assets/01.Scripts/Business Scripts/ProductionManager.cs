@@ -48,7 +48,7 @@ public class ProductionManager : MonoBehaviour
             PlayerPrefs.GetInt($"레시피{i}", 0);
         }
     }
-
+    
     // 등급 선택 버튼 → 여기로 재연결 (구 FishInventoryManager.SelectXxx)
     public void SelectCommon() => SetSelected(0, "Common");
     public void SelectRare() => SetSelected(1, "Rare");
