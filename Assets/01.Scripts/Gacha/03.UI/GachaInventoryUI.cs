@@ -63,22 +63,11 @@ namespace PixelRestaurant.Gacha
         private void Start()
         {
             RegisterTabEvents();
-            RegisterTestEvents();
 
             
 
         }
-        private void RegisterTestEvents()
-        {
-            if (clearGachaInventoryButton == null)
-                return;
-
-            clearGachaInventoryButton.onClick.RemoveAllListeners();
-
-            clearGachaInventoryButton.onClick.AddListener(
-                ClearGachaInventory
-            );
-        }
+      
         // =========================================================
         // 탭 이벤트
         // =========================================================
@@ -511,31 +500,9 @@ namespace PixelRestaurant.Gacha
                     return 99;
             }
         }
-        // =========================================================
-        // 인벤토리 초기화 버튼 이벤트 등록 (테스트용)
-        // =========================================================
-        private void ClearGachaInventory()
-        {
-            GachaInventory inventory =
-                GachaInventory.Instance;
+   
 
-            if (inventory == null)
-            {
-
-                return;
-            }
-
-         
-            // 현재 화면도 즉시 갱신
-            RefreshInventoryDisplay();
-
-            // 테스트용 저장 데이터까지 즉시 반영
-            if (SaveManager.instance != null)
-            {
-                SaveManager.instance.Save();
-            }
-
-        }
+        
     }
 
 }

@@ -98,63 +98,71 @@ namespace PixelRestaurant.Gacha
 
         private void Awake()
         {
-            _rectTransform =
-                GetComponent<RectTransform>();
-
-            _canvasGroup =
-                GetComponent<CanvasGroup>();
+            _rectTransform = GetComponent<RectTransform>();
+            _canvasGroup = GetComponent<CanvasGroup>();
 
             if (_canvasGroup == null)
             {
-                _canvasGroup =
-                    gameObject.AddComponent<CanvasGroup>();
+                _canvasGroup = gameObject.AddComponent<CanvasGroup>();
+            }
+
+            // 결과 UI 자동으로 찾기
+            if (resultDisplay == null)
+            {
+                resultDisplay =
+                    GetComponentInChildren<GachaResultItemDisplay>(true);
             }
 
             if (cardVisual != null)
             {
-                _originalScale =
-                    cardVisual.localScale;
+                _originalScale = cardVisual.localScale;
             }
 
             _state = CardState.Spawning;
 
             ResetCardVisual();
         }
-
         // 카드 초기화
         public void Setup(
-            GachaItem item,
-            RectTransform target)
+           GachaItem item,
+           RectTransform target)
         {
+
             StopCurrentAnimation();
 
             _item = item;
             inventoryTarget = target;
-
-            _state = CardState.Spawning;
-
-            _canvasGroup.alpha = 1f;
-            _canvasGroup.interactable = false;
-            _canvasGroup.blocksRaycasts = false;
-
-            _rectTransform.localRotation =
-                Quaternion.identity;
-
-            ResetCardVisual();
-            DisableAllVFX();
-
-            if (resultDisplay != null && item != null)
             {
-                bool isNew =
-                    GachaInventory.Instance != null &&
-                    GachaInventory.Instance.IsNewItem(
-                        item.ItemId
-                    );
+                StopCurrentAnimation();
 
-                resultDisplay.SetItemInfo(
-                    item,
-                    isNew
-                );
+                _item = item;
+                inventoryTarget = target;
+
+                _state = CardState.Spawning;
+
+                _canvasGroup.alpha = 1f;
+                _canvasGroup.interactable = false;
+                _canvasGroup.blocksRaycasts = false;
+
+                _rectTransform.localRotation =
+                    Quaternion.identity;
+
+                ResetCardVisual();
+                DisableAllVFX();
+
+                if (resultDisplay != null && item != null)
+                {
+                    bool isNew =
+                        GachaInventory.Instance != null &&
+                        GachaInventory.Instance.IsNewItem(
+                            item.ItemId
+                        );
+
+                    resultDisplay.SetItemInfo(
+                        item,
+                        isNew
+                    );
+                }
             }
         }
 

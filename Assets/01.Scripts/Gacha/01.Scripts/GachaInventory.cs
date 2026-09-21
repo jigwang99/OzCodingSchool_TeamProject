@@ -175,20 +175,16 @@ namespace PixelRestaurant.Gacha
             }
 
         }
-        private void SyncFurnitureToPlayerData(
-     string itemId,
-     int count)
+        private void SyncFurnitureToPlayerData(string itemId, int count)
         {
             if (GameManager.instance == null ||
                 GameManager.instance.PlayerData == null)
                 return;
 
-            if (count <= 0)
-                return;
+            PlayerData playerData = GameManager.instance.PlayerData;
 
             int furnitureIndex = -1;
 
-            // 실제 가챠 아이템 ID에 맞게 수정
             switch (itemId)
             {
                 case "furniture_0":
@@ -216,22 +212,10 @@ namespace PixelRestaurant.Gacha
                     break;
             }
 
-            if (furnitureIndex == -1)
+            if (furnitureIndex < 0)
                 return;
 
-            PlayerData playerData =
-                GameManager.instance.PlayerData;
-
-            if (playerData.foodMachine == null ||
-                furnitureIndex >= playerData.foodMachine.Length)
-                return;
-
-            // 가챠에서 획득한 가구 개수 누적
-            if (playerData.foodMachine[furnitureIndex]
-                > int.MaxValue - count)
-                return;
-
-            playerData.foodMachine[furnitureIndex] += count;
+            playerData.MachineCount[furnitureIndex] += count;
         }
         private void SyncRecipeToPlayerData(
     string gachaItemId,
