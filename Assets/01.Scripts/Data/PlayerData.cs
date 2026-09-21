@@ -12,6 +12,20 @@ public class OwnedWeaponData
 }
 
 [Serializable]
+public class OwnedFurnitureData
+{
+    public string furnitureId;
+    public int count = 1;
+}
+
+[Serializable]
+public class OwnedRecipeData
+{
+    public string recipeId;
+    public int count = 1;
+}
+
+[Serializable]
 public class PlayerData
 {
     // 재화 - 골드
@@ -37,6 +51,8 @@ public class PlayerData
     public int healthLevel = 1;
     public int fishDropRateLevel = 1;
     public int restaurantLevel = 1;      // ← 식당 레벨은 이 값을 공용으로 사용
+    public List<OwnedFurnitureData> ownedFurniture = new List<OwnedFurnitureData>();
+    public List<OwnedRecipeData> ownedRecipes = new List<OwnedRecipeData>();
 
     // 무기,가구,레시피 아이템
     public GachaInventoryData gachaInventory =  new GachaInventoryData();
