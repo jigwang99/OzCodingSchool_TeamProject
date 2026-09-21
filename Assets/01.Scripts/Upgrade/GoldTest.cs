@@ -7,7 +7,7 @@ public class GoldTest : MonoBehaviour
     [Header("테스트용 골드 치트")]
     [SerializeField] private Button goldCheatButton;
     [SerializeField] private TMP_Text goldText;
-    [SerializeField] private int cheatGold = 500;
+    [SerializeField] private double cheatGold = 500;
 
     private void Start()
     {
@@ -23,8 +23,9 @@ public class GoldTest : MonoBehaviour
     {
         PlayerData playerData = GameManager.instance.PlayerData;
 
-        //CurrencyManager.instance.AddGold(cheatGold);
+        CurrencyManager.instance.AddGold(new BigNumber(cheatGold));
 
-        goldText.text = $"Gold: {playerData.gold}";
+        BigNumber gold = GameManager.instance.PlayerData.gold;
+        goldText.text = $"{gold}";
     }
 }

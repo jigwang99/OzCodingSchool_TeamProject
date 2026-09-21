@@ -9,7 +9,11 @@ public class UpgradeManager : Singleton<UpgradeManager>
     public BigNumber GetUpgradeCost(UpgradeData data, int currentLevel)
     {
         int levelIndex = Mathf.Max(0, currentLevel - 1);
-        return new BigNumber(data.baseCost * Math.Pow(data.costMultiplier, levelIndex));
+
+        double cost = data.baseCost * Math.Pow(data.costMultiplier, levelIndex);
+        cost = Math.Round(cost, 2);
+
+        return new BigNumber(cost);
     }
 
     // 업그레이드 시도
