@@ -37,6 +37,7 @@ RectTransform:
   - {fileID: 2867453477401004192}
   - {fileID: 5523101951453325796}
   - {fileID: 8718725503813268746}
+  - {fileID: 1458892373903409875}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -94,7 +95,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5f302eb48c79b8449dab24c83666109, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PixelRestaurant.Gacha.GachaResultItemDisplay
-  itemIconImage: {fileID: 0}
+  itemIconImage: {fileID: 7065457018209894833}
   itemNameText: {fileID: 8811986087619235262}
   rarityText: {fileID: 9156755565873493378}
   gradeText: {fileID: 6670560397291830315}
@@ -112,17 +113,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fce58e893a0db542a4158534040166d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PixelRestaurant.Gacha.GachaRevealCard
-  cardImage: {fileID: 0}
-  cardScaleTarget: {fileID: 0}
-  hoverOutline: {fileID: 0}
+  cardVisual: {fileID: 0}
   back: {fileID: 0}
   front: {fileID: 0}
+  hoverOutline: {fileID: 0}
   resultDisplay: {fileID: 0}
-  commonVFX: {fileID: 0}
-  rareVFX: {fileID: 0}
-  uniqueVFX: {fileID: 0}
-  epicVFX: {fileID: 0}
+  spawnDuration: 0.6
+  spawnStartScale: 0.6
+  spawnEase: 27
+  flipDuration: 0.6
+  flipEase: 4
+  commonSpawnVFX: {fileID: 0}
+  rareSpawnVFX: {fileID: 0}
+  uniqueSpawnVFX: {fileID: 0}
+  epicSpawnVFX: {fileID: 0}
+  commonRevealVFX: {fileID: 0}
+  rareRevealVFX: {fileID: 0}
+  uniqueRevealVFX: {fileID: 0}
+  epicRevealVFX: {fileID: 0}
   inventoryTarget: {fileID: 0}
+  inventoryMoveDuration: 0.5
 --- !u!1 &670859661484470847
 GameObject:
   m_ObjectHideFlags: 0
@@ -534,6 +544,81 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!1 &5400791725295890052
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1458892373903409875}
+  - component: {fileID: 2419448364768269440}
+  - component: {fileID: 7065457018209894833}
+  m_Layer: 5
+  m_Name: Image
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1458892373903409875
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5400791725295890052}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6838080733903285006}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &2419448364768269440
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5400791725295890052}
+  m_CullTransparentMesh: 1
+--- !u!114 &7065457018209894833
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5400791725295890052}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &6032527734361719062
 GameObject:
   m_ObjectHideFlags: 0

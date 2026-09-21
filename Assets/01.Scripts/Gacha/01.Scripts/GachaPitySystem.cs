@@ -196,27 +196,6 @@ namespace PixelRestaurant.Gacha
         }
 
 
-        /// <summary>
-        /// 특정 그룹 진행도 리셋 (테스트용)
-        /// </summary>
-        /// <param name="group">그룹</param>
-        public void ResetProgress(GachaGroup group)
-        {
-            if (_progressPerGroup.ContainsKey(group))
-            {
-                _progressPerGroup[group].Reset();
-            }
-        }
-
-        /// <summary>
-        /// 모든 그룹 진행도 리셋 (테스트용)
-        /// </summary>
-        public void ResetAllProgress()
-        {
-            foreach (var group in _progressPerGroup.Keys)
-            {
-                _progressPerGroup[group].Reset();
-            }
-        }
+    
     }
 }

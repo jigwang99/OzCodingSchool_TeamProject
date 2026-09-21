@@ -67,7 +67,11 @@ public class PlayerData
                                            // 3 튀김기
                                            // 4 냉장고
                                            // 5 오븐
-    public int[] foodMachine2 = new int[5]; // 가구선택 5칸
+                                           // 식당에 배치된 가구 정보
+                                           // 0 = 빈 슬롯
+                                           // 1~6 = 배치된 가구 종류
+                                           // 가구 배치 시스템
+    public int[] foodMachine2 = new int[5];
     public int[] MachineCount = new int[6];
 
     // 식당 업그레이드 효과값
@@ -261,5 +265,34 @@ public class PlayerData
 
         isRetryEnabled = enabled;
         OnRetryChanged?.Invoke();
+    }
+    public bool AddRecipe(string recipeId) // 09.21 추가: 레시피 중복 지급 방지 new
+    {
+        if (string.IsNullOrWhiteSpace(recipeId))
+            return false;
+
+        if (ownedRecipes == null)
+            ownedRecipes = new List<OwnedRecipeData>();
+
+        // 이미 보유한 레시피인지 확인
+        OwnedRecipeData recipe = ownedRecipes.Find(
+            r => r != null && r.recipeId == recipeId
+        );
+
+        // 이미 보유 중이면 중복 지급하지 않음
+        if (recipe != null)
+        {
+            recipe.count = 1;
+            return false;
+        }
+
+        // 처음 획득한 레시피만 추가
+        ownedRecipes.Add(new OwnedRecipeData
+        {
+            recipeId = recipeId,
+            count = 1
+        });
+
+        return true;
     }
 }
