@@ -1,13 +1,28 @@
 fileFormatVersion: 2
-guid: dc42b58c38d71a44ab99d9a0a707afcb
+guid: 3af0448655cc1854aa279d1656f6d43c
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 5252581005019482174
-    second: Spum_Gacha_0
+      213: 3794624100503310150
+    second: Spum_WeaponGacha_0
   - first:
-      213: 6665253271637449034
-    second: Spum_Gacha_1
+      213: 3539477250010462347
+    second: Spum_WeaponGacha_1
+  - first:
+      213: -3422284884099851070
+    second: Spum_WeaponGacha_2
+  - first:
+      213: -8659933394514968696
+    second: Spum_WeaponGacha_3
+  - first:
+      213: -5479701735205136250
+    second: Spum_WeaponGacha_4
+  - first:
+      213: 5691087292619696789
+    second: Spum_WeaponGacha_5
+  - first:
+      213: -6056402280085937829
+    second: Spum_WeaponGacha_6
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -129,13 +144,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Spum_Gacha_0
+      name: Spum_WeaponGacha_0
       rect:
         serializedVersion: 2
-        x: 209
+        x: 88
         y: 0
-        width: 992
-        height: 1202
+        width: 1145
+        height: 1221
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -144,19 +159,41 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: e38862e389ae4e840800000000000000
-      internalID: 5252581005019482174
+      spriteID: 64fc2aeb38639a430800000000000000
+      internalID: 3794624100503310150
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Spum_Gacha_1
+      name: Spum_WeaponGacha_1
       rect:
         serializedVersion: 2
-        x: 715
-        y: 1181
-        width: 10
+        x: 1220
+        y: 822
+        width: 15
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b8833715ecfbe1130800000000000000
+      internalID: 3539477250010462347
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spum_WeaponGacha_2
+      rect:
+        serializedVersion: 2
+        x: 1239
+        y: 767
+        width: 15
         height: 9
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -166,8 +203,96 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: a49d5f9598cbf7c50800000000000000
-      internalID: 6665253271637449034
+      spriteID: 2cc1a0ba70a9180d0800000000000000
+      internalID: -3422284884099851070
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spum_WeaponGacha_3
+      rect:
+        serializedVersion: 2
+        x: 1244
+        y: 744
+        width: 10
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 88f7461c57cb1d780800000000000000
+      internalID: -8659933394514968696
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spum_WeaponGacha_4
+      rect:
+        serializedVersion: 2
+        x: 1244
+        y: 648
+        width: 10
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6889106fd4034f3b0800000000000000
+      internalID: -5479701735205136250
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spum_WeaponGacha_5
+      rect:
+        serializedVersion: 2
+        x: 1193
+        y: 374
+        width: 20
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 59a265e6dbdcafe40800000000000000
+      internalID: 5691087292619696789
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spum_WeaponGacha_6
+      rect:
+        serializedVersion: 2
+        x: 1212
+        y: 163
+        width: 15
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b51ac96e63653fba0800000000000000
+      internalID: -6056402280085937829
       vertices: []
       indices: 
       edges: []
@@ -186,8 +311,13 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Spum_Gacha_0: 5252581005019482174
-      Spum_Gacha_1: 6665253271637449034
+      Spum_WeaponGacha_0: 3794624100503310150
+      Spum_WeaponGacha_1: 3539477250010462347
+      Spum_WeaponGacha_2: -3422284884099851070
+      Spum_WeaponGacha_3: -8659933394514968696
+      Spum_WeaponGacha_4: -5479701735205136250
+      Spum_WeaponGacha_5: 5691087292619696789
+      Spum_WeaponGacha_6: -6056402280085937829
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
