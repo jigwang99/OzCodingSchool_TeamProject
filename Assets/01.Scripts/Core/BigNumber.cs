@@ -63,6 +63,22 @@ public struct BigNumber : IComparable<BigNumber>, IEquatable<BigNumber>, IFormat
             value *= 1000;
             exponent = checked(exponent - 3);
         }
+
+        // 소수점 둘째 자리까지 반올림
+        value = Math.Round(value, 2);
+
+        // 반올림으로 1000이 된 경우 다시 정규화
+        if (Math.Abs(value) >= 1000)
+        {
+            value /= 1000;
+            exponent = checked(exponent + 3);
+        }
+
+        // 반올림 결과가 0이 된 경우
+        if (value == 0)
+        {
+            exponent = 0;
+        }
     }
 
     public bool IsZeroOrNegative => value <= 0;
@@ -75,7 +91,7 @@ public struct BigNumber : IComparable<BigNumber>, IEquatable<BigNumber>, IFormat
     public string ToString(string format, IFormatProvider formatProvider)
     {
         var number = new BigNumber(value, exponent);
-        string[] units = { "", "K", "M", "B", "T" };
+        string[] units = { "", "K", "M", "B", "T", "Qa", "Qi", "Sx", "Sp", "Oc", "No", "Dc", "Ud", "Dd", "Td" };
 
         string digits = number.value.ToString(
             string.IsNullOrEmpty(format) ? "0.##" : format,
@@ -122,6 +138,9 @@ public struct BigNumber : IComparable<BigNumber>, IEquatable<BigNumber>, IFormat
 
     public static BigNumber operator -(BigNumber a, BigNumber b)
     {
+        if (a == b)
+            return new BigNumber(0);
+
         return a + new BigNumber(-b.value, b.exponent);
     }
 

@@ -15,6 +15,8 @@ public class StageManager : MonoBehaviour
     [SerializeField] private EnemySpawner enemySpawner;
     [SerializeField] private PlayercatController playerCat;
     [SerializeField] private FishDropSystem fishDropSystem;
+    [SerializeField] private CombatFloorMap floorMap;
+    [SerializeField] private CombatInfiniteBackground combatBackground;
 
     // 비워두면 씬에 배치된 플레이어의 최초 위치를 시작 위치로 사용
     [SerializeField] private Transform playerSpawnPoint;
@@ -154,12 +156,20 @@ public class StageManager : MonoBehaviour
             enemySpawner.Clear();
             await CombatFeedbackPool.PrepareForStageAsync(token);
             await CombatObjectPoolManager.instance.PrepareStageAsync(data, token);
+            // 맵 구조를 먼저 확정해야 생성 위치·스폰·카메라가 같은 범위를 사용한다.
+            if (floorMap != null && combatBackground != null && combatBackground.PrepareStage(CurrentStage))
+            {
+                floorMap.ApplyStageLayout(data.ElevatedFloorCounts, combatBackground.MapHorizontalRange);
+                playerStartPosition = floorMap.GetGroundStartPosition();
+                if (playerSpawnPoint != null) playerSpawnPoint.position = playerStartPosition;
+            }
+            floorMap?.ApplyChapterPalette((Mathf.Max(1, CurrentStage) - 1) / 5);
             playerCat.transform.position = playerStartPosition;
             playerCat.Revive();
             fishDropSystem?.SetDropTable(data.DropTable);
             Vector3 origin = enemySpawnOrigin != null ? enemySpawnOrigin.position : enemySpawner.transform.position;
             combatManager.BeginBattle(playerCat, data.EnemyCount);
-            enemySpawner.PrepareStage(data, origin, playerCat);
+            enemySpawner.PrepareStage(data, origin, playerCat, floorMap);
             RetargetPlayer();
             CurrentResult = null;
             // 결과 UI와 스테이지 표시는 검은 화면에서 갱신한다.
@@ -216,7 +226,7 @@ public class StageManager : MonoBehaviour
         RetargetPlayer();
     }
 
-    // 적이 하나 죽을 때마다 플레이어 타겟을 가장 가까운 살아있는 적으로 갱신
+    // 처치 이벤트는 다음 탐지를 예약한다. 실제 선택은 플레이어의 주기적 탐지가 담당한다.
     private void HandleEnemyDefeated(EnemyController _)
     {
         RetargetPlayer();
@@ -224,8 +234,7 @@ public class StageManager : MonoBehaviour
 
     private void RetargetPlayer()
     {
-        EnemyController nearest = enemySpawner.GetNearestAlive(playerCat.transform.position);
-        playerCat.SetTarget(nearest);
+        playerCat.RequestDetection();
     }
 
     // 승리
