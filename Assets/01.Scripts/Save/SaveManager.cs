@@ -40,6 +40,7 @@ public class SaveManager : Singleton<SaveManager>
 
             string json = JsonUtility.ToJson(data, true);
             File.WriteAllText(saveFilePath, json);
+
         }
         catch (IOException)
         {

@@ -525,9 +525,7 @@ namespace PixelRestaurant.Gacha
                 return;
             }
 
-            // 인벤토리 데이터 초기화
-            inventory.Clear();
-
+         
             // 현재 화면도 즉시 갱신
             RefreshInventoryDisplay();
 

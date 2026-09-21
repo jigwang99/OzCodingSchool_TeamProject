@@ -93,11 +93,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5f302eb48c79b8449dab24c83666109, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PixelRestaurant.Gacha.GachaResultItemDisplay
+  itemIconImage: {fileID: 0}
   itemNameText: {fileID: 8811986087619235262}
   rarityText: {fileID: 9156755565873493378}
   gradeText: {fileID: 6670560397291830315}
-  newBadge: {fileID: 1505783394292674101}
   countText: {fileID: 1870854220167225494}
+  newBadge: {fileID: 1505783394292674101}
 --- !u!1 &670859661484470847
 GameObject:
   m_ObjectHideFlags: 0

@@ -251,7 +251,7 @@ namespace PixelRestaurant.Gacha
                             continue;
                         }
 
-                        _inventory.AddItem(item.ItemId, 1);
+                        _inventory.AddItem(item.ItemId, 1, saveImmediately: false);
 
                     }
                 }
@@ -259,6 +259,10 @@ namespace PixelRestaurant.Gacha
 
                 // 결과 표시와 다른 시스템에 알림
                 OnGachaItemsDrawn?.Invoke(results);
+
+                // Persist once, after all awards and result subscribers finish.
+                if (_inventory != null && SaveManager.instance != null)
+                    SaveManager.instance.Save();
             }
 
             return results;

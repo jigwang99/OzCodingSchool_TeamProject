@@ -150,25 +150,16 @@ namespace PixelRestaurant.Gacha
 
         public void Pull1()
         {
-            if (ExecuteGacha(1))
-            {
-                if (resultPopup != null)
-                    resultPopup.SetActive(true);
-            }
+            ExecuteGacha(1);
         }
 
         public void Pull10()
         {
-            if (ExecuteGacha(10))
-            {
-                if (resultPopup != null)
-                    resultPopup.SetActive(true);
-            }
+            ExecuteGacha(10);
         }
 
         private bool ExecuteGacha(int pullCount)
         {
-
             if (GachaManager.Instance == null)
             {
                 return false;
@@ -188,7 +179,8 @@ namespace PixelRestaurant.Gacha
             // 전체 뽑기 비용 확인
             // =========================
 
-            BigNumber totalCost = new BigNumber(30 * pullCount);
+            BigNumber totalCost =
+                new BigNumber(30 * pullCount);
 
             BigNumber currentGold =
                 CurrencyManager.instance.GetCurrentGold();
@@ -196,8 +188,6 @@ namespace PixelRestaurant.Gacha
             // 필요한 골드가 부족하면 뽑기 실행하지 않음
             if (currentGold < totalCost)
             {
-               
-
                 return false;
             }
 
@@ -218,7 +208,16 @@ namespace PixelRestaurant.Gacha
             }
 
             // =========================
-            // 결과 표시
+            // 결과 팝업 먼저 활성화
+            // =========================
+
+            if (resultPopup != null)
+            {
+                resultPopup.SetActive(true);
+            }
+
+            // =========================
+            // 결과 카드 생성 및 등장 연출
             // =========================
 
             ShowGachaResults(results);
@@ -232,11 +231,14 @@ namespace PixelRestaurant.Gacha
         // Result
         // =========================
 
+
         private void ShowGachaResults(List<GachaItem> items)
         {
             ClearPreviousResults();
 
-            if (resultSpawnPoint == null)
+            if (resultSpawnPoint == null ||
+                items == null ||
+                items.Count == 0)
             {
                 return;
             }
@@ -245,18 +247,29 @@ namespace PixelRestaurant.Gacha
                 GachaResultHandler.Instance;
 
             if (resultHandler == null)
-            {
                 return;
-            }
+
+            // null 아이템을 제외한 실제 카드 수
+            List<GachaItem> validItems =
+                new List<GachaItem>();
 
             foreach (GachaItem item in items)
             {
-                if (item == null)
-                    continue;
+                if (item != null)
+                {
+                    validItems.Add(item);
+                }
+            }
 
+            int totalCards = validItems.Count;
+
+            for (int i = 0; i < totalCards; i++)
+            {
                 resultHandler.HandleGachaResult(
-                    item,
-                    resultSpawnPoint
+                    validItems[i],
+                    resultSpawnPoint,
+                    i,
+                    totalCards
                 );
             }
         }
