@@ -197,6 +197,9 @@ public class ProductionManager : MonoBehaviour
             chefs[0].transform.parent.position = new Vector3(-0.5f, 0.7f);
             chefs[1].transform.parent.position = new Vector3(0.7f, 0.7f);
 
+            chefsSlider[0].transform.localScale = new Vector3(.8f, .8f, .8f);
+            chefsSlider[1].transform.localScale = new Vector3(.8f, .8f, .8f);
+
             chefsSlider[0].transform.localPosition = new Vector3(-200, 390);
             chefsSlider[1].transform.localPosition = new Vector3(167, 390);
         }
@@ -209,6 +212,10 @@ public class ProductionManager : MonoBehaviour
             chefs[0].transform.parent.position = new Vector3(-0.6f, 0.3f);
             chefs[1].transform.parent.position = new Vector3(1f, 0.3f);
             chefs[2].transform.parent.position = new Vector3(-1.5f, 0.35f);
+
+            chefsSlider[0].transform.localScale = new Vector3(.6f, .6f, .6f);
+            chefsSlider[1].transform.localScale = new Vector3(.6f, .6f, .6f);
+            chefsSlider[2].transform.localScale = new Vector3(.6f, .6f, .6f);
 
             chefsSlider[0].transform.localPosition = new Vector3(-219, 212);
             chefsSlider[1].transform.localPosition = new Vector3(271, 221);
