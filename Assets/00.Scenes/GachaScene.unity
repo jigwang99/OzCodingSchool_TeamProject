@@ -1270,7 +1270,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PixelRestaurant.Gacha.GachaObjectPool
   poolName: GachaObjectPool
-  prefab: {fileID: 213800520459445659, guid: 1acf46c43bc04ba42bc74f873059b67e, type: 3}
+  prefab: {fileID: 213800520459445659, guid: e47ddd559502dfc4cb354cfb054ba249, type: 3}
   initialPoolSize: 10
   poolParent: {fileID: 2135788093}
 --- !u!114 &172503149
@@ -1285,6 +1285,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 859f4fc61b297e249852adb438e35ce7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PixelRestaurant.Gacha.GachaResultHandler
+  spawnPosition: {x: 0, y: 0}
+  cardsPerRow: 5
+  cardSpacing: {x: 120, y: 160}
+  layoutCenter: {x: 0, y: 0}
+  inventoryTarget: {fileID: 0}
 --- !u!1 &200042696
 GameObject:
   m_ObjectHideFlags: 0

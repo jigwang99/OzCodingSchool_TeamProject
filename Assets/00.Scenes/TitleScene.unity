@@ -564,8 +564,9 @@ MonoBehaviour:
   bgmAudioSource: {fileID: 360842346}
   sfxAudioSource: {fileID: 360842349}
   titleBgm: {fileID: 8300000, guid: fe074fb61e7bb284c8712115a2812a47, type: 3}
-  BusinessBgm: {fileID: 8300000, guid: 210dd6cf6ab981349a2536e63c5570b7, type: 3}
+  businessBgm: {fileID: 8300000, guid: 210dd6cf6ab981349a2536e63c5570b7, type: 3}
   combatBgm: {fileID: 8300000, guid: 05864fcd357ff6942b0469ffb9db7e26, type: 3}
+  gachaBgm: {fileID: 8300000, guid: 210dd6cf6ab981349a2536e63c5570b7, type: 3}
   enemyAttackVolume: 0.65
   enemyAttackMinInterval: 0.1
 --- !u!4 &360842348
