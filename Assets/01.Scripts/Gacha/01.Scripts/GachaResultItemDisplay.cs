@@ -57,7 +57,6 @@ namespace PixelRestaurant.Gacha
         {
             if (item == null)
             {
-                Debug.LogError("[카드] 아이템이 null입니다.");
                 return;
             }
 
@@ -88,7 +87,6 @@ namespace PixelRestaurant.Gacha
                 countText.gameObject.SetActive(false);
             }
 
-            Debug.Log($"[카드] {item.GetDisplayName()} 정보 표시 (NEW: {isNew})");
         }
 
         /// <summary>

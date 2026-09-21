@@ -76,14 +76,14 @@ namespace PixelRestaurant.Gacha
             var pityLevel = levels.Find(l => l.Level == level);
             if (pityLevel == null)
             {
-                Debug.LogWarning($"[천장] Level {level}을 찾을 수 없습니다.");
+             
                 return 0;
             }
 
             var rarityWeight = pityLevel.Rarities.Find(r => r.Rarity == rarity);
             if (rarityWeight == null)
             {
-                Debug.LogWarning($"[천장] Level {level}에서 {rarity}를 찾을 수 없습니다.");
+          
                 return 0;
             }
 
@@ -115,14 +115,12 @@ namespace PixelRestaurant.Gacha
         {
             if (levels.Count == 0)
             {
-                Debug.LogWarning("[천장] Level이 하나도 없습니다!");
                 return;
             }
 
             // Level 1부터 시작하는지 확인
             if (levels[0].Level != 1)
             {
-                Debug.LogError("[천장] Level은 1부터 시작해야 합니다!");
             }
 
             // 각 Level마다 모든 Rarity 가중치 확인
@@ -130,11 +128,9 @@ namespace PixelRestaurant.Gacha
             {
                 if (level.Rarities.Count != 4)
                 {
-                    Debug.LogWarning($"[천장] Level {level.Level}에서 Rarity가 4개가 아닙니다!");
                 }
             }
 
-            Debug.Log($"[천장] 검증 완료: {levels.Count}개 레벨");
         }
 #endif
     }

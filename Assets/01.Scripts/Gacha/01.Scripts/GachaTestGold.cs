@@ -11,20 +11,17 @@ namespace PixelRestaurant.Gacha
         {
             if (CurrencyManager.instance == null)
             {
-                Debug.LogError("[가챠 테스트] CurrencyManager를 찾을 수 없습니다.");
                 return;
             }
 
             CurrencyManager.instance.AddGold(testGold);
 
-            Debug.Log($"[가챠 테스트] 골드 {testGold} 추가 완료");
         }
 
         public void ResetGold()
         {
             if (CurrencyManager.instance == null)
             {
-                Debug.LogError("[가챠 테스트] CurrencyManager를 찾을 수 없습니다.");
                 return;
             }
 
@@ -36,7 +33,6 @@ namespace PixelRestaurant.Gacha
                 CurrencyManager.instance.SpendGold(currentGold);
             }
 
-            Debug.Log("[가챠 테스트] 골드 초기화 완료");
         }
     }
 }

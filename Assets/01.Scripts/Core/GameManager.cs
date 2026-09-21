@@ -4,6 +4,8 @@ public class GameManager : Singleton<GameManager>
 {
     public PlayerData PlayerData { get; private set; }
 
+    private float lastMasterVolume = 1f;
+
     protected override void Awake()
     {
         isDontDestroy = true;
@@ -12,11 +14,35 @@ public class GameManager : Singleton<GameManager>
         if (instance != this)
             return;
 
+        QualitySettings.vSyncCount = 0;
+        Application.targetFrameRate = 60;
+        // [추가] 백그라운드에서도 게임이 멈추지 않고 진행되도록 설정
+        Application.runInBackground = true;
+
         LoadPlayerData();
 
-        // 씬에 별도 배치하지 않아도 방치 보상은 게임 전체에서 계속 동작해야 한다.
+        // 씬에 별도 배치하지 않아도 방치 보상은 게임 전체에서 계속 동작해야 함.
         if (GetComponent<IdleFishManager>() == null)
             gameObject.AddComponent<IdleFishManager>();
+
+
+    }
+
+    // [추가] 창 포커스를 잃으면(다른 창 클릭) 소리를 끄고, 돌아오면 다시 켬
+    private void OnApplicationFocus(bool hasFocus)
+    {
+        if (hasFocus)
+        {
+            // 게임으로 돌아왔을 때는 이전 볼륨으로 복구
+            AudioListener.volume = lastMasterVolume;
+        }
+        else
+        {
+            // 백그라운드로 나갈 때는 현재 볼륨을 저장하고 0으로 만듦
+            // (소리는 일시정지되지 않고 무음 상태로 실시간 소모됨)
+            lastMasterVolume = AudioListener.volume;
+            AudioListener.volume = 0f;
+        }
     }
 
     private void LoadPlayerData()
@@ -26,12 +52,10 @@ public class GameManager : Singleton<GameManager>
         if (savedData != null)
         {
             SetPlayerData(savedData);
-            Debug.Log("[GameManager] 저장 데이터 적용 완료!");
         }
         else
         {
             CreateNewPlayerData();
-            Debug.Log("[GameManager] 저장 데이터가 없어 새 게임 데이터를 생성했습니다.");
         }
     }
 

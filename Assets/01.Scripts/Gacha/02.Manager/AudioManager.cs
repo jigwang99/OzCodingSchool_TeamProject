@@ -55,7 +55,6 @@ public class AudioManager : MonoBehaviour
     {
         if (bgm == null)
         {
-            Debug.LogWarning("BGM_BusinessScene이 연결되지 않았습니다.");
             return;
         }
 
@@ -86,7 +85,6 @@ public class AudioManager : MonoBehaviour
     {
         if (clip == null)
         {
-            Debug.LogWarning("AudioClip이 연결되지 않았습니다.");
             return;
         }
 

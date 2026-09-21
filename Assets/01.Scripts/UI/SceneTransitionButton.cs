@@ -19,18 +19,30 @@ public class SceneTransitionButton : MonoBehaviour, IPointerDownHandler, IPointe
     private void Awake()
     {
         originalScale = transform.localScale;
-        GetComponent<Button>().onClick.AddListener(OnClickButton);
 
-        if (SceneManager.GetActiveScene().name == targetScene.ToString())
+        Button btn = GetComponent<Button>();
+        btn.onClick.AddListener(OnClickButton);
+    }
+
+    public void CheckAndToggleVisibility(string currentSceneName)
+    {
+        bool isCurrentScene = (currentSceneName == targetScene.ToString());
+        gameObject.SetActive(!isCurrentScene);
+    }
+
+    public void OnClickButton()
+    {
+        if (SceneFadeManager.Instance != null)
         {
-            gameObject.SetActive(false);
+            SceneFadeManager.Instance.ChangeScene(targetScene.ToString());
+        }
+        else
+        {
+            SceneManager.LoadScene(targetScene.ToString());
         }
     }
 
-    private void OnClickButton()
-    {
-        SceneFadeManager.Instance?.ChangeScene(targetScene.ToString());
-    }
+
 
     public void OnPointerDown(PointerEventData eventData) => transform.localScale = originalScale * 0.93f;
     public void OnPointerUp(PointerEventData eventData) => transform.localScale = originalScale;

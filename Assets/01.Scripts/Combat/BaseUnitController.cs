@@ -19,11 +19,40 @@ public abstract class BaseUnitController : MonoBehaviour
     // 비워두면 자식에서 IUnitView 구현체를 자동 탐색한다. (없어도 로직에는 지장 없음)
     [SerializeField] private MonoBehaviour unitViewSource;
     private IUnitView unitView;
+    private Transform facingRoot;
+    private Vector3 initialVisualScale;
+
+    public CombatFloorMap FloorMap { get; private set; }
+    public virtual bool IsChangingFloors => false;
+    public int CurrentFloor => FloorMap != null ? FloorMap.GetFloorIndex(transform.position) : 0;
+    protected virtual bool InitiallyFacesRight => true;
 
     public bool IsFinishingAttack => unitView is IAttackRecoveryView recovery && recovery.IsFinishingAttack;
 
-    public bool HasTarget => Target != null && !Target.Health.IsDead;
-    public bool IsTargetInAttackRange => HasTarget && Attack.IsInAttackRange(Target.transform);
+    public bool HasTarget => Target != null && Target.gameObject.activeInHierarchy && !Target.Health.IsDead;
+    public bool IsTargetInAttackRange => HasTarget && Attack.IsUnitInAttackRange(Target);
+
+    public void SetFloorMap(CombatFloorMap map) => FloorMap = map;
+
+    public bool IsOnSameFloor(BaseUnitController other)
+    {
+        if (other == null || IsChangingFloors || other.IsChangingFloors) return false;
+        if (FloorMap == null && other.FloorMap == null)
+            return Mathf.Abs(transform.position.y - other.transform.position.y) <= 0.75f;
+        if (FloorMap != other.FloorMap) return false;
+        int currentFloor = CurrentFloor;
+        return currentFloor >= 0 && currentFloor == other.CurrentFloor;
+    }
+
+    public virtual bool CanEngage(BaseUnitController other) => IsOnSameFloor(other);
+
+    public void FaceDirection(float direction)
+    {
+        if (facingRoot == null || Mathf.Abs(direction) < 0.001f) return;
+        Vector3 scale = initialVisualScale;
+        scale.x *= (direction > 0f) == InitiallyFacesRight ? 1f : -1f;
+        if (facingRoot.localScale != scale) facingRoot.localScale = scale;
+    }
 
     // 타겟을 '교전 대상'으로 인식했는가.
     // 기본(플레이어): 타겟이 있으면 항상 교전.
@@ -40,9 +69,14 @@ public abstract class BaseUnitController : MonoBehaviour
         unitView = unitViewSource as IUnitView;
         if (unitView == null)
             unitView = GetComponentInChildren<IUnitView>(true);
+        if (unitView is Component view && view.transform != transform)
+        {
+            facingRoot = view.transform;
+            initialVisualScale = facingRoot.localScale;
+        }
 
-        if (unitViewSource != null && unitView == null)
 #if UNITY_EDITOR
+        if (unitViewSource != null && unitView == null)
             Debug.LogWarning($"[{name}] unitViewSource가 IUnitView를 구현하지 않습니다. 연결을 확인하세요.");
 #endif
 
@@ -79,8 +113,8 @@ public abstract class BaseUnitController : MonoBehaviour
             StateMachine.ChangeState(IdleState);
     }
 
-    protected void Update() => StateMachine.Update();
-    protected void FixedUpdate() => StateMachine.FixedUpdate();
+    protected virtual void Update() => StateMachine.Update();
+    protected virtual void FixedUpdate() => StateMachine.FixedUpdate();
 
     // 상태(FSM)가 애니메이션을 요청하는 단일 창구.
     // 비주얼이 없으면(임시 square 등) 조용히 무시되어 로직에는 영향 없음.
@@ -91,11 +125,12 @@ public abstract class BaseUnitController : MonoBehaviour
     }
 
     // Move 상태의 실제 이동. 기본: 타겟을 향해 이동(적 추적).
-    // 플레이어는 앞으로 전진하도록 오버라이드.
+    // 플레이어는 층 연결 경로를 따라 이동하도록 오버라이드.
     public virtual void PerformMove()
     {
         if (HasTarget)
         {
+            FaceDirection(Target.transform.position.x - transform.position.x);
             Move.MoveTo(Target.transform);
         }
     }
@@ -128,7 +163,7 @@ public abstract class BaseUnitController : MonoBehaviour
 
     // 오브젝트 풀 반납 직전 정리:
     // Idle로 전환하면 CombatState.Exit가 호출돼 진행 중이던 비동기 공격 루프가 취소된다.
-    public void PrepareForPool()
+    public virtual void PrepareForPool()
     {
         ClearTarget();
         StateMachine.ChangeState(IdleState);

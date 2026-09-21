@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
   id: 102
   upgradeName: "\uBB3C\uACE0\uAE30 \uB4DC\uB86D\uB960 \uAC15\uD654"
-  type: 1
+  type: 2
   baseCost: 100
   costMultiplier: 1.15
-  maxLevel: 5
+  maxLevel: 999
   dropChanceMultiplierPerLevel: 0.3

@@ -128,7 +128,6 @@ namespace PixelRestaurant.Gacha
         {
             _currentGachaType = group;
 
-            Debug.Log($"[GachaUI] 가챠 종류 변경: {group}");
 
             UpdateDisplay();
         }
@@ -169,23 +168,19 @@ namespace PixelRestaurant.Gacha
 
         private bool ExecuteGacha(int pullCount)
         {
-            Debug.Log($"[GachaUI] 가챠 버튼 클릭: {pullCount}회");
 
             if (GachaManager.Instance == null)
             {
-                Debug.LogError("[GachaUI] GachaManager.Instance가 없습니다.");
                 return false;
             }
 
             if (CurrencyManager.instance == null)
             {
-                Debug.LogError("[GachaUI] CurrencyManager.instance가 없습니다.");
                 return false;
             }
 
             if (pullCount != 1 && pullCount != 10)
             {
-                Debug.LogWarning("[GachaUI] 1회 또는 10회 뽑기만 가능합니다.");
                 return false;
             }
 
@@ -201,9 +196,7 @@ namespace PixelRestaurant.Gacha
             // 필요한 골드가 부족하면 뽑기 실행하지 않음
             if (currentGold < totalCost)
             {
-                Debug.LogWarning(
-                    $"[GachaUI] 골드 부족! 필요: {totalCost}, 현재: {currentGold}"
-                );
+               
 
                 return false;
             }
@@ -221,7 +214,6 @@ namespace PixelRestaurant.Gacha
 
             if (results == null || results.Count == 0)
             {
-                Debug.LogWarning("[GachaUI] 가챠 결과가 없습니다.");
                 return false;
             }
 
@@ -246,7 +238,6 @@ namespace PixelRestaurant.Gacha
 
             if (resultSpawnPoint == null)
             {
-                Debug.LogError("[GachaUI] ResultSpawnPoint가 연결되지 않았습니다.");
                 return;
             }
 
@@ -255,7 +246,6 @@ namespace PixelRestaurant.Gacha
 
             if (resultHandler == null)
             {
-                Debug.LogError("[GachaUI] GachaResultHandler.Instance가 없습니다.");
                 return;
             }
 
@@ -281,7 +271,6 @@ namespace PixelRestaurant.Gacha
 
             if (resultHandler == null)
             {
-                Debug.LogError("[GachaUI] GachaResultHandler.Instance가 없습니다.");
                 return;
             }
 
@@ -290,7 +279,6 @@ namespace PixelRestaurant.Gacha
 
             if (objectPool == null)
             {
-                Debug.LogError("[GachaUI] GachaObjectPool을 찾을 수 없습니다.");
                 return;
             }
 

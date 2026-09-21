@@ -83,27 +83,21 @@ public class GachaWeaponInventoryUI : MonoBehaviour
 
         if (weaponInventoryGrid == null)
         {
-            Debug.LogError(
-                "[무기 인벤토리] weaponInventoryGrid가 없습니다."
-            );
+            
 
             return;
         }
 
         if (itemCardPrefab == null)
         {
-            Debug.LogError(
-                "[무기 인벤토리] itemCardPrefab이 없습니다."
-            );
+           
 
             return;
         }
 
         if (weaponGachaPool == null)
         {
-            Debug.LogError(
-                "[무기 인벤토리] weaponGachaPool이 없습니다."
-            );
+            
 
             return;
         }
@@ -111,9 +105,7 @@ public class GachaWeaponInventoryUI : MonoBehaviour
         if (GameManager.instance == null ||
             GameManager.instance.PlayerData == null)
         {
-            Debug.LogError(
-                "[무기 인벤토리] PlayerData가 없습니다."
-            );
+        
 
             return;
         }
@@ -241,10 +233,7 @@ public class GachaWeaponInventoryUI : MonoBehaviour
     {
         if (weaponEquipment == null)
         {
-            Debug.LogError(
-                "[무기 인벤토리] " +
-                "PlayerWeaponEquipment가 없습니다."
-            );
+           
 
             return;
         }
@@ -256,9 +245,6 @@ public class GachaWeaponInventoryUI : MonoBehaviour
 
         if (success)
         {
-            Debug.Log(
-                $"[무기 인벤토리] {weaponId} 장착 완료"
-            );
         }
 
         RefreshWeaponInventory();
