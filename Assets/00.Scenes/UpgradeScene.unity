@@ -545,6 +545,7 @@ MonoBehaviour:
   upgradeButton: {fileID: 43238084}
   upgradeButtonText: {fileID: 1093794273}
   goldFilledImage: {fileID: 95073307}
+  EffectImage: {fileID: 0}
   repeatDelay: 0.2
 --- !u!114 &43238084
 MonoBehaviour:
@@ -686,6 +687,7 @@ MonoBehaviour:
   upgradeButton: {fileID: 56310704}
   upgradeButtonText: {fileID: 389910154}
   goldFilledImage: {fileID: 1519353962}
+  EffectImage: {fileID: 26546704}
   repeatDelay: 0.2
 --- !u!114 &56310704
 MonoBehaviour:
@@ -1109,6 +1111,7 @@ MonoBehaviour:
   upgradeButton: {fileID: 107648618}
   upgradeButtonText: {fileID: 1934829956}
   goldFilledImage: {fileID: 1091734936}
+  EffectImage: {fileID: 0}
   repeatDelay: 0.2
 --- !u!114 &107648618
 MonoBehaviour:
@@ -1829,6 +1832,7 @@ MonoBehaviour:
   upgradeButton: {fileID: 346966823}
   upgradeButtonText: {fileID: 868152424}
   goldFilledImage: {fileID: 835672838}
+  EffectImage: {fileID: 0}
   repeatDelay: 0.2
 --- !u!114 &346966823
 MonoBehaviour:
@@ -3338,6 +3342,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1484552328}
+  - {fileID: 2080359002}
   m_Father: {fileID: 1166265861}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -4765,7 +4770,6 @@ RectTransform:
   m_Children:
   - {fileID: 1718223143}
   - {fileID: 780253545}
-  - {fileID: 2080359002}
   m_Father: {fileID: 725978874}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -5178,6 +5182,7 @@ MonoBehaviour:
   upgradeButton: {fileID: 1220878642}
   upgradeButtonText: {fileID: 181922011}
   goldFilledImage: {fileID: 1218729949}
+  EffectImage: {fileID: 829826433}
   repeatDelay: 0.2
 --- !u!114 &1220878642
 MonoBehaviour:
@@ -5873,6 +5878,7 @@ MonoBehaviour:
   upgradeButton: {fileID: 1500394772}
   upgradeButtonText: {fileID: 8145466}
   goldFilledImage: {fileID: 565352404}
+  EffectImage: {fileID: 1858166394}
   repeatDelay: 0.2
 --- !u!114 &1500394772
 MonoBehaviour:
@@ -6346,6 +6352,7 @@ MonoBehaviour:
   upgradeButton: {fileID: 1589646111}
   upgradeButtonText: {fileID: 391212044}
   goldFilledImage: {fileID: 1519029250}
+  EffectImage: {fileID: 964362721}
   repeatDelay: 0.2
 --- !u!114 &1589646111
 MonoBehaviour:
@@ -8214,11 +8221,11 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 635684052}
-  m_Father: {fileID: 1166265861}
+  m_Father: {fileID: 780253545}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 780, y: 0}
+  m_AnchoredPosition: {x: 489.7306, y: -58}
   m_SizeDelta: {x: 250, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2080359003
@@ -8238,6 +8245,7 @@ MonoBehaviour:
   upgradeButton: {fileID: 2080359004}
   upgradeButtonText: {fileID: 780253543}
   goldFilledImage: {fileID: 1317822071}
+  EffectImage: {fileID: 0}
   repeatDelay: 0.2
 --- !u!114 &2080359004
 MonoBehaviour:

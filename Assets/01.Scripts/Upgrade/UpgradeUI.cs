@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class UpgradeUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
@@ -15,11 +16,15 @@ public class UpgradeUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     [SerializeField] private Button upgradeButton;
     [SerializeField] private TMP_Text upgradeButtonText;
     [SerializeField] private Image goldFilledImage;
+    [SerializeField] private Image EffectImage;
 
     [Header("연속 강화")]
     [SerializeField] private float repeatDelay = 0.2f;
 
     private Coroutine upgradeCoroutine;
+
+    private Sequence goldEnoughEffectTween;
+    private bool isGoldEnoughEffectPlaying;
 
     private void Start()
     {
@@ -38,6 +43,7 @@ public class UpgradeUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     private void OnDisable()
     {
         StopUpgradeCoroutine();
+        StopGoldEnoughEffect();
 
         if (CurrencyManager.instance != null)
             CurrencyManager.instance.OnGoldChanged -= OnGoldChanged;
@@ -138,6 +144,9 @@ public class UpgradeUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         {
             upgradeText.text = $"현재 Lv. {currentLevel}";
             upgradeButton.interactable = false;
+
+            StopGoldEnoughEffect();
+
             return;
         }
 
@@ -163,6 +172,61 @@ public class UpgradeUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         if (goldFilledImage != null)
         {
             goldFilledImage.fillAmount = (float)fillAmount;
+
+            bool isGoldEnough = fillAmount >= 1.0;
+
+            if (isGoldEnough && !isGoldEnoughEffectPlaying)
+            {
+                PlayGoldEnoughEffect();
+            }
+            else if (!isGoldEnough && isGoldEnoughEffectPlaying)
+            {
+                StopGoldEnoughEffect();
+            }
         }
+    }
+
+    private void PlayGoldEnoughEffect()
+    {
+        if (EffectImage == null)
+            return;
+
+        StopGoldEnoughEffect();
+
+        isGoldEnoughEffectPlaying = true;
+
+        goldEnoughEffectTween = DOTween.Sequence();
+
+        goldEnoughEffectTween.Append(
+            EffectImage.transform
+                .DOScale(1.1f, 0.15f)
+                .SetEase(Ease.OutQuad)
+        );
+
+        goldEnoughEffectTween.Append(
+            EffectImage.transform
+                .DOScale(1f, 0.15f)
+                .SetEase(Ease.InQuad)
+        );
+
+        goldEnoughEffectTween.AppendInterval(0.7f);
+
+        goldEnoughEffectTween.SetLoops(-1);
+    }
+
+    private void StopGoldEnoughEffect()
+    {
+        if (goldEnoughEffectTween != null)
+        {
+            goldEnoughEffectTween.Kill();
+            goldEnoughEffectTween = null;
+        }
+
+        if (EffectImage != null)
+        {
+            EffectImage.transform.localScale = Vector3.one;
+        }
+
+        isGoldEnoughEffectPlaying = false;
     }
 }
