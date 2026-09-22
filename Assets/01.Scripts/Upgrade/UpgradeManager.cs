@@ -60,7 +60,6 @@ public class UpgradeManager : Singleton<UpgradeManager>
             case UpgradeType.FishDropRate: return playerData.fishDropRateLevel;
             case UpgradeType.RestaurantExpansion: return playerData.restaurantLevel;
             case UpgradeType.ChefCookingSkill: return playerData.chefCatLevel;
-            case UpgradeType.GachaRate: return playerData.gachaRateLevel;
             default: return 1;
         }
     }
@@ -74,7 +73,6 @@ public class UpgradeManager : Singleton<UpgradeManager>
             case UpgradeType.FishDropRate: playerData.fishDropRateLevel++; break;
             case UpgradeType.RestaurantExpansion: playerData.restaurantLevel++; break;
             case UpgradeType.ChefCookingSkill: playerData.chefCatLevel++; break;
-            case UpgradeType.GachaRate: playerData.gachaRateLevel++; break;
         }
     }
 }

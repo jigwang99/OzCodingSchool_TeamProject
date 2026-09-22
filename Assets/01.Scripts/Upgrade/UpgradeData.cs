@@ -6,8 +6,7 @@ public enum UpgradeType
     Health,
     FishDropRate,
     RestaurantExpansion,
-    ChefCookingSkill,
-    GachaRate
+    ChefCookingSkill
 }
 
 [CreateAssetMenu(fileName = "UpgradeData", menuName = "Upgrade/UpgradeData")]

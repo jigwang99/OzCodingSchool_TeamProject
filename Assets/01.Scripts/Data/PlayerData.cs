@@ -53,7 +53,6 @@ public class PlayerData
     public int restaurantLevel = 1;      // ← 식당 레벨은 이 값을 공용으로 사용
     public List<OwnedFurnitureData> ownedFurniture = new List<OwnedFurnitureData>();
     public List<OwnedRecipeData> ownedRecipes = new List<OwnedRecipeData>();
-    public int gachaRateLevel = 1;
 
     // 무기,가구,레시피 아이템
     public GachaInventoryData gachaInventory = new GachaInventoryData();
