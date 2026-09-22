@@ -42,6 +42,7 @@ public class CombatFloorMap : MonoBehaviour
 
     public int FloorCount => floors != null ? floors.Length : 0;
     public float GetStandingY(int floor) => floors[floor].bounds.max.y + standingOffset;
+    public Collider2D GetFloorCollider(int floor) => floors[floor];
 
     public Vector3 GetGroundStartPosition()
     {
@@ -253,11 +254,11 @@ public class CombatFloorMap : MonoBehaviour
         return position;
     }
 
-    public bool TryGetJump(int from, int destination, float fromX, float targetX, float horizontalReach,
-        out int nextFloor, out float takeoffX, out float landingX)
+    public bool TryGetVerticalJump(int from, int destination, float fromX,
+        out int nextFloor, out float takeoffX)
     {
         nextFloor = from;
-        takeoffX = landingX = fromX;
+        takeoffX = fromX;
         if (from < 0 || destination < 0 || from >= FloorCount || destination >= FloorCount || from == destination)
             return false;
         // 높이 순서가 아닌 발판 연결 그래프를 탐색한다. 분리된 구역은 지상을 경유한다.
@@ -289,8 +290,6 @@ public class CombatFloorMap : MonoBehaviour
         float right = Mathf.Min(fromBounds.max.x, nextBounds.max.x) - 0.6f;
         if (left > right) return false;
         takeoffX = Mathf.Clamp(fromX, left, right);
-        float reach = Mathf.Max(0f, horizontalReach);
-        landingX = Mathf.Clamp(targetX, Mathf.Max(left, takeoffX - reach), Mathf.Min(right, takeoffX + reach));
         return true;
     }
 

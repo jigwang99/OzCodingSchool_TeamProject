@@ -173,7 +173,8 @@ public class CombatFeedbackPool : MonoBehaviour
             sparksVisible = true;
             scaleSettled = false;
             rootTransform.SetPositionAndRotation(position, rotation);
-            textColor = damage.IsCritical ? new Color(1f, 0.75f, 0.15f) : color;
+            textColor = damage.IsCritical ? new Color(1f, 0.75f, 0.15f)
+                : damage.IsSkill ? new Color(0.4f, 0.85f, 1f) : color;
             if (font != null && label.font != font) label.font = font;
             // 기존 0.## 반올림/문화권 표기를 유지하면서 버퍼를 재사용한다.
             if (damage.Damage.TryFormat(damageText.AsSpan(), out int length, "0.##", CultureInfo.CurrentCulture))

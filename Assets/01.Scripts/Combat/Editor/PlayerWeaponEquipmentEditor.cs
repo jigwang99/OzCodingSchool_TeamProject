@@ -24,7 +24,7 @@ public class PlayerWeaponEquipmentEditor : Editor
         PlayerData data = canTest ? GameManager.instance.PlayerData : null;
         EditorGUILayout.Space();
         EditorGUILayout.LabelField("무기 획득 / 장착 테스트", EditorStyles.boldLabel);
-        EditorGUILayout.LabelField("현재 무기", equipment.CurrentWeapon?.id ?? "미장착");
+        EditorGUILayout.LabelField("현재 무기", equipment.CurrentWeapon?.DisplayName ?? "미장착");
         if (data != null && equipment.CurrentWeapon != null)
             EditorGUILayout.LabelField("현재 무기 레벨", data.GetWeaponLevel(equipment.CurrentWeapon.id).ToString());
         var attack = equipment.GetComponent<UnitAttack>();
@@ -36,7 +36,8 @@ public class PlayerWeaponEquipmentEditor : Editor
         {
             string id = catalog.Weapons[i]?.id;
             OwnedWeaponData owned = data?.GetOwnedWeapon(id);
-            options[i] = id == null ? "(비어 있음)" : owned == null ? $"{id} / 미보유" : $"{id} / Lv.{owned.level} / {owned.count}개";
+            string name = catalog.Weapons[i]?.DisplayName;
+            options[i] = id == null ? "(비어 있음)" : owned == null ? $"{name} ({id}) / 미보유" : $"{name} ({id}) / Lv.{owned.level} / {owned.count}개";
         }
 
         selectedIndex = Mathf.Clamp(selectedIndex, 0, options.Length - 1);

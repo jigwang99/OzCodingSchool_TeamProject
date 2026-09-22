@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 [RequireComponent(typeof(UnitHealth), typeof(UnitMove), typeof(UnitAttack))]
 public abstract class BaseUnitController : MonoBehaviour
@@ -13,17 +13,15 @@ public abstract class BaseUnitController : MonoBehaviour
     public UnitMoveState MoveState { get; protected set; }
     public UnitDieState DieState { get; protected set; }
     public BaseUnitController Target { get; private set; }
+    public event System.Action OnUnavailable;
 
-    // 비주얼 어댑터(IUnitView). cat이든 crab이든 이 인터페이스로만 다룬다.
-    // Unity는 인터페이스 필드를 직접 직렬화하지 못하므로 MonoBehaviour 슬롯으로 받고 Awake에서 캐스팅.
+    // 비주얼 어댑터(IUnitView). cat이든 enemy이든 이 인터페이스로만 다룬다.
     // 비워두면 자식에서 IUnitView 구현체를 자동 탐색한다. (없어도 로직에는 지장 없음)
     [SerializeField] private MonoBehaviour unitViewSource;
     private IUnitView unitView;
-    private Transform facingRoot;
-    private Vector3 initialVisualScale;
 
     public CombatFloorMap FloorMap { get; private set; }
-    public virtual bool IsChangingFloors => false;
+    public bool IsChangingFloors => Move != null && Move.IsChangingFloors;
     public int CurrentFloor => FloorMap != null ? FloorMap.GetFloorIndex(transform.position) : 0;
     protected virtual bool InitiallyFacesRight => true;
 
@@ -46,14 +44,6 @@ public abstract class BaseUnitController : MonoBehaviour
 
     public virtual bool CanEngage(BaseUnitController other) => IsOnSameFloor(other);
 
-    public void FaceDirection(float direction)
-    {
-        if (facingRoot == null || Mathf.Abs(direction) < 0.001f) return;
-        Vector3 scale = initialVisualScale;
-        scale.x *= (direction > 0f) == InitiallyFacesRight ? 1f : -1f;
-        if (facingRoot.localScale != scale) facingRoot.localScale = scale;
-    }
-
     // 타겟을 '교전 대상'으로 인식했는가.
     // 기본(플레이어): 타겟이 있으면 항상 교전.
     // 적: 감지범위 안에 들어와야 교전 → EnemyController에서 오버라이드.
@@ -71,8 +61,7 @@ public abstract class BaseUnitController : MonoBehaviour
             unitView = GetComponentInChildren<IUnitView>(true);
         if (unitView is Component view && view.transform != transform)
         {
-            facingRoot = view.transform;
-            initialVisualScale = facingRoot.localScale;
+            Move.ConfigureFacing(view.transform, InitiallyFacesRight);
         }
 
 #if UNITY_EDITOR
@@ -81,12 +70,17 @@ public abstract class BaseUnitController : MonoBehaviour
 #endif
 
         StateMachine = new StateMachine();
+        CreateStates();
+
+        Health.OnDied += HandleDied;
+    }
+
+    protected virtual void CreateStates()
+    {
         IdleState = new UnitIdleState(this);
         MoveState = new UnitMoveState(this);
         CombatState = new UnitCombatState(this);
         DieState = new UnitDieState(this);
-
-        Health.OnDied += HandleDied;
     }
 
     protected void Start()
@@ -101,6 +95,9 @@ public abstract class BaseUnitController : MonoBehaviour
 
     protected virtual void OnDisable()
     {
+        Move.CancelFloorTravel();
+        Move.Stop();
+        OnUnavailable?.Invoke();
         // 비활성/풀 반납 시 실행 중인 공격 루프와 애니메이션 타격 예약을 모두 취소한다.
         CombatState?.Exit();
         if (Attack != null)
@@ -109,6 +106,7 @@ public abstract class BaseUnitController : MonoBehaviour
 
     protected virtual void OnEnable()
     {
+        Move.ResetMotion();
         if (StateMachine?.CurrentState != null && Health != null && !Health.IsDead)
             StateMachine.ChangeState(IdleState);
     }
@@ -124,34 +122,14 @@ public abstract class BaseUnitController : MonoBehaviour
             unitView.RunAnimation(ani);
     }
 
-    // Move 상태의 실제 이동. 기본: 타겟을 향해 이동(적 추적).
-    // 플레이어는 층 연결 경로를 따라 이동하도록 오버라이드.
-    public virtual void PerformMove()
-    {
-        if (HasTarget)
-        {
-            FaceDirection(Target.transform.position.x - transform.position.x);
-            Move.MoveTo(Target.transform);
-        }
-    }
-
-    public void SetTarget(BaseUnitController target)
+    public virtual void SetTarget(BaseUnitController target)
     {
         Target = target == this ? null : target;
     }
 
     public void ClearTarget()
     {
-        Target = null;
-    }
-
-    public bool TryAttackTarget()
-    {
-        // 자기 자신이 죽었으면 공격 불가 (비동기 공격 루프가 죽는 프레임에 한 번 더 도는 것을 차단).
-        if (Health.IsDead)
-            return false;
-
-        return IsTargetInAttackRange && Attack.Attack(Target.Health);
+        SetTarget(null);
     }
 
     public void Revive()
@@ -173,5 +151,6 @@ public abstract class BaseUnitController : MonoBehaviour
     private void HandleDied()
     {
         StateMachine.ChangeState(DieState);
+        OnUnavailable?.Invoke();
     }
 }

@@ -166,7 +166,7 @@ public class StageManager : MonoBehaviour
             floorMap?.ApplyChapterPalette((Mathf.Max(1, CurrentStage) - 1) / 5);
             playerCat.transform.position = playerStartPosition;
             playerCat.Revive();
-            fishDropSystem?.SetDropTable(data.DropTable);
+            fishDropSystem?.SetDropTable(data.DropTable, data.BossGuaranteedFishCount);
             Vector3 origin = enemySpawnOrigin != null ? enemySpawnOrigin.position : enemySpawner.transform.position;
             combatManager.BeginBattle(playerCat, data.EnemyCount);
             enemySpawner.PrepareStage(data, origin, playerCat, floorMap);
@@ -226,7 +226,7 @@ public class StageManager : MonoBehaviour
         RetargetPlayer();
     }
 
-    // 처치 이벤트는 다음 탐지를 예약한다. 실제 선택은 플레이어의 주기적 탐지가 담당한다.
+    // 현재 타겟이 없을 때만, 남은 공격 모션이 끝난 뒤 다음 적을 탐색한다.
     private void HandleEnemyDefeated(EnemyController _)
     {
         RetargetPlayer();

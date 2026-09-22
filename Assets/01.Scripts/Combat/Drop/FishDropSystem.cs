@@ -12,6 +12,7 @@ public class FishDropSystem : MonoBehaviour
 
     private float dropChanceMultiplier = 1f; // 드롭률 업그레이드 배수 (성장 담당이 세팅)
     private StageDropTable currentTable;
+    private int pendingBossFishCount;
 
     // 인벤토리/재화 담당이 구독: 어떤 등급의 어떤 종을 몇 개 얻었는지
     public event Action<FishDrop> OnFishDropped;
@@ -31,9 +32,10 @@ public class FishDropSystem : MonoBehaviour
     }
 
     // StageManager가 스테이지 시작 시 현재 테이블을 지정 (없으면 default 유지)
-    public void SetDropTable(StageDropTable table)
+    public void SetDropTable(StageDropTable table, int bossGuaranteedFishCount = 0)
     {
         currentTable = table != null ? table : defaultDropTable;
+        pendingBossFishCount = Mathf.Max(0, bossGuaranteedFishCount);
     }
 
     // 드롭률 업그레이드 반영 (성장 담당이 호출)
@@ -47,11 +49,28 @@ public class FishDropSystem : MonoBehaviour
         if (currentTable == null || enemy == null)
             return;
 
+        Vector3 sourcePosition = enemy.transform.position;
+        StageDropTable table = currentTable;
+        // 마지막 적의 처치 이벤트는 클리어 판정·저장보다 먼저 발생한다.
+        // 일반 드롭과 별도로 지급하며, 이벤트 재진입 시에도 보상을 중복 지급하지 않는다.
+        if (pendingBossFishCount > 0 && combatManager != null && combatManager.RemainingEnemyCount == 0)
+        {
+            int guaranteedCount = pendingBossFishCount;
+            pendingBossFishCount = 0;
+            for (int i = 0; i < guaranteedCount; i++)
+            {
+                if (!TryRollFish(table, out FishGrade bossGrade, out int bossSpecies))
+                {
+                    Debug.LogError("[FishDropSystem] 보스 확정 보상 테이블의 물고기 가중치를 확인하세요.", this);
+                    break;
+                }
+                OnFishDropped?.Invoke(new FishDrop(bossGrade, bossSpecies, 1, sourcePosition));
+            }
+        }
+
         // 100%를 넘는 강화분도 보상으로 반영한다.
         // 예: 130% = 1회 확정 + 30% 확률로 1회 추가, 220% = 2회 확정 + 20% 추가.
-        StageDropTable table = currentTable;
         int dropCount = CalculateDropCount(table.DropChance * dropChanceMultiplier, UnityEngine.Random.value);
-        Vector3 sourcePosition = enemy.transform.position;
 
         for (int i = 0; i < dropCount; i++)
         {

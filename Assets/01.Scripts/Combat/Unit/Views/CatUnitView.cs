@@ -42,6 +42,9 @@ public class CatUnitView : MonoBehaviour, IUnitView, IAttackRecoveryView
     public void RunAnimation(AnimationTypeEnum ani)
     {
         attackHitResolved = false;
+        if (animator != null)
+            animator.speed = (ani == AnimationTypeEnum.Attack0 || ani == AnimationTypeEnum.Attack1)
+                && unitAttack != null ? unitAttack.AttackAnimationSpeed : 1f;
         if (animator != null && (ani == AnimationTypeEnum.Attack0 || ani == AnimationTypeEnum.Attack1))
         {
             // 같은 공격 상태에 재진입해도 반드시 첫 프레임부터 재생한다.
@@ -59,5 +62,9 @@ public class CatUnitView : MonoBehaviour, IUnitView, IAttackRecoveryView
             attackHitResolved = true;
     }
 
-    private void OnDisable() => attackHitResolved = false;
+    private void OnDisable()
+    {
+        attackHitResolved = false;
+        if (animator != null) animator.speed = 1f;
+    }
 }
