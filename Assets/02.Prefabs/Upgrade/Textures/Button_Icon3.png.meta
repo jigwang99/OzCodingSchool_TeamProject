@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 016e0281b26d3304d99e4ae69d97234a
+guid: 01e31484480a3774b9db7e8e7342a66e
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -8276864690631202713
-    second: Spum_FurnitureGacha_0
+      213: -7445206112496274796
+    second: Button_Icon3_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -54,7 +54,7 @@ TextureImporter:
   spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
-  alphaUsage: 1
+  alphaUsage: 2
   alphaIsTransparency: 1
   spriteTessellationDetail: -1
   textureType: 8
@@ -126,13 +126,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Spum_FurnitureGacha_0
+      name: Button_Icon3_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 1207
-        height: 1204
+        width: 35
+        height: 35
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,8 +141,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 76824f4aa6ba22d80800000000000000
-      internalID: -8276864690631202713
+      spriteID: 492b711bc705da890800000000000000
+      internalID: -7445206112496274796
       vertices: []
       indices: 
       edges: []
@@ -161,7 +161,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Spum_FurnitureGacha_0: -8276864690631202713
+      Button_Icon3_0: -7445206112496274796
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
