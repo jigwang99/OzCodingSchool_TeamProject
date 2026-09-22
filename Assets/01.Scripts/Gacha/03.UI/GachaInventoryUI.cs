@@ -56,18 +56,25 @@ namespace PixelRestaurant.Gacha
 
         [SerializeField] private GameObject itemCardPrefab;
 
+        [Header("Inventory Pagination")]
+        [SerializeField] private Button prevPageButton;
+        [SerializeField] private Button nextPageButton;
+        [SerializeField] private TMPro.TextMeshProUGUI pageText;
+
+        [SerializeField] private int itemsPerPage = 20;
+
+        private int currentPage = 0;
+        private int totalPages = 1;
         // =========================================================
         // Unity
         // =========================================================
 
         private void Start()
         {
-            RegisterTabEvents();
-
-            
-
+           
+         
+            RefreshInventoryDisplay();
         }
-      
         // =========================================================
         // 탭 이벤트
         // =========================================================
@@ -94,6 +101,7 @@ namespace PixelRestaurant.Gacha
                     () => SelectTab(GachaGroup.Recipe)
                 );
             }
+
         }
 
         // =========================================================
@@ -156,15 +164,28 @@ namespace PixelRestaurant.Gacha
         // 탭 선택
         // =========================================================
 
-        private void SelectTab(
-            GachaGroup group)
+        private void SelectTab(GachaGroup group)
         {
             _currentTab = group;
 
-            RefreshInventoryDisplay();
+            currentPage = 0;
 
+            RefreshInventoryDisplay();
+        }
+        public void SelectWeaponTab()
+        {
+            SelectTab(GachaGroup.Weapon);
         }
 
+        public void SelectFurnitureTab()
+        {
+            SelectTab(GachaGroup.Furniture);
+        }
+
+        public void SelectRecipeTab()
+        {
+            SelectTab(GachaGroup.Recipe);
+        }
         // =========================================================
         // 인벤토리 갱신
         // =========================================================
@@ -176,7 +197,7 @@ namespace PixelRestaurant.Gacha
 
             if (inventory == null)
             {
-               
+
 
                 return;
             }
@@ -193,7 +214,7 @@ namespace PixelRestaurant.Gacha
 
             if (poolData == null)
             {
-                
+
 
                 return;
             }
@@ -212,65 +233,85 @@ namespace PixelRestaurant.Gacha
                 inventory.GetItemsInGroup(
                     _currentTab,
                     poolData
-                ); 
-                itemIds.Sort((idA, idB) =>
-                {
-                    GachaItem itemA =
-                        poolData.Items.Find(i => i.ItemId == idA);
-
-                    GachaItem itemB =
-                        poolData.Items.Find(i => i.ItemId == idB);
-
-                    if (itemA == null)
-                        return 1;
-
-                    if (itemB == null)
-                        return -1;
-
-                    // 1순위: 레어도
-                    int rarityCompare =
-                        GetRarityOrder(itemA.Rarity)
-                        .CompareTo(
-                            GetRarityOrder(itemB.Rarity)
-                        );
-
-                    if (rarityCompare != 0)
-                        return rarityCompare;
-
-                    // 2순위: 등급
-                    int gradeCompare =
-                        itemA.Grade.CompareTo(itemB.Grade);
-
-                    if (gradeCompare != 0)
-                        return gradeCompare;
-
-                    // 3순위: 같은 경우 이름순
-                    return string.Compare(
-                        itemA.ItemName,
-                        itemB.ItemName,
-                        System.StringComparison.Ordinal
-                    );
-                });
-
-            if (itemIds.Count == 0)
+                );
+            itemIds.Sort((idA, idB) =>
             {
+                GachaItem itemA =
+                    poolData.Items.Find(i => i.ItemId == idA);
 
-                return;
-            }
+                GachaItem itemB =
+                    poolData.Items.Find(i => i.ItemId == idB);
 
+                if (itemA == null)
+                    return 1;
+
+                if (itemB == null)
+                    return -1;
+
+                // 1순위: 레어도
+                int rarityCompare =
+                    GetRarityOrder(itemA.Rarity)
+                    .CompareTo(
+                        GetRarityOrder(itemB.Rarity)
+                    );
+
+                if (rarityCompare != 0)
+                    return rarityCompare;
+
+                // 2순위: 등급
+                int gradeCompare =
+                    itemA.Grade.CompareTo(itemB.Grade);
+
+                if (gradeCompare != 0)
+                    return gradeCompare;
+
+                // 3순위: 같은 경우 이름순
+                return string.Compare(
+                    itemA.ItemName,
+                    itemB.ItemName,
+                    System.StringComparison.Ordinal
+                );
+            });
+
+       
             // -----------------------------------------------------
             // 카드 생성
             // -----------------------------------------------------
+            // 전체 페이지 수 계산
+            totalPages = Mathf.Max(
+                1,
+                Mathf.CeilToInt(
+                    itemIds.Count / (float)itemsPerPage
+                )
+            );
 
-            foreach (string itemId in itemIds)
+            // 현재 페이지가 범위를 벗어나지 않도록 조정
+            currentPage = Mathf.Clamp(
+                currentPage,
+                0,
+                totalPages - 1
+            );
+
+            // 현재 페이지에 표시할 아이템 범위
+            int startIndex = currentPage * itemsPerPage;
+
+            int endIndex = Mathf.Min(
+                startIndex + itemsPerPage,
+                itemIds.Count
+            );
+
+            // 현재 페이지의 아이템만 생성
+            for (int i = startIndex; i < endIndex; i++)
             {
                 CreateItemCard(
-                    itemId,
+                    itemIds[i],
                     inventory,
                     poolData
                 );
+                // 페이지 번호 및 버튼 갱신
+              
             }
-
+            UpdatePageUI();
         }
 
         // =========================================================
@@ -500,9 +541,39 @@ namespace PixelRestaurant.Gacha
                     return 99;
             }
         }
-   
 
-        
+
+        public void PreviousPage()
+        {
+            if (currentPage <= 0)
+                return;
+
+            currentPage--;
+
+            RefreshInventoryDisplay();
+        }
+
+        public void NextPage()
+        {
+            if (currentPage >= totalPages - 1)
+                return;
+
+            currentPage++;
+
+            RefreshInventoryDisplay();
+        }
+
+        private void UpdatePageUI()
+        {
+            if (pageText != null)
+                pageText.text = $"{currentPage + 1} / {totalPages}";
+
+            if (prevPageButton != null)
+                prevPageButton.interactable = currentPage > 0;
+
+            if (nextPageButton != null)
+                nextPageButton.interactable = currentPage < totalPages - 1;
+        }
     }
 
 }

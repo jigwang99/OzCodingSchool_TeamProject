@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using PixelRestaurant.Data;
-
+using System.Collections;
 
 namespace PixelRestaurant.Gacha
 {
@@ -25,7 +25,12 @@ namespace PixelRestaurant.Gacha
         [Header("Pull Buttons")]
         [SerializeField] private Button pull1Button;
         [SerializeField] private Button pull10Button;
+        [Header("Gacha Animation")]
+        [SerializeField] private Animator gachaAnimator;
 
+        [SerializeField] private float shakeDuration = 1.0f;
+
+        private bool isGachaPlaying = false;
         [Header("Gold")]
         [SerializeField] private TextMeshProUGUI goldDisplay;
 
@@ -159,6 +164,10 @@ namespace PixelRestaurant.Gacha
 
         private bool ExecuteGacha(int pullCount)
         {
+            // 애니메이션 재생 중에는 추가 뽑기 금지
+            if (isGachaPlaying)
+                return false;
+
             GachaManager gachaManager = GachaManager.Instance;
 
             if (gachaManager == null)
@@ -227,24 +236,50 @@ namespace PixelRestaurant.Gacha
                 return false;
             }
 
-            // =========================
-            // 결과 팝업 활성화
-            // =========================
-
-            if (resultPopup != null)
-            {
-                resultPopup.SetActive(true);
-            }
-
-            // 결과 카드 생성
-            ShowGachaResults(results);
+            // 가챠 애니메이션 실행
+            StartCoroutine(PlayGachaAnimation(results));
 
             // UI 갱신
             UpdateDisplay();
 
             return true;
         }
+        private IEnumerator PlayGachaAnimation(List<GachaItem> results)
+        {
+            isGachaPlaying = true;
 
+            // 중복 클릭 방지
+            if (pull1Button != null)
+                pull1Button.interactable = false;
+
+            if (pull10Button != null)
+                pull10Button.interactable = false;
+
+            // 애니메이션 재생
+            if (gachaAnimator != null)
+            {
+                gachaAnimator.SetTrigger("Shake");
+
+                // 애니메이션이 끝날 때까지 대기
+                yield return new WaitForSeconds(shakeDuration);
+            }
+
+            // 결과 팝업 표시
+            if (resultPopup != null)
+                resultPopup.SetActive(true);
+
+            // 결과 카드 생성
+            ShowGachaResults(results);
+
+            // 버튼 다시 활성화
+            if (pull1Button != null)
+                pull1Button.interactable = true;
+
+            if (pull10Button != null)
+                pull10Button.interactable = true;
+
+            isGachaPlaying = false;
+        }
         // =========================
         // Result
         // =========================

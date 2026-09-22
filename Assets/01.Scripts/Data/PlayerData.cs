@@ -295,4 +295,22 @@ public class PlayerData
 
         return true;
     }
+    /// <summary>
+    /// 특정 레시피 보유 여부 확인
+    /// </summary>
+    public bool HasRecipe(string recipeId)
+    {
+        if (string.IsNullOrWhiteSpace(recipeId))
+            return false;
+
+        if (ownedRecipes == null)
+            return false;
+
+        return ownedRecipes.Exists(
+            recipe =>
+                recipe != null &&
+                recipe.recipeId == recipeId &&
+                recipe.count > 0
+        );
+    }
 }

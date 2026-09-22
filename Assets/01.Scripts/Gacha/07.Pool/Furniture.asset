@@ -16,7 +16,7 @@ MonoBehaviour:
   group: 1
   items:
   - itemId: furniture_0
-    itemName: GasStove
+    itemName: "\uAC00\uC2A4\uB808\uC778\uC9C0"
     group: 1
     rarity: 0
     grade: 1
@@ -30,7 +30,7 @@ MonoBehaviour:
       goldBonusFlat: 0
       goldBonusRate: 0
   - itemId: furniture_1
-    itemName: Microwave
+    itemName: "\uC804\uC790\uB808\uC778\uC9C0"
     group: 1
     rarity: 0
     grade: 2
@@ -44,7 +44,7 @@ MonoBehaviour:
       goldBonusFlat: 0
       goldBonusRate: 0
   - itemId: furniture_2
-    itemName: Steamer
+    itemName: "\uCC1C\uAE30"
     group: 1
     rarity: 1
     grade: 1
@@ -58,7 +58,7 @@ MonoBehaviour:
       goldBonusFlat: 0
       goldBonusRate: 0
   - itemId: furniture_3
-    itemName: Fryer
+    itemName: "\uD280\uAE40\uAE30"
     group: 1
     rarity: 1
     grade: 2
@@ -72,7 +72,7 @@ MonoBehaviour:
       goldBonusFlat: 0
       goldBonusRate: 0
   - itemId: furniture_4
-    itemName: Refrigerator
+    itemName: "\uB0C9\uC7A5\uACE0"
     group: 1
     rarity: 2
     grade: 1
@@ -86,7 +86,7 @@ MonoBehaviour:
       goldBonusFlat: 0
       goldBonusRate: 0
   - itemId: furniture_5
-    itemName: Oven
+    itemName: "\uC624\uBE10"
     group: 1
     rarity: 3
     grade: 1
@@ -102,35 +102,13 @@ MonoBehaviour:
   pityConfig:
     levels:
     - level: 1
-      requiredPullCount: 10
+      requiredPullCount: 0
       rarities:
       - rarity: 0
-        weight: 65
+        weight: 40
       - rarity: 1
-        weight: 25
+        weight: 20
       - rarity: 2
-        weight: 9
+        weight: 20
       - rarity: 3
-        weight: 1
-    - level: 2
-      requiredPullCount: 20
-      rarities:
-      - rarity: 0
-        weight: 50
-      - rarity: 1
-        weight: 30
-      - rarity: 2
-        weight: 17
-      - rarity: 3
-        weight: 3
-    - level: 3
-      requiredPullCount: 30
-      rarities:
-      - rarity: 0
-        weight: 35
-      - rarity: 1
-        weight: 35
-      - rarity: 2
-        weight: 25
-      - rarity: 3
-        weight: 5
+        weight: 20

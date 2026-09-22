@@ -18,13 +18,13 @@ namespace PixelRestaurant.Gacha
 
         [Header("가챠 1회 비용")]
         [SerializeField, Min(0)]
-        private int weaponGachaCost = 30;
+        private int weaponGachaCost = 1;
+            
+        [SerializeField, Min(0)]
+        private int recipeGachaCost = 1 ;
 
         [SerializeField, Min(0)]
-        private int recipeGachaCost = 30;
-
-        [SerializeField, Min(0)]
-        private int furnitureGachaCost = 30;
+        private int furnitureGachaCost = 1;
 
         private Dictionary<GachaGroup, GachaPoolData> _pools
             = new Dictionary<GachaGroup, GachaPoolData>();
@@ -111,9 +111,7 @@ namespace PixelRestaurant.Gacha
                     return new BigNumber(furnitureGachaCost);
 
                 default:
-                    Debug.LogError(
-                        $"[GachaManager] 알 수 없는 가챠 종류: {group}"
-                    );
+                  
 
                     return new BigNumber(0);
             }
@@ -183,9 +181,7 @@ namespace PixelRestaurant.Gacha
             // 1회 비용 유효성 확인
             if (costPerPull <= new BigNumber(0))
             {
-                Debug.LogError(
-                    $"[GachaManager] 가챠 비용 설정 오류: {group}"
-                );
+               
 
                 return results;
             }
@@ -205,11 +201,7 @@ namespace PixelRestaurant.Gacha
             // 골드 부족 시 뽑기 중단
             if (currentGold < totalCost)
             {
-                Debug.Log(
-                    $"[GachaManager] 골드 부족! " +
-                    $"필요 골드: {totalCost}, " +
-                    $"보유 골드: {currentGold}"
-                );
+                
 
                 return results;
             }

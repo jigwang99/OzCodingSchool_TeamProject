@@ -15,12 +15,12 @@ MonoBehaviour:
   poolName: WeaponGachaPool
   group: 2
   items:
-  - itemId: 001
-    itemName: AceSpade
+  - itemId: Recipe_0
+    itemName: Grilled Fish
     group: 2
     rarity: 0
     grade: 1
-    weight: 4
+    weight: 100
     itemIcon: {fileID: -4261018228057752908, guid: fb3f70245531e1442ae7e4b8b093f5aa, type: 3}
     linkedWeaponId: 
     linkedFurnitureId: 
@@ -29,12 +29,12 @@ MonoBehaviour:
       attackPower: 1
       goldBonusFlat: 0
       goldBonusRate: 0
-  - itemId: 002
-    itemName: TwoSpade
+  - itemId: Recipe_1
+    itemName: Grilled Eel
     group: 2
-    rarity: 0
-    grade: 2
-    weight: 3
+    rarity: 1
+    grade: 1
+    weight: 100
     itemIcon: {fileID: -5011394437853923541, guid: fb3f70245531e1442ae7e4b8b093f5aa, type: 3}
     linkedWeaponId: 
     linkedFurnitureId: 
@@ -43,13 +43,13 @@ MonoBehaviour:
       attackPower: 0
       goldBonusFlat: 0
       goldBonusRate: 0
-  - itemId: 003
-    itemName: TreeSpade
+  - itemId: Recipe_2
+    itemName: Shrimp Tempura
     group: 2
-    rarity: 0
-    grade: 3
-    weight: 2
-    itemIcon: {fileID: -211345686528130792, guid: fb3f70245531e1442ae7e4b8b093f5aa, type: 3}
+    rarity: 2
+    grade: 1
+    weight: 100
+    itemIcon: {fileID: -4657705370912839433, guid: fb3f70245531e1442ae7e4b8b093f5aa, type: 3}
     linkedWeaponId: 
     linkedFurnitureId: 
     linkedRecipeId: recipe_6
@@ -57,12 +57,12 @@ MonoBehaviour:
       attackPower: 0
       goldBonusFlat: 0
       goldBonusRate: 0
-  - itemId: 004
-    itemName: FourSpade
+  - itemId: Recipe_3
+    itemName: Steamed Seafood
     group: 2
-    rarity: 0
-    grade: 4
-    weight: 1
+    rarity: 3
+    grade: 1
+    weight: 100
     itemIcon: {fileID: -8808243382295292962, guid: fb3f70245531e1442ae7e4b8b093f5aa, type: 3}
     linkedWeaponId: 
     linkedFurnitureId: 
@@ -74,35 +74,57 @@ MonoBehaviour:
   pityConfig:
     levels:
     - level: 1
-      requiredPullCount: 10
+      requiredPullCount: 20
       rarities:
       - rarity: 0
-        weight: 50
-      - rarity: 0
-        weight: 50
-      - rarity: 0
+        weight: 100
+      - rarity: 1
         weight: 0
-      - rarity: 0
+      - rarity: 2
+        weight: 0
+      - rarity: 3
         weight: 0
     - level: 2
-      requiredPullCount: 30
-      rarities:
-      - rarity: 0
-        weight: 50
-      - rarity: 0
-        weight: 40
-      - rarity: 0
-        weight: 10
-      - rarity: 0
-        weight: 0
-    - level: 3
       requiredPullCount: 50
       rarities:
       - rarity: 0
-        weight: 30
-      - rarity: 0
-        weight: 50
-      - rarity: 0
-        weight: 15
-      - rarity: 0
+        weight: 95
+      - rarity: 1
         weight: 5
+      - rarity: 2
+        weight: 0
+      - rarity: 3
+        weight: 0
+    - level: 3
+      requiredPullCount: 120
+      rarities:
+      - rarity: 0
+        weight: 90
+      - rarity: 1
+        weight: 9
+      - rarity: 2
+        weight: 1
+      - rarity: 3
+        weight: 0
+    - level: 4
+      requiredPullCount: 200
+      rarities:
+      - rarity: 0
+        weight: 85
+      - rarity: 1
+        weight: 10
+      - rarity: 2
+        weight: 4
+      - rarity: 3
+        weight: 1
+    - level: 5
+      requiredPullCount: 500
+      rarities:
+      - rarity: 0
+        weight: 80
+      - rarity: 0
+        weight: 12
+      - rarity: 0
+        weight: 6
+      - rarity: 0
+        weight: 2
