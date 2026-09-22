@@ -64,8 +64,14 @@ public class CombatFeedbackPool : MonoBehaviour
         }
     }
 
-    public static void Show(Vector3 position, DamageInfo damage, Color color, TMP_FontAsset font)
+    public static void Show(Vector3 position, DamageInfo damage, Color color, TMP_FontAsset font, bool isPlayerDamage = false)
     {
+        // [추가] 1. 플레이어가 피격되었을 때 설정 체크
+        if (isPlayerDamage && !UISettingsPopup.IsShowPlayerDamage) return;
+
+        // [추가] 2. 적이 피격되었을 때 설정 체크
+        if (!isPlayerDamage && !UISettingsPopup.IsShowEnemyDamage) return;
+
         CombatFeedbackPool pool = GetOrCreate();
         if (pool.isActiveAndEnabled) pool.Spawn(position, damage, color, font);
     }
