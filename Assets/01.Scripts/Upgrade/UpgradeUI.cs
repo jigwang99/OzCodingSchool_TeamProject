@@ -150,6 +150,9 @@ public class UpgradeUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
             upgradeText.text = $"현재 Lv. {currentLevel}";
             upgradeButton.interactable = false;
 
+            if (goldFilledImage != null)
+                goldFilledImage.fillAmount = 0f;
+
             StopGoldEnoughEffect();
 
             return;
