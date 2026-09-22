@@ -8,26 +8,31 @@ using DG.Tweening;
 
 public class UpgradeUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
-    [Header("업그레이드 데이터")]
-    [SerializeField] private UpgradeData upgradeData;
-
+    private UpgradeData upgradeData;
+    
     [Header("UI")]
     [SerializeField] private TMP_Text upgradeText;
     [SerializeField] private Button upgradeButton;
     [SerializeField] private TMP_Text upgradeButtonText;
     [SerializeField] private Image goldFilledImage;
     [SerializeField] private Image EffectImage;
+    [SerializeField] private Image innerImage;
 
     [Header("연속 강화")]
     [SerializeField] private float repeatDelay = 0.2f;
-
+    
     private Coroutine upgradeCoroutine;
 
     private Sequence goldEnoughEffectTween;
     private bool isGoldEnoughEffectPlaying;
-
-    private void Start()
+    
+    public void Initialize(UpgradeData data)
     {
+        upgradeData = data;
+
+        if (innerImage != null)
+            innerImage.sprite = upgradeData.icon;
+        
         RefreshUI();
     }
 
