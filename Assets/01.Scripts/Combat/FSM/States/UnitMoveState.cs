@@ -33,10 +33,15 @@ public class UnitMoveState : UnitBaseState
         }
 
         // 플레이어: 층 연결 경로 이동 / 적: 같은 층에서 추적
-        controller.PerformMove();
+        MoveTowardsTarget();
     }
 
     public override void Update()
     {
+    }
+
+    protected virtual void MoveTowardsTarget()
+    {
+        if (controller.HasTarget) controller.Move.MoveTo(controller.Target.transform);
     }
 }
