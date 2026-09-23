@@ -57,6 +57,9 @@ public class PlayerData
     // 무기,가구,레시피 아이템
     public GachaInventoryData gachaInventory = new GachaInventoryData();
 
+    // 0923new 무기/가구/레시피 그룹별 가챠 피티 진행도 (SaveManager의 PlayerData JSON에 함께 저장)
+    public GachaPityData gachaPity = new GachaPityData();
+
     // 식당 상태 (구 PlayerPrefs 저장분)
     public int chefCatLevel = 1;         // 셰프고양이 레벨
     public int cookCatNum = 0;           // 직원고양이 수

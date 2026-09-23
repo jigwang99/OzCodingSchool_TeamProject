@@ -129,10 +129,10 @@ TextureImporter:
       name: GachaScene_Button_0
       rect:
         serializedVersion: 2
-        x: 103
+        x: 52
         y: 53
-        width: 1966
-        height: 619
+        width: 2072
+        height: 622
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
