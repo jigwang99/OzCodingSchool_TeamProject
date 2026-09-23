@@ -17,14 +17,19 @@ public class CombatHitFeedback : MonoBehaviour
     private Color[] originalColors;
     private float flashRemaining;
     private bool flashActive;
+    private bool isPlayer; // 추가
 
     private void Awake()
     {
         health = GetComponent<UnitHealth>();
+
+        var cat = GetComponentInChildren<CatUnitView>(true);
+        var monster = GetComponentInChildren<MonsterUnitView>(true);
+
+        isPlayer = (cat != null);
+
         if (visualRoot == null)
         {
-            var cat = GetComponentInChildren<CatUnitView>(true);
-            var monster = GetComponentInChildren<MonsterUnitView>(true);
             visualRoot = cat != null ? cat.transform : monster != null ? monster.transform : transform;
         }
         sprites = visualRoot.GetComponentsInChildren<SpriteRenderer>(true);
@@ -51,7 +56,7 @@ public class CombatHitFeedback : MonoBehaviour
             flashActive = true;
         }
         // 유닛의 자식으로 만들지 않아 적이 풀에 돌아가도 숫자와 타격 이펙트는 끝까지 재생된다.
-        CombatFeedbackPool.Show(transform.position + hitOffset, info, damageColor, damageFont);
+        CombatFeedbackPool.Show(transform.position + hitOffset, info, damageColor, damageFont, isPlayer);
     }
 
     private void LateUpdate()
