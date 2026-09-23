@@ -13,6 +13,7 @@ public class CatUnitView : MonoBehaviour, IUnitView, IAttackRecoveryView
     private UnitAttack unitAttack;
     private Animator animator;
     private bool attackHitResolved;
+    public float DeathAnimationDuration { get; private set; }
 
     public bool IsFinishingAttack
     {
@@ -37,6 +38,12 @@ public class CatUnitView : MonoBehaviour, IUnitView, IAttackRecoveryView
         controller.enabled = false;
         unitAttack = GetComponentInParent<UnitAttack>();
         animator = GetComponent<Animator>();
+        if (animator != null && animator.runtimeAnimatorController != null)
+        {
+            foreach (AnimationClip clip in animator.runtimeAnimatorController.animationClips)
+                if (clip.name == "PlayerCatDeath" || clip.name == "cat0Dead")
+                    DeathAnimationDuration = clip.length;
+        }
     }
 
     public void RunAnimation(AnimationTypeEnum ani)

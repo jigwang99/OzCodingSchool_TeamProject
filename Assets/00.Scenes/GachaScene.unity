@@ -669,6 +669,8 @@ MonoBehaviour:
   recipeButton: {fileID: 1441780172}
   pull1Button: {fileID: 362862181}
   pull10Button: {fileID: 489651580}
+  pull1CostDisplay: {fileID: 0}
+  pull10CostDisplay: {fileID: 0}
   gachaAnimator: {fileID: 1131169546}
   shakeDuration: 0.5
   goldDisplay: {fileID: 1587464148}
@@ -5543,7 +5545,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -5967630374500685136, guid: 6e74017f33dfb0b4dafa0f2d7a08ba69, type: 3}
+  m_Sprite: {fileID: -2521278732674330906, guid: b73bc80aa148ff841a828e3c5b3f2e78, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

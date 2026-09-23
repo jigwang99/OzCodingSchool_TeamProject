@@ -60,7 +60,8 @@ public class PlayerWeaponCatalog : ScriptableObject
         public GameObject prefab;
         public PixelRestaurant.Data.GachaRarity rarity;
         [Min(0f)] public float baseDamage = 10f;
-        [Min(0f)] public float damagePerLevel = 5f;
+        [Tooltip("강화 레벨이 오를 때마다 현재 무기 공격력에 누적 적용되는 증가율(%)")]
+        [Min(0f)] public float damageGrowthPercent = 5f;
         public WeaponTraits traits;
         [Min(1f)] public float strongDamageMultiplier = 1.3f;
         [Range(0f, 1f)] public float criticalChanceBonus = 0.15f;
@@ -84,7 +85,8 @@ public class PlayerWeaponCatalog : ScriptableObject
 
         public float GetDamage(int level)
         {
-            float damage = Mathf.Max(0f, baseDamage) + Mathf.Max(0, level - 1) * Mathf.Max(0f, damagePerLevel);
+            float damage = Mathf.Max(0f, baseDamage)
+                * Mathf.Pow(1f + Mathf.Max(0f, damageGrowthPercent) / 100f, Mathf.Max(0, level - 1));
             return damage * (HasTrait(WeaponTraits.StrongDamage) ? Mathf.Max(1f, strongDamageMultiplier) : 1f);
         }
 
