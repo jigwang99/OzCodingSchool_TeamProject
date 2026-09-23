@@ -29,6 +29,7 @@ MonoBehaviour:
       attackPower: 0
       goldBonusFlat: 0
       goldBonusRate: 0
+    nextMergeItemId: Weapon_1
   - itemId: Weapon_1
     itemName: "\uC7A5\uC5B4"
     group: 0
@@ -43,6 +44,7 @@ MonoBehaviour:
       attackPower: 0
       goldBonusFlat: 0
       goldBonusRate: 0
+    nextMergeItemId: Weapon_2
   - itemId: Weapon_2
     itemName: "\uBCF5\uC5B4"
     group: 0
@@ -57,6 +59,7 @@ MonoBehaviour:
       attackPower: 0
       goldBonusFlat: 0
       goldBonusRate: 0
+    nextMergeItemId: Weapon_3
   - itemId: Weapon_3
     itemName: "\uB178\uB780\uBB3C\uACE0\uAE30"
     group: 0
@@ -71,6 +74,7 @@ MonoBehaviour:
       attackPower: 0
       goldBonusFlat: 0
       goldBonusRate: 0
+    nextMergeItemId: Weapon_4
   - itemId: Weapon_4
     itemName: "\uC904\uBB34\uB2AC\uBB3C\uACE0\uAE30"
     group: 0
@@ -85,6 +89,7 @@ MonoBehaviour:
       attackPower: 0
       goldBonusFlat: 0
       goldBonusRate: 0
+    nextMergeItemId: Weapon_5
   - itemId: Weapon_5
     itemName: "\uC815\uC5B4\uB9AC"
     group: 0
@@ -99,6 +104,7 @@ MonoBehaviour:
       attackPower: 0
       goldBonusFlat: 0
       goldBonusRate: 0
+    nextMergeItemId: Weapon_6
   - itemId: Weapon_6
     itemName: "\uC2E4\uB7EC\uCF04\uC11C"
     group: 0
@@ -113,6 +119,7 @@ MonoBehaviour:
       attackPower: 0
       goldBonusFlat: 0
       goldBonusRate: 0
+    nextMergeItemId: Weapon_7
   - itemId: Weapon_7
     itemName: "\uC810\uBC15\uC774 \uBCF5\uC5B4"
     group: 0
@@ -127,6 +134,7 @@ MonoBehaviour:
       attackPower: 0
       goldBonusFlat: 0
       goldBonusRate: 0
+    nextMergeItemId: Weapon_8
   - itemId: Weapon_8
     itemName: "\uC740\uBE5B\uAC08\uCE58"
     group: 0
@@ -141,6 +149,7 @@ MonoBehaviour:
       attackPower: 0
       goldBonusFlat: 0
       goldBonusRate: 0
+    nextMergeItemId: Weapon_9
   - itemId: Weapon_9
     itemName: "\uC810\uBC15\uC774\uBB3C\uACE0\uAE30"
     group: 0
@@ -155,6 +164,7 @@ MonoBehaviour:
       attackPower: 0
       goldBonusFlat: 0
       goldBonusRate: 0
+    nextMergeItemId: Weapon_10
   - itemId: Weapon_10
     itemName: "\uC740\uAC08\uCE58"
     group: 0
@@ -169,6 +179,7 @@ MonoBehaviour:
       attackPower: 0
       goldBonusFlat: 0
       goldBonusRate: 0
+    nextMergeItemId: Weapon_11
   - itemId: Weapon_11
     itemName: "\uCC38\uCE58"
     group: 0
@@ -183,6 +194,7 @@ MonoBehaviour:
       attackPower: 0
       goldBonusFlat: 0
       goldBonusRate: 0
+    nextMergeItemId: Weapon_12
   - itemId: Weapon_12
     itemName: "\uC624\uC9D5\uC5B4"
     group: 0
@@ -197,6 +209,7 @@ MonoBehaviour:
       attackPower: 0
       goldBonusFlat: 0
       goldBonusRate: 0
+    nextMergeItemId: Weapon_13
   - itemId: Weapon_13
     itemName: "\uB119\uCE58"
     group: 0
@@ -211,6 +224,7 @@ MonoBehaviour:
       attackPower: 0
       goldBonusFlat: 0
       goldBonusRate: 0
+    nextMergeItemId: Weapon_14
   - itemId: Weapon_14
     itemName: "\uC740\uBE5B\uACE0\uB4F1\uC5B4"
     group: 0
@@ -225,6 +239,7 @@ MonoBehaviour:
       attackPower: 0
       goldBonusFlat: 0
       goldBonusRate: 0
+    nextMergeItemId: Weapon_15
   - itemId: Weapon_15
     itemName: "\uCD08\uB85D\uC7A5\uC5B4"
     group: 0
@@ -239,6 +254,7 @@ MonoBehaviour:
       attackPower: 0
       goldBonusFlat: 0
       goldBonusRate: 0
+    nextMergeItemId: Weapon_16
   - itemId: Weapon_16
     itemName: "\uB3C4\uBBF8"
     group: 0
@@ -253,6 +269,7 @@ MonoBehaviour:
       attackPower: 0
       goldBonusFlat: 0
       goldBonusRate: 0
+    nextMergeItemId: Weapon_17
   - itemId: Weapon_17
     itemName: "\uAC08\uC0C9 \uB119\uCE58"
     group: 0
@@ -267,6 +284,7 @@ MonoBehaviour:
       attackPower: 0
       goldBonusFlat: 0
       goldBonusRate: 0
+    nextMergeItemId: Weapon_18
   - itemId: Weapon_18
     itemName: "\uD669\uC0C8\uCE58"
     group: 0
@@ -281,6 +299,7 @@ MonoBehaviour:
       attackPower: 0
       goldBonusFlat: 0
       goldBonusRate: 0
+    nextMergeItemId: Weapon_19
   - itemId: Weapon_19
     itemName: "\uACE0\uB4F1\uC5B4"
     group: 0
@@ -295,6 +314,7 @@ MonoBehaviour:
       attackPower: 0
       goldBonusFlat: 0
       goldBonusRate: 0
+    nextMergeItemId: Weapon_20
   - itemId: Weapon_20
     itemName: "\uC904\uBB34\uB2AC\uBCF5\uC5B4"
     group: 0
@@ -309,6 +329,7 @@ MonoBehaviour:
       attackPower: 0
       goldBonusFlat: 0
       goldBonusRate: 0
+    nextMergeItemId: Weapon_21
   - itemId: Weapon_21
     itemName: "\uBA54\uAE30"
     group: 0
@@ -323,6 +344,7 @@ MonoBehaviour:
       attackPower: 0
       goldBonusFlat: 0
       goldBonusRate: 0
+    nextMergeItemId: Weapon_22
   - itemId: Weapon_22
     itemName: "\uBC94\uACE0\uB798"
     group: 0
@@ -337,6 +359,7 @@ MonoBehaviour:
       attackPower: 0
       goldBonusFlat: 0
       goldBonusRate: 0
+    nextMergeItemId: 
   pityConfig:
     levels:
     - level: 1

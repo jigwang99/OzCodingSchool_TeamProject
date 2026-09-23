@@ -48,6 +48,7 @@ namespace PixelRestaurant.Gacha
 
         public void ShowFurniture()
         {
+
             ShowGroup(GachaGroup.Furniture);
         }
 
@@ -322,7 +323,7 @@ namespace PixelRestaurant.Gacha
         // =========================
         // Clear
         // =========================
-
+    
         private void ClearPage()
         {
             if (levelPage == null)

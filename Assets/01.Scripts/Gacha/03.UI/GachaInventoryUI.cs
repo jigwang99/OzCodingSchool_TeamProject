@@ -1,5 +1,6 @@
 
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using PixelRestaurant.Data;
@@ -44,6 +45,12 @@ namespace PixelRestaurant.Gacha
         [SerializeField] private Button furnitureTab;
         [SerializeField] private Button recipeTab;
 
+        [Header("Merge All (Inventory Popup)")]
+        [SerializeField] private Button mergeAllButton;
+        [SerializeField] private PlayerWeaponCatalog weaponCatalog;
+        [SerializeField] private TextMeshProUGUI mergeResultText;
+        private bool _merging;
+
         private GachaGroup _currentTab =
             GachaGroup.Weapon;
 
@@ -71,9 +78,66 @@ namespace PixelRestaurant.Gacha
 
         private void Start()
         {
-           
-         
+
+
+            if (mergeAllButton != null)
+                mergeAllButton.onClick.AddListener(MergeAllWeapons);
             RefreshInventoryDisplay();
+        }
+
+        private void OnDestroy()
+        {
+            if (mergeAllButton != null)
+                mergeAllButton.onClick.RemoveListener(MergeAllWeapons);
+        }
+
+        public void MergeAllWeapons()
+        {
+            if (_merging || GachaInventory.Instance == null || GachaManager.Instance == null) return;
+            GachaPoolData pool = GachaManager.Instance.GetPoolData(GachaGroup.Weapon);
+            if (pool == null || weaponCatalog == null)
+            {
+                if (mergeResultText != null) mergeResultText.text = "무기 풀/카탈로그 연결을 확인하세요.";
+                return;
+            }
+            _merging = true;
+            try
+            {
+                int merged = GachaInventory.Instance.TryMergeAllWeapons(pool, weaponCatalog);
+                if (merged == 0)
+                    Debug.LogWarning("[MergeAll] No weapon merged. See the preceding [MergeAll] warnings in the Console for item-specific reasons.");
+                if (mergeResultText != null)
+                    mergeResultText.text = merged > 0 ? $"무기 {merged}회 합치기 완료" : "합칠 수 있는 무기가 없습니다.";
+            }
+            finally
+            {
+                _merging = false;
+                RefreshInventoryDisplay();
+            }
+        }
+
+        private void UpdateMergeAllButton()
+        {
+            if (mergeAllButton == null) return;
+            bool weaponTabSelected = _currentTab == GachaGroup.Weapon;
+            mergeAllButton.gameObject.SetActive(weaponTabSelected);
+            if (!weaponTabSelected) return;
+            GachaPoolData pool = GachaManager.Instance != null
+                ? GachaManager.Instance.GetPoolData(GachaGroup.Weapon) : null;
+            // Do not disable the whole button because one weapon is unmergeable.
+            // The inventory merge routine checks each weapon independently and skips failures.
+            bool hasFiveOrMore = false;
+            if (pool != null && pool.Items != null && GachaInventory.Instance != null)
+            {
+                foreach (GachaItem item in pool.Items)
+                {
+                    if (item == null || item.Group != GachaGroup.Weapon) continue;
+                    if (GachaInventory.Instance.GetItemCount(item.ItemId) < GachaWeaponMerge.RequiredCount) continue;
+                    hasFiveOrMore = true;
+                    break;
+                }
+            }
+            mergeAllButton.interactable = !_merging && weaponCatalog != null && hasFiveOrMore;
         }
         // =========================================================
         // 탭 이벤트
@@ -125,7 +189,7 @@ namespace PixelRestaurant.Gacha
 
             if (inventoryPopup == null)
             {
-              
+
 
                 return;
             }
@@ -134,7 +198,7 @@ namespace PixelRestaurant.Gacha
 
             RefreshInventoryDisplay();
 
-        
+
         }
 
         // =========================================================
@@ -273,7 +337,7 @@ namespace PixelRestaurant.Gacha
                 );
             });
 
-       
+
             // -----------------------------------------------------
             // 카드 생성
             // -----------------------------------------------------
@@ -309,9 +373,10 @@ namespace PixelRestaurant.Gacha
                     poolData
                 );
                 // 페이지 번호 및 버튼 갱신
-              
+
             }
             UpdatePageUI();
+            UpdateMergeAllButton();
         }
 
         // =========================================================

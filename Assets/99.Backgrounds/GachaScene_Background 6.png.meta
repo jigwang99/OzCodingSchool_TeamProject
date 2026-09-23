@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 70c7c9e68e1886a47900e147fc2ebf21
+guid: b73bc80aa148ff841a828e3c5b3f2e78
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 8500058739362094038
-    second: GachaScene_Background 3_0
+      213: -2521278732674330906
+    second: GachaScene_Background6_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -126,13 +126,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: GachaScene_Background 3_0
+      name: GachaScene_Background6_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 1448
-        height: 1086
+        width: 1410
+        height: 1112
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,8 +141,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 6dbd1a1636646f570800000000000000
-      internalID: 8500058739362094038
+      spriteID: 6ee0337d95e920dd0800000000000000
+      internalID: -2521278732674330906
       vertices: []
       indices: 
       edges: []
@@ -161,7 +161,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      GachaScene_Background 3_0: 8500058739362094038
+      GachaScene_Background6_0: -2521278732674330906
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

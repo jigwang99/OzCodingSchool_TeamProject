@@ -161,6 +161,33 @@ public class PlayerData
         return true;
     }
 
+    // Merge ownership is a single unlock per gacha item; preserve independent combat levels.
+    // Call only after validating the gacha counts, next-stage mapping and catalog entries.
+    public bool TryApplyGachaWeaponMerge(string sourceId, string resultId, bool keepSource)
+    {
+        if (string.IsNullOrWhiteSpace(sourceId) || string.IsNullOrWhiteSpace(resultId) ||
+            sourceId == resultId || ownedWeapons == null) return false;
+
+        OwnedWeaponData source = GetOwnedWeapon(sourceId);
+        OwnedWeaponData result = GetOwnedWeapon(resultId);
+        if (source == null) return false;
+        if (result == null && ownedWeapons.Count == int.MaxValue) return false;
+
+        // Never remove the last default weapon: InitializeWeapons would recreate it.
+        if (!keepSource && sourceId == "swords_0") return false;
+
+        if (result == null)
+            ownedWeapons.Add(new OwnedWeaponData { weaponId = resultId, count = 1 });
+        // An already unlocked result is not granted another combat copy.
+        if (!keepSource)
+        {
+            ownedWeapons.Remove(source);
+            if (equippedWeaponId == sourceId) equippedWeaponId = resultId;
+        }
+        OnWeaponsChanged?.Invoke();
+        return true;
+    }
+
     public bool TryEquipOwnedWeapon(string weaponId)
     {
         if (!OwnsWeapon(weaponId))

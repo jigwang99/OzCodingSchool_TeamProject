@@ -25,6 +25,10 @@ namespace PixelRestaurant.Gacha
         [Header("Pull Buttons")]
         [SerializeField] private Button pull1Button;
         [SerializeField] private Button pull10Button;
+
+        [Header("뽑기 가격 텍스트 (숫자만 표시)")]
+        [SerializeField] private TextMeshProUGUI pull1CostDisplay;
+        [SerializeField] private TextMeshProUGUI pull10CostDisplay;
         [Header("Gacha Animation")]
         [SerializeField] private Animator gachaAnimator;
 
@@ -215,7 +219,7 @@ namespace PixelRestaurant.Gacha
             // 골드 부족 시 뽑기 중단
             if (currentGold < totalCost)
             {
-             
+
 
                 return false;
             }
@@ -368,9 +372,34 @@ namespace PixelRestaurant.Gacha
         {
             UpdateGoldDisplay();
             UpdateGroupDisplay();
+            UpdatePullCostDisplay();
             UpdatePityDisplay();
             UpdateProbabilityDisplay();
         }
+        // 실제 결제와 동일한 GachaManager의 그룹별 1회 가격을 표시합니다.
+        private void UpdatePullCostDisplay()
+        {
+            GachaManager manager = GachaManager.Instance;
+            if (manager == null)
+            {
+                if (pull1CostDisplay != null) pull1CostDisplay.text = " -";
+                if (pull10CostDisplay != null) pull10CostDisplay.text = "-";
+                return;
+            }
+
+            BigNumber costPerPull = manager.GetGachaCost(_currentGachaType);
+            if (pull1CostDisplay != null)
+                pull1CostDisplay.text = costPerPull.ToString();
+
+            if (pull10CostDisplay != null)
+            {
+                BigNumber totalCost = new BigNumber(0);
+                for (int i = 0; i < 10; i++)
+                    totalCost += costPerPull;
+                pull10CostDisplay.text = totalCost.ToString();
+            }
+        }
+
         private void UpdateGoldDisplay()
         {
             if (goldDisplay == null)

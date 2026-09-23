@@ -47,7 +47,7 @@ namespace PixelRestaurant.Gacha
                 return;
             }
             _instance = this;
-            DontDestroyOnLoad(gameObject); 
+            DontDestroyOnLoad(gameObject);
         }
         private void SaveGameData()
         {
@@ -55,9 +55,9 @@ namespace PixelRestaurant.Gacha
             {
                 // 인수를 넣지 않고 Save() 호출
                 SaveManager.instance.Save();
-               
+
             }
-            
+
         }
         /// <summary>
         /// 아이템 추가 (뽑기 후 호출)
@@ -92,7 +92,7 @@ namespace PixelRestaurant.Gacha
             }
 
             // 전투 무기 목록에 반영
-            SyncWeaponToPlayerData(itemId, count);
+            if (previousCount == 0) SyncWeaponToPlayerData(itemId, 1);
             // 가챠 가구 목록에 반영
             SyncFurnitureToPlayerData(itemId, count);
             // 가챠 인벤토리 전체를 PlayerData에 직접 반영
@@ -108,11 +108,196 @@ namespace PixelRestaurant.Gacha
         }
 
 
+        public int TryMergeAllWeapons(
+    GachaPoolData pool,
+    PlayerWeaponCatalog catalog)
+        {
+            if (pool == null || pool.Items == null || catalog == null)
+            {
+                Debug.LogWarning("[MergeAll] 무기 풀 또는 카탈로그가 없습니다.");
+                return 0;
+            }
+
+            int merged = 0;
+            bool changed;
+
+            do
+            {
+                changed = false;
+
+                foreach (GachaItem item in pool.Items)
+                {
+                    if (item == null || item.Group != GachaGroup.Weapon)
+                        continue;
+
+                    if (!CanMergeWeapon(item, pool, catalog))
+                        continue;
+
+                    if (!TryMergeWeapon(item, pool, catalog))
+                        continue;
+
+                    merged++;
+                    changed = true;
+
+                    // 합치기로 상위 단계 무기가 새로 생겼으므로 처음부터 재검사
+                    break;
+                }
+            }
+            while (changed);
+
+            // 다른 무기가 합쳐졌더라도 Weapon_15의 상태를 출력
+            foreach (GachaItem item in pool.Items)
+            {
+                if (item == null || item.ItemId != "Weapon_15")
+                    continue;
+
+                int count = GetItemCount(item.ItemId);
+
+                if (count >= GachaWeaponMerge.RequiredCount)
+                {
+                    Debug.LogWarning(
+                        $"[MergeAll] Weapon_15 합치기 확인: " +
+                        $"보유 수량={count}, " +
+                        $"NextMergeItemId={item.NextMergeItemId}, " +
+                        $"LinkedWeaponId={item.LinkedWeaponId}, " +
+                        $"합치기 가능={CanMergeWeapon(item, pool, catalog)}"
+                    );
+                }
+            }
+            DiagnoseWeapon15(pool, catalog);
+            return merged;
+        }
+        public bool HasMergeableWeapon(GachaPoolData pool, PlayerWeaponCatalog catalog)
+        {
+            if (pool == null || pool.Items == null || catalog == null) return false;
+            foreach (GachaItem item in pool.Items)
+                if (CanMergeWeapon(item, pool, catalog)) return true;
+            return false;
+        }
+
+        private bool CanMergeWeapon(GachaItem source, GachaPoolData pool, PlayerWeaponCatalog catalog)
+        {
+            if (source == null || pool == null || catalog == null ||
+                GameManager.instance == null || GameManager.instance.PlayerData == null) return false;
+            GachaItem result;
+            if (!GachaWeaponMerge.TryFindMergeResult(source, this, pool, out result)) return false;
+            if (result == null || source.ItemId == result.ItemId ||
+                string.IsNullOrWhiteSpace(source.LinkedWeaponId) ||
+                string.IsNullOrWhiteSpace(result.LinkedWeaponId) ||
+                source.LinkedWeaponId == result.LinkedWeaponId) return false;
+            var sourceWeapon = catalog.Find(source.LinkedWeaponId);
+            var resultWeapon = catalog.Find(result.LinkedWeaponId);
+            if (sourceWeapon == null || resultWeapon == null ||
+                !GameManager.instance.PlayerData.OwnsWeapon(source.LinkedWeaponId)) return false;
+            int remaining = GetItemCount(source.ItemId) - GachaWeaponMerge.RequiredCount;
+            if (remaining < 0 || (remaining == 0 && source.LinkedWeaponId == "swords_0")) return false;
+            return GetItemCount(result.ItemId) < int.MaxValue;
+        }
+       private void DiagnoseWeapon15(
+    GachaPoolData pool,
+    PlayerWeaponCatalog catalog)
+        {
+            if (pool == null || pool.Items == null)
+                return;
+
+            GachaItem source = pool.Items.Find(
+                item => item != null && item.ItemId == "Weapon_15"
+            );
+
+            if (source == null)
+            {
+                Debug.LogWarning("[MergeAll] Weapon_15가 무기 풀에 없습니다.");
+                return;
+            }
+
+            int count = GetItemCount(source.ItemId);
+
+            if (count < GachaWeaponMerge.RequiredCount)
+                return;
+
+            GachaItem result;
+
+            if (!GachaWeaponMerge.TryFindMergeResult(
+                    source, this, pool, out result))
+            {
+                Debug.LogWarning(
+                    $"[MergeAll] Weapon_15: 다음 단계 가챠 아이템을 찾지 못했습니다. " +
+                    $"NextMergeItemId={source.NextMergeItemId}, " +
+                    $"보유 수량={count}"
+                );
+                return;
+            }
+
+            if (catalog == null ||
+                catalog.Find(source.LinkedWeaponId) == null ||
+                catalog.Find(result.LinkedWeaponId) == null)
+            {
+                Debug.LogWarning(
+                    $"[MergeAll] Weapon_15: 전투 무기 카탈로그 연결을 확인하세요. " +
+                    $"현재 무기={source.LinkedWeaponId}, " +
+                    $"결과 무기={result.LinkedWeaponId}"
+                );
+                return;
+            }
+
+            if (GameManager.instance == null ||
+                GameManager.instance.PlayerData == null)
+            {
+                Debug.LogWarning(
+                    "[MergeAll] Weapon_15: PlayerData를 찾을 수 없습니다."
+                );
+                return;
+            }
+
+            if (!GameManager.instance.PlayerData.OwnsWeapon(
+                    source.LinkedWeaponId))
+            {
+                Debug.LogWarning(
+                    $"[MergeAll] Weapon_15: 가챠 인벤토리에는 {count}개 있지만 " +
+                    $"전투 무기 목록에는 {source.LinkedWeaponId}가 등록되지 않았습니다."
+                );
+                return;
+            }
+
+            Debug.LogWarning(
+                $"[MergeAll] Weapon_15: 기본 조건은 통과했지만 합치기가 실패했습니다. " +
+                $"현재 무기={source.LinkedWeaponId}, " +
+                $"결과 무기={result.LinkedWeaponId}"
+            );
+        }
+        // All preconditions are checked before any gacha material is consumed.
+        public bool TryMergeWeapon(GachaItem source, GachaPoolData pool, PlayerWeaponCatalog catalog)
+        {
+            if (!CanMergeWeapon(source, pool, catalog)) return false;
+            GachaItem result;
+            if (!GachaWeaponMerge.TryFindMergeResult(source, this, pool, out result)) return false;
+            PlayerData data = GameManager.instance.PlayerData;
+            int remaining = GetItemCount(source.ItemId) - GachaWeaponMerge.RequiredCount;
+            bool keepSource = remaining > 0;
+            int resultCount = GetItemCount(result.ItemId);
+
+            // PlayerData mutation returns false without changing data on failed validation.
+            if (!data.TryApplyGachaWeaponMerge(source.LinkedWeaponId, result.LinkedWeaponId, keepSource))
+                return false;
+
+            if (remaining == 0) { _items.Remove(source.ItemId); _newItems.Remove(source.ItemId); }
+            else _items[source.ItemId] = remaining;
+            _items[result.ItemId] = resultCount + 1;
+            if (resultCount == 0) _newItems.Add(result.ItemId);
+            SyncInventoryToPlayerData();
+            // Reapply sprite and attack damage when the equipped weapon was replaced.
+            var equipment = FindObjectOfType<PlayerWeaponEquipment>();
+            if (equipment != null) equipment.RestoreEquipment();
+            OnInventoryChanged?.Invoke();
+            SaveGameData();
+            return true;
+        }
+
         private void SyncInventoryToPlayerData()
         {
             if (GameManager.instance == null)
             {
-             
+
                 return;
             }
 
@@ -120,7 +305,7 @@ namespace PixelRestaurant.Gacha
 
             if (playerData == null)
             {
-              
+
                 return;
             }
 
@@ -161,12 +346,13 @@ namespace PixelRestaurant.Gacha
             {
                 if (poolData == null || poolData.Items == null) continue;
 
-                var gachaItem = poolData.Items.Find(i => i.ItemId == gachaItemId);
+                var gachaItem = poolData.Items.Find(i => i != null && i.ItemId == gachaItemId);
                 if (gachaItem != null)
                 {
                     if (gachaItem.Group == GachaGroup.Weapon && !string.IsNullOrEmpty(gachaItem.LinkedWeaponId))
                     {
-                        GameManager.instance.PlayerData.AddWeapon(gachaItem.LinkedWeaponId, count);
+                        if (!GameManager.instance.PlayerData.OwnsWeapon(gachaItem.LinkedWeaponId))
+                            GameManager.instance.PlayerData.AddWeapon(gachaItem.LinkedWeaponId, 1);
 
                     }
                     return;
@@ -250,7 +436,7 @@ namespace PixelRestaurant.Gacha
                 if (string.IsNullOrWhiteSpace(
                     gachaItem.LinkedRecipeId))
                 {
-                    
+
 
 
                     return;
@@ -259,7 +445,7 @@ namespace PixelRestaurant.Gacha
                     GameManager.instance.PlayerData;
 
                 string recipeId = gachaItem.LinkedRecipeId;
- 
+
 
                 // 레시피 목록이 없으면 초기화
                 if (playerData.ownedRecipes == null)
@@ -277,7 +463,7 @@ namespace PixelRestaurant.Gacha
 
                 // 처음 획득한 레시피만 추가
                 if (!alreadyOwned)
-                
+
 
 
                     playerData.ownedRecipes.Add(
@@ -287,12 +473,12 @@ namespace PixelRestaurant.Gacha
                             count = 1
                         }
                     );
-                }
-                   
-
-                return;
             }
-       
+
+
+            return;
+        }
+
         /// <summary>
         /// 보유 개수 조회
         /// </summary>
@@ -401,13 +587,13 @@ namespace PixelRestaurant.Gacha
             return _items.ContainsKey(itemId) && _items[itemId] > 0;
         }
 
-    
-      
+
+
         public void LoadFromPlayerData()
         {
             if (GameManager.instance == null)
             {
-               
+
                 return;
             }
 
@@ -416,13 +602,13 @@ namespace PixelRestaurant.Gacha
 
             if (playerData == null)
             {
-                
+
                 return;
             }
 
             if (playerData.gachaInventory == null)
             {
-                
+
                 return;
             }
 
@@ -448,7 +634,7 @@ namespace PixelRestaurant.Gacha
                 }
             }
 
-            
+
         }
     }
 }

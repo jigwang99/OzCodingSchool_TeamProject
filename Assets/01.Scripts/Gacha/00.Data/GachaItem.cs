@@ -35,6 +35,11 @@ namespace PixelRestaurant.Gacha
         [SerializeField]
         private GachaItemStats stats = new GachaItemStats();
 
+        [Header("Weapon Merge")]
+        [Tooltip("합치기 성공 시 획득할 다음 단계 가챠 무기의 ItemId")]
+        [SerializeField] private string nextMergeItemId;
+
+        public string NextMergeItemId => nextMergeItemId;
         public string ItemId => itemId;
         public string ItemName => itemName;
         public GachaGroup Group => group;
@@ -57,24 +62,13 @@ namespace PixelRestaurant.Gacha
         [ContextMenu("Validate Item ID")]
         private void ValidateItemId()
         {
-            if (string.IsNullOrEmpty(itemId))
-             
-
-            if (grade < 1 || grade > 4)
-        
-
-            if (weight <= 0)
-            
-
-            if (itemIcon == null)
-             
-
-            if (group == GachaGroup.Weapon &&
-                string.IsNullOrEmpty(linkedWeaponId))
-            {
-         
-             
-            }
+            if (string.IsNullOrWhiteSpace(itemId)) Debug.LogWarning("Gacha ItemId is empty");
+            int maxGrade = group == GachaGroup.Weapon ? GachaWeaponMerge.GetMaxGrade(rarity) : 4;
+            if (grade < 1 || grade > maxGrade) Debug.LogWarning($"Invalid grade: {grade}");
+            if (weight <= 0) Debug.LogWarning("Weight must be positive");
+            if (itemIcon == null) Debug.LogWarning("Item icon is missing");
+            if (group == GachaGroup.Weapon && string.IsNullOrWhiteSpace(linkedWeaponId))
+                Debug.LogWarning("LinkedWeaponId is missing");
         }
 #endif
     }

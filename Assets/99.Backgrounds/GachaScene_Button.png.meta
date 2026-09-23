@@ -1,16 +1,10 @@
 fileFormatVersion: 2
-guid: 02ec9fc31d3f4654388e09c277ce5714
+guid: 750e7ec79e28ddb4f8f70c42e0a69305
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -8082572358430165706
-    second: GachaScene_NewBadgeBachGround_0
-  - first:
-      213: 4308751938735339549
-    second: GachaScene_NewBadgeBachGround_1
-  - first:
-      213: -4810631955435078055
-    second: GachaScene_NewBadgeBachGround_2
+      213: 7509514303189325378
+    second: GachaScene_Button_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -132,13 +126,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: GachaScene_NewBadgeBachGround_0
+      name: GachaScene_Button_0
       rect:
         serializedVersion: 2
-        x: 203
-        y: 132
-        width: 277
-        height: 133
+        x: 103
+        y: 53
+        width: 1966
+        height: 619
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -147,52 +141,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 635f068634fe4df80800000000000000
-      internalID: -8082572358430165706
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: GachaScene_NewBadgeBachGround_1
-      rect:
-        serializedVersion: 2
-        x: 386
-        y: 259
-        width: 7
-        height: 7
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: d18789d3f03cbcb30800000000000000
-      internalID: 4308751938735339549
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: GachaScene_NewBadgeBachGround_2
-      rect:
-        serializedVersion: 2
-        x: 482
-        y: 196
-        width: 11
-        height: 10
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 95e362f69b33d3db0800000000000000
-      internalID: -4810631955435078055
+      spriteID: 246905db877273860800000000000000
+      internalID: 7509514303189325378
       vertices: []
       indices: 
       edges: []
@@ -211,9 +161,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      GachaScene_NewBadgeBachGround_0: -8082572358430165706
-      GachaScene_NewBadgeBachGround_1: 4308751938735339549
-      GachaScene_NewBadgeBachGround_2: -4810631955435078055
+      GachaScene_Button_0: 7509514303189325378
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
