@@ -213,7 +213,7 @@ public class EnemySpawner : MonoBehaviour
         float bestSqr = float.MaxValue;
         foreach (EnemyController enemy in active)
         {
-            if (enemy == null || !enemy.gameObject.activeInHierarchy || enemy.Health.IsDead) continue;
+            if (enemy == null || !enemy.isActiveAndEnabled || enemy.Health.IsDead) continue;
             float sqr = ((Vector2)(enemy.transform.position - from)).sqrMagnitude;
             if (sqr >= bestSqr) continue;
             bestSqr = sqr;

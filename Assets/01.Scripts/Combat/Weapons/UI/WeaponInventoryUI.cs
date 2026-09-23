@@ -171,7 +171,7 @@ public class WeaponInventoryUI : MonoBehaviour
             slot.icon.color = acquired ? Color.white : lockedIconColor;
             slot.level.text = acquired ? "+" + subscribedData.GetWeaponLevel(slot.weapon.id) : "+0";
             slot.level.color = acquired ? textColor : lockedTextColor;
-            slot.badge.text = equipped ? "장착" : (i + 1).ToString("00");
+            slot.badge.text = equipped ? "장착" : slot.weapon.DisplayName;
             slot.badge.color = equipped ? selectedColor : badgeColor;
             slot.count.text = "획득 " + (owned?.count ?? 0).ToString("N0") + "개";
             slot.countBackground.color = acquired ? ownedCountBackground : lockedCountBackground;
@@ -186,10 +186,19 @@ public class WeaponInventoryUI : MonoBehaviour
             detailLabel.text = "무기를 선택해 주세요.";
         else
         {
-            string name = "무기 " + (slots.IndexOf(selected) + 1).ToString("00");
+            string name = selected.weapon.DisplayName + " · " + selected.weapon.rarity;
             detailLabel.text = canEquip
                 ? name + "  ·  공격력 " + selected.weapon.GetDamage(subscribedData.GetWeaponLevel(selectedId)).ToString("0.##")
                 : name + "  ·  아직 획득하지 못했습니다.";
+            string traits = selected.weapon.GetTraitDescription();
+            if (!string.IsNullOrEmpty(traits)) detailLabel.text += "\n" + traits;
+            if (selected.weapon.HasTrait(WeaponTraits.Skill))
+            {
+                PlayerWeaponCatalog.SkillSettings skill = equipment.Catalog.GetSkillSettings(selected.weapon);
+                detailLabel.text += $"\n스킬 {skill.duration:0.#}초 / 쿨타임 {skill.cooldown:0.#}초"
+                    + $"\n피해 +{skill.damageBonus * 100f:0.#}% · 치명타 +{skill.criticalChanceBonus * 100f:0.#}%p"
+                    + $" · 공속 +{skill.attackSpeedBonus * 100f:0.#}% · 이속 +{skill.moveSpeedBonus * 100f:0.#}%";
+            }
         }
     }
 

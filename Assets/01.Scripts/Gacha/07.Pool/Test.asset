@@ -16,7 +16,7 @@ MonoBehaviour:
   group: 0
   items:
   - itemId: Test1
-    itemName: 1
+    itemName: 멸치
     group: 0
     rarity: 0
     grade: 1
@@ -28,7 +28,7 @@ MonoBehaviour:
       goldBonusFlat: 0
       goldBonusRate: 0
   - itemId: Test2
-    itemName: 2
+    itemName: 정어리
     group: 0
     rarity: 0
     grade: 2
@@ -40,7 +40,7 @@ MonoBehaviour:
       goldBonusFlat: 0
       goldBonusRate: 0
   - itemId: Test3
-    itemName: 3
+    itemName: 청어
     group: 0
     rarity: 0
     grade: 3
@@ -52,7 +52,7 @@ MonoBehaviour:
       goldBonusFlat: 0
       goldBonusRate: 0
   - itemId: Test4
-    itemName: 4
+    itemName: 전갱이
     group: 0
     rarity: 0
     grade: 4
@@ -64,9 +64,9 @@ MonoBehaviour:
       goldBonusFlat: 0
       goldBonusRate: 0
   - itemId: Test5
-    itemName: 5
+    itemName: 고등어
     group: 0
-    rarity: 1
+    rarity: 0
     grade: 2
     weight: 1
     itemIcon: {fileID: 7917612348479043816, guid: c1b0bbbd287f34b63a81673b7ada0b31, type: 3}
@@ -76,9 +76,9 @@ MonoBehaviour:
       goldBonusFlat: 0
       goldBonusRate: 0
   - itemId: Test6
-    itemName: 6
+    itemName: 꽁치
     group: 0
-    rarity: 1
+    rarity: 0
     grade: 6
     weight: 1
     itemIcon: {fileID: -1527510420817029064, guid: c1b0bbbd287f34b63a81673b7ada0b31, type: 3}
@@ -88,9 +88,9 @@ MonoBehaviour:
       goldBonusFlat: 0
       goldBonusRate: 0
   - itemId: Test7
-    itemName: 7
+    itemName: 전어
     group: 0
-    rarity: 2
+    rarity: 0
     grade: 6
     weight: 1
     itemIcon: {fileID: 2465368753443547920, guid: c1b0bbbd287f34b63a81673b7ada0b31, type: 3}
@@ -100,9 +100,9 @@ MonoBehaviour:
       goldBonusFlat: 0
       goldBonusRate: 0
   - itemId: Test8
-    itemName: 8
+    itemName: 빙어
     group: 0
-    rarity: 2
+    rarity: 0
     grade: 6
     weight: 2
     itemIcon: {fileID: -3581400602456801779, guid: c1b0bbbd287f34b63a81673b7ada0b31, type: 3}
@@ -112,9 +112,9 @@ MonoBehaviour:
       goldBonusFlat: 0
       goldBonusRate: 0
   - itemId: Test9
-    itemName: 9
+    itemName: 은어
     group: 0
-    rarity: 2
+    rarity: 0
     grade: 6
     weight: 2
     itemIcon: {fileID: 989341614017228077, guid: c1b0bbbd287f34b63a81673b7ada0b31, type: 3}
@@ -124,9 +124,9 @@ MonoBehaviour:
       goldBonusFlat: 0
       goldBonusRate: 0
   - itemId: Test10
-    itemName: 10
+    itemName: 붕어
     group: 0
-    rarity: 3
+    rarity: 1
     grade: 6
     weight: 2
     itemIcon: {fileID: 1799176996764264566, guid: c1b0bbbd287f34b63a81673b7ada0b31, type: 3}
@@ -136,9 +136,9 @@ MonoBehaviour:
       goldBonusFlat: 0
       goldBonusRate: 0
   - itemId: Test11
-    itemName: 11
+    itemName: 잉어
     group: 0
-    rarity: 3
+    rarity: 1
     grade: 6
     weight: 2
     itemIcon: {fileID: -5521930113802750886, guid: c1b0bbbd287f34b63a81673b7ada0b31, type: 3}
@@ -148,9 +148,9 @@ MonoBehaviour:
       goldBonusFlat: 0
       goldBonusRate: 0
   - itemId: Test12
-    itemName: 12
+    itemName: 송어
     group: 0
-    rarity: 3
+    rarity: 1
     grade: 6
     weight: 2
     itemIcon: {fileID: -5330209929612280627, guid: c1b0bbbd287f34b63a81673b7ada0b31, type: 3}
@@ -160,9 +160,9 @@ MonoBehaviour:
       goldBonusFlat: 0
       goldBonusRate: 0
   - itemId: Test13
-    itemName: 13
+    itemName: 연어
     group: 0
-    rarity: 3
+    rarity: 1
     grade: 6
     weight: 2
     itemIcon: {fileID: 5420241916359937051, guid: c1b0bbbd287f34b63a81673b7ada0b31, type: 3}
@@ -172,15 +172,123 @@ MonoBehaviour:
       goldBonusFlat: 0
       goldBonusRate: 0
   - itemId: Test14
-    itemName: 14
+    itemName: 농어
     group: 0
-    rarity: 3
+    rarity: 1
     grade: 6
     weight: 2
     itemIcon: {fileID: -252366736038406540, guid: c1b0bbbd287f34b63a81673b7ada0b31, type: 3}
     linkedWeaponId: swords_13
     stats:
       attackPower: 7
+      goldBonusFlat: 0
+      goldBonusRate: 0
+  - itemId: Test15
+    itemName: 광어
+    group: 0
+    rarity: 1
+    grade: 1
+    weight: 1
+    itemIcon: {fileID: -252366736038406540, guid: c1b0bbbd287f34b63a81673b7ada0b31, type: 3}
+    linkedWeaponId: swords_14
+    stats:
+      attackPower: 0
+      goldBonusFlat: 0
+      goldBonusRate: 0
+  - itemId: Test16
+    itemName: 우럭
+    group: 0
+    rarity: 1
+    grade: 1
+    weight: 1
+    itemIcon: {fileID: -4038341700606420678, guid: c1b0bbbd287f34b63a81673b7ada0b31, type: 3}
+    linkedWeaponId: swords_15
+    stats:
+      attackPower: 0
+      goldBonusFlat: 0
+      goldBonusRate: 0
+  - itemId: Test17
+    itemName: 도미
+    group: 0
+    rarity: 1
+    grade: 1
+    weight: 1
+    itemIcon: {fileID: -9144741878822685231, guid: c1b0bbbd287f34b63a81673b7ada0b31, type: 3}
+    linkedWeaponId: swords_16
+    stats:
+      attackPower: 0
+      goldBonusFlat: 0
+      goldBonusRate: 0
+  - itemId: Test18
+    itemName: 방어
+    group: 0
+    rarity: 2
+    grade: 1
+    weight: 1
+    itemIcon: {fileID: -178236419022009773, guid: c1b0bbbd287f34b63a81673b7ada0b31, type: 3}
+    linkedWeaponId: swords_17
+    stats:
+      attackPower: 0
+      goldBonusFlat: 0
+      goldBonusRate: 0
+  - itemId: Test19
+    itemName: 대구
+    group: 0
+    rarity: 2
+    grade: 1
+    weight: 1
+    itemIcon: {fileID: 5326364851146495771, guid: c1b0bbbd287f34b63a81673b7ada0b31, type: 3}
+    linkedWeaponId: swords_18
+    stats:
+      attackPower: 0
+      goldBonusFlat: 0
+      goldBonusRate: 0
+  - itemId: Test20
+    itemName: 가자미
+    group: 0
+    rarity: 2
+    grade: 1
+    weight: 1
+    itemIcon: {fileID: -2174811614663726402, guid: c1b0bbbd287f34b63a81673b7ada0b31, type: 3}
+    linkedWeaponId: swords_19
+    stats:
+      attackPower: 0
+      goldBonusFlat: 0
+      goldBonusRate: 0
+  - itemId: Test21
+    itemName: 장어
+    group: 0
+    rarity: 2
+    grade: 1
+    weight: 1
+    itemIcon: {fileID: 573806895040313311, guid: c1b0bbbd287f34b63a81673b7ada0b31, type: 3}
+    linkedWeaponId: swords_20
+    stats:
+      attackPower: 0
+      goldBonusFlat: 0
+      goldBonusRate: 0
+  - itemId: Test22
+    itemName: 참치
+    group: 0
+    rarity: 3
+    grade: 1
+    weight: 1
+    itemIcon: {fileID: -1150020013204898742, guid: c1b0bbbd287f34b63a81673b7ada0b31, type: 3}
+    linkedWeaponId: swords_21
+    stats:
+      attackPower: 0
+      goldBonusFlat: 0
+      goldBonusRate: 0
+  - itemId: Test23
+    itemName: 황새치
+    group: 0
+    rarity: 3
+    grade: 1
+    weight: 1
+    itemIcon: {fileID: -8352473898307048687, guid: c1b0bbbd287f34b63a81673b7ada0b31, type: 3}
+    linkedWeaponId: swords_22
+    stats:
+      attackPower: 0
       goldBonusFlat: 0
       goldBonusRate: 0
   pityConfig:

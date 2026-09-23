@@ -12,12 +12,58 @@ public class PlayerWeaponEquipment : MonoBehaviour
     [SerializeField] private string defaultWeaponId = "swords_0";
 
     private UnitAttack unitAttack;
+    private BaseUnitController unit;
+    private float skillEndsAt;
+    private float skillReadyAt;
+    private bool skillActive;
     private UpgradeManager subscribedUpgradeManager;
     private bool started;
 
     public PlayerWeaponCatalog Catalog => catalog;
     public PlayerWeaponCatalog.Weapon CurrentWeapon { get; private set; }
     public event Action<PlayerWeaponCatalog.Weapon> OnWeaponChanged;
+    public bool HasSkill => CurrentWeapon != null && CurrentWeapon.HasTrait(WeaponTraits.Skill);
+    public float SkillRemaining => skillActive ? Mathf.Max(0f, skillEndsAt - Time.time) : 0f;
+    public float SkillCooldownRemaining => Mathf.Max(0f, skillReadyAt - Time.time);
+    public bool CanUseSkill => isActiveAndEnabled && HasSkill && !skillActive
+        && SkillCooldownRemaining <= 0f && unit != null && unit.isActiveAndEnabled && !unit.Health.IsDead
+        && Time.timeScale > 0f;
+
+    private void Awake()
+    {
+        unitAttack = GetComponent<UnitAttack>();
+        unit = GetComponent<BaseUnitController>();
+    }
+
+    public bool TryUseSkill()
+    {
+        if (!CanUseSkill || catalog == null) return false;
+        PlayerWeaponCatalog.SkillSettings skill = catalog.GetSkillSettings(CurrentWeapon);
+        if (skill == null) return false;
+        skillActive = true;
+        skillEndsAt = Time.time + Mathf.Max(0.1f, skill.duration);
+        // 쿨타임은 사용 순간부터 진행되며 무기 교체로 초기화하지 않는다.
+        skillReadyAt = Time.time + Mathf.Max(0.1f, skill.cooldown);
+        unitAttack.SetSkillBuff(skill.damageBonus, skill.criticalChanceBonus, skill.attackSpeedBonus);
+        unit.Move.SetSkillSpeedBonus(skill.moveSpeedBonus);
+        return true;
+    }
+
+    private void Update()
+    {
+        if (skillActive && (Time.time >= skillEndsAt || unit == null || !unit.isActiveAndEnabled || unit.Health.IsDead))
+            EndSkill();
+        if (CanUseSkill && unit.IsTargetInAttackRange)
+            TryUseSkill();
+    }
+
+    private void EndSkill()
+    {
+        skillActive = false;
+        skillEndsAt = 0f;
+        if (unitAttack != null) unitAttack.SetSkillBuff(0f, 0f, 0f);
+        if (unit != null && unit.Move != null) unit.Move.SetSkillSpeedBonus(0f);
+    }
 
     // 가차 결과 지급/인스펙터 테스트의 공통 진입점. 획득과 장착은 별도 동작이다.
     public bool AcquireWeapon(string weaponId, int count = 1)
@@ -44,10 +90,12 @@ public class PlayerWeaponEquipment : MonoBehaviour
     {
         started = true;
         RestoreEquipment();
+        if (GetComponent<WeaponSkillUI>() == null) gameObject.AddComponent<WeaponSkillUI>();
     }
 
     private void OnDisable()
     {
+        EndSkill();
         if (subscribedUpgradeManager != null)
             subscribedUpgradeManager.OnUpgradePurchased -= HandleUpgradePurchased;
 
@@ -80,8 +128,12 @@ public class PlayerWeaponEquipment : MonoBehaviour
             return false;
 
         // sword의 Transform/정렬/머티리얼을 유지해 기존 팔과 검 애니메이션을 그대로 사용한다.
+        EndSkill();
         swordRenderer.sprite = sprite;
         CurrentWeapon = weapon;
+        unitAttack.ConfigureWeaponTraits(
+            weapon.HasTrait(WeaponTraits.HighCriticalChance) ? weapon.criticalChanceBonus : 0f,
+            weapon.HasTrait(WeaponTraits.FastAttack) ? weapon.fastAttackIntervalMultiplier : 1f);
         unitAttack.SetAttackDamage(weapon.GetDamage(data.GetWeaponLevel(weaponId)));
         data.TryEquipOwnedWeapon(weapon.id);
         OnWeaponChanged?.Invoke(weapon);

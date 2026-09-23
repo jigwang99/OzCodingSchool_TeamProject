@@ -19,6 +19,6 @@ MonoBehaviour:
     speciesCount: 8
     speciesWeights: []
   - grade: 1
-    weight: 25
+    weight: 30
     speciesCount: 4
     speciesWeights: []
