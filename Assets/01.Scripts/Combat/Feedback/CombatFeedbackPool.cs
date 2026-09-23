@@ -73,7 +73,8 @@ public class CombatFeedbackPool : MonoBehaviour
         if (!isPlayerDamage && !UISettingsPopup.IsShowEnemyDamage) return;
 
         CombatFeedbackPool pool = GetOrCreate();
-        if (pool.isActiveAndEnabled) pool.Spawn(position, damage, color, font);
+        if (pool.isActiveAndEnabled)
+            pool.Spawn(position, damage, color, pool.prewarmFont != null ? pool.prewarmFont : font);
     }
 
     private void Spawn(Vector3 position, DamageInfo damage, Color color, TMP_FontAsset font)

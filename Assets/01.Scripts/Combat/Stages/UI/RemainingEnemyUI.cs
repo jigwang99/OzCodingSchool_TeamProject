@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,7 +7,7 @@ using UnityEngine.UI;
 public class RemainingEnemyUI : MonoBehaviour
 {
     [SerializeField] private CombatManager combatManager;
-    [SerializeField] private Text countLabel;
+    [SerializeField] private TMP_Text countLabel;
 
     private void OnEnable()
     {

@@ -1,3 +1,4 @@
+using TMPro;
 using System;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,13 +14,13 @@ public class IdleFishRewardUI : MonoBehaviour
         public FishGrade grade;
         public int species;
         public RectTransform root;
-        public Text countLabel;
+        public TMP_Text countLabel;
     }
 
     [SerializeField] private GameObject modal;
     [SerializeField] private RectTransform panel;
-    [SerializeField] private Text timeLabel;
-    [SerializeField] private Text totalLabel;
+    [SerializeField] private TMP_Text timeLabel;
+    [SerializeField] private TMP_Text totalLabel;
     [SerializeField] private Button claimButton;
     [SerializeField] private RewardSlot[] rewardSlots;
     [SerializeField] private RectTransform[] footer;

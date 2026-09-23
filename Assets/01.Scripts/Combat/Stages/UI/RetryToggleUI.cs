@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,7 +7,7 @@ public class RetryToggleUI : MonoBehaviour
     [SerializeField] private Toggle retryToggle;
     [SerializeField] private Image switchTrack;
     [SerializeField] private RectTransform switchThumb;
-    [SerializeField] private Text stateLabel;
+    [SerializeField] private TMP_Text stateLabel;
     [SerializeField] private Color onColor = new Color32(88, 153, 126, 255);
     [SerializeField] private Color offColor = new Color32(142, 130, 115, 255);
 

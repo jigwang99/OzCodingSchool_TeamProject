@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+using TMPro;
+using UnityEngine;
 using UnityEngine.UI;
 
 // 전투는 계속 진행하며, 최종 전투 모듈의 값을 읽어 강화·버프를 함께 표시한다.
@@ -10,9 +11,9 @@ public sealed class CombatInfoUI : MonoBehaviour
     [SerializeField] private GameObject root;
     [SerializeField] private GameObject modal;
     [SerializeField] private RectTransform panel;
-    [SerializeField] private Text weaponLabel;
-    [SerializeField] private Text traitLabel;
-    [SerializeField] private Text[] values;
+    [SerializeField] private TMP_Text weaponLabel;
+    [SerializeField] private TMP_Text traitLabel;
+    [SerializeField] private TMP_Text[] values;
     private UnitHealth health;
     private UnitAttack attack;
     private UnitMove movement;
@@ -137,7 +138,7 @@ public sealed class CombatInfoUI : MonoBehaviour
         }
     }
 
-    private static void SetTextIfChanged(Text target, string text)
+    private static void SetTextIfChanged(TMP_Text target, string text)
     {
         if (target != null && target.text != text)
             target.text = text;
