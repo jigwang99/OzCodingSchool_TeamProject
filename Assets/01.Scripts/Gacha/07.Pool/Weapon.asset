@@ -16,7 +16,7 @@ MonoBehaviour:
   group: 0
   items:
   - itemId: Weapon_0
-    itemName: "\uC804\uAC31\uC774"
+    itemName: "\uBA78\uCE58"
     group: 0
     rarity: 0
     grade: 1
@@ -31,7 +31,7 @@ MonoBehaviour:
       goldBonusRate: 0
     nextMergeItemId: Weapon_1
   - itemId: Weapon_1
-    itemName: "\uC7A5\uC5B4"
+    itemName: "\uC815\uC5B4\uB9AC"
     group: 0
     rarity: 0
     grade: 2
@@ -61,7 +61,7 @@ MonoBehaviour:
       goldBonusRate: 0
     nextMergeItemId: Weapon_3
   - itemId: Weapon_3
-    itemName: "\uB178\uB780\uBB3C\uACE0\uAE30"
+    itemName: "\uC804\uAC31\uC774"
     group: 0
     rarity: 0
     grade: 4
@@ -76,7 +76,7 @@ MonoBehaviour:
       goldBonusRate: 0
     nextMergeItemId: Weapon_4
   - itemId: Weapon_4
-    itemName: "\uC904\uBB34\uB2AC\uBB3C\uACE0\uAE30"
+    itemName: "\uBB34\uB2AC\uBCF5\uC5B4"
     group: 0
     rarity: 0
     grade: 5
@@ -91,7 +91,7 @@ MonoBehaviour:
       goldBonusRate: 0
     nextMergeItemId: Weapon_5
   - itemId: Weapon_5
-    itemName: "\uC815\uC5B4\uB9AC"
+    itemName: "\uB0A0\uCE58"
     group: 0
     rarity: 0
     grade: 6
@@ -106,7 +106,7 @@ MonoBehaviour:
       goldBonusRate: 0
     nextMergeItemId: Weapon_6
   - itemId: Weapon_6
-    itemName: "\uC2E4\uB7EC\uCF04\uC11C"
+    itemName: "\uBE59\uC5B4"
     group: 0
     rarity: 0
     grade: 7
@@ -121,7 +121,7 @@ MonoBehaviour:
       goldBonusRate: 0
     nextMergeItemId: Weapon_7
   - itemId: Weapon_7
-    itemName: "\uC810\uBC15\uC774 \uBCF5\uC5B4"
+    itemName: "\uC6B0\uB7ED"
     group: 0
     rarity: 0
     grade: 8
@@ -136,7 +136,7 @@ MonoBehaviour:
       goldBonusRate: 0
     nextMergeItemId: Weapon_8
   - itemId: Weapon_8
-    itemName: "\uC740\uBE5B\uAC08\uCE58"
+    itemName: "\uC1A1\uC5B4"
     group: 0
     rarity: 1
     grade: 1
@@ -151,7 +151,7 @@ MonoBehaviour:
       goldBonusRate: 0
     nextMergeItemId: Weapon_9
   - itemId: Weapon_9
-    itemName: "\uC810\uBC15\uC774\uBB3C\uACE0\uAE30"
+    itemName: "\uC740\uAC08\uCE58"
     group: 0
     rarity: 1
     grade: 2
@@ -166,7 +166,7 @@ MonoBehaviour:
       goldBonusRate: 0
     nextMergeItemId: Weapon_10
   - itemId: Weapon_10
-    itemName: "\uC740\uAC08\uCE58"
+    itemName: "\uACE0\uB4F1\uC5B4"
     group: 0
     rarity: 1
     grade: 3
@@ -181,7 +181,7 @@ MonoBehaviour:
       goldBonusRate: 0
     nextMergeItemId: Weapon_11
   - itemId: Weapon_11
-    itemName: "\uCC38\uCE58"
+    itemName: "\uC624\uC9D5\uC5B4"
     group: 0
     rarity: 1
     grade: 4
@@ -196,7 +196,7 @@ MonoBehaviour:
       goldBonusRate: 0
     nextMergeItemId: Weapon_12
   - itemId: Weapon_12
-    itemName: "\uC624\uC9D5\uC5B4"
+    itemName: "\uAC00\uC790\uBBF8"
     group: 0
     rarity: 1
     grade: 5
@@ -211,7 +211,7 @@ MonoBehaviour:
       goldBonusRate: 0
     nextMergeItemId: Weapon_13
   - itemId: Weapon_13
-    itemName: "\uB119\uCE58"
+    itemName: "\uB18D\uC5B4"
     group: 0
     rarity: 1
     grade: 6
@@ -226,7 +226,7 @@ MonoBehaviour:
       goldBonusRate: 0
     nextMergeItemId: Weapon_14
   - itemId: Weapon_14
-    itemName: "\uC740\uBE5B\uACE0\uB4F1\uC5B4"
+    itemName: "\uC7A5\uC5B4"
     group: 0
     rarity: 1
     grade: 7
@@ -241,7 +241,7 @@ MonoBehaviour:
       goldBonusRate: 0
     nextMergeItemId: Weapon_15
   - itemId: Weapon_15
-    itemName: "\uCD08\uB85D\uC7A5\uC5B4"
+    itemName: "\uB3C4\uBBF8"
     group: 0
     rarity: 1
     grade: 8
@@ -256,7 +256,7 @@ MonoBehaviour:
       goldBonusRate: 0
     nextMergeItemId: Weapon_16
   - itemId: Weapon_16
-    itemName: "\uB3C4\uBBF8"
+    itemName: "\uB119\uCE58"
     group: 0
     rarity: 1
     grade: 8
@@ -271,7 +271,7 @@ MonoBehaviour:
       goldBonusRate: 0
     nextMergeItemId: Weapon_17
   - itemId: Weapon_17
-    itemName: "\uAC08\uC0C9 \uB119\uCE58"
+    itemName: "\uCCAD\uC0C8\uCE58"
     group: 0
     rarity: 2
     grade: 1
@@ -286,7 +286,7 @@ MonoBehaviour:
       goldBonusRate: 0
     nextMergeItemId: Weapon_18
   - itemId: Weapon_18
-    itemName: "\uD669\uC0C8\uCE58"
+    itemName: "\uCC38\uCE58"
     group: 0
     rarity: 2
     grade: 2
@@ -301,7 +301,7 @@ MonoBehaviour:
       goldBonusRate: 0
     nextMergeItemId: Weapon_19
   - itemId: Weapon_19
-    itemName: "\uACE0\uB4F1\uC5B4"
+    itemName: "\uB300\uC655\uBCF5\uC5B4"
     group: 0
     rarity: 2
     grade: 3
@@ -316,7 +316,7 @@ MonoBehaviour:
       goldBonusRate: 0
     nextMergeItemId: Weapon_20
   - itemId: Weapon_20
-    itemName: "\uC904\uBB34\uB2AC\uBCF5\uC5B4"
+    itemName: "\uAC00\uBB3C\uCE58"
     group: 0
     rarity: 2
     grade: 4
@@ -331,7 +331,7 @@ MonoBehaviour:
       goldBonusRate: 0
     nextMergeItemId: Weapon_21
   - itemId: Weapon_21
-    itemName: "\uBA54\uAE30"
+    itemName: "\uCD08\uB871\uC544\uADC0"
     group: 0
     rarity: 3
     grade: 1

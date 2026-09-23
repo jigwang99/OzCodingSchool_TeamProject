@@ -618,6 +618,10 @@ MonoBehaviour:
   rareResultSFX: {fileID: 0}
   uniqueResultSFX: {fileID: 0}
   epicResultSFX: {fileID: 0}
+  insufficientGoldSFX: {fileID: 0}
+  insufficientGoldSFXDelay: 1.5
+  warningCooldown: 5
+  retryGachaButton: {fileID: 0}
 --- !u!4 &106314149
 Transform:
   m_ObjectHideFlags: 0
@@ -1109,6 +1113,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonSFX
   clickSound: {fileID: 8300000, guid: 21c54cdf5e87b4a4297e2fb5d8c13e7a, type: 3}
+  soundCooldown: 5
 --- !u!114 &157507213
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1489,7 +1494,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7bfb6e5d15a40324b92dfcc993d10f65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PixelRestaurant.Gacha.GachaManager
-  weaponGachaCost: 1
+  weaponGachaCost: 1000
   recipeGachaCost: 10000
   furnitureGachaCost: 30000
 --- !u!1 &314551834
