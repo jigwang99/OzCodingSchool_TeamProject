@@ -124,45 +124,37 @@ namespace PixelRestaurant.Gacha
         }
         // 카드 초기화
         public void Setup(
-           GachaItem item,
-           RectTransform target)
+     GachaItem item,
+     RectTransform target)
         {
-
             StopCurrentAnimation();
 
             _item = item;
             inventoryTarget = target;
+
+            _state = CardState.Spawning;
+
+            _canvasGroup.alpha = 1f;
+            _canvasGroup.interactable = false;
+            _canvasGroup.blocksRaycasts = false;
+
+            _rectTransform.localRotation = Quaternion.identity;
+
+            ResetCardVisual();
+            DisableAllVFX();
+
+            if (resultDisplay != null)
             {
-                StopCurrentAnimation();
+                resultDisplay.ResetCard();
+            }
 
-                _item = item;
-                inventoryTarget = target;
+            if (resultDisplay != null && item != null)
+            {
+                bool isNew =
+                    GachaInventory.Instance != null &&
+                    GachaInventory.Instance.IsNewItem(item.ItemId);
 
-                _state = CardState.Spawning;
-
-                _canvasGroup.alpha = 1f;
-                _canvasGroup.interactable = false;
-                _canvasGroup.blocksRaycasts = false;
-
-                _rectTransform.localRotation =
-                    Quaternion.identity;
-
-                ResetCardVisual();
-                DisableAllVFX();
-
-                if (resultDisplay != null && item != null)
-                {
-                    bool isNew =
-                        GachaInventory.Instance != null &&
-                        GachaInventory.Instance.IsNewItem(
-                            item.ItemId
-                        );
-
-                    resultDisplay.SetItemInfo(
-                        item,
-                        isNew
-                    );
-                }
+                resultDisplay.SetItemInfo(item, isNew);
             }
         }
 
@@ -222,7 +214,7 @@ namespace PixelRestaurant.Gacha
             {
                 _animation = null;
 
-                DisableSpawnVFX();
+                //DisableSpawnVFX();
 
                 _state = CardState.Waiting;
 
@@ -245,7 +237,14 @@ namespace PixelRestaurant.Gacha
                     break;
             }
         }
-
+        // 모두 뒤집기 버튼에서 호출
+        public void RevealCard()
+        {
+            if (_state == CardState.Waiting)
+            {
+                PlayFlipAnimation();
+            }
+        }
         // 카드 Y축 뒤집기
         private void PlayFlipAnimation()
         {
@@ -313,9 +312,9 @@ namespace PixelRestaurant.Gacha
         }
 
         // 등급별 Back 등장 이펙트
-        private void PlaySpawnVFX(
-            GachaRarity rarity)
+        private void PlaySpawnVFX(GachaRarity rarity)
         {
+
             DisableSpawnVFX();
 
             GameObject vfx = GetRarityVFX(
@@ -325,6 +324,8 @@ namespace PixelRestaurant.Gacha
                 uniqueSpawnVFX,
                 epicSpawnVFX
             );
+
+          
 
             PlayVFX(vfx);
         }
@@ -375,17 +376,19 @@ namespace PixelRestaurant.Gacha
         private void PlayVFX(GameObject vfx)
         {
             if (vfx == null)
-                return;
+            {
+              
+            }
 
             vfx.SetActive(true);
 
             ParticleSystem[] particles =
-                vfx.GetComponentsInChildren<ParticleSystem>(
-                    true
-                );
+                vfx.GetComponentsInChildren<ParticleSystem>(true);
+
 
             foreach (ParticleSystem particle in particles)
             {
+
                 particle.Stop(true);
                 particle.Play(true);
             }

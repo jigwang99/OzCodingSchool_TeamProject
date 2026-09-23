@@ -115,3 +115,7 @@ Assets/Eric VFX Studio
 Assets/HitEffectPack
 Assets/WCE Assets
 Assets/98.Fonts/Cafe24DongdongRegular Bitmap.asset
+
+# Business asset import folder (local only)
+/Assets/Business_Assets/
+/Assets/Business_Assets.meta

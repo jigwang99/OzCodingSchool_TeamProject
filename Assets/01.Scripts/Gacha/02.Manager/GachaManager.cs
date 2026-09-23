@@ -16,6 +16,16 @@ namespace PixelRestaurant.Gacha
     {
         private static GachaManager _instance;
 
+        [Header("가챠 1회 비용")]
+        [SerializeField, Min(0)]
+        private int weaponGachaCost = 1;
+            
+        [SerializeField, Min(0)]
+        private int recipeGachaCost = 1 ;
+
+        [SerializeField, Min(0)]
+        private int furnitureGachaCost = 1;
+
         private Dictionary<GachaGroup, GachaPoolData> _pools
             = new Dictionary<GachaGroup, GachaPoolData>();
 
@@ -85,6 +95,28 @@ namespace PixelRestaurant.Gacha
         }
 
         /// <summary>
+        /// 가챠 종류별 1회 비용 반환
+        /// </summary>
+        public BigNumber GetGachaCost(GachaGroup group)
+        {
+            switch (group)
+            {
+                case GachaGroup.Weapon:
+                    return new BigNumber(weaponGachaCost);
+
+                case GachaGroup.Recipe:
+                    return new BigNumber(recipeGachaCost);
+
+                case GachaGroup.Furniture:
+                    return new BigNumber(furnitureGachaCost);
+
+                default:
+                  
+
+                    return new BigNumber(0);
+            }
+        }
+        /// <summary>
         /// 가챠 실행
         /// 1회 / 10회 지원
         /// </summary>
@@ -139,23 +171,40 @@ namespace PixelRestaurant.Gacha
 
 
             // =========================
-            // 전체 비용 사전 확인
+            // 가챠 종류별 비용 계산
             // =========================
 
-            BigNumber totalCost = new BigNumber(
-                30 * pullCount
-            );
+            // 외부에서 전달된 비용 대신
+            // 가챠 종류에 설정된 비용을 사용
+            costPerPull = GetGachaCost(group);
 
-            BigNumber currentGold =
-                CurrencyManager.instance.GetCurrentGold();
-
-            if (currentGold < totalCost)
+            // 1회 비용 유효성 확인
+            if (costPerPull <= new BigNumber(0))
             {
-              
+               
 
                 return results;
             }
 
+            // 전체 뽑기 비용 계산
+            BigNumber totalCost = new BigNumber(0);
+
+            for (int i = 0; i < pullCount; i++)
+            {
+                totalCost += costPerPull;
+            }
+
+            // 현재 골드 확인
+            BigNumber currentGold =
+                CurrencyManager.instance.GetCurrentGold();
+
+            // 골드 부족 시 뽑기 중단
+            if (currentGold < totalCost)
+            {
+                
+
+                return results;
+            }
             // =========================
             // Pull
             // =========================

@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using PixelRestaurant.Data;
-
+using System.Collections;
 
 namespace PixelRestaurant.Gacha
 {
@@ -11,7 +11,7 @@ namespace PixelRestaurant.Gacha
     {
         [Header("Gacha Open / Close")]
         [SerializeField] private Button gachaOpenButton;
-        [SerializeField] private Button gachaCloseButton;
+
         [SerializeField] private GameObject gachaPopup;
         [SerializeField] private GachaInventoryUI inventoryUI;
 
@@ -26,6 +26,15 @@ namespace PixelRestaurant.Gacha
         [SerializeField] private Button pull1Button;
         [SerializeField] private Button pull10Button;
 
+        [Header("뽑기 가격 텍스트 (숫자만 표시)")]
+        [SerializeField] private TextMeshProUGUI pull1CostDisplay;
+        [SerializeField] private TextMeshProUGUI pull10CostDisplay;
+        [Header("Gacha Animation")]
+        [SerializeField] private Animator gachaAnimator;
+
+        [SerializeField] private float shakeDuration = 1.0f;
+
+        private bool isGachaPlaying = false;
         [Header("Gold")]
         [SerializeField] private TextMeshProUGUI goldDisplay;
 
@@ -57,8 +66,7 @@ namespace PixelRestaurant.Gacha
         [SerializeField] private Button inventoryOpenButton;
         [SerializeField] private Button listOpenButton;
 
-        private static readonly BigNumber CostPerPull =
-    new BigNumber(30);
+
 
         private void Start()
         {
@@ -160,7 +168,13 @@ namespace PixelRestaurant.Gacha
 
         private bool ExecuteGacha(int pullCount)
         {
-            if (GachaManager.Instance == null)
+            // 애니메이션 재생 중에는 추가 뽑기 금지
+            if (isGachaPlaying)
+                return false;
+
+            GachaManager gachaManager = GachaManager.Instance;
+
+            if (gachaManager == null)
             {
                 return false;
             }
@@ -176,18 +190,37 @@ namespace PixelRestaurant.Gacha
             }
 
             // =========================
-            // 전체 뽑기 비용 확인
+            // 가챠 종류별 비용 가져오기
             // =========================
 
-            BigNumber totalCost =
-                new BigNumber(30 * pullCount);
+            BigNumber costPerPull =
+                gachaManager.GetGachaCost(_currentGachaType);
+
+            // 비용 유효성 검사
+            if (costPerPull <= new BigNumber(0))
+            {
+                return false;
+            }
+
+            // =========================
+            // 전체 뽑기 비용 계산
+            // =========================
+
+            BigNumber totalCost = new BigNumber(0);
+
+            for (int i = 0; i < pullCount; i++)
+            {
+                totalCost += costPerPull;
+            }
 
             BigNumber currentGold =
                 CurrencyManager.instance.GetCurrentGold();
 
-            // 필요한 골드가 부족하면 뽑기 실행하지 않음
+            // 골드 부족 시 뽑기 중단
             if (currentGold < totalCost)
             {
+
+
                 return false;
             }
 
@@ -196,10 +229,10 @@ namespace PixelRestaurant.Gacha
             // =========================
 
             List<GachaItem> results =
-                GachaManager.Instance.DrawGacha(
+                gachaManager.DrawGacha(
                     _currentGachaType,
                     pullCount,
-                    CostPerPull
+                    costPerPull
                 );
 
             if (results == null || results.Count == 0)
@@ -207,26 +240,50 @@ namespace PixelRestaurant.Gacha
                 return false;
             }
 
-            // =========================
-            // 결과 팝업 먼저 활성화
-            // =========================
+            // 가챠 애니메이션 실행
+            StartCoroutine(PlayGachaAnimation(results));
 
-            if (resultPopup != null)
-            {
-                resultPopup.SetActive(true);
-            }
-
-            // =========================
-            // 결과 카드 생성 및 등장 연출
-            // =========================
-
-            ShowGachaResults(results);
-
+            // UI 갱신
             UpdateDisplay();
 
             return true;
         }
+        private IEnumerator PlayGachaAnimation(List<GachaItem> results)
+        {
+            isGachaPlaying = true;
 
+            // 중복 클릭 방지
+            if (pull1Button != null)
+                pull1Button.interactable = false;
+
+            if (pull10Button != null)
+                pull10Button.interactable = false;
+
+            // 애니메이션 재생
+            if (gachaAnimator != null)
+            {
+                gachaAnimator.SetTrigger("Shake");
+
+                // 애니메이션이 끝날 때까지 대기
+                yield return new WaitForSeconds(shakeDuration);
+            }
+
+            // 결과 팝업 표시
+            if (resultPopup != null)
+                resultPopup.SetActive(true);
+
+            // 결과 카드 생성
+            ShowGachaResults(results);
+
+            // 버튼 다시 활성화
+            if (pull1Button != null)
+                pull1Button.interactable = true;
+
+            if (pull10Button != null)
+                pull10Button.interactable = true;
+
+            isGachaPlaying = false;
+        }
         // =========================
         // Result
         // =========================
@@ -315,9 +372,34 @@ namespace PixelRestaurant.Gacha
         {
             UpdateGoldDisplay();
             UpdateGroupDisplay();
+            UpdatePullCostDisplay();
             UpdatePityDisplay();
             UpdateProbabilityDisplay();
         }
+        // 실제 결제와 동일한 GachaManager의 그룹별 1회 가격을 표시합니다.
+        private void UpdatePullCostDisplay()
+        {
+            GachaManager manager = GachaManager.Instance;
+            if (manager == null)
+            {
+                if (pull1CostDisplay != null) pull1CostDisplay.text = " -";
+                if (pull10CostDisplay != null) pull10CostDisplay.text = "-";
+                return;
+            }
+
+            BigNumber costPerPull = manager.GetGachaCost(_currentGachaType);
+            if (pull1CostDisplay != null)
+                pull1CostDisplay.text = costPerPull.ToString();
+
+            if (pull10CostDisplay != null)
+            {
+                BigNumber totalCost = new BigNumber(0);
+                for (int i = 0; i < 10; i++)
+                    totalCost += costPerPull;
+                pull10CostDisplay.text = totalCost.ToString();
+            }
+        }
+
         private void UpdateGoldDisplay()
         {
             if (goldDisplay == null)
@@ -467,5 +549,26 @@ namespace PixelRestaurant.Gacha
 
             text.text = $"{rarity}: \n{weight:0.##}%";
         }
+        // 가챠 결과 카드 모두 뒤집기
+        public void RevealAllCards()
+        {
+            if (resultSpawnPoint == null)
+                return;
+
+            foreach (Transform child in resultSpawnPoint)
+            {
+                if (!child.gameObject.activeInHierarchy)
+                    continue;
+
+                GachaRevealCard card =
+                    child.GetComponent<GachaRevealCard>();
+
+                if (card != null)
+                {
+                    card.RevealCard();
+                }
+            }
+        }
     }
+
 }

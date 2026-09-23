@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using PixelRestaurant.Gacha;
 
 // 전투 씬의 무기 목록. 보유 수량/강화 수치는 PlayerData만 읽고 장착은 Equipment에 위임한다.
 [DefaultExecutionOrder(200)]
@@ -147,7 +148,26 @@ public class WeaponInventoryUI : MonoBehaviour
         Refresh();
     }
 
-    private void HandleEquipmentChanged(PlayerWeaponCatalog.Weapon _) => Refresh();
+    private void HandleEquipmentChanged(PlayerWeaponCatalog.Weapon _) => Refresh(); // new 0923 김동주
+
+    // 전투 무기는 해금 여부만 ownedWeapons에 저장된다. 실제 중복 수량은 가챠 인벤토리가 기준이다.
+    private int GetGachaWeaponCount(string weaponId)
+    {
+        if (subscribedData == null || subscribedData.gachaInventory == null ||
+            subscribedData.gachaInventory.items == null || string.IsNullOrEmpty(weaponId))
+            return 0;
+
+        // 프로젝트의 연결 규칙: swords_16 <-> Weapon_16.
+        const string combatPrefix = "swords_";
+        if (!weaponId.StartsWith(combatPrefix, StringComparison.Ordinal)) return 0;
+        string itemId = "Weapon_" + weaponId.Substring(combatPrefix.Length);
+        foreach (GachaOwnedItemData item in subscribedData.gachaInventory.items)
+        {
+            if (item != null && item.itemId == itemId)
+                return Mathf.Max(0, item.count);
+        }
+        return 0;
+    }
 
     private void Refresh()
     {
@@ -173,7 +193,7 @@ public class WeaponInventoryUI : MonoBehaviour
             slot.level.color = acquired ? textColor : lockedTextColor;
             slot.badge.text = equipped ? "장착" : slot.weapon.DisplayName;
             slot.badge.color = equipped ? selectedColor : badgeColor;
-            slot.count.text = "획득 " + (owned?.count ?? 0).ToString("N0") + "개";
+            slot.count.text = "획득 " + GetGachaWeaponCount(slot.weapon.id).ToString("N0") + "개";
             slot.countBackground.color = acquired ? ownedCountBackground : lockedCountBackground;
         }
 

@@ -35,23 +35,12 @@ namespace PixelRestaurant.Gacha
         // ========== 레어리티 색상 ==========
         private Color _commonColor = Color.white;
         private Color _rareColor = Color.green;
-        private Color _uniqueColor = Color.yellow;
-        private Color _epicColor = new Color(0.5f, 0, 1);
+        private Color _uniqueColor = new Color(0.5f, 0, 1);
+        private Color _epicColor =  Color.yellow;
 
         private void Start()
         {
-            // 폰트 크기는 2단계에서 수정 예정
-            if (itemNameText != null)
-                itemNameText.fontSize = 60;
-
-            if (rarityText != null)
-                rarityText.fontSize = 20;
-
-            if (gradeText != null)
-                gradeText.fontSize = 20;
-
-            if (countText != null)
-                countText.fontSize = 20;
+      
         }
 
         /// <summary>
