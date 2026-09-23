@@ -185,7 +185,8 @@ public struct BigNumber : IComparable<BigNumber>, IEquatable<BigNumber>, IFormat
         if (b.value == 0) throw new DivideByZeroException();
         if (a.value == 0) return new BigNumber(0);
 
-        long newVal = (a.value * ScaleFactor) / b.value;
+        //long newVal = (a.value * ScaleFactor) / b.value;
+        long newVal = (long)(((double)a.value * ScaleFactor) / b.value);
         int newExp = checked(a.exponent - b.exponent);
         return new BigNumber(newVal, newExp);
     }

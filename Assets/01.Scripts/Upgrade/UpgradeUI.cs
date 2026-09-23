@@ -170,11 +170,17 @@ public class UpgradeUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
         if (cost > new BigNumber(0))
         {
-            BigNumber ratio = currentGold / cost;
+            double currentGoldValue =
+                ((double)currentGold.value / 100.0) * Math.Pow(10, currentGold.exponent);
 
-            fillAmount = ((double)ratio.value / 100.0) * Math.Pow(10, ratio.exponent);
+            double costValue =
+                ((double)cost.value / 100.0) * Math.Pow(10, cost.exponent);
 
-            fillAmount = Math.Max(0.0, Math.Min(1.0, fillAmount));
+            if (costValue > 0)
+            {
+                fillAmount = currentGoldValue / costValue;
+                fillAmount = Math.Max(0.0, Math.Min(1.0, fillAmount));
+            }
         }
 
         if (goldFilledImage != null)
