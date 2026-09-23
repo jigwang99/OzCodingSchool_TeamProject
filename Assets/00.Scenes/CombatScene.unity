@@ -376,7 +376,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishDropUpgradeBinder
   fishDropSystem: {fileID: 397242959}
-  floorMap: {fileID: 8893000000000000002}
   dropRateUpgrade: {fileID: 11400000, guid: 4c0edb15a8dc4d7d9f9a1c2b3e4f5a6b, type: 2}
 --- !u!1 &483230544
 GameObject:
@@ -483,16 +482,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b22c3f8549810724589ea466661f016a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
+  activationDistance: 12
+  activationCheckInterval: 0.1
+  activationCamera: {fileID: 2132697593}
+  offscreenPadding: 3
   randomizeSpawns: 1
   useFullMapWidth: 1
   spawnXRange: {x: 0, y: 20}
   spawnEdgePadding: 0.8
   minimumSpawnSpacing: 1.25
   playerSpawnClearance: 3
-  activationDistance: 12
-  activationCheckInterval: 0.1
-  activationCamera: {fileID: 2132697593}
-  offscreenPadding: 3
 --- !u!4 &547176849
 Transform:
   m_ObjectHideFlags: 0
@@ -864,6 +863,7 @@ GameObject:
   - component: {fileID: 1218732660}
   - component: {fileID: 1218732659}
   - component: {fileID: 1218732658}
+  - component: {fileID: 8868500000000000001}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -871,6 +871,21 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &8868500000000000001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1218732657}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72ae44cb44bb40b79f27dc65a96011fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CombatInfoUI
+  player: {fileID: 1543899952}
+  equipment: {fileID: 1543899958}
+  font: {fileID: 12800000, guid: b9ddfc23d3ff8ab48988041f97ef00e0, type: 3}
 --- !u!114 &1218732658
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -900,12 +915,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.CanvasScaler
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 0.5
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -1032,7 +1047,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 673549903829074807, guid: cc509fb38492e4d71ae0c3a0785867bb, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.5
+      value: -0.759
       objectReference: {fileID: 0}
     - target: {fileID: 673549903829074807, guid: cc509fb38492e4d71ae0c3a0785867bb, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1175,10 +1190,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayercatController
   unitViewSource: {fileID: 1440917490}
-  detectionInterval: 0.5
-  jumpGravity: 60
-  jumpApexClearance: 0.35
-  jumpHorizontalReach: 3
   attackSound: {fileID: 8300000, guid: fd9b77b7a58c2c040962a32cd44e6d8b, type: 3}
 --- !u!114 &1543899953
 MonoBehaviour:
@@ -1210,6 +1221,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UnitMove
   moveSpeed: 2
+  jumpSpeed: 8
+  dropSpeed: 2
 --- !u!50 &1543899955
 Rigidbody2D:
   serializedVersion: 5
@@ -1372,7 +1385,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishInventoryAdapter
   fishDropSystem: {fileID: 397242959}
-  floorMap: {fileID: 8893000000000000002}
 --- !u!4 &1762081860
 Transform:
   m_ObjectHideFlags: 0
@@ -1894,7 +1906,7 @@ MonoBehaviour:
   m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 1280, y: 720}
+  m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0.5
   m_PhysicalUnit: 3
@@ -2012,7 +2024,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CombatRewardTracker
   stageManager: {fileID: 1323060461}
   fishDropSystem: {fileID: 397242959}
-  floorMap: {fileID: 8893000000000000002}
 --- !u!1 &8866100000000000000
 GameObject:
   m_ObjectHideFlags: 0
@@ -7107,7 +7118,7 @@ MonoBehaviour:
   m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 1280, y: 720}
+  m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0.5
   m_PhysicalUnit: 3
@@ -11660,7 +11671,7 @@ MonoBehaviour:
   m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 1280, y: 720}
+  m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0.5
   m_PhysicalUnit: 3
@@ -12312,7 +12323,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 480, y: 704}
+  m_SizeDelta: {x: 480, y: 832}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8868100000000000032
 CanvasRenderer:
@@ -26756,8 +26767,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -629}
-  m_SizeDelta: {x: -36, y: 26}
+  m_AnchoredPosition: {x: 0, y: -688}
+  m_SizeDelta: {x: -36, y: 144}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8868100000000001712
 CanvasRenderer:
@@ -26837,7 +26848,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -669}
+  m_AnchoredPosition: {x: 0, y: -794}
   m_SizeDelta: {x: -220, y: 42}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8868100000000001722
@@ -27578,7 +27589,7 @@ MonoBehaviour:
   m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 1280, y: 720}
+  m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0.5
   m_PhysicalUnit: 3
@@ -32398,7 +32409,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 735dd6a9216447c89793b8d16c20f124, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CombatFloorMap
   floors:
   - {fileID: 928199310}
@@ -32435,6 +32446,21 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!4 &8893000000000000011
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8893000000000000010}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -4.55, y: -1.08, z: 0}
+  m_LocalScale: {x: 16.6, y: 0.36, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8893000000000000001}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &8893000000000000012
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -32481,21 +32507,6 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!4 &8893000000000000011
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8893000000000000010}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.55, y: -1.08, z: 0}
-  m_LocalScale: {x: 16.6, y: 0.36, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 8893000000000000001}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8893000000000000020
 GameObject:
   m_ObjectHideFlags: 0
@@ -32513,6 +32524,21 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!4 &8893000000000000021
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8893000000000000020}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 31.85, y: -1.08, z: 0}
+  m_LocalScale: {x: 16.6, y: 0.36, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8893000000000000001}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &8893000000000000022
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -32559,21 +32585,6 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!4 &8893000000000000021
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8893000000000000020}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 31.85, y: -1.08, z: 0}
-  m_LocalScale: {x: 16.6, y: 0.36, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 8893000000000000001}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

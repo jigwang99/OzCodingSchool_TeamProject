@@ -1,7 +1,9 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using TMPro; // TMP_Dropdown 제어를 위해 추가
 
 public class UISettingsPopup : MonoBehaviour
 {
@@ -24,22 +26,31 @@ public class UISettingsPopup : MonoBehaviour
     [SerializeField] private Slider bgmSlider;
     [SerializeField] private Slider sfxSlider;
 
+    [Header("Convenience Settings")]
+    [SerializeField] private TMP_Dropdown frameRateDropdown;
+    [SerializeField] private TMP_Dropdown resolutionDropdown;
+    [SerializeField] private Toggle fullscreenToggle;
+
+    [Header("Damage Display Settings")]
+    [SerializeField] private Toggle enemyDamageToggle;
+    [SerializeField] private Toggle playerDamageToggle;
+
     [Header("Menu Return Button")]
     [SerializeField] private GameObject returnToMenuButton;
     [SerializeField] private ExitPopup exitPopup;
 
+    private List<Resolution> resolutions = new List<Resolution>();
+
+    public static bool IsShowEnemyDamage => PlayerPrefs.GetInt("ShowEnemyDamage", 1) == 1;
+    public static bool IsShowPlayerDamage => PlayerPrefs.GetInt("ShowPlayerDamage", 1) == 1;
+
     private void Start()
     {
-        if (bgmSlider != null)
-        {
-            bgmSlider.onValueChanged.AddListener(OnBGMVolumeChanged);
-        }
+        if (bgmSlider != null) bgmSlider.onValueChanged.AddListener(OnBGMVolumeChanged);
+        if (sfxSlider != null) sfxSlider.onValueChanged.AddListener(OnSFXVolumeChanged);
 
-        if (sfxSlider != null)
-        {
-            sfxSlider.onValueChanged.AddListener(OnSFXVolumeChanged);
-        }
-
+        // 편의 옵션 초기화 및 이벤트 연결
+        InitConvenienceSettings();
     }
 
     private void OnEnable()
@@ -48,25 +59,16 @@ public class UISettingsPopup : MonoBehaviour
 
         if (SoundManager.instance != null)
         {
-            if (bgmSlider != null)
-            {
-                bgmSlider.value = SoundManager.instance.GetBGMVolume();
-            }
-
-            if (sfxSlider != null)
-            {
-                sfxSlider.value = SoundManager.instance.GetSFXVolume();
-            }
+            if (bgmSlider != null) bgmSlider.value = SoundManager.instance.GetBGMVolume();
+            if (sfxSlider != null) sfxSlider.value = SoundManager.instance.GetSFXVolume();
         }
 
-        string currentSceneName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+        string currentSceneName = SceneManager.GetActiveScene().name;
         if (returnToMenuButton != null)
         {
             returnToMenuButton.SetActive(currentSceneName != "TitleScene");
         }
     }
-
-
 
     private void Update()
     {
@@ -86,45 +88,31 @@ public class UISettingsPopup : MonoBehaviour
         }
     }
 
+    #region Tab & Popup Control
     public void Toggle()
     {
-        if (gameObject.activeSelf)
-        {
-            Close();
-        }
-        else
-        {
-            Open();
-        }
+        if (gameObject.activeSelf) Close();
+        else Open();
     }
 
     public void Open()
     {
         gameObject.SetActive(true);
-
         OnClickSoundTab();
 
-        string currentSceneName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+        string currentSceneName = SceneManager.GetActiveScene().name;
         if (returnToMenuButton != null)
         {
             returnToMenuButton.SetActive(currentSceneName != "TitleScene");
         }
 
-        if (pauseGameOnOpen)
-        {
-            Time.timeScale = 0f;
-        }
-
+        if (pauseGameOnOpen) Time.timeScale = 0f;
     }
 
     public void Close()
     {
         gameObject.SetActive(false);
-
-        if (pauseGameOnOpen)
-        {
-            Time.timeScale = 1f;
-        }
+        if (pauseGameOnOpen) Time.timeScale = 1f;
     }
 
     public void OnClickSoundTab()
@@ -144,29 +132,174 @@ public class UISettingsPopup : MonoBehaviour
         if (soundTabImage != null) soundTabImage.color = inactiveColor;
         if (convenienceTabImage != null) convenienceTabImage.color = activeColor;
     }
+    #endregion
 
+    #region Sound Settings Logic
     private void OnBGMVolumeChanged(float value)
     {
-        if (SoundManager.instance != null)
-        {
-            SoundManager.instance.SetBGMVolume(value);
-        }
+        if (SoundManager.instance != null) SoundManager.instance.SetBGMVolume(value);
     }
 
     private void OnSFXVolumeChanged(float value)
     {
-        if (SoundManager.instance != null)
+        if (SoundManager.instance != null) SoundManager.instance.SetSFXVolume(value);
+    }
+    #endregion
+
+    #region Convenience Settings Logic
+    public void OnEnemyDamageChanged(bool isOn)
+    {
+        PlayerPrefs.SetInt("ShowEnemyDamage", isOn ? 1 : 0);
+        PlayerPrefs.Save();
+    }
+
+    public void OnPlayerDamageChanged(bool isOn)
+    {
+        PlayerPrefs.SetInt("ShowPlayerDamage", isOn ? 1 : 0);
+        PlayerPrefs.Save();
+    }
+    private void InitConvenienceSettings()
+    {
+        // 프레임 제한 초기화
+        QualitySettings.vSyncCount = 0;
+        if (frameRateDropdown != null)
         {
-            SoundManager.instance.SetSFXVolume(value);
+            frameRateDropdown.onValueChanged.RemoveAllListeners();
+            int savedFrameIndex = PlayerPrefs.GetInt("FrameRateIndex", 1); // 기본값: 60FPS(Index 1)
+            SetFrameRate(savedFrameIndex);
+            frameRateDropdown.value = savedFrameIndex;
+            frameRateDropdown.onValueChanged.AddListener(OnFrameRateChanged);
+        }
+
+        // 해상도 드롭다운 목록 자동 생성
+        if (resolutionDropdown != null)
+        {
+            resolutionDropdown.onValueChanged.RemoveAllListeners();
+            resolutionDropdown.ClearOptions();
+
+            Resolution[] allResolutions = Screen.resolutions;
+            HashSet<string> uniqueResSet = new HashSet<string>();
+            resolutions.Clear();
+
+            int currentResIndex = 0;
+            List<string> options = new List<string>();
+
+            for (int i = 0; i < allResolutions.Length; i++)
+            {
+                // 주사율 차이로 인한 중복 해상도 제거
+                string option = $"{allResolutions[i].width} x {allResolutions[i].height}";
+                if (!uniqueResSet.Contains(option))
+                {
+                    uniqueResSet.Add(option);
+                    resolutions.Add(allResolutions[i]);
+                    options.Add(option);
+
+                    if (allResolutions[i].width == Screen.currentResolution.width &&
+                        allResolutions[i].height == Screen.currentResolution.height)
+                    {
+                        currentResIndex = resolutions.Count - 1;
+                    }
+                }
+            }
+
+            resolutionDropdown.AddOptions(options);
+
+            int savedResIndex = PlayerPrefs.GetInt("ResolutionIndex", currentResIndex);
+            savedResIndex = Mathf.Clamp(savedResIndex, 0, resolutions.Count - 1);
+
+            SetResolution(savedResIndex);
+            resolutionDropdown.value = savedResIndex;
+            resolutionDropdown.RefreshShownValue();
+
+            resolutionDropdown.onValueChanged.AddListener(OnResolutionChanged);
+        }
+
+        // 전체화면 토글 초기화
+        if (fullscreenToggle != null)
+        {
+            fullscreenToggle.onValueChanged.RemoveAllListeners();
+            bool isFull = PlayerPrefs.GetInt("IsFullscreen", Screen.fullScreen ? 1 : 0) == 1;
+            Screen.fullScreen = isFull;
+            fullscreenToggle.isOn = isFull;
+            fullscreenToggle.onValueChanged.AddListener(OnFullscreenChanged);
+        }
+
+
+
+        // 적 데미지 토글 초기화
+        if (enemyDamageToggle != null)
+        {
+            enemyDamageToggle.onValueChanged.RemoveAllListeners();
+            bool showEnemy = PlayerPrefs.GetInt("ShowEnemyDamage", 1) == 1;
+            enemyDamageToggle.isOn = showEnemy;
+            enemyDamageToggle.onValueChanged.AddListener(OnEnemyDamageChanged);
+        }
+
+        // 내 데미지 토글 초기화
+        if (playerDamageToggle != null)
+        {
+            playerDamageToggle.onValueChanged.RemoveAllListeners();
+            bool showPlayer = PlayerPrefs.GetInt("ShowPlayerDamage", 1) == 1;
+            playerDamageToggle.isOn = showPlayer;
+            playerDamageToggle.onValueChanged.AddListener(OnPlayerDamageChanged);
         }
     }
 
+    public void OnFrameRateChanged(int index)
+    {
+        SetFrameRate(index);
+        PlayerPrefs.SetInt("FrameRateIndex", index);
+        PlayerPrefs.Save();
+    }
+
+    private void SetFrameRate(int index)
+    {
+        switch (index)
+        {
+            case 0: Application.targetFrameRate = 30; break;
+            case 1: Application.targetFrameRate = 60; break;
+            case 2: Application.targetFrameRate = 120; break;
+            case 3: Application.targetFrameRate = -1; break;
+        }
+    }
+
+    public void OnResolutionChanged(int index)
+    {
+        SetResolution(index);
+        PlayerPrefs.SetInt("ResolutionIndex", index);
+        PlayerPrefs.Save();
+    }
+
+    private void SetResolution(int index)
+    {
+        if (index >= 0 && index < resolutions.Count)
+        {
+            Resolution res = resolutions[index];
+            Screen.SetResolution(res.width, res.height, Screen.fullScreen);
+
+#if UNITY_EDITOR
+            // 에디터에서만 콘솔 창에 출력되는 확인용 로그
+            Debug.Log($"[해상도 변경] {res.width} x {res.height} (전체화면: {Screen.fullScreen})");
+#endif
+        }
+
+
+    }
+
+    public void OnFullscreenChanged(bool isFull)
+    {
+        Screen.fullScreen = isFull;
+        PlayerPrefs.SetInt("IsFullscreen", isFull ? 1 : 0);
+        PlayerPrefs.Save();
+    }
+    #endregion
+
+    #region Scene / Game Exit
     public void OnClickReturnToTitle()
     {
         Close();
         Time.timeScale = 1f;
-
-        UnityEngine.SceneManagement.SceneManager.LoadScene("TitleScene");
+        SceneManager.LoadScene("TitleScene");
     }
 
     public void OnClickExitGame()
@@ -181,4 +314,5 @@ public class UISettingsPopup : MonoBehaviour
             exitPopup.OpenPopup();
         }
     }
+    #endregion
 }

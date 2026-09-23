@@ -59,7 +59,7 @@ public class UnitCombatState : UnitBaseState
                 }
 
                 int animationIndex = useSecondAttack ? 1 : 0;
-                controller.FaceDirection(controller.Target.transform.position.x - controller.transform.position.x);
+                controller.Move.FaceDirection(controller.Target.transform.position.x - controller.transform.position.x);
                 attackId = controller.Attack.BeginAttack(controller.Target, animationIndex);
                 if (attackId == 0) break;
                 controller.PlayAnimation(useSecondAttack ? AnimationTypeEnum.Attack1 : AnimationTypeEnum.Attack0);

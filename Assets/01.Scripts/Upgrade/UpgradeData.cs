@@ -1,5 +1,11 @@
 ﻿using UnityEngine;
 
+public enum UpgradeCategory
+{
+    Combat,
+    Business
+}
+
 public enum UpgradeType
 {
     WeaponPower,
@@ -12,23 +18,18 @@ public enum UpgradeType
 [CreateAssetMenu(fileName = "UpgradeData", menuName = "Upgrade/UpgradeData")]
 public class UpgradeData : ScriptableObject
 {
-    [Header("고유 정보")]
+    [Header("업그레이드 정보")]
     public int id;
-
-    [Header("UI에 표시될 업그레이드 이름")]
     public string upgradeName;
-
-    [Header("업그레이드 카테고리")]
+    public UpgradeCategory category;
     public UpgradeType type;
 
-    [Header("업그레이드 설정")]
-    [Tooltip("레벨 1 -> 2 로 갈 때 드는 기본 비용")]
+    [Header("UI")]
+    public Sprite icon;
+
+    [Header("강화 설정")]
     public double baseCost = 100.0;
-
-    [Tooltip("레벨이 오를 때마다 비용이 증가하는 계수 (현재: 1.15 = 15%씩 증가)")]
     public double costMultiplier = 1.15;
-
-    [Tooltip("최대 도달 가능 레벨")]
     public int maxLevel;
 
     [Header("드롭률 업그레이드 설정")]
@@ -40,7 +41,6 @@ public class UpgradeData : ScriptableObject
         return 1f + Mathf.Max(0, level - 1) * dropChanceMultiplierPerLevel;
     }
 
-    //일단 레벨마다 +20해둠
     public float GetMaxHealth(int level)
     {
         return 100f + (level - 1) * 20f;

@@ -15,6 +15,7 @@ MonoBehaviour:
   id: 102
   upgradeName: "\uBB3C\uACE0\uAE30 \uB4DC\uB86D\uB960 \uAC15\uD654"
   type: 2
+  icon: {fileID: -6317066916707456106, guid: d8367192e203c674b9f0b0836b44c2c3, type: 3}
   baseCost: 100
   costMultiplier: 1.15
   maxLevel: 999

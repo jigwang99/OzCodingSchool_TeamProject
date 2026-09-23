@@ -93,11 +93,22 @@ public struct BigNumber : IComparable<BigNumber>, IEquatable<BigNumber>, IFormat
         var number = new BigNumber(value, exponent);
         string[] units = { "", "K", "M", "B", "T", "Qa", "Qi", "Sx", "Sp", "Oc", "No", "Dc", "Ud", "Dd", "Td" };
 
-        string digits = number.value.ToString(
-            string.IsNullOrEmpty(format) ? "0.##" : format,
-            formatProvider);
-
         int unitIndex = number.exponent / 3;
+
+        // 1000 미만이면 소수점 없이 정수로 표시
+        string digits;
+
+        if (unitIndex == 0)
+        {
+            digits = Math.Round(number.value).ToString("0", formatProvider);
+        }
+        else
+        {
+            // 1000 이상이면 소수점 둘째 자리까지
+            digits = number.value.ToString(
+                string.IsNullOrEmpty(format) ? "0.##" : format,
+                formatProvider);
+        }
 
         if (unitIndex >= 0 && unitIndex < units.Length)
         {

@@ -22,6 +22,8 @@ public class StageData
 
     [Header("Reward")]
     [SerializeField] private StageDropTable dropTable;
+    [Tooltip("보스 처치 시 현재 드롭 테이블에서 추가로 확정 지급할 물고기 수. 일반 스테이지는 0입니다.")]
+    [SerializeField, Min(0)] private int bossGuaranteedFishCount;
 
     public string StageName => stageName;
     public Vector3Int ElevatedFloorCounts => new Vector3Int(
@@ -32,15 +34,18 @@ public class StageData
     public float EnemyMaxHp => enemyMaxHp;
     public float EnemyDamage => enemyDamage;
     public StageDropTable DropTable => dropTable;
+    public int BossGuaranteedFishCount => Mathf.Max(0, bossGuaranteedFishCount);
 
     public StageData(string stageName, Vector2[] spawnOffsets, float enemyMaxHp,
-        float enemyDamage, StageDropTable dropTable, PoolType[] enemyTypes = null, Vector3Int? elevatedFloorCounts = null)
+        float enemyDamage, StageDropTable dropTable, PoolType[] enemyTypes = null, Vector3Int? elevatedFloorCounts = null,
+        int bossGuaranteedFishCount = 0)
     {
         this.stageName = stageName;
         this.spawnOffsets = spawnOffsets;
         this.enemyMaxHp = enemyMaxHp;
         this.enemyDamage = enemyDamage;
         this.dropTable = dropTable;
+        this.bossGuaranteedFishCount = Mathf.Max(0, bossGuaranteedFishCount);
         this.enemyTypes = enemyTypes;
         this.elevatedFloorCounts = elevatedFloorCounts ?? new Vector3Int(1, 0, 2);
     }
@@ -64,7 +69,7 @@ public class StageData
         PoolType[] clonedTypes = enemyTypes != null
             ? (PoolType[])enemyTypes.Clone()
             : Array.Empty<PoolType>();
-        return new StageData(stageName, clonedOffsets, enemyMaxHp, enemyDamage, dropTable, clonedTypes, elevatedFloorCounts);
+        return new StageData(stageName, clonedOffsets, enemyMaxHp, enemyDamage, dropTable, clonedTypes, elevatedFloorCounts, bossGuaranteedFishCount);
     }
 }
 [CreateAssetMenu(fileName = "StageDataList", menuName = "Combat/Stage Data List")]
