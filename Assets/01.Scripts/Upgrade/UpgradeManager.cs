@@ -10,8 +10,7 @@ public class UpgradeManager : Singleton<UpgradeManager>
     {
         int levelIndex = Mathf.Max(0, currentLevel - 1);
 
-        double cost = data.baseCost * Math.Pow(data.costMultiplier, levelIndex);
-        cost = Math.Round(cost, 2);
+        int cost = (int)(data.baseCost * Math.Pow(data.costMultiplier, levelIndex));
 
         return new BigNumber(cost);
     }
