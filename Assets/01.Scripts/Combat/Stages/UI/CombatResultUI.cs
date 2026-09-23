@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+using TMPro;
+using UnityEngine;
 using UnityEngine.UI;
 
 // CombatScene의 전용 Canvas에만 배치. 진행/재시작은 StageManager가 전담.
@@ -12,7 +13,7 @@ public class CombatResultUI : MonoBehaviour
         public FishGrade grade;
         [Min(0)] public int species;
         public CanvasGroup group;
-        public Text countLabel;
+        public TMP_Text countLabel;
     }
 
     [SerializeField] private StageManager stageManager;
@@ -24,11 +25,11 @@ public class CombatResultUI : MonoBehaviour
     [Header("씬에 배치된 UI")]
     [SerializeField] private CanvasGroup panel;
     [SerializeField] private RectTransform panelRect;
-    [SerializeField] private Text stageLabel;
-    [SerializeField] private Text titleLabel;
-    [SerializeField] private Text messageLabel;
-    [SerializeField] private Text rewardLabel;
-    [SerializeField] private Text countdownLabel;
+    [SerializeField] private TMP_Text stageLabel;
+    [SerializeField] private TMP_Text titleLabel;
+    [SerializeField] private TMP_Text messageLabel;
+    [SerializeField] private TMP_Text rewardLabel;
+    [SerializeField] private TMP_Text countdownLabel;
     [SerializeField] private Image accent;
     [SerializeField] private Image progress;
     [Header("이번 전투 드롭 (Business 인벤토리 순서)")]

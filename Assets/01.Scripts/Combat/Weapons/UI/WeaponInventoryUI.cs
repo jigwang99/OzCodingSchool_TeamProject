@@ -1,3 +1,4 @@
+using TMPro;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,7 +16,7 @@ public class WeaponInventoryUI : MonoBehaviour
     {
         public string weaponId;
         public Image border, background, icon, countBackground;
-        public Text level, count, badge;
+        public TMP_Text level, count, badge;
         [NonSerialized] public PlayerWeaponCatalog.Weapon weapon;
     }
 
@@ -27,7 +28,7 @@ public class WeaponInventoryUI : MonoBehaviour
     [SerializeField] private GameObject modal;
     [SerializeField] private RectTransform panel;
     [SerializeField] private Button openButton, equipButton;
-    [SerializeField] private Text collectionLabel, detailLabel, equipLabel;
+    [SerializeField] private TMP_Text collectionLabel, detailLabel, equipLabel;
     [SerializeField] private List<Slot> slots = new List<Slot>();
 
     [Header("상태별 색상")]

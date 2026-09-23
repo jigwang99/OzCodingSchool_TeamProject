@@ -1,3 +1,4 @@
+using TMPro;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,7 +14,7 @@ public class StageSelectUI : MonoBehaviour
     {
         [Min(1)] public int stageNumber;
         public Button button;
-        public Text label;
+        public TMP_Text label;
     }
 
     [SerializeField] private StageManager stageManager;
@@ -21,10 +22,10 @@ public class StageSelectUI : MonoBehaviour
     [SerializeField] private GameObject modal;
     [SerializeField] private RectTransform panel;
     [SerializeField] private Button openButton;
-    [SerializeField] private Text hint;
+    [SerializeField] private TMP_Text hint;
     [SerializeField] private List<StageButton> stages = new List<StageButton>();
     [SerializeField] private Button endlessButton;
-    [SerializeField] private Text endlessLabel;
+    [SerializeField] private TMP_Text endlessLabel;
 
     [Header("상태별 색상")]
     [SerializeField] private Color normalColor = new Color(0.18f, 0.23f, 0.32f);

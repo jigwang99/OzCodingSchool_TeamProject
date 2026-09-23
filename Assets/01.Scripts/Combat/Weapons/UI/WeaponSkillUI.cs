@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,7 +12,8 @@ public sealed class WeaponSkillUI : MonoBehaviour
     private Image frame;
     private Image icon;
     private Image cooldownFill;
-    private Text countdown;
+    [SerializeField] private TMP_FontAsset countdownFont;
+    private TMP_Text countdown;
     private Sprite fillSprite;
     private int displayedSeconds = -1;
 
@@ -52,17 +54,18 @@ public sealed class WeaponSkillUI : MonoBehaviour
         cooldownFill.fillOrigin = (int)Image.Origin360.Top;
         cooldownFill.fillClockwise = true;
 
-        var textObject = new GameObject("Cooldown Seconds", typeof(RectTransform), typeof(Text), typeof(Outline));
+        var textObject = new GameObject("Cooldown Seconds", typeof(RectTransform), typeof(TextMeshProUGUI));
         textObject.transform.SetParent(background.transform, false);
-        countdown = textObject.GetComponent<Text>();
-        countdown.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+        countdown = textObject.GetComponent<TextMeshProUGUI>();
+        countdown.font = countdownFont != null ? countdownFont : TMP_Settings.defaultFontAsset;
         countdown.fontSize = 36;
-        countdown.fontStyle = FontStyle.Bold;
-        countdown.alignment = TextAnchor.MiddleCenter;
+        countdown.fontStyle = FontStyles.Bold;
+        countdown.alignment = TextAlignmentOptions.Center;
         countdown.color = Color.white;
         countdown.raycastTarget = false;
         Stretch(countdown.rectTransform, 0f);
-        textObject.GetComponent<Outline>().effectColor = new Color(0f, 0f, 0f, 0.9f);
+        countdown.outlineColor = new Color32(0, 0, 0, 230);
+        countdown.outlineWidth = 0.15f;
     }
 
     private void HandleWeaponChanged(PlayerWeaponCatalog.Weapon weapon)
