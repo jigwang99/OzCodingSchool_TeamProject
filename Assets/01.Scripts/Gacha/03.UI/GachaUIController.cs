@@ -671,18 +671,29 @@ namespace PixelRestaurant.Gacha
             if (resultSpawnPoint == null)
                 return;
 
+            // 아직 뒤집히지 않은 카드 중 최고 등급 카드 하나만 소리 재생
+            GachaRevealCard highestCard = null;
             foreach (Transform child in resultSpawnPoint)
             {
                 if (!child.gameObject.activeInHierarchy)
                     continue;
 
-                GachaRevealCard card =
-                    child.GetComponent<GachaRevealCard>();
+                GachaRevealCard card = child.GetComponent<GachaRevealCard>();
+                if (card == null || !card.CanReveal)
+                    continue;
 
-                if (card != null)
-                {
-                    card.RevealCard();
-                }
+                if (highestCard == null || (int)card.CardRarity > (int)highestCard.CardRarity)
+                    highestCard = card;
+            }
+
+            foreach (Transform child in resultSpawnPoint)
+            {
+                if (!child.gameObject.activeInHierarchy)
+                    continue;
+
+                GachaRevealCard card = child.GetComponent<GachaRevealCard>();
+                if (card != null && card.CanReveal)
+                    card.RevealCard(card == highestCard);
             }
         }
     }

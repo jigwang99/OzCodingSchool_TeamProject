@@ -248,15 +248,19 @@ namespace PixelRestaurant.Gacha
             }
         }
         // 모두 뒤집기 버튼에서 호출
-        public void RevealCard()
+        // 모두 뒤집기에서 아직 뒤집을 수 있는 카드만 최고 등급 비교에 사용
+        public bool CanReveal => _state == CardState.Waiting && _item != null;
+        public GachaRarity CardRarity => _item != null ? _item.Rarity : GachaRarity.Common;
+
+        public void RevealCard(bool playSound = true)
         {
             if (_state == CardState.Waiting)
             {
-                PlayFlipAnimation();
+                PlayFlipAnimation(playSound);
             }
         }
         // 카드 Y축 뒤집기
-        private void PlayFlipAnimation()
+        private void PlayFlipAnimation(bool playSound = true)
         {
             if (_item == null ||
                 cardVisual == null)
@@ -299,7 +303,8 @@ namespace PixelRestaurant.Gacha
                 }
 
                 // 카드 앞면이 공개되는 순간 효과음
-                PlayFlipSFX(_item.Rarity);
+                if (playSound)
+                    PlayFlipSFX(_item.Rarity);
             });
 
             // Front: 90도 -> 180도
@@ -352,7 +357,7 @@ namespace PixelRestaurant.Gacha
             {
                 SoundManager.instance.PlaySFX(clip);
             }
-        }   
+        }
         // 등급별 Back 등장 이펙트
         private void PlaySpawnVFX(GachaRarity rarity)
         {
@@ -367,7 +372,7 @@ namespace PixelRestaurant.Gacha
                 epicSpawnVFX
             );
 
-          
+
 
             PlayVFX(vfx);
         }
@@ -419,7 +424,7 @@ namespace PixelRestaurant.Gacha
         {
             if (vfx == null)
             {
-              
+
             }
 
             vfx.SetActive(true);
