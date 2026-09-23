@@ -11,6 +11,9 @@ public class UISettingsPopup : MonoBehaviour
     [SerializeField] private GameObject soundContentPanel;
     [SerializeField] private GameObject convenienceContentPanel;
 
+    [Header("Confirm Delete Popup")]
+    [SerializeField] private GameObject confirmDeletePanel; // [추가] 저장 파일 삭제 확인 팝업 패널
+
     [Header("Tab Images")]
     [SerializeField] private Image soundTabImage;
     [SerializeField] private Image convenienceTabImage;
@@ -55,6 +58,9 @@ public class UISettingsPopup : MonoBehaviour
 
     private void OnEnable()
     {
+        if (confirmDeletePanel != null)
+            confirmDeletePanel.SetActive(false);
+
         OnClickSoundTab();
 
         if (SoundManager.instance != null)
@@ -132,6 +138,7 @@ public class UISettingsPopup : MonoBehaviour
         if (soundTabImage != null) soundTabImage.color = inactiveColor;
         if (convenienceTabImage != null) convenienceTabImage.color = activeColor;
     }
+
     #endregion
 
     #region Sound Settings Logic
@@ -158,6 +165,7 @@ public class UISettingsPopup : MonoBehaviour
         PlayerPrefs.SetInt("ShowPlayerDamage", isOn ? 1 : 0);
         PlayerPrefs.Save();
     }
+
     private void InitConvenienceSettings()
     {
         // 프레임 제한 초기화
@@ -224,8 +232,6 @@ public class UISettingsPopup : MonoBehaviour
             fullscreenToggle.onValueChanged.AddListener(OnFullscreenChanged);
         }
 
-
-
         // 적 데미지 토글 초기화
         if (enemyDamageToggle != null)
         {
@@ -282,8 +288,6 @@ public class UISettingsPopup : MonoBehaviour
             Debug.Log($"[해상도 변경] {res.width} x {res.height} (전체화면: {Screen.fullScreen})");
 #endif
         }
-
-
     }
 
     public void OnFullscreenChanged(bool isFull)
@@ -292,6 +296,51 @@ public class UISettingsPopup : MonoBehaviour
         PlayerPrefs.SetInt("IsFullscreen", isFull ? 1 : 0);
         PlayerPrefs.Save();
     }
+
+    #region Save File Delete Flow (Popup)
+    public void OnClickDeleteSaveData()
+    {
+        if (confirmDeletePanel != null)
+        {
+            confirmDeletePanel.SetActive(true);
+        }
+        else
+        {
+            ExecuteDeleteSaveData();
+        }
+    }
+
+    public void OnClickConfirmDeleteYes()
+    {
+        ExecuteDeleteSaveData();
+    }
+
+    public void OnClickConfirmDeleteNo()
+    {
+        if (confirmDeletePanel != null)
+        {
+            confirmDeletePanel.SetActive(false);
+        }
+    }
+
+    private void ExecuteDeleteSaveData()
+    {
+        if (SaveManager.instance != null)
+        {
+            SaveManager.instance.DeleteSaveFile();
+
+            if (GameManager.instance != null)
+            {
+                GameManager.instance.CreateNewPlayerData();
+            }
+
+            Close();
+            Time.timeScale = 1f;
+
+            SceneManager.LoadScene("TitleScene");
+        }
+    }
+    #endregion
     #endregion
 
     #region Scene / Game Exit
