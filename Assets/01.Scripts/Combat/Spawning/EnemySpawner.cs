@@ -44,10 +44,14 @@ public class EnemySpawner : MonoBehaviour
         player = target;
         floorMap = map;
         player.ConfigureNavigation(this, floorMap);
-        BuildSpawnPositions();
         // 플레이어가 시작점으로 이동한 직후에는 카메라도 먼저 맞춘다.
         // 이전 스테이지 끝의 카메라 위치로 활성화 범위를 계산하지 않는다.
-        if (cameraFollow != null) cameraFollow.SnapToTarget();
+        if (cameraFollow != null)
+        {
+            cameraFollow.ResetEncounterFraming();
+            cameraFollow.SnapToTarget();
+        }
+        BuildSpawnPositions();
         pending.Clear();
         for (int i = 0; i < data.EnemyCount; i++) pending.Add(i);
         ActivateNearby();
@@ -57,6 +61,42 @@ public class EnemySpawner : MonoBehaviour
     private void BuildSpawnPositions()
     {
         spawnPositions = new Vector3[stage.EnemyCount];
+        if (stage.SpawnInCamera)
+        {
+            Vector3 position = player.transform.position + Vector3.right * Mathf.Max(3f, playerSpawnClearance);
+            float left = position.x, right = position.x;
+            if (activationCamera != null)
+            {
+                float depth = Vector3.Dot(player.transform.position - activationCamera.transform.position,
+                    activationCamera.transform.forward);
+                left = activationCamera.ViewportToWorldPoint(new Vector3(0.15f, 0.5f, depth)).x;
+                right = activationCamera.ViewportToWorldPoint(new Vector3(0.85f, 0.5f, depth)).x;
+                position.x = activationCamera.ViewportToWorldPoint(new Vector3(0.72f, 0.5f, depth)).x;
+            }
+            if (floorMap != null && floorMap.FloorCount > 0)
+            {
+                Vector2 ground = floorMap.GetWalkableRange(0, spawnEdgePadding);
+                left = Mathf.Max(left, ground.x);
+                right = Mathf.Min(right, ground.y);
+                position.y = floorMap.GetStandingY(0);
+            }
+            if (left <= right)
+            {
+                float safeRight = Mathf.Max(left, player.transform.position.x + playerSpawnClearance);
+                float safeLeft = Mathf.Min(right, player.transform.position.x - playerSpawnClearance);
+                position.x = safeRight <= right ? Mathf.Clamp(position.x, safeRight, right)
+                    : safeLeft >= left ? Mathf.Clamp(position.x, left, safeLeft) : Mathf.Clamp(position.x, left, right);
+            }
+            position.x = player.transform.position.x + (position.x - player.transform.position.x) * 2f;
+            if (floorMap != null && floorMap.FloorCount > 0)
+            {
+                Vector2 ground = floorMap.GetWalkableRange(0, spawnEdgePadding);
+                position.x = Mathf.Clamp(position.x, ground.x, ground.y);
+            }
+            if (cameraFollow != null) cameraFollow.FrameEncounter(player.transform.position, position);
+            for (int i = 0; i < spawnPositions.Length; i++) spawnPositions[i] = position;
+            return;
+        }
         if (!randomizeSpawns || floorMap == null || floorMap.FloorCount == 0)
         {
             for (int i = 0; i < spawnPositions.Length; i++)
@@ -158,7 +198,7 @@ public class EnemySpawner : MonoBehaviour
         {
             int index = pending[i];
             Vector3 position = GetSpawnPosition(index);
-            if (Mathf.Abs(position.x - player.transform.position.x) > distance) continue;
+            if (!stage.SpawnInCamera && Mathf.Abs(position.x - player.transform.position.x) > distance) continue;
             EnemyController enemy = CombatObjectPoolManager.instance.GetObject<EnemyController>(stage.GetEnemyType(index), position);
             if (enemy == null) throw new InvalidOperationException("준비된 몬스터 풀을 찾을 수 없습니다.");
             enemy.Health.SetMaxHp(stage.EnemyMaxHp);

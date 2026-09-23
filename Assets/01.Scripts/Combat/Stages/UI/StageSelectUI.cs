@@ -23,6 +23,8 @@ public class StageSelectUI : MonoBehaviour
     [SerializeField] private Button openButton;
     [SerializeField] private Text hint;
     [SerializeField] private List<StageButton> stages = new List<StageButton>();
+    [SerializeField] private Button endlessButton;
+    [SerializeField] private Text endlessLabel;
 
     [Header("상태별 색상")]
     [SerializeField] private Color normalColor = new Color(0.18f, 0.23f, 0.32f);
@@ -109,6 +111,8 @@ public class StageSelectUI : MonoBehaviour
                 : "이전 스테이지를 먼저 클리어해 주세요.";
     }
 
+    public void SelectEndless() => Select(stageManager.LatestEndlessStage);
+
     private void HandleResult(StageResult _) => RequestRefresh();
 
     private void RequestRefresh()
@@ -133,6 +137,16 @@ public class StageSelectUI : MonoBehaviour
             string status = !unlocked ? (boss ? "보스 · 미해금" : "미해금")
                 : boss ? (current ? "보스 · 진행중" : "보스") : (current ? "진행중" : "일반");
             stage.label.text = stageManager.GetStageName(number) + "\n" + status;
+        }
+        if (endlessButton != null && endlessLabel != null)
+        {
+            int number = stageManager.LatestEndlessStage;
+            bool unlocked = stageManager.IsStageUnlocked(number);
+            endlessButton.interactable = unlocked;
+            endlessButton.image.color = !unlocked ? lockedColor
+                : stageManager.CurrentStageNumber > stageManager.StageCount ? currentColor : bossColor;
+            endlessLabel.text = unlocked ? $"무한 모드 · {number - stageManager.StageCount}단계"
+                : "무한 모드 · 3-5 클리어 후 해금";
         }
     }
 

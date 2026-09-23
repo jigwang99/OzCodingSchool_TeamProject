@@ -22,6 +22,10 @@ public class PlayerWeaponEquipment : MonoBehaviour
     public PlayerWeaponCatalog Catalog => catalog;
     public PlayerWeaponCatalog.Weapon CurrentWeapon { get; private set; }
     public event Action<PlayerWeaponCatalog.Weapon> OnWeaponChanged;
+    public event Action OnSkillChanged;
+    private float notifiedSkillRemaining;
+    private float notifiedCooldownRemaining;
+    private bool notifiedSkillActive;
     public bool HasSkill => CurrentWeapon != null && CurrentWeapon.HasTrait(WeaponTraits.Skill);
     public float SkillRemaining => skillActive ? Mathf.Max(0f, skillEndsAt - Time.time) : 0f;
     public float SkillCooldownRemaining => Mathf.Max(0f, skillReadyAt - Time.time);
@@ -46,6 +50,7 @@ public class PlayerWeaponEquipment : MonoBehaviour
         skillReadyAt = Time.time + Mathf.Max(0.1f, skill.cooldown);
         unitAttack.SetSkillBuff(skill.damageBonus, skill.criticalChanceBonus, skill.attackSpeedBonus);
         unit.Move.SetSkillSpeedBonus(skill.moveSpeedBonus);
+        NotifySkillChanged();
         return true;
     }
 
@@ -55,6 +60,26 @@ public class PlayerWeaponEquipment : MonoBehaviour
             EndSkill();
         if (CanUseSkill && unit.IsTargetInAttackRange)
             TryUseSkill();
+        NotifySkillChanged();
+    }
+
+    public void ResetSkillCooldown()
+    {
+        skillReadyAt = 0f;
+        NotifySkillChanged();
+    }
+
+    // 시간은 기존 스킬 처리에서 흘러가며, 실제 남은 시간/상태가 바뀔 때만 알린다.
+    private void NotifySkillChanged()
+    {
+        float remaining = SkillRemaining;
+        float cooldown = SkillCooldownRemaining;
+        if (remaining == notifiedSkillRemaining && cooldown == notifiedCooldownRemaining
+            && skillActive == notifiedSkillActive) return;
+        notifiedSkillRemaining = remaining;
+        notifiedCooldownRemaining = cooldown;
+        notifiedSkillActive = skillActive;
+        OnSkillChanged?.Invoke();
     }
 
     private void EndSkill()
@@ -63,6 +88,7 @@ public class PlayerWeaponEquipment : MonoBehaviour
         skillEndsAt = 0f;
         if (unitAttack != null) unitAttack.SetSkillBuff(0f, 0f, 0f);
         if (unit != null && unit.Move != null) unit.Move.SetSkillSpeedBonus(0f);
+        NotifySkillChanged();
     }
 
     // 가차 결과 지급/인스펙터 테스트의 공통 진입점. 획득과 장착은 별도 동작이다.

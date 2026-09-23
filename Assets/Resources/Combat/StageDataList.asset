@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5fd91c16fbcbbf4d8b1fb82e5723bd4, type: 3}
   m_Name: StageDataList
   m_EditorClassIdentifier: Assembly-CSharp::StageDataList
+  endlessGrowthPercent: 10
   stageList:
   - stageName: 1-1
     elevatedFloorCounts: {x: 1, y: 0, z: 1}

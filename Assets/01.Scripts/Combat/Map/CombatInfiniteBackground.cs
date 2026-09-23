@@ -68,7 +68,7 @@ public class CombatInfiniteBackground : MonoBehaviour
         }
     }
 
-    private void Start() => PrepareStage(stageManager != null ? stageManager.CurrentStageNumber : 1);
+    private void Start() => PrepareStage(stageManager != null ? stageManager.EnvironmentStageNumber : 1);
 
     private bool Initialize()
     {
@@ -106,7 +106,7 @@ public class CombatInfiniteBackground : MonoBehaviour
     }
 
     private void ApplyStageBackground()
-        => PrepareStage(stageManager != null ? stageManager.CurrentStageNumber : 1);
+        => PrepareStage(stageManager != null ? stageManager.EnvironmentStageNumber : 1);
 
     private void ApplyBackground(int stageNumber)
     {
