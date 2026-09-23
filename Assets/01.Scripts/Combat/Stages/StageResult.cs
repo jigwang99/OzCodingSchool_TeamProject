@@ -8,9 +8,10 @@ public readonly struct StageResult
     public readonly string NextStageName;
     public readonly bool RetryWasEnabled;
     public readonly float Delay;
+    public readonly bool IsEndless;
 
     public StageResult(bool isClear, int completedStage, int nextStage,
-        string completedStageName, string nextStageName, bool retryWasEnabled, float delay)
+        string completedStageName, string nextStageName, bool retryWasEnabled, float delay, bool isEndless = false)
     {
         IsClear = isClear;
         CompletedStage = completedStage;
@@ -19,6 +20,7 @@ public readonly struct StageResult
         NextStageName = nextStageName;
         RetryWasEnabled = retryWasEnabled;
         Delay = delay;
+        IsEndless = isEndless;
     }
 
     public string Title => IsClear ? "스테이지 클리어!" : "전투 패배";
@@ -36,6 +38,9 @@ public readonly struct StageResult
                     ? $"{NextStageName} 반복 사냥을 계속합니다."
                     : $"마지막 스테이지입니다.\n{NextStageName} 반복 사냥을 계속합니다.";
             }
+
+            if (IsEndless)
+                return $"{NextStageName}에서 다시 도전합니다.";
 
             if (NextStage < CompletedStage)
                 return $"이전 스테이지 {NextStageName}에서 재도전합니다.\n재도전 모드로 전환되었습니다.";

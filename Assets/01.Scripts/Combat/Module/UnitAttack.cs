@@ -39,21 +39,27 @@ public class UnitAttack : MonoBehaviour
     private float buffAttackSpeedMultiplier = 1f;
     private float buffCriticalBonus;
     private bool hasSkillBuff;
+    public event Action OnStatsChanged;
+    private Vector3 DisplayStats => new Vector3(AttackDamage, CriticalChance, AttackInterval);
 
     public void ConfigureWeaponTraits(float criticalBonus, float intervalMultiplier)
     {
+        Vector3 previous = DisplayStats;
         // 장비 교체로 이전 공격을 새 특성으로 처리하지 않으며, 기존 쿨다운은 유지한다.
         CancelPendingHit();
         weaponCriticalBonus = Mathf.Clamp01(criticalBonus);
         weaponIntervalMultiplier = Mathf.Clamp(intervalMultiplier, 0.1f, 1f);
+        if (!previous.Equals(DisplayStats)) OnStatsChanged?.Invoke();
     }
 
     public void SetSkillBuff(float damageBonus, float criticalBonus, float attackSpeedBonus)
     {
+        Vector3 previous = DisplayStats;
         buffDamageMultiplier = 1f + Mathf.Max(0f, damageBonus);
         buffCriticalBonus = Mathf.Clamp01(criticalBonus);
         buffAttackSpeedMultiplier = 1f + Mathf.Max(0f, attackSpeedBonus);
         hasSkillBuff = damageBonus > 0f || criticalBonus > 0f || attackSpeedBonus > 0f;
+        if (!previous.Equals(DisplayStats)) OnStatsChanged?.Invoke();
     }
 
     private void Awake() => owner = GetComponent<BaseUnitController>();
@@ -137,6 +143,8 @@ public class UnitAttack : MonoBehaviour
 
     public void SetAttackDamage(float value)
     {
+        float previous = AttackDamage;
         attackDamage = Mathf.Max(0f, value);
+        if (previous != AttackDamage) OnStatsChanged?.Invoke();
     }
 }

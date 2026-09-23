@@ -46,7 +46,7 @@ MonoBehaviour:
     prefab: {fileID: 5108586841713532949, guid: db8107fea9a26cd478986e6d3350f99d, type: 3}
     rarity: 0
     baseDamage: 30
-    damagePerLevel: 5
+    damageGrowthPercent: 5
     traits: 0
     strongDamageMultiplier: 1.3
     criticalChanceBonus: 0.15
@@ -56,7 +56,7 @@ MonoBehaviour:
     prefab: {fileID: 3038567190503479868, guid: f8acff7d4ed49684483dd770447b98ba, type: 3}
     rarity: 0
     baseDamage: 30
-    damagePerLevel: 5
+    damageGrowthPercent: 5
     traits: 1
     strongDamageMultiplier: 1.3
     criticalChanceBonus: 0.15
@@ -66,7 +66,7 @@ MonoBehaviour:
     prefab: {fileID: 85547855024863184, guid: 7896eebfe7101ff42b89600188e52a66, type: 3}
     rarity: 0
     baseDamage: 30
-    damagePerLevel: 5
+    damageGrowthPercent: 5
     traits: 1
     strongDamageMultiplier: 1.3
     criticalChanceBonus: 0.15
@@ -76,7 +76,7 @@ MonoBehaviour:
     prefab: {fileID: 4997258140202185063, guid: 8a6e8349c98ddea48bf1427c8856e489, type: 3}
     rarity: 0
     baseDamage: 30
-    damagePerLevel: 5
+    damageGrowthPercent: 5
     traits: 2
     strongDamageMultiplier: 1.3
     criticalChanceBonus: 0.15
@@ -86,7 +86,7 @@ MonoBehaviour:
     prefab: {fileID: 7486135362970670261, guid: 79a3ec560a5661444916fd104b475f3b, type: 3}
     rarity: 0
     baseDamage: 30
-    damagePerLevel: 5
+    damageGrowthPercent: 5
     traits: 2
     strongDamageMultiplier: 1.3
     criticalChanceBonus: 0.15
@@ -96,7 +96,7 @@ MonoBehaviour:
     prefab: {fileID: 328174037412448222, guid: 37d7610a87d6c364cb04ea39b36f6946, type: 3}
     rarity: 0
     baseDamage: 30
-    damagePerLevel: 5
+    damageGrowthPercent: 5
     traits: 4
     strongDamageMultiplier: 1.3
     criticalChanceBonus: 0.15
@@ -106,7 +106,7 @@ MonoBehaviour:
     prefab: {fileID: 6063338786950207708, guid: 7825d772ccb4f8449a1f3b24e57deccc, type: 3}
     rarity: 0
     baseDamage: 30
-    damagePerLevel: 5
+    damageGrowthPercent: 5
     traits: 4
     strongDamageMultiplier: 1.3
     criticalChanceBonus: 0.15
@@ -116,7 +116,7 @@ MonoBehaviour:
     prefab: {fileID: 3566464038548240538, guid: d38dba43117eb9a488dab6b6ec65e9cc, type: 3}
     rarity: 0
     baseDamage: 30
-    damagePerLevel: 5
+    damageGrowthPercent: 5
     traits: 8
     strongDamageMultiplier: 1.3
     criticalChanceBonus: 0.15
@@ -126,7 +126,7 @@ MonoBehaviour:
     prefab: {fileID: 282621361169986830, guid: b68fd26d6f633984ea02c8ce496307bf, type: 3}
     rarity: 0
     baseDamage: 30
-    damagePerLevel: 5
+    damageGrowthPercent: 5
     traits: 8
     strongDamageMultiplier: 1.3
     criticalChanceBonus: 0.15
@@ -136,7 +136,7 @@ MonoBehaviour:
     prefab: {fileID: 8529470379274003572, guid: e276a1db3b6d45e46865118c437ea121, type: 3}
     rarity: 1
     baseDamage: 60
-    damagePerLevel: 5
+    damageGrowthPercent: 5
     traits: 1
     strongDamageMultiplier: 1.3
     criticalChanceBonus: 0.15
@@ -146,7 +146,7 @@ MonoBehaviour:
     prefab: {fileID: 1760769811292791127, guid: e9cda4df4af8ac347b664364b1238aa9, type: 3}
     rarity: 1
     baseDamage: 60
-    damagePerLevel: 5
+    damageGrowthPercent: 5
     traits: 1
     strongDamageMultiplier: 1.3
     criticalChanceBonus: 0.15
@@ -156,7 +156,7 @@ MonoBehaviour:
     prefab: {fileID: 7832941446364942816, guid: b80d8d31fcaa5204da19749b8d242d36, type: 3}
     rarity: 1
     baseDamage: 60
-    damagePerLevel: 5
+    damageGrowthPercent: 5
     traits: 2
     strongDamageMultiplier: 1.4
     criticalChanceBonus: 0.15
@@ -166,7 +166,7 @@ MonoBehaviour:
     prefab: {fileID: 6846263035685858993, guid: bc67e4df7a9ca114bb02d2793bc2af60, type: 3}
     rarity: 1
     baseDamage: 60
-    damagePerLevel: 5
+    damageGrowthPercent: 5
     traits: 2
     strongDamageMultiplier: 1.4
     criticalChanceBonus: 0.15
@@ -176,7 +176,7 @@ MonoBehaviour:
     prefab: {fileID: 984282329067995459, guid: 5586c069625198d4ea2eb6beb4f017a5, type: 3}
     rarity: 1
     baseDamage: 60
-    damagePerLevel: 5
+    damageGrowthPercent: 5
     traits: 4
     strongDamageMultiplier: 1.3
     criticalChanceBonus: 0.25
@@ -186,7 +186,7 @@ MonoBehaviour:
     prefab: {fileID: 896645349825550520, guid: 97f5f24a442bd8e4282942d2e5b39673, type: 3}
     rarity: 1
     baseDamage: 60
-    damagePerLevel: 5
+    damageGrowthPercent: 5
     traits: 4
     strongDamageMultiplier: 1.3
     criticalChanceBonus: 0.25
@@ -196,7 +196,7 @@ MonoBehaviour:
     prefab: {fileID: 7816587753233510918, guid: 0b41d0f719cce67419a4d5ab64a280c5, type: 3}
     rarity: 1
     baseDamage: 60
-    damagePerLevel: 5
+    damageGrowthPercent: 5
     traits: 8
     strongDamageMultiplier: 1.3
     criticalChanceBonus: 0.15
@@ -206,7 +206,7 @@ MonoBehaviour:
     prefab: {fileID: 7935268375840918420, guid: d61197cc75282fa419e5a930c728ccfe, type: 3}
     rarity: 1
     baseDamage: 60
-    damagePerLevel: 5
+    damageGrowthPercent: 5
     traits: 8
     strongDamageMultiplier: 1.3
     criticalChanceBonus: 0.15
@@ -216,7 +216,7 @@ MonoBehaviour:
     prefab: {fileID: 928571396802083952, guid: 6451ab887d7654c46870b5941b29b499, type: 3}
     rarity: 2
     baseDamage: 90
-    damagePerLevel: 5
+    damageGrowthPercent: 5
     traits: 1
     strongDamageMultiplier: 1.3
     criticalChanceBonus: 0.15
@@ -226,7 +226,7 @@ MonoBehaviour:
     prefab: {fileID: 5448696442646326241, guid: 847d1b05af377ca43848acde88df4a1c, type: 3}
     rarity: 2
     baseDamage: 90
-    damagePerLevel: 5
+    damageGrowthPercent: 5
     traits: 2
     strongDamageMultiplier: 1.5
     criticalChanceBonus: 0.15
@@ -236,7 +236,7 @@ MonoBehaviour:
     prefab: {fileID: 5614041972019548634, guid: 36a989dd8fd260f46ab16de4a8251472, type: 3}
     rarity: 2
     baseDamage: 90
-    damagePerLevel: 5
+    damageGrowthPercent: 5
     traits: 4
     strongDamageMultiplier: 1.3
     criticalChanceBonus: 0.35
@@ -246,7 +246,7 @@ MonoBehaviour:
     prefab: {fileID: 5569953501538390296, guid: 0e84cffe58a7f744d91e282055c968ea, type: 3}
     rarity: 2
     baseDamage: 90
-    damagePerLevel: 5
+    damageGrowthPercent: 5
     traits: 8
     strongDamageMultiplier: 1.3
     criticalChanceBonus: 0.15
@@ -256,7 +256,7 @@ MonoBehaviour:
     prefab: {fileID: 5152363797696314033, guid: 06a27947dcea97d42a556a358f4cf194, type: 3}
     rarity: 3
     baseDamage: 120
-    damagePerLevel: 5
+    damageGrowthPercent: 5
     traits: 3
     strongDamageMultiplier: 1.5
     criticalChanceBonus: 0.15
@@ -266,7 +266,7 @@ MonoBehaviour:
     prefab: {fileID: 6521193352797571059, guid: 7b85b95f8ac11fd4287e475d1c428775, type: 3}
     rarity: 3
     baseDamage: 120
-    damagePerLevel: 5
+    damageGrowthPercent: 5
     traits: 12
     strongDamageMultiplier: 1.3
     criticalChanceBonus: 0.45

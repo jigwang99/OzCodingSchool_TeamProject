@@ -172,7 +172,7 @@ public class UpgradeUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         {
             BigNumber ratio = currentGold / cost;
 
-            fillAmount = ratio.value * Math.Pow(10, ratio.exponent);
+            fillAmount = ((double)ratio.value / 100.0) * Math.Pow(10, ratio.exponent);
 
             fillAmount = Math.Max(0.0, Math.Min(1.0, fillAmount));
         }

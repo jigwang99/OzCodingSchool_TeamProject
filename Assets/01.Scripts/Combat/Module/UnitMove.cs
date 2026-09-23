@@ -16,6 +16,8 @@ public class UnitMove : MonoBehaviour
     private Transform facingRoot;
     private Vector3 initialVisualScale;
     private bool initiallyFacesRight;
+    private ParticleSystemRenderer[] facingEffects;
+    private Vector3[] originalEffectFlips;
     private float facingDirection = 1f;
     private float attackDirection = 1f;
     private Collider2D bodyCollider;
@@ -28,7 +30,14 @@ public class UnitMove : MonoBehaviour
     private float skillSpeedMultiplier = 1f;
     public float MoveSpeed => moveSpeed * skillSpeedMultiplier;
 
-    public void SetSkillSpeedBonus(float bonus) => skillSpeedMultiplier = 1f + Mathf.Max(0f, bonus);
+    public event System.Action OnMoveSpeedChanged;
+
+    public void SetSkillSpeedBonus(float bonus)
+    {
+        float previous = MoveSpeed;
+        skillSpeedMultiplier = 1f + Mathf.Max(0f, bonus);
+        if (previous != MoveSpeed) OnMoveSpeedChanged?.Invoke();
+    }
     public bool IsMoving => unitRigidbody.linearVelocity.sqrMagnitude > 0f;
 
     private void Awake()
@@ -45,6 +54,17 @@ public class UnitMove : MonoBehaviour
         facingRoot = visual;
         initialVisualScale = visual.localScale;
         initiallyFacesRight = facesRight;
+        facingEffects = visual.GetComponentsInChildren<ParticleSystemRenderer>(true);
+        originalEffectFlips = new Vector3[facingEffects.Length];
+        for (int i = 0; i < facingEffects.Length; i++)
+        {
+            originalEffectFlips[i] = facingEffects[i].flip;
+            ParticleSystem particles = facingEffects[i].GetComponent<ParticleSystem>();
+            if (particles == null) continue;
+            var main = particles.main;
+            main.simulationSpace = ParticleSystemSimulationSpace.Local;
+            main.scalingMode = ParticleSystemScalingMode.Hierarchy;
+        }
     }
 
     public void FaceDirection(float direction)
@@ -56,6 +76,15 @@ public class UnitMove : MonoBehaviour
         Vector3 scale = initialVisualScale;
         scale.x *= (facingDirection > 0f) == initiallyFacesRight ? 1f : -1f;
         facingRoot.localScale = scale;
+        // 파티클 빌보드의 UV는 부모의 음수 스케일로 반전되지 않으므로 따로 맞춘다.
+        bool mirrored = (facingDirection > 0f) != initiallyFacesRight;
+        for (int i = 0; facingEffects != null && i < facingEffects.Length; i++)
+        {
+            if (facingEffects[i] == null) continue;
+            Vector3 flip = originalEffectFlips[i];
+            if (mirrored) flip.x = 1f - flip.x;
+            facingEffects[i].flip = flip;
+        }
     }
 
     public void CaptureAttackDirection(float direction)

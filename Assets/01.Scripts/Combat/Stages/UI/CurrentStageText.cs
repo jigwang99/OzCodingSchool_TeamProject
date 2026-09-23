@@ -42,7 +42,13 @@ public class CurrentStageText : MonoBehaviour
         if (boundData == null || stageText == null)
             return;
 
-        // 저장 데이터의 진행도(1~15)를 스테이지 데이터의 표시 이름(1-1~3-5)으로 보여준다.
+        if (stageDataList != null && stageDataList.IsEndlessStage(boundData.currentStage))
+        {
+            stageText.text = $"Stage {boundData.currentStage - stageDataList.Count}";
+            return;
+        }
+
+        // 일반 스테이지는 챕터-스테이지 표시를 유지한다.
         string stageName = stageDataList != null
             ? stageDataList.GetStageName(boundData.currentStage)
             : null;
