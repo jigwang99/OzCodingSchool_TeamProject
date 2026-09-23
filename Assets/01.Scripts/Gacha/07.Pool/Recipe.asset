@@ -81,9 +81,9 @@ MonoBehaviour:
       requiredPullCount: 20
       rarities:
       - rarity: 0
-        weight: 100
+        weight: 99
       - rarity: 1
-        weight: 0
+        weight: 1
       - rarity: 2
         weight: 0
       - rarity: 3
@@ -126,9 +126,9 @@ MonoBehaviour:
       rarities:
       - rarity: 0
         weight: 80
-      - rarity: 0
+      - rarity: 1
         weight: 12
-      - rarity: 0
+      - rarity: 2
         weight: 6
-      - rarity: 0
+      - rarity: 3
         weight: 2
