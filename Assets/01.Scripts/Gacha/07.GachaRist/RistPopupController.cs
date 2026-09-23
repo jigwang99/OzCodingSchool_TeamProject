@@ -180,7 +180,9 @@ namespace PixelRestaurant.Gacha
             card.Setup(item);
         }
 
-        /// <summary>
+
+
+        /// <summary> 
         /// 기존 카드 삭제
         /// </summary>
         private void ClearContent()

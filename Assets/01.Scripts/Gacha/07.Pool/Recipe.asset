@@ -16,7 +16,7 @@ MonoBehaviour:
   group: 2
   items:
   - itemId: Recipe_0
-    itemName: Grilled Fish
+    itemName: "\uC0DD\uC120\uAD6C\uC774\uC815\uC2DD"
     group: 2
     rarity: 0
     grade: 1
@@ -29,8 +29,9 @@ MonoBehaviour:
       attackPower: 1
       goldBonusFlat: 0
       goldBonusRate: 0
+    nextMergeItemId: 
   - itemId: Recipe_1
-    itemName: Grilled Eel
+    itemName: "\uC7A5\uC5B4\uAD6C\uC774\uC815\uC2DD"
     group: 2
     rarity: 1
     grade: 1
@@ -43,13 +44,14 @@ MonoBehaviour:
       attackPower: 0
       goldBonusFlat: 0
       goldBonusRate: 0
+    nextMergeItemId: 
   - itemId: Recipe_2
-    itemName: Shrimp Tempura
+    itemName: "\uD574\uBB3C\uCC1C"
     group: 2
     rarity: 2
     grade: 1
     weight: 100
-    itemIcon: {fileID: -4657705370912839433, guid: fb3f70245531e1442ae7e4b8b093f5aa, type: 3}
+    itemIcon: {fileID: -1500366873817124674, guid: fb3f70245531e1442ae7e4b8b093f5aa, type: 3}
     linkedWeaponId: 
     linkedFurnitureId: 
     linkedRecipeId: recipe_6
@@ -57,8 +59,9 @@ MonoBehaviour:
       attackPower: 0
       goldBonusFlat: 0
       goldBonusRate: 0
+    nextMergeItemId: 
   - itemId: Recipe_3
-    itemName: Steamed Seafood
+    itemName: "\uD574\uBB3C\uD0D5"
     group: 2
     rarity: 3
     grade: 1
@@ -71,6 +74,7 @@ MonoBehaviour:
       attackPower: 0
       goldBonusFlat: 0
       goldBonusRate: 0
+    nextMergeItemId: 
   pityConfig:
     levels:
     - level: 1

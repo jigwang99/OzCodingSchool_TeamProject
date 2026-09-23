@@ -116,10 +116,7 @@ public class ProductionManager : MonoBehaviour
             if (foodIndex < 0 || foodIndex >= foods.Length) continue;
 
             Food food = foods[foodIndex];
-            if (food == null) { Debug.Log("조건에 맞는 음식 없음"); continue; }
-            if (customer == null) { Debug.Log("Customer가 null"); continue; }
-            if (customer.mySeat == null) { Debug.Log("Customer 자리 없음"); continue; }
-
+           
             customer.eatTime = food.eatTime;
             Vector3 foodPosition = customer.mySeat.transform.GetChild(0).position;
 

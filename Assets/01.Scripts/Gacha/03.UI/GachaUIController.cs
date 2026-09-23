@@ -32,7 +32,7 @@ namespace PixelRestaurant.Gacha
         [Header("Gacha Animation")]
         [SerializeField] private Animator gachaAnimator;
 
-        [SerializeField] private float shakeDuration = 1.0f;
+        [SerializeField] private float shakeDuration = 10.0f;
 
         private bool isGachaPlaying = false;
         [Header("Gold")]
@@ -66,7 +66,32 @@ namespace PixelRestaurant.Gacha
         [SerializeField] private Button inventoryOpenButton;
         [SerializeField] private Button listOpenButton;
 
+        [Header("Gacha Result SFX")]
+        [SerializeField] private AudioClip commonResultSFX;
+        [SerializeField] private AudioClip rareResultSFX;
+        [SerializeField] private AudioClip uniqueResultSFX;
+        [SerializeField] private AudioClip epicResultSFX;
 
+        [Header("Gacha Warning SFX")]
+        [SerializeField] private AudioClip insufficientGoldSFX;
+        [SerializeField] private float insufficientGoldSFXDelay = 1.5f;
+        [SerializeField] private float warningCooldown = 5f;
+        private float nextWarningTime = 0f;
+
+        [Header("Retry Gacha")]
+        [SerializeField] private Button retryGachaButton;
+
+        // 마지막으로 성공한 뽑기 횟수
+        private int lastPullCount = 1;
+
+        // 결과 팝업의 다시 뽑기: 이전 횟수로 즉시 재추첨 (Shake 없음)
+        public void RetryLastGacha()
+        {
+            if (isGachaPlaying)
+                return;
+
+            ExecuteGacha(lastPullCount, true);
+        }
 
         private void Start()
         {
@@ -166,7 +191,7 @@ namespace PixelRestaurant.Gacha
             ExecuteGacha(10);
         }
 
-        private bool ExecuteGacha(int pullCount)
+        private bool ExecuteGacha(int pullCount, bool isRetry = false)
         {
             // 애니메이션 재생 중에는 추가 뽑기 금지
             if (isGachaPlaying)
@@ -216,14 +241,21 @@ namespace PixelRestaurant.Gacha
             BigNumber currentGold =
                 CurrencyManager.instance.GetCurrentGold();
 
-            // 골드 부족 시 뽑기 중단
+            // 골드 부족 시: ButtonSFX 클릭음이 먼저 들린 뒤 경고음을 재생
             if (currentGold < totalCost)
             {
+                if (Time.unscaledTime >= nextWarningTime)
+                {
+                    nextWarningTime = Time.unscaledTime + warningCooldown;
+                    StartCoroutine(PlayInsufficientGoldSFXAfterClick());
+                }
 
+                // 결과 팝업의 다시 뽑기에서 골드가 부족하면 팝업을 닫는다.
+                if (isRetry && resultPopup != null)
+                    resultPopup.SetActive(false);
 
                 return false;
             }
-
             // =========================
             // 가챠 실행
             // =========================
@@ -240,17 +272,49 @@ namespace PixelRestaurant.Gacha
                 return false;
             }
 
-            // 가챠 애니메이션 실행
-            StartCoroutine(PlayGachaAnimation(results));
+            // 실제 성공한 뽑기 횟수를 기억한다.
+            lastPullCount = pullCount;
+
+            if (isRetry)
+            {
+                // 다시 뽑기는 Shake와 대기 없이 기존 카드를 교체한다.
+                if (resultPopup != null)
+                    resultPopup.SetActive(true);
+
+                ShowGachaResults(results);
+            }
+            else
+            {
+                // 일반 뽑기만 Shake 애니메이션을 실행한다.
+                StartCoroutine(PlayGachaAnimation(results));
+            }
 
             // UI 갱신
             UpdateDisplay();
 
             return true;
         }
+        private IEnumerator PlayInsufficientGoldSFXAfterClick()
+        {
+            if (insufficientGoldSFXDelay > 0f)
+                yield return new WaitForSecondsRealtime(insufficientGoldSFXDelay);
+            else
+                yield return null;
+
+            if (SoundManager.instance != null && insufficientGoldSFX != null)
+            {
+                SoundManager.instance.PlaySFX(insufficientGoldSFX);
+            }
+        }
+
         private IEnumerator PlayGachaAnimation(List<GachaItem> results)
         {
             isGachaPlaying = true;
+
+            // 이전 가챠 결과 팝업이 열려 있으면 먼저 숨긴다.
+            // 순서: 클릭 -> Shake 애니메이션 -> 대기 -> 결과 팝업/카드 표시
+            if (resultPopup != null)
+                resultPopup.SetActive(false);
 
             // 중복 클릭 방지
             if (pull1Button != null)
@@ -263,10 +327,10 @@ namespace PixelRestaurant.Gacha
             if (gachaAnimator != null)
             {
                 gachaAnimator.SetTrigger("Shake");
-
-                // 애니메이션이 끝날 때까지 대기
-                yield return new WaitForSeconds(shakeDuration);
             }
+
+            // Animator 연결 여부와 상관없이 결과 팝업은 지정 시간 뒤에 표시
+            yield return new WaitForSecondsRealtime(shakeDuration);
 
             // 결과 팝업 표시
             if (resultPopup != null)
@@ -287,7 +351,6 @@ namespace PixelRestaurant.Gacha
         // =========================
         // Result
         // =========================
-
 
         private void ShowGachaResults(List<GachaItem> items)
         {
@@ -320,6 +383,12 @@ namespace PixelRestaurant.Gacha
 
             int totalCards = validItems.Count;
 
+            if (totalCards == 0)
+                return;
+
+            // 결과 전체 중 최고 등급 등장음만 한 번 재생
+            PlayHighestRarityResultSFX(validItems);
+
             for (int i = 0; i < totalCards; i++)
             {
                 resultHandler.HandleGachaResult(
@@ -330,7 +399,54 @@ namespace PixelRestaurant.Gacha
                 );
             }
         }
+        private void PlayHighestRarityResultSFX(List<GachaItem> items)
+        {
+            if (SoundManager.instance == null ||
+                items == null ||
+                items.Count == 0)
+            {
+                return;
+            }
 
+            GachaRarity highestRarity = GachaRarity.Common;
+
+            foreach (GachaItem item in items)
+            {
+                if (item == null)
+                    continue;
+
+                if ((int)item.Rarity > (int)highestRarity)
+                {
+                    highestRarity = item.Rarity;
+                }
+            }
+
+            AudioClip clip = null;
+
+            switch (highestRarity)
+            {
+                case GachaRarity.Common:
+                    clip = commonResultSFX;
+                    break;
+
+                case GachaRarity.Rare:
+                    clip = rareResultSFX;
+                    break;
+
+                case GachaRarity.Unique:
+                    clip = uniqueResultSFX;
+                    break;
+
+                case GachaRarity.Epic:
+                    clip = epicResultSFX;
+                    break;
+            }
+
+            if (clip != null)
+            {
+                SoundManager.instance.PlaySFX(clip);
+            }
+        }
         private void ClearPreviousResults()
         {
             if (resultSpawnPoint == null)

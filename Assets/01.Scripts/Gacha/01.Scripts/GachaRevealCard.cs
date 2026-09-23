@@ -82,10 +82,15 @@ namespace PixelRestaurant.Gacha
         [Header("Inventory")]
         [SerializeField]
         private RectTransform inventoryTarget;
-
+        [Header("Card SFX")]
+        [SerializeField] private AudioClip spawnSFX;
         [SerializeField]
         private float inventoryMoveDuration = 0.5f;
-
+        [Header("Card Flip SFX")]
+        [SerializeField] private AudioClip commonFlipSFX;
+        [SerializeField] private AudioClip rareFlipSFX;
+        [SerializeField] private AudioClip uniqueFlipSFX;
+        [SerializeField] private AudioClip epicFlipSFX;
         private GachaItem _item;
         private CardState _state;
 
@@ -191,6 +196,11 @@ namespace PixelRestaurant.Gacha
 
             // 등급에 맞는 Back 등장 이펙트
             PlaySpawnVFX(_item.Rarity);
+            // 카드 등장 효과음
+            if (SoundManager.instance != null && spawnSFX != null)
+            {
+                SoundManager.instance.PlaySFX(spawnSFX);
+            }
 
             _animation = DOTween.Sequence();
 
@@ -271,7 +281,6 @@ namespace PixelRestaurant.Gacha
                 ).SetEase(flipEase)
             );
 
-            // 카드가 옆면을 향하는 순간 교체
             _animation.AppendCallback(() =>
             {
                 if (back != null)
@@ -288,6 +297,9 @@ namespace PixelRestaurant.Gacha
 
                     front.SetActive(true);
                 }
+
+                // 카드 앞면이 공개되는 순간 효과음
+                PlayFlipSFX(_item.Rarity);
             });
 
             // Front: 90도 -> 180도
@@ -310,7 +322,37 @@ namespace PixelRestaurant.Gacha
                 _canvasGroup.blocksRaycasts = true;
             });
         }
+        private void PlayFlipSFX(GachaRarity rarity)
+        {
+            if (SoundManager.instance == null)
+                return;
 
+            AudioClip clip = null;
+
+            switch (rarity)
+            {
+                case GachaRarity.Common:
+                    clip = commonFlipSFX;
+                    break;
+
+                case GachaRarity.Rare:
+                    clip = rareFlipSFX;
+                    break;
+
+                case GachaRarity.Unique:
+                    clip = uniqueFlipSFX;
+                    break;
+
+                case GachaRarity.Epic:
+                    clip = epicFlipSFX;
+                    break;
+            }
+
+            if (clip != null)
+            {
+                SoundManager.instance.PlaySFX(clip);
+            }
+        }   
         // 등급별 Back 등장 이펙트
         private void PlaySpawnVFX(GachaRarity rarity)
         {

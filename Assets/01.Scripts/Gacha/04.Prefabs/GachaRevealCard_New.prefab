@@ -490,7 +490,12 @@ MonoBehaviour:
   uniqueRevealVFX: {fileID: 8020944104324586807}
   epicRevealVFX: {fileID: 9005232746099991914}
   inventoryTarget: {fileID: 0}
+  spawnSFX: {fileID: 0}
   inventoryMoveDuration: 0.5
+  commonFlipSFX: {fileID: 8300000, guid: 335c4605cb9ad714fa3ddbe07990ab50, type: 3}
+  rareFlipSFX: {fileID: 8300000, guid: f65caa19586755d409230ad9898755ad, type: 3}
+  uniqueFlipSFX: {fileID: 8300000, guid: f6872c18dcf310b4d8a973e3242f4a6b, type: 3}
+  epicFlipSFX: {fileID: 8300000, guid: 0ebe07122c7e73f44bdf73cdac314211, type: 3}
 --- !u!1001 &1081309848197090995
 PrefabInstance:
   m_ObjectHideFlags: 0
