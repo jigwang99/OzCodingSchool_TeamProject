@@ -4,77 +4,104 @@ using System.Globalization;
 [Serializable]
 public struct BigNumber : IComparable<BigNumber>, IEquatable<BigNumber>, IFormattable
 {
-    // 실제 값 = value * 10^exponent
-    // 정규화 시 지수는 3의 배수로 유지한다.
-    public double value;
+    // 실제 값 = (value / ScaleFactor) * 10^exponent
+    public long value;
     public int exponent;
 
-    public BigNumber(int value) : this((double)value) { }
+    private const long ScaleFactor = 100; // 소수점 둘째 자리까지 정밀도 유지
 
-    public BigNumber(int value, int exponent)
-        : this((double)value, exponent) { }
-
-    public BigNumber(double value) : this(value, 0) { }
-
-    public BigNumber(double value, int exponent)
+    public BigNumber(long rawValue, int exponent)
     {
-        this.value = value;
+        this.value = rawValue;
         this.exponent = exponent;
+        Normalize();
+    }
 
+    public BigNumber(long integerValue)
+    {
+        this.value = integerValue * ScaleFactor;
+        this.exponent = 0;
+        Normalize();
+    }
+
+    public BigNumber(double doubleValue)
+    {
+        if (double.IsNaN(doubleValue) || double.IsInfinity(doubleValue))
+        {
+            throw new ArgumentOutOfRangeException(nameof(doubleValue), "BigNumber requires a finite value.");
+        }
+
+        if (doubleValue == 0)
+        {
+            this.value = 0;
+            this.exponent = 0;
+            return;
+        }
+
+        int exp = 0;
+        while (Math.Abs(doubleValue) >= 10.0)
+        {
+            doubleValue /= 10.0;
+            exp++;
+        }
+        while (Math.Abs(doubleValue) < 1.0 && doubleValue != 0)
+        {
+            doubleValue *= 10.0;
+            exp--;
+        }
+
+        this.value = (long)Math.Round(doubleValue * ScaleFactor);
+        this.exponent = exp;
+        Normalize();
+    }
+
+    public BigNumber(double val, int exp)
+    {
+        // double 값을 받아 초기화할 때 지수와 값을 정확히 반영
+        double total = val * Math.Pow(10, exp);
+        int targetExp = 0;
+
+        if (total != 0)
+        {
+            targetExp = (int)Math.Floor(Math.Log10(Math.Abs(total)));
+            val = total / Math.Pow(10, targetExp);
+        }
+
+        this.value = (long)Math.Round(val * ScaleFactor);
+        this.exponent = targetExp;
         Normalize();
     }
 
     private void Normalize()
     {
-        // 무한대와 NaN은 정규화할 수 없으므로 거부한다.
-        if (double.IsNaN(value) || double.IsInfinity(value))
-        {
-            throw new ArgumentOutOfRangeException(
-                nameof(value),
-                "BigNumber requires a finite value.");
-        }
-
         if (value == 0)
         {
             exponent = 0;
             return;
         }
 
-        int remainder = (exponent % 3 + 3) % 3;
-        exponent = checked(exponent - remainder);
+        // 지수를 항상 3의 배수로 맞춤 (방치형 게임 표준 단위 K, M, B...)
+        int remainder = exponent % 3;
+        if (remainder != 0)
+        {
+            exponent -= remainder;
+            value = (long)Math.Round(value * Math.Pow(10, remainder));
+        }
 
-        // 큰 double에 10 또는 100을 곱할 때의 오버플로를 방지한다.
-        while (Math.Abs(value) >= 1000)
+        // value 절댓값이 너무 크면 지수를 올림
+        while (Math.Abs(value) >= ScaleFactor * 1000)
         {
             value /= 1000;
             exponent = checked(exponent + 3);
         }
 
-        value *= Math.Pow(10, remainder);
-
-        while (Math.Abs(value) >= 1000)
-        {
-            value /= 1000;
-            exponent = checked(exponent + 3);
-        }
-
-        while (Math.Abs(value) < 1)
+        // value 절댓값이 너무 작고 지수가 남아있으면 지수를 내림
+        while (Math.Abs(value) < ScaleFactor && exponent >= 3)
         {
             value *= 1000;
             exponent = checked(exponent - 3);
         }
 
-        // 소수점 둘째 자리까지 반올림
-        value = Math.Round(value, 2);
-
-        // 반올림으로 1000이 된 경우 다시 정규화
-        if (Math.Abs(value) >= 1000)
-        {
-            value /= 1000;
-            exponent = checked(exponent + 3);
-        }
-
-        // 반올림 결과가 0이 된 경우
         if (value == 0)
         {
             exponent = 0;
@@ -90,24 +117,19 @@ public struct BigNumber : IComparable<BigNumber>, IEquatable<BigNumber>, IFormat
 
     public string ToString(string format, IFormatProvider formatProvider)
     {
-        var number = new BigNumber(value, exponent);
         string[] units = { "", "K", "M", "B", "T", "Qa", "Qi", "Sx", "Sp", "Oc", "No", "Dc", "Ud", "Dd", "Td" };
 
-        int unitIndex = number.exponent / 3;
+        int unitIndex = exponent / 3;
+        double realValue = (double)value / ScaleFactor;
 
-        // 1000 미만이면 소수점 없이 정수로 표시
         string digits;
-
         if (unitIndex == 0)
         {
-            digits = Math.Round(number.value).ToString("0", formatProvider);
+            digits = Math.Round(realValue).ToString("0", formatProvider);
         }
         else
         {
-            // 1000 이상이면 소수점 둘째 자리까지
-            digits = number.value.ToString(
-                string.IsNullOrEmpty(format) ? "0.##" : format,
-                formatProvider);
+            digits = realValue.ToString(string.IsNullOrEmpty(format) ? "0.##" : format, formatProvider);
         }
 
         if (unitIndex >= 0 && unitIndex < units.Length)
@@ -115,162 +137,94 @@ public struct BigNumber : IComparable<BigNumber>, IEquatable<BigNumber>, IFormat
             return digits + units[unitIndex];
         }
 
-        return digits + "e"
-            + number.exponent.ToString(CultureInfo.InvariantCulture);
+        return digits + "e" + exponent.ToString(CultureInfo.InvariantCulture);
     }
 
     // 사칙 연산자
     public static BigNumber operator +(BigNumber a, BigNumber b)
     {
-        if (a.value == 0)
-            return b;
+        if (a.value == 0) return b;
+        if (b.value == 0) return a;
 
-        if (b.value == 0)
-            return a;
-
-        // 지수가 큰 쪽을 기준으로 맞춘다.
         if (a.exponent > b.exponent)
         {
-            double convertedValue = b.value
-                * Math.Pow(10, (long)b.exponent - a.exponent);
-
-            return new BigNumber(
-                a.value + convertedValue,
-                a.exponent);
+            long diff = a.exponent - b.exponent;
+            long shiftedB = (long)Math.Round(b.value / Math.Pow(10, diff));
+            return new BigNumber(a.value + shiftedB, a.exponent);
         }
-
-        double convertedA = a.value
-            * Math.Pow(10, (long)a.exponent - b.exponent);
-
-        return new BigNumber(
-            b.value + convertedA,
-            b.exponent);
+        else if (b.exponent > a.exponent)
+        {
+            long diff = b.exponent - a.exponent;
+            long shiftedA = (long)Math.Round(a.value / Math.Pow(10, diff));
+            return new BigNumber(b.value + shiftedA, b.exponent);
+        }
+        else
+        {
+            return new BigNumber(a.value + b.value, a.exponent);
+        }
     }
 
     public static BigNumber operator -(BigNumber a, BigNumber b)
     {
-        if (a == b)
-            return new BigNumber(0);
+        if (a == b) return new BigNumber(0);
 
-        return a + new BigNumber(-b.value, b.exponent);
+        return a + (b * new BigNumber(-1));
     }
 
     public static BigNumber operator *(BigNumber a, BigNumber b)
     {
-        if (a.value == 0 || b.value == 0)
-            return new BigNumber(0);
+        if (a.value == 0 || b.value == 0) return new BigNumber(0);
 
-        return new BigNumber(
-            a.value * b.value,
-            checked(a.exponent + b.exponent));
+        long newVal = (a.value * b.value) / ScaleFactor;
+        int newExp = checked(a.exponent + b.exponent);
+        return new BigNumber(newVal, newExp);
     }
 
     public static BigNumber operator /(BigNumber a, BigNumber b)
     {
-        if (b.value == 0)
-            throw new DivideByZeroException();
+        if (b.value == 0) throw new DivideByZeroException();
+        if (a.value == 0) return new BigNumber(0);
 
-        if (a.value == 0)
-            return new BigNumber(0);
-
-        return new BigNumber(
-            a.value / b.value,
-            checked(a.exponent - b.exponent));
+        long newVal = (a.value * ScaleFactor) / b.value;
+        int newExp = checked(a.exponent - b.exponent);
+        return new BigNumber(newVal, newExp);
     }
 
-    // 거듭제곱을 BigNumber 연산으로 계산한다.
     public static BigNumber Pow(BigNumber number, int power)
     {
-        if (power < 0)
-            throw new ArgumentOutOfRangeException(nameof(power));
-
+        if (power < 0) throw new ArgumentOutOfRangeException(nameof(power));
         var result = new BigNumber(1);
 
         while (power > 0)
         {
-            if ((power & 1) != 0)
-            {
-                result *= number;
-            }
-
+            if ((power & 1) != 0) result *= number;
             power >>= 1;
-
-            if (power > 0)
-            {
-                number *= number;
-            }
+            if (power > 0) number *= number;
         }
-
         return result;
     }
 
     public int CompareTo(BigNumber other)
     {
-        var a = new BigNumber(value, exponent);
-        var b = new BigNumber(other.value, other.exponent);
+        if (exponent == other.exponent)
+        {
+            return value.CompareTo(other.value);
+        }
 
-        int sign = Math.Sign(a.value);
-        int otherSign = Math.Sign(b.value);
-
-        if (sign != otherSign)
-            return sign.CompareTo(otherSign);
-
-        if (sign == 0)
-            return 0;
-
-        int order = a.exponent.CompareTo(b.exponent);
-
-        return order != 0
-            ? order * sign
-            : a.value.CompareTo(b.value);
+        double aReal = ((double)value / ScaleFactor) * Math.Pow(10, exponent);
+        double bReal = ((double)other.value / ScaleFactor) * Math.Pow(10, other.exponent);
+        return aReal.CompareTo(bReal);
     }
 
-    public bool Equals(BigNumber other)
-    {
-        return CompareTo(other) == 0;
-    }
-
-    public override bool Equals(object obj)
-    {
-        return obj is BigNumber other && Equals(other);
-    }
-
-    public override int GetHashCode()
-    {
-        var number = new BigNumber(value, exponent);
-
-        return number.value.GetHashCode()
-            ^ number.exponent.GetHashCode();
-    }
+    public bool Equals(BigNumber other) => CompareTo(other) == 0;
+    public override bool Equals(object obj) => obj is BigNumber other && Equals(other);
+    public override int GetHashCode() => value.GetHashCode() ^ exponent.GetHashCode();
 
     // 비교 연산자
-    public static bool operator >(BigNumber a, BigNumber b)
-    {
-        return a.CompareTo(b) > 0;
-    }
-
-    public static bool operator <(BigNumber a, BigNumber b)
-    {
-        return a.CompareTo(b) < 0;
-    }
-
-    public static bool operator >=(BigNumber a, BigNumber b)
-    {
-        return a.CompareTo(b) >= 0;
-    }
-
-    public static bool operator <=(BigNumber a, BigNumber b)
-    {
-        return a.CompareTo(b) <= 0;
-    }
-
-    public static bool operator ==(BigNumber a, BigNumber b)
-    {
-        return a.Equals(b);
-    }
-
-    public static bool operator !=(BigNumber a, BigNumber b)
-    {
-        return !a.Equals(b);
-    }
+    public static bool operator >(BigNumber a, BigNumber b) => a.CompareTo(b) > 0;
+    public static bool operator <(BigNumber a, BigNumber b) => a.CompareTo(b) < 0;
+    public static bool operator >=(BigNumber a, BigNumber b) => a.CompareTo(b) >= 0;
+    public static bool operator <=(BigNumber a, BigNumber b) => a.CompareTo(b) <= 0;
+    public static bool operator ==(BigNumber a, BigNumber b) => a.Equals(b);
+    public static bool operator !=(BigNumber a, BigNumber b) => !a.Equals(b);
 }
