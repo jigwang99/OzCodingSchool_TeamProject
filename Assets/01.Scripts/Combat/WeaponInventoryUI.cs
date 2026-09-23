@@ -148,7 +148,7 @@ public class WeaponInventoryUI : MonoBehaviour
         Refresh();
     }
 
-    private void HandleEquipmentChanged(PlayerWeaponCatalog.Weapon _) => Refresh();
+    private void HandleEquipmentChanged(PlayerWeaponCatalog.Weapon _) => Refresh(); // new 0923 김동주
 
     // 전투 무기는 해금 여부만 ownedWeapons에 저장된다. 실제 중복 수량은 가챠 인벤토리가 기준이다.
     private int GetGachaWeaponCount(string weaponId)

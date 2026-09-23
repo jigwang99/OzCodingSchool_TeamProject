@@ -77,7 +77,7 @@ namespace PixelRestaurant.Gacha
 
             if (GachaManager.Instance == null)
             {
-                Debug.LogWarning("GachaManager를 찾을 수 없습니다.");
+              
                 return;
             }
 
@@ -86,9 +86,7 @@ namespace PixelRestaurant.Gacha
 
             if (poolData == null)
             {
-                Debug.LogWarning(
-                    $"{currentGroup} GachaPoolData를 찾을 수 없습니다."
-                );
+               
 
                 return;
             }
@@ -97,9 +95,7 @@ namespace PixelRestaurant.Gacha
 
             if (currentConfig == null)
             {
-                Debug.LogWarning(
-                    $"{currentGroup} PityConfig가 없습니다."
-                );
+              
 
                 return;
             }

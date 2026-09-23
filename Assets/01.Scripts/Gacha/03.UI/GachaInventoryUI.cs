@@ -105,7 +105,6 @@ namespace PixelRestaurant.Gacha
             {
                 int merged = GachaInventory.Instance.TryMergeAllWeapons(pool, weaponCatalog);
                 if (merged == 0)
-                    Debug.LogWarning("[MergeAll] No weapon merged. See the preceding [MergeAll] warnings in the Console for item-specific reasons.");
                 if (mergeResultText != null)
                     mergeResultText.text = merged > 0 ? $"무기 {merged}회 합치기 완료" : "합칠 수 있는 무기가 없습니다.";
             }

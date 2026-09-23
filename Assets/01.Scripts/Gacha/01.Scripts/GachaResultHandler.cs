@@ -57,10 +57,8 @@ namespace PixelRestaurant.Gacha
 
             if (_objectPool == null)
             {
-                Debug.LogError(
-                    "GachaObjectPool is missing.",
-                    this
-                );
+               
+               
             }
         }
 

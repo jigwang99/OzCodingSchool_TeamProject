@@ -132,9 +132,8 @@ namespace PixelRestaurant.Gacha
 
             if (string.IsNullOrWhiteSpace(nextItemId))
             {
-                Debug.LogWarning(
-                    $"[Merge] {sourceItem.ItemId}: Next Merge Item Id가 비어 있습니다."
-                );
+   
+                
                 return false;
             }
 
@@ -148,10 +147,8 @@ namespace PixelRestaurant.Gacha
 
             if (candidate == null)
             {
-                Debug.LogWarning(
-                    $"[Merge] {sourceItem.ItemId}: " +
-                    $"다음 아이템 {nextItemId}을(를) 무기 풀에서 찾지 못했습니다."
-                );
+          
+                
                 return false;
             }
 
@@ -159,20 +156,13 @@ namespace PixelRestaurant.Gacha
                 candidate.Rarity != nextRarity ||
                 candidate.Grade != nextGrade)
             {
-                Debug.LogWarning(
-                    $"[Merge] {sourceItem.ItemId} → {candidate.ItemId}: " +
-                    $"예상 단계={nextRarity} {nextGrade}, " +
-                    $"실제 단계={candidate.Rarity} {candidate.Grade}, " +
-                    $"그룹={candidate.Group}"
-                );
+           
                 return false;
             }
 
             if (string.IsNullOrWhiteSpace(candidate.LinkedWeaponId))
             {
-                Debug.LogWarning(
-                    $"[Merge] {candidate.ItemId}: Linked Weapon Id가 비어 있습니다."
-                );
+           
                 return false;
             }
 

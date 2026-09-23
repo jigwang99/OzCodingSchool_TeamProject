@@ -62,13 +62,13 @@ namespace PixelRestaurant.Gacha
         [ContextMenu("Validate Item ID")]
         private void ValidateItemId()
         {
-            if (string.IsNullOrWhiteSpace(itemId)) Debug.LogWarning("Gacha ItemId is empty");
+         
             int maxGrade = group == GachaGroup.Weapon ? GachaWeaponMerge.GetMaxGrade(rarity) : 4;
-            if (grade < 1 || grade > maxGrade) Debug.LogWarning($"Invalid grade: {grade}");
-            if (weight <= 0) Debug.LogWarning("Weight must be positive");
-            if (itemIcon == null) Debug.LogWarning("Item icon is missing");
-            if (group == GachaGroup.Weapon && string.IsNullOrWhiteSpace(linkedWeaponId))
-                Debug.LogWarning("LinkedWeaponId is missing");
+
+
+
+            if (group == GachaGroup.Weapon && string.IsNullOrWhiteSpace(linkedWeaponId)) ;
+        
         }
 #endif
     }
