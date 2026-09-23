@@ -59,7 +59,7 @@ public class StageData
             : PoolType.Crab_0001;
     }
 
-    public StageData Clone()
+    public StageData Clone(bool spawnInCamera = false)
     {
         // spawnOffsets는 배열(참조형)이라 얕은 복사면 원본과 배열을 공유한다.
         // 복제본에서 위치를 바꿔도 원본이 안전하도록 배열은 새로 만들어 복사.
@@ -71,7 +71,8 @@ public class StageData
         PoolType[] clonedTypes = enemyTypes != null
             ? (PoolType[])enemyTypes.Clone()
             : Array.Empty<PoolType>();
-        return new StageData(stageName, clonedOffsets, enemyMaxHp, enemyDamage, dropTable, clonedTypes, elevatedFloorCounts, bossGuaranteedFishCount, SpawnInCamera);
+        return new StageData(stageName, clonedOffsets, enemyMaxHp, enemyDamage, dropTable, clonedTypes,
+            elevatedFloorCounts, bossGuaranteedFishCount, SpawnInCamera || spawnInCamera);
     }
 }
 [CreateAssetMenu(fileName = "StageDataList", menuName = "Combat/Stage Data List")]
@@ -80,6 +81,8 @@ public class StageDataList : ScriptableObject
     [SerializeField] private List<StageData> stageList = new List<StageData>();
     [Header("최종 보스 이후 무한 스테이지")]
     [SerializeField, Min(0f)] private float endlessGrowthPercent = 10f;
+    [Tooltip("무한 단계마다 최종 보스의 확정 물고기 보상에 추가되는 수량. 확률 드롭은 별도입니다.")]
+    [SerializeField, Min(1)] private int endlessBonusFishPerStage = 1;
 
     public int Count => stageList != null ? stageList.Count : 0;
 
@@ -97,13 +100,18 @@ public class StageDataList : ScriptableObject
     public StageData GetClone(int stageNumber)
     {
         StageData source = GetSource(stageNumber);
-        if (source == null || !IsEndlessStage(stageNumber)) return source?.Clone();
-        double multiplier = Math.Pow(1d + Mathf.Max(0f, endlessGrowthPercent) / 100d, stageNumber - Count);
+        if (source == null) return null;
+        if (!IsEndlessStage(stageNumber))
+            return source.Clone(stageNumber > 0 && stageNumber % 5 == 0 && source.EnemyCount == 1);
+        int endlessLevel = stageNumber - Count;
+        double multiplier = Math.Pow(1d + Mathf.Max(0f, endlessGrowthPercent) / 100d, endlessLevel);
+        int guaranteedFish = (int)Math.Min(int.MaxValue, (long)source.BossGuaranteedFishCount
+            + (long)endlessLevel * Mathf.Max(1, endlessBonusFishPerStage));
         // float 전투 모듈의 범위 안에서 유지해 아주 높은 단계도 Infinity/NaN으로 망가지지 않는다.
         float Scale(float value) => value <= 0f ? 0f : (float)Math.Min(float.MaxValue / 1024d, value * multiplier);
         return new StageData(GetStageName(stageNumber), new[] { Vector2.zero },
             Scale(source.EnemyMaxHp), Scale(source.EnemyDamage), source.DropTable,
-            new[] { source.GetEnemyType(0) }, Vector3Int.zero, source.BossGuaranteedFishCount, true);
+            new[] { source.GetEnemyType(0) }, Vector3Int.zero, guaranteedFish, true);
     }
 
     private StageData GetSource(int stageNumber)

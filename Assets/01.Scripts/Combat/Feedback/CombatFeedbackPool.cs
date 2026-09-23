@@ -182,11 +182,12 @@ public class CombatFeedbackPool : MonoBehaviour
             textColor = damage.IsCritical ? new Color(1f, 0.75f, 0.15f)
                 : damage.IsSkill ? new Color(0.4f, 0.85f, 1f) : color;
             if (font != null && label.font != font) label.font = font;
-            // 기존 0.## 반올림/문화권 표기를 유지하면서 버퍼를 재사용한다.
-            if (damage.Damage.TryFormat(damageText.AsSpan(), out int length, "0.##", CultureInfo.CurrentCulture))
+            // 실제 피해는 유지하고 표시만 반올림한다. 정수형 변환 없이 큰 피해도 표시한다.
+            double roundedDamage = Math.Round(damage.Damage, MidpointRounding.AwayFromZero);
+            if (roundedDamage.TryFormat(damageText.AsSpan(), out int length, "0", CultureInfo.CurrentCulture))
                 label.SetCharArray(damageText, 0, length);
             else
-                label.text = damage.Damage.ToString("0.##");
+                label.text = roundedDamage.ToString("0", CultureInfo.CurrentCulture);
             label.color = textColor;
             labelTransform.anchoredPosition = new Vector2(0f, 60f);
             labelTransform.localScale = Vector3.one * 1.25f;

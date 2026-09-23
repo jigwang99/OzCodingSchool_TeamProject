@@ -32917,7 +32917,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "Info · 전투 정보"
+  m_Text: "전투 정보"
 --- !u!1 &8895000000000000014
 GameObject:
   m_ObjectHideFlags: 0

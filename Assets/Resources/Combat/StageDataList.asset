@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: StageDataList
   m_EditorClassIdentifier: Assembly-CSharp::StageDataList
   endlessGrowthPercent: 10
+  endlessBonusFishPerStage: 1
   stageList:
   - stageName: 1-1
     elevatedFloorCounts: {x: 1, y: 0, z: 1}

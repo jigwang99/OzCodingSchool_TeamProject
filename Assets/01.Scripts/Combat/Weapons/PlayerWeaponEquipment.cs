@@ -29,6 +29,7 @@ public class PlayerWeaponEquipment : MonoBehaviour
     public bool HasSkill => CurrentWeapon != null && CurrentWeapon.HasTrait(WeaponTraits.Skill);
     public float SkillRemaining => skillActive ? Mathf.Max(0f, skillEndsAt - Time.time) : 0f;
     public float SkillCooldownRemaining => Mathf.Max(0f, skillReadyAt - Time.time);
+    public float SkillCooldownDuration { get; private set; }
     public bool CanUseSkill => isActiveAndEnabled && HasSkill && !skillActive
         && SkillCooldownRemaining <= 0f && unit != null && unit.isActiveAndEnabled && !unit.Health.IsDead
         && Time.timeScale > 0f;
@@ -47,7 +48,8 @@ public class PlayerWeaponEquipment : MonoBehaviour
         skillActive = true;
         skillEndsAt = Time.time + Mathf.Max(0.1f, skill.duration);
         // 쿨타임은 사용 순간부터 진행되며 무기 교체로 초기화하지 않는다.
-        skillReadyAt = Time.time + Mathf.Max(0.1f, skill.cooldown);
+        SkillCooldownDuration = Mathf.Max(0.1f, skill.cooldown);
+        skillReadyAt = Time.time + SkillCooldownDuration;
         unitAttack.SetSkillBuff(skill.damageBonus, skill.criticalChanceBonus, skill.attackSpeedBonus);
         unit.Move.SetSkillSpeedBonus(skill.moveSpeedBonus);
         NotifySkillChanged();

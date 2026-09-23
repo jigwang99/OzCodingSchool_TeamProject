@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 // 전투는 계속 진행하며, 최종 전투 모듈의 값을 읽어 강화·버프를 함께 표시한다.
@@ -88,7 +88,7 @@ public sealed class CombatInfoUI : MonoBehaviour
 
     private void RefreshHealth(float current, float max)
     {
-        SetTextIfChanged(values[0], $"{current:0.#} / {max:0.#}");
+        SetTextIfChanged(values[0], $"{System.Math.Round(current, System.MidpointRounding.AwayFromZero):0} / {System.Math.Round(max, System.MidpointRounding.AwayFromZero):0}");
     }
 
     private void HandleWeaponChanged(PlayerWeaponCatalog.Weapon weapon)
@@ -109,7 +109,7 @@ public sealed class CombatInfoUI : MonoBehaviour
 
     private void RefreshAttack()
     {
-        SetTextIfChanged(values[1], $"{attack.AttackDamage:0.##}");
+        SetTextIfChanged(values[1], $"{System.Math.Round(attack.AttackDamage, System.MidpointRounding.AwayFromZero):0}");
         SetTextIfChanged(values[2], $"{attack.CriticalChance * 100f:0.#}%");
         SetTextIfChanged(values[3], $"{attack.CriticalDamageMultiplier:0.##}배");
         SetTextIfChanged(values[4], $"초당 {1f / attack.AttackInterval:0.##}회");
@@ -125,7 +125,7 @@ public sealed class CombatInfoUI : MonoBehaviour
     private void RefreshSkill()
     {
         SetTextIfChanged(values[8], !equipment.HasSkill ? "없음" : equipment.SkillRemaining > 0f
-            ? $"발동 중 · {equipment.SkillRemaining:0.0}초" : "자동 발동 대기");
+            ? $"발동 중 · {equipment.SkillRemaining:0.0}초" : "대기");
         SetTextIfChanged(values[9], !equipment.HasSkill ? "—" : equipment.SkillCooldownRemaining > 0f
             ? $"{equipment.SkillCooldownRemaining:0.0}초" : "준비 완료");
         bool buff = equipment.SkillRemaining > 0f;
