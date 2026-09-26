@@ -12,7 +12,8 @@ public class GetGoldPopup : MonoBehaviour
         mr.sortingLayerName = "Default";
         mr.sortingOrder = 1000;
 
-        goldText.text = $"+{gold}G";
+        int addGold = (int)(gold * (1f + FacilityManager.instance.GoldBonus));
+        goldText.text = $"+{addGold}G";
         if (isSpecial)
             goldText.text += $" x2";
         StartCoroutine(Popup());
