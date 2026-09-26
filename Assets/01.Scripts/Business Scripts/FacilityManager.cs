@@ -39,8 +39,6 @@ public class FacilityManager : Singleton<FacilityManager> //시설 업그레이�
     public Button refrigeratorBtn;
     public Button ovenBtn;
     public Button chefBtn;
-    public Button restaurantUpgradeBtn;
-    public Button chefLevelBtn;
 
     public GameObject[] restaurants;
 
@@ -49,8 +47,6 @@ public class FacilityManager : Singleton<FacilityManager> //시설 업그레이�
     public TextMeshProUGUI infoText;
 
     public TextMeshProUGUI chefBuyText;
-    public TextMeshProUGUI cheflevelBuyText;
-    public TextMeshProUGUI restaurantBuyText;
 
     public GameObject selectMachinesParentObj;   //가구 추가 2
     public Sprite[] selectMachinesImgs;
@@ -76,8 +72,8 @@ public class FacilityManager : Singleton<FacilityManager> //시설 업그레이�
         if (deepfryer == 1) deepfryerBtn.interactable = false;
         if (refrigerator == 1) refrigeratorBtn.interactable = false;
         if (oven == 1) ovenBtn.interactable = false;
-        if (RestaurantLevel >= 3) { RestaurantLevel = 3; restaurantUpgradeBtn.interactable = false; }
-        if (ChefCatLevel >= 9) { ChefCatLevel = 9; chefLevelBtn.interactable = false; }
+        if (RestaurantLevel >= 3) { RestaurantLevel = 3;  }
+        if (ChefCatLevel >= 9) { ChefCatLevel = 9; }
 
         chefLevelText.text = $"Chef Level : {ChefCatLevel}";
         selectMachinesObjs = selectMachinesParentObj.GetComponentsInChildren<Button>();
@@ -214,7 +210,6 @@ public class FacilityManager : Singleton<FacilityManager> //시설 업그레이�
 
         int basePrice = 1000;
         int currentPrice = basePrice * (RestaurantLevel);
-        restaurantBuyText.text = $"{currentPrice}";
 
         if (!CurrencyManager.instance.SpendGold(new BigNumber(currentPrice))) return;
 
@@ -295,7 +290,7 @@ public class FacilityManager : Singleton<FacilityManager> //시설 업그레이�
             for (int i = 0; i < 3; i++)
                 selectMachinesObjs[i].transform.localScale = new Vector3(.8f, .8f, .8f);
             selectMachinesObjs[0].transform.localPosition = new Vector3(-63, -43, 0);
-            selectMachinesObjs[1].transform.localPosition = new Vector3(723, 33, 0);
+            selectMachinesObjs[1].transform.localPosition = new Vector3(857, 0, 0);
         }
         else if (RestaurantLevel == 3)
         {
@@ -309,9 +304,9 @@ public class FacilityManager : Singleton<FacilityManager> //시설 업그레이�
             selectMachinesObjs[4].gameObject.SetActive(true);
             for (int i = 0; i < 5; i++)
                 selectMachinesObjs[i].transform.localScale = new Vector3(.6f, .6f, .6f);
-            selectMachinesObjs[0].transform.localPosition = new Vector3(-224, -10, 0);
-            selectMachinesObjs[1].transform.localPosition = new Vector3(64, 1, 0);
-            selectMachinesObjs[2].transform.localPosition = new Vector3(352, 1, 0);
+            selectMachinesObjs[0].transform.localPosition = new Vector3(-140, 32, 0);
+            selectMachinesObjs[1].transform.localPosition = new Vector3(204, 32, 0);
+            selectMachinesObjs[2].transform.localPosition = new Vector3(432, 32, 0);
         }
         chefBtn.interactable = CookCatNum < RestaurantLevel;
         ProductionManager.instance.ChefPosition();
@@ -329,22 +324,22 @@ public class FacilityManager : Singleton<FacilityManager> //시설 업그레이�
         switch (index)
         {
             case 0:
-                selectMachinesText.text = $"Gas Stove\r\n\r\n\n Food Make Speed + 0.1";
+                selectMachinesText.text = $"Gas Stove\r\n\r\n\n Food Make Speed + 10%";
                 break;
             case 1:
-                selectMachinesText.text = $"Refrigerator\r\n\r\n\n No Use Fish Chance += 0.05";
+                selectMachinesText.text = $"Refrigerator\r\n\r\n\n No Use Fish Chance = 5%";
                 break;
             case 2:
-                selectMachinesText.text = $"Deepfryer\r\n\r\n Make Speed + 0.2\n Gold Bonus + 0.05";
+                selectMachinesText.text = $"Deepfryer\r\n\r\n Make Speed + 20%\n Gold Bonus + 5%";
                 break;
             case 3:
-                selectMachinesText.text = $"Oven\r\n\r\n\n Food Make Speed + 0.1";
+                selectMachinesText.text = $"Oven\r\n\r\n\n Food Make Speed + 10%";
                 break;
             case 4:
-                selectMachinesText.text = $"Microwave Oven\r\n\r\n\n GoldBonus + 0.15";
+                selectMachinesText.text = $"Microwave Oven\r\n\r\n\n GoldBonus + 15%";
                 break;
             case 5:
-                selectMachinesText.text = $"Steamer\r\n\r\n Make Speed + 0.05\n GoldBonus + 0.05";
+                selectMachinesText.text = $"Steamer\r\n\r\n Make Speed + 5%\n GoldBonus + 5%";
                 break;
         }
     }
@@ -431,9 +426,8 @@ public class FacilityManager : Singleton<FacilityManager> //시설 업그레이�
 
     public void InfoText()
     {
-        infoText.text = $" MakeSpeed : {MakeSpeed}\n GoldBonus : {GoldBonus}\n SpecialChance : {SpecialChance}\n NoUseFishChance : {NoUseFishChance}";
+        infoText.text = $" MakeSpeed : {MakeSpeed * 100}%\n GoldBonus : {GoldBonus * 100}%\n SpecialChance : {SpecialChance * 100}%\n NoUseFishChance : {NoUseFishChance * 100}%";
         chefLevelText.text = $"Chef Level : {(ChefCatLevel)}";
-        restaurantBuyText.text = $"{1000 * RestaurantLevel}";
         chefBuyText.text = $"{2000 * (CookCatNum + 1)}";
     }
 
