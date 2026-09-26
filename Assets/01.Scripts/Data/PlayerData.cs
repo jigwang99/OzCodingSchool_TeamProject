@@ -55,7 +55,10 @@ public class PlayerData
     public List<OwnedRecipeData> ownedRecipes = new List<OwnedRecipeData>();
 
     // 무기,가구,레시피 아이템
-    public GachaInventoryData gachaInventory =  new GachaInventoryData();
+    public GachaInventoryData gachaInventory = new GachaInventoryData();
+
+    // 0923new 무기/가구/레시피 그룹별 가챠 피티 진행도 (SaveManager의 PlayerData JSON에 함께 저장)
+    public GachaPityData gachaPity = new GachaPityData();
 
     // 식당 상태 (구 PlayerPrefs 저장분)
     public int chefCatLevel = 1;         // 셰프고양이 레벨
@@ -67,7 +70,11 @@ public class PlayerData
                                            // 3 튀김기
                                            // 4 냉장고
                                            // 5 오븐
-    public int[] foodMachine2 = new int[5]; // 가구선택 5칸
+                                           // 식당에 배치된 가구 정보
+                                           // 0 = 빈 슬롯
+                                           // 1~6 = 배치된 가구 종류
+                                           // 가구 배치 시스템
+    public int[] foodMachine2 = new int[5];
     public int[] MachineCount = new int[6];
 
     // 식당 업그레이드 효과값
@@ -153,6 +160,33 @@ public class PlayerData
             weapon.count += count;
         }
 
+        OnWeaponsChanged?.Invoke();
+        return true;
+    }
+
+    // Merge ownership is a single unlock per gacha item; preserve independent combat levels.
+    // Call only after validating the gacha counts, next-stage mapping and catalog entries.
+    public bool TryApplyGachaWeaponMerge(string sourceId, string resultId, bool keepSource)
+    {
+        if (string.IsNullOrWhiteSpace(sourceId) || string.IsNullOrWhiteSpace(resultId) ||
+            sourceId == resultId || ownedWeapons == null) return false;
+
+        OwnedWeaponData source = GetOwnedWeapon(sourceId);
+        OwnedWeaponData result = GetOwnedWeapon(resultId);
+        if (source == null) return false;
+        if (result == null && ownedWeapons.Count == int.MaxValue) return false;
+
+        // Never remove the last default weapon: InitializeWeapons would recreate it.
+        if (!keepSource && sourceId == "swords_0") return false;
+
+        if (result == null)
+            ownedWeapons.Add(new OwnedWeaponData { weaponId = resultId, count = 1 });
+        // An already unlocked result is not granted another combat copy.
+        if (!keepSource)
+        {
+            ownedWeapons.Remove(source);
+            if (equippedWeaponId == sourceId) equippedWeaponId = resultId;
+        }
         OnWeaponsChanged?.Invoke();
         return true;
     }
@@ -261,5 +295,52 @@ public class PlayerData
 
         isRetryEnabled = enabled;
         OnRetryChanged?.Invoke();
+    }
+    public bool AddRecipe(string recipeId) // 09.21 추가: 레시피 중복 지급 방지 new
+    {
+        if (string.IsNullOrWhiteSpace(recipeId))
+            return false;
+
+        if (ownedRecipes == null)
+            ownedRecipes = new List<OwnedRecipeData>();
+
+        // 이미 보유한 레시피인지 확인
+        OwnedRecipeData recipe = ownedRecipes.Find(
+            r => r != null && r.recipeId == recipeId
+        );
+
+        // 이미 보유 중이면 중복 지급하지 않음
+        if (recipe != null)
+        {
+            recipe.count = 1;
+            return false;
+        }
+
+        // 처음 획득한 레시피만 추가
+        ownedRecipes.Add(new OwnedRecipeData
+        {
+            recipeId = recipeId,
+            count = 1
+        });
+
+        return true;
+    }
+    /// <summary>
+    /// 특정 레시피 보유 여부 확인
+    /// </summary>
+    public bool HasRecipe(string recipeId)
+    {
+        if (string.IsNullOrWhiteSpace(recipeId))
+            return false;
+
+        if (ownedRecipes == null)
+            return false;
+
+        return ownedRecipes.Exists(
+            recipe =>
+                recipe != null &&
+                recipe.recipeId == recipeId &&
+                recipe.count > 0
+        );
     }
 }

@@ -7,7 +7,7 @@ public class CurrencyManager : Singleton<CurrencyManager>, ICurrencyProvider // 
     private PlayerData data => GameManager.instance.PlayerData;
 
     public event Action<FishGrade> OnFishChanged;
-    public event Action OnGoldChanged;
+    public event Action<BigNumber> OnGoldChanged;
 
     protected override void Awake()
     {
@@ -22,7 +22,7 @@ public class CurrencyManager : Singleton<CurrencyManager>, ICurrencyProvider // 
 
         data.gold += amount;
 
-        OnGoldChanged?.Invoke();
+        OnGoldChanged?.Invoke(data.gold);
     }
 
     //골드 소비
@@ -36,7 +36,7 @@ public class CurrencyManager : Singleton<CurrencyManager>, ICurrencyProvider // 
 
         data.gold -= amount;
 
-        OnGoldChanged?.Invoke();
+        OnGoldChanged?.Invoke(data.gold);
 
         return true;
     }

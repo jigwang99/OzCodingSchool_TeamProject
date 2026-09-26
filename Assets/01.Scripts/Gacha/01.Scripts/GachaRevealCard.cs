@@ -1,7 +1,5 @@
 using DG.Tweening;
 using PixelRestaurant.Data;
-using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -12,55 +10,100 @@ namespace PixelRestaurant.Gacha
         IPointerEnterHandler,
         IPointerExitHandler
     {
-        [Header("Card")]
-        [SerializeField] private Image cardImage;
-        [SerializeField] private RectTransform cardScaleTarget;
-        [SerializeField] private Image hoverOutline;
+        private enum CardState
+        {
+            Spawning,
+            Waiting,
+            Flipping,
+            Revealed,
+            Moving
+        }
 
-        [Header("Back / Front")]
-        [SerializeField] private GameObject back;
-        [SerializeField] private GameObject front;
+        [Header("Card References")]
+        [SerializeField]
+        private RectTransform cardVisual;
+
+        [SerializeField]
+        private GameObject back;
+
+        [SerializeField]
+        private GameObject front;
+
+        [SerializeField]
+        private Image hoverOutline;
 
         [Header("Result")]
-        [SerializeField] private GachaResultItemDisplay resultDisplay;
+        [SerializeField]
+        private GachaResultItemDisplay resultDisplay;
 
-        [Header("Eric VFX")]
-        [SerializeField] private GameObject commonVFX;
-        [SerializeField] private GameObject rareVFX;
-        [SerializeField] private GameObject uniqueVFX;
-        [SerializeField] private GameObject epicVFX;
+        [Header("Spawn Animation")]
+        [SerializeField]
+        private float spawnDuration = 0.6f;
 
-        [Header("Move Target")]
-        [SerializeField] private RectTransform inventoryTarget;
+        [SerializeField]
+        private float spawnStartScale = 0.6f;
 
+        [SerializeField]
+        private Ease spawnEase = Ease.OutBack;
+
+        [Header("Flip Animation")]
+        [SerializeField]
+        private float flipDuration = 0.6f;
+
+        [SerializeField]
+        private Ease flipEase = Ease.InOutSine;
+
+        [Header("Back Spawn VFX")]
+        [SerializeField]
+        private GameObject commonSpawnVFX;
+
+        [SerializeField]
+        private GameObject rareSpawnVFX;
+
+        [SerializeField]
+        private GameObject uniqueSpawnVFX;
+
+        [SerializeField]
+        private GameObject epicSpawnVFX;
+
+        [Header("Result Reveal VFX")]
+        [SerializeField]
+        private GameObject commonRevealVFX;
+
+        [SerializeField]
+        private GameObject rareRevealVFX;
+
+        [SerializeField]
+        private GameObject uniqueRevealVFX;
+
+        [SerializeField]
+        private GameObject epicRevealVFX;
+
+        [Header("Inventory")]
+        [SerializeField]
+        private RectTransform inventoryTarget;
+        [Header("Card SFX")]
+        [SerializeField] private AudioClip spawnSFX;
+        [SerializeField]
+        private float inventoryMoveDuration = 0.5f;
+        [Header("Card Flip SFX")]
+        [SerializeField] private AudioClip commonFlipSFX;
+        [SerializeField] private AudioClip rareFlipSFX;
+        [SerializeField] private AudioClip uniqueFlipSFX;
+        [SerializeField] private AudioClip epicFlipSFX;
         private GachaItem _item;
-
-        private bool _isRevealed;
-        private bool _isMoving;
+        private CardState _state;
 
         private RectTransform _rectTransform;
         private CanvasGroup _canvasGroup;
 
-        private Vector2 _originalPosition;
         private Vector3 _originalScale;
+
+        private Sequence _animation;
 
         private void Awake()
         {
             _rectTransform = GetComponent<RectTransform>();
-
-            if (cardScaleTarget == null && cardImage != null)
-                cardScaleTarget = cardImage.rectTransform;
-
-            if (cardScaleTarget != null &&
-                cardScaleTarget != transform && !cardScaleTarget.IsChildOf(transform))
-            {
-                Debug.LogError("Card Scale Target must belong to this card.", this);
-                cardScaleTarget = null;
-            }
-
-            if (cardScaleTarget != null)
-                _originalScale = cardScaleTarget.localScale;
-
             _canvasGroup = GetComponent<CanvasGroup>();
 
             if (_canvasGroup == null)
@@ -68,262 +111,459 @@ namespace PixelRestaurant.Gacha
                 _canvasGroup = gameObject.AddComponent<CanvasGroup>();
             }
 
-            if (hoverOutline != null)
+            // 결과 UI 자동으로 찾기
+            if (resultDisplay == null)
             {
-                Color color = hoverOutline.color;
-                color.a = 0f;
-                hoverOutline.color = color;
+                resultDisplay =
+                    GetComponentInChildren<GachaResultItemDisplay>(true);
             }
 
-            if (front != null)
-                front.SetActive(false);
+            if (cardVisual != null)
+            {
+                _originalScale = cardVisual.localScale;
+            }
 
-            if (back != null)
-                back.SetActive(true);
+            _state = CardState.Spawning;
+
+            ResetCardVisual();
         }
-
+        // 카드 초기화
         public void Setup(
-            GachaItem item,
-            RectTransform target)
+     GachaItem item,
+     RectTransform target)
         {
+            StopCurrentAnimation();
+
             _item = item;
             inventoryTarget = target;
 
-            _isRevealed = false;
-            _isMoving = false;
-
-            _originalPosition = _rectTransform.anchoredPosition;
-            if (cardScaleTarget != null)
-            {
-                cardScaleTarget.DOKill();
-                cardScaleTarget.localScale = _originalScale;
-            }
+            _state = CardState.Spawning;
 
             _canvasGroup.alpha = 1f;
+            _canvasGroup.interactable = false;
+            _canvasGroup.blocksRaycasts = false;
 
-            if (back != null)
-                back.SetActive(true);
+            _rectTransform.localRotation = Quaternion.identity;
 
-            if (front != null)
-                front.SetActive(false);
-
-            if (hoverOutline != null)
-            {
-                Color color = hoverOutline.color;
-                color.a = 0f;
-                hoverOutline.color = color;
-            }
+            ResetCardVisual();
+            DisableAllVFX();
 
             if (resultDisplay != null)
             {
-                bool isNew = GachaInventory.Instance != null &&
-                             GachaInventory.Instance.IsNewItem(item.ItemId);
+                resultDisplay.ResetCard();
+            }
+
+            if (resultDisplay != null && item != null)
+            {
+                bool isNew =
+                    GachaInventory.Instance != null &&
+                    GachaInventory.Instance.IsNewItem(item.ItemId);
 
                 resultDisplay.SetItemInfo(item, isNew);
             }
-
-            DisableAllVFX();
         }
 
-        /// <summary>
-        /// 카드 클릭
-        /// </summary>
+        // Back 카드 등장
+        public void PlaySpawnAnimation(
+            Vector2 spawnPosition,
+            Vector2 targetPosition)
+        {
+            if (_item == null ||
+                cardVisual == null)
+            {
+                return;
+            }
+
+            StopCurrentAnimation();
+
+            _state = CardState.Spawning;
+
+            ResetCardVisual();
+            DisableAllVFX();
+
+            _canvasGroup.alpha = 1f;
+            _canvasGroup.interactable = false;
+            _canvasGroup.blocksRaycasts = false;
+
+            _rectTransform.anchoredPosition =
+                spawnPosition;
+
+            _rectTransform.localRotation =
+                Quaternion.identity;
+
+            cardVisual.localScale =
+                _originalScale * spawnStartScale;
+
+            // 등급에 맞는 Back 등장 이펙트
+            PlaySpawnVFX(_item.Rarity);
+            // 카드 등장 효과음
+            if (SoundManager.instance != null && spawnSFX != null)
+            {
+                SoundManager.instance.PlaySFX(spawnSFX);
+            }
+
+            _animation = DOTween.Sequence();
+
+            // 리스폰 지점에서 목표 위치로 이동
+            _animation.Append(
+                _rectTransform.DOAnchorPos(
+                    targetPosition,
+                    spawnDuration
+                ).SetEase(spawnEase)
+            );
+
+            // 이동하면서 카드 크기 증가
+            _animation.Join(
+                cardVisual.DOScale(
+                    _originalScale,
+                    spawnDuration
+                ).SetEase(Ease.OutBack)
+            );
+
+            _animation.OnComplete(() =>
+            {
+                _animation = null;
+
+                //DisableSpawnVFX();
+
+                _state = CardState.Waiting;
+
+                _canvasGroup.interactable = true;
+                _canvasGroup.blocksRaycasts = true;
+            });
+        }
+
+        // 카드 클릭
         public void OnCardClicked()
         {
-            if (_isMoving)
-                return;
+            switch (_state)
+            {
+                case CardState.Waiting:
+                    PlayFlipAnimation();
+                    break;
 
-            if (!_isRevealed)
-            {
-                RevealCard();
-            }
-            else
-            {
-                MoveToInventory();
+                case CardState.Revealed:
+                    MoveToInventory();
+                    break;
             }
         }
+        // 모두 뒤집기 버튼에서 호출
+        // 모두 뒤집기에서 아직 뒤집을 수 있는 카드만 최고 등급 비교에 사용
+        public bool CanReveal => _state == CardState.Waiting && _item != null;
+        public GachaRarity CardRarity => _item != null ? _item.Rarity : GachaRarity.Common;
 
-        /// <summary>
-        /// 첫 번째 클릭 - 카드 공개
-        /// </summary>
-        private void RevealCard()
+        public void RevealCard(bool playSound = true)
         {
-            if (_item == null)
+            if (_state == CardState.Waiting)
+            {
+                PlayFlipAnimation(playSound);
+            }
+        }
+        // 카드 Y축 뒤집기
+        private void PlayFlipAnimation(bool playSound = true)
+        {
+            if (_item == null ||
+                cardVisual == null)
+            {
+                return;
+            }
+
+            _state = CardState.Flipping;
+
+            _canvasGroup.interactable = false;
+            _canvasGroup.blocksRaycasts = false;
+
+            DisableSpawnVFX();
+
+            _animation = DOTween.Sequence();
+
+            // Back: 0도 -> 90도
+            _animation.Append(
+                cardVisual.DOLocalRotate(
+                    new Vector3(0f, 90f, 0f),
+                    flipDuration * 0.5f
+                ).SetEase(flipEase)
+            );
+
+            _animation.AppendCallback(() =>
+            {
+                if (back != null)
+                    back.SetActive(false);
+
+                if (front != null)
+                {
+                    front.transform.localRotation =
+                        Quaternion.Euler(
+                            0f,
+                            180f,
+                            0f
+                        );
+
+                    front.SetActive(true);
+                }
+
+                // 카드 앞면이 공개되는 순간 효과음
+                if (playSound)
+                    PlayFlipSFX(_item.Rarity);
+            });
+
+            // Front: 90도 -> 180도
+            _animation.Append(
+                cardVisual.DOLocalRotate(
+                    new Vector3(0f, 180f, 0f),
+                    flipDuration * 0.5f
+                ).SetEase(flipEase)
+            );
+
+            _animation.OnComplete(() =>
+            {
+                _animation = null;
+
+                _state = CardState.Revealed;
+
+                PlayRevealVFX(_item.Rarity);
+
+                _canvasGroup.interactable = true;
+                _canvasGroup.blocksRaycasts = true;
+            });
+        }
+        private void PlayFlipSFX(GachaRarity rarity)
+        {
+            if (SoundManager.instance == null)
                 return;
 
-            _isRevealed = true;
-
-            //// 클릭한 순간 약간 커졌다가 원래 크기로
-            //if (cardScaleTarget != null) cardScaleTarget.DOScale(
-            //    _originalScale * 1.08f,
-            //    0.12f
-            //)
-            //.SetEase(Ease.OutQuad)
-            //.OnComplete(() =>
-            //{
-            //    cardScaleTarget.DOScale(
-            //        _originalScale,
-            //        0.18f
-            //    )
-            //    .SetEase(Ease.OutBack);
-            //});
-
-            // 뒷면을 서서히 어둡게
-            if (cardImage != null)
-            {
-                cardImage
-                    .DOColor(new Color(0.05f, 0.05f, 0.05f, 0.3f), 0.55f)
-                    .SetEase(Ease.InOutQuad);
-            }
-
-            // 앞면 표시
-            if (front != null)
-            {
-                front.SetActive(true);
-
-                CanvasGroup frontGroup =
-                    front.GetComponent<CanvasGroup>();
-
-                if (frontGroup == null)
-                    frontGroup = front.AddComponent<CanvasGroup>();
-
-                frontGroup.alpha = 0f;
-
-                frontGroup
-                    .DOFade(1f, 0.65f)
-                    .SetEase(Ease.InOutQuad);
-            }
-
-            if (back != null)
-            {
-                CanvasGroup backGroup =
-                    back.GetComponent<CanvasGroup>();
-
-                if (backGroup == null)
-                    backGroup = back.AddComponent<CanvasGroup>();
-
-                backGroup
-                    .DOFade(0f, 0.65f)
-                    .SetEase(Ease.InOutQuad);
-            }
-
-            // 레어도별 VFX
-            PlayRarityVFX(_item.Rarity);
-        }
-
-        /// <summary>
-        /// 레어도에 따른 Eric VFX
-        /// </summary>
-        private void PlayRarityVFX(GachaRarity rarity)
-        {
-            DisableAllVFX();
-
-            GameObject vfx = null;
+            AudioClip clip = null;
 
             switch (rarity)
             {
                 case GachaRarity.Common:
-                    vfx = commonVFX;
+                    clip = commonFlipSFX;
                     break;
 
                 case GachaRarity.Rare:
-                    vfx = rareVFX;
+                    clip = rareFlipSFX;
                     break;
 
                 case GachaRarity.Unique:
-                    vfx = uniqueVFX;
+                    clip = uniqueFlipSFX;
                     break;
 
                 case GachaRarity.Epic:
-                    vfx = epicVFX;
+                    clip = epicFlipSFX;
                     break;
             }
 
+            if (clip != null)
+            {
+                SoundManager.instance.PlaySFX(clip);
+            }
+        }
+        // 등급별 Back 등장 이펙트
+        private void PlaySpawnVFX(GachaRarity rarity)
+        {
+
+            DisableSpawnVFX();
+
+            GameObject vfx = GetRarityVFX(
+                rarity,
+                commonSpawnVFX,
+                rareSpawnVFX,
+                uniqueSpawnVFX,
+                epicSpawnVFX
+            );
+
+
+
+            PlayVFX(vfx);
+        }
+
+        // 등급별 결과 공개 이펙트
+        private void PlayRevealVFX(
+            GachaRarity rarity)
+        {
+            DisableRevealVFX();
+
+            GameObject vfx = GetRarityVFX(
+                rarity,
+                commonRevealVFX,
+                rareRevealVFX,
+                uniqueRevealVFX,
+                epicRevealVFX
+            );
+
+            PlayVFX(vfx);
+        }
+
+        private GameObject GetRarityVFX(
+            GachaRarity rarity,
+            GameObject common,
+            GameObject rare,
+            GameObject unique,
+            GameObject epic)
+        {
+            switch (rarity)
+            {
+                case GachaRarity.Common:
+                    return common;
+
+                case GachaRarity.Rare:
+                    return rare;
+
+                case GachaRarity.Unique:
+                    return unique;
+
+                case GachaRarity.Epic:
+                    return epic;
+
+                default:
+                    return null;
+            }
+        }
+
+        private void PlayVFX(GameObject vfx)
+        {
             if (vfx == null)
-                return;
+            {
+
+            }
 
             vfx.SetActive(true);
 
             ParticleSystem[] particles =
                 vfx.GetComponentsInChildren<ParticleSystem>(true);
 
+
             foreach (ParticleSystem particle in particles)
             {
+
                 particle.Stop(true);
                 particle.Play(true);
             }
         }
 
-        /// <summary>
-        /// 두 번째 클릭 - 인벤토리로 이동
-        /// </summary>
+        private void DisableSpawnVFX()
+        {
+            SetVFXActive(commonSpawnVFX, false);
+            SetVFXActive(rareSpawnVFX, false);
+            SetVFXActive(uniqueSpawnVFX, false);
+            SetVFXActive(epicSpawnVFX, false);
+        }
+
+        private void DisableRevealVFX()
+        {
+            SetVFXActive(commonRevealVFX, false);
+            SetVFXActive(rareRevealVFX, false);
+            SetVFXActive(uniqueRevealVFX, false);
+            SetVFXActive(epicRevealVFX, false);
+        }
+
+        private void DisableAllVFX()
+        {
+            DisableSpawnVFX();
+            DisableRevealVFX();
+        }
+
+        private void SetVFXActive(
+            GameObject vfx,
+            bool active)
+        {
+            if (vfx != null)
+                vfx.SetActive(active);
+        }
+
+        // 카드 상태 초기화
+        private void ResetCardVisual()
+        {
+            if (cardVisual != null)
+            {
+                cardVisual.localRotation =
+                    Quaternion.identity;
+
+                cardVisual.localScale =
+                    _originalScale;
+            }
+
+            if (back != null)
+                back.SetActive(true);
+
+            if (front != null)
+            {
+                front.transform.localRotation =
+                    Quaternion.Euler(
+                        0f,
+                        180f,
+                        0f
+                    );
+
+                front.SetActive(false);
+            }
+
+            if (hoverOutline != null)
+            {
+                hoverOutline.DOKill();
+
+                Color color = hoverOutline.color;
+                color.a = 0f;
+
+                hoverOutline.color = color;
+            }
+        }
+
+        // 결과 카드 -> 인벤토리
         private void MoveToInventory()
         {
-            if (_isMoving)
+            if (_state != CardState.Revealed)
                 return;
 
-            _isMoving = true;
+            _state = CardState.Moving;
 
-            // 버튼 클릭 효과음
+            _canvasGroup.interactable = false;
+            _canvasGroup.blocksRaycasts = false;
+
             if (AudioManager.Instance != null)
             {
                 AudioManager.Instance.PlayButtonSound();
             }
 
+            DisableAllVFX();
+
             if (inventoryTarget == null)
             {
-
                 Disappear();
                 return;
             }
 
-            // 현재 카드 위치에서 인벤토리 버튼 위치로 이동
-            Vector3 targetWorldPosition =
-                inventoryTarget.position;
-
             Vector3 targetLocalPosition =
                 _rectTransform.parent.InverseTransformPoint(
-                    targetWorldPosition
+                    inventoryTarget.position
                 );
 
-            DG.Tweening.Sequence sequence = DOTween.Sequence();
+            _animation = DOTween.Sequence();
 
-            // 카드 축소
-            if (cardScaleTarget != null) sequence.Append(
-                cardScaleTarget.DOScale(
-                    _originalScale * 0.35f,
-                    0.35f
-                )
-                .SetEase(Ease.InBack)
-            );
-
-            // 인벤토리 방향으로 이동
-            sequence.Join(
-                _rectTransform.DOAnchorPos(
+            _animation.Append(
+                _rectTransform.DOLocalMove(
                     targetLocalPosition,
-                    0.5f
-                )
-                .SetEase(Ease.InBack)
+                    inventoryMoveDuration
+                ).SetEase(Ease.InBack)
             );
 
-            // 살짝 회전
-            sequence.Join(
-                transform.DORotate(
-                    new Vector3(0, 0, 15f),
-                    0.5f
-                )
+            _animation.Join(
+                cardVisual.DOScale(
+                    _originalScale * 0.35f,
+                    inventoryMoveDuration
+                ).SetEase(Ease.InBack)
             );
 
-            // 마지막에 사라짐
-            sequence.Join(
+            _animation.Join(
                 _canvasGroup.DOFade(
                     0f,
-                    0.4f
+                    inventoryMoveDuration
                 )
             );
 
-            sequence.OnComplete(() =>
+            _animation.OnComplete(() =>
             {
+                _animation = null;
                 Disappear();
             });
         }
@@ -334,7 +574,6 @@ namespace PixelRestaurant.Gacha
 
             gameObject.SetActive(false);
 
-            // 인벤토리 갱신
             GachaInventoryUI inventoryUI =
                 FindObjectOfType<GachaInventoryUI>();
 
@@ -344,39 +583,67 @@ namespace PixelRestaurant.Gacha
             }
         }
 
-        public void OnPointerEnter(PointerEventData eventData)
+        public void OnPointerEnter(
+            PointerEventData eventData)
         {
-            if (_isMoving || hoverOutline == null)
+            if (_state != CardState.Waiting &&
+                _state != CardState.Revealed)
+            {
+                return;
+            }
+
+            if (hoverOutline == null)
                 return;
 
-            hoverOutline
-                .DOFade(1f, 0.2f)
-                .SetEase(Ease.OutQuad);
+            hoverOutline.DOKill();
+
+            hoverOutline.DOFade(
+                1f,
+                0.2f
+            );
         }
 
-        public void OnPointerExit(PointerEventData eventData)
+        public void OnPointerExit(
+            PointerEventData eventData)
         {
-            if (_isMoving || hoverOutline == null)
+            if (hoverOutline == null)
                 return;
 
-            hoverOutline
-                .DOFade(0f, 0.2f)
-                .SetEase(Ease.OutQuad);
+            hoverOutline.DOKill();
+
+            hoverOutline.DOFade(
+                0f,
+                0.2f
+            );
         }
 
-        private void DisableAllVFX()
+        private void StopCurrentAnimation()
         {
-            if (commonVFX != null)
-                commonVFX.SetActive(false);
+            if (_animation != null)
+            {
+                _animation.Kill();
+                _animation = null;
+            }
 
-            if (rareVFX != null)
-                rareVFX.SetActive(false);
+            if (_rectTransform != null)
+                _rectTransform.DOKill();
 
-            if (uniqueVFX != null)
-                uniqueVFX.SetActive(false);
+            if (cardVisual != null)
+                cardVisual.DOKill();
 
-            if (epicVFX != null)
-                epicVFX.SetActive(false);
+            if (_canvasGroup != null)
+                _canvasGroup.DOKill();
+        }
+
+        private void OnDisable()
+        {
+            StopCurrentAnimation();
+            DisableAllVFX();
+        }
+
+        private void OnDestroy()
+        {
+            StopCurrentAnimation();
         }
     }
 }

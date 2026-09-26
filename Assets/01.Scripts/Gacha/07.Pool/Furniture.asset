@@ -1,0 +1,114 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8ff4255ab00be8488ae9c1c06855be1, type: 3}
+  m_Name: Furniture
+  m_EditorClassIdentifier: Assembly-CSharp::PixelRestaurant.Gacha.GachaPoolData
+  poolName: WeaponGachaPool
+  group: 1
+  items:
+  - itemId: furniture_0
+    itemName: "\uAC00\uC2A4\uB808\uC778\uC9C0"
+    group: 1
+    rarity: 0
+    grade: 1
+    weight: 50
+    itemIcon: {fileID: 6844095443856569869, guid: d30be3c336d4767488d3fd2825b10aeb, type: 3}
+    linkedWeaponId: 
+    linkedFurnitureId: 'foodMachine[0]'
+    linkedRecipeId: 
+    stats:
+      attackPower: 0
+      goldBonusFlat: 0
+      goldBonusRate: 0
+  - itemId: furniture_1
+    itemName: "\uC804\uC790\uB808\uC778\uC9C0"
+    group: 1
+    rarity: 0
+    grade: 2
+    weight: 50
+    itemIcon: {fileID: 8066074951644447294, guid: 7244dbec37817d846b493d0ff7ebbcd4, type: 3}
+    linkedWeaponId: 
+    linkedFurnitureId: 'foodMachine[1]'
+    linkedRecipeId: 
+    stats:
+      attackPower: 0
+      goldBonusFlat: 0
+      goldBonusRate: 0
+  - itemId: furniture_2
+    itemName: "\uCC1C\uAE30"
+    group: 1
+    rarity: 1
+    grade: 1
+    weight: 50
+    itemIcon: {fileID: -4833745000991619465, guid: d67c0f951ab41cc41843aaf09a1f64d0, type: 3}
+    linkedWeaponId: 
+    linkedFurnitureId: 'foodMachine[2]'
+    linkedRecipeId: 
+    stats:
+      attackPower: 0
+      goldBonusFlat: 0
+      goldBonusRate: 0
+  - itemId: furniture_3
+    itemName: "\uD280\uAE40\uAE30"
+    group: 1
+    rarity: 1
+    grade: 2
+    weight: 50
+    itemIcon: {fileID: -2853084121206449099, guid: cfc5073a4c4fcf746a96eac4642447f6, type: 3}
+    linkedWeaponId: 
+    linkedFurnitureId: 'foodMachine[3]'
+    linkedRecipeId: 
+    stats:
+      attackPower: 0
+      goldBonusFlat: 0
+      goldBonusRate: 0
+  - itemId: furniture_4
+    itemName: "\uB0C9\uC7A5\uACE0"
+    group: 1
+    rarity: 2
+    grade: 1
+    weight: 100
+    itemIcon: {fileID: 8063565088541166495, guid: 32e2185ce969cdd439a988b0ef11a65a, type: 3}
+    linkedWeaponId: 
+    linkedFurnitureId: 'foodMachine[4]'
+    linkedRecipeId: 
+    stats:
+      attackPower: 0
+      goldBonusFlat: 0
+      goldBonusRate: 0
+  - itemId: furniture_5
+    itemName: "\uC624\uBE10"
+    group: 1
+    rarity: 3
+    grade: 1
+    weight: 100
+    itemIcon: {fileID: 6517942360070797507, guid: 7ce69bd075b7841419c2a7044b8741d1, type: 3}
+    linkedWeaponId: 
+    linkedFurnitureId: 'foodMachine[5]'
+    linkedRecipeId: 
+    stats:
+      attackPower: 0
+      goldBonusFlat: 0
+      goldBonusRate: 0
+  pityConfig:
+    levels:
+    - level: 1
+      requiredPullCount: 0
+      rarities:
+      - rarity: 0
+        weight: 40
+      - rarity: 1
+        weight: 20
+      - rarity: 2
+        weight: 20
+      - rarity: 3
+        weight: 20

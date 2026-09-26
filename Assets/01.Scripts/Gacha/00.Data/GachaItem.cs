@@ -21,10 +21,25 @@ namespace PixelRestaurant.Gacha
         [Tooltip("실제 PlayerWeaponCatalog의 무기 ID")]
         [SerializeField] private string linkedWeaponId;
 
+        [Header("Furniture Connection")]
+        [Tooltip("비즈니스 씬에서 사용할 실제 가구 ID")]
+        [SerializeField] private string linkedFurnitureId;
+
+
+        [Header("Recipe Connection")]
+        [Tooltip("실제 비즈니스 씬에서 사용하는 레시피 ID")]
+        [SerializeField] private string linkedRecipeId;
+        public string LinkedRecipeId => linkedRecipeId;
+
         [Header("Stats")]
         [SerializeField]
         private GachaItemStats stats = new GachaItemStats();
 
+        [Header("Weapon Merge")]
+        [Tooltip("합치기 성공 시 획득할 다음 단계 가챠 무기의 ItemId")]
+        [SerializeField] private string nextMergeItemId;
+
+        public string NextMergeItemId => nextMergeItemId;
         public string ItemId => itemId;
         public string ItemName => itemName;
         public GachaGroup Group => group;
@@ -47,24 +62,13 @@ namespace PixelRestaurant.Gacha
         [ContextMenu("Validate Item ID")]
         private void ValidateItemId()
         {
-            if (string.IsNullOrEmpty(itemId))
-             
-
-            if (grade < 1 || grade > 4)
-        
-
-            if (weight <= 0)
-            
-
-            if (itemIcon == null)
-             
-
-            if (group == GachaGroup.Weapon &&
-                string.IsNullOrEmpty(linkedWeaponId))
-            {
          
-             
-            }
+            int maxGrade = group == GachaGroup.Weapon ? GachaWeaponMerge.GetMaxGrade(rarity) : 4;
+
+
+
+            if (group == GachaGroup.Weapon && string.IsNullOrWhiteSpace(linkedWeaponId)) ;
+        
         }
 #endif
     }

@@ -1,0 +1,134 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8ff4255ab00be8488ae9c1c06855be1, type: 3}
+  m_Name: Recipe
+  m_EditorClassIdentifier: Assembly-CSharp::PixelRestaurant.Gacha.GachaPoolData
+  poolName: WeaponGachaPool
+  group: 2
+  items:
+  - itemId: Recipe_0
+    itemName: "\uC0DD\uC120\uAD6C\uC774\uC815\uC2DD"
+    group: 2
+    rarity: 0
+    grade: 1
+    weight: 100
+    itemIcon: {fileID: -4261018228057752908, guid: fb3f70245531e1442ae7e4b8b093f5aa, type: 3}
+    linkedWeaponId: 
+    linkedFurnitureId: 
+    linkedRecipeId: recipe_0
+    stats:
+      attackPower: 1
+      goldBonusFlat: 0
+      goldBonusRate: 0
+    nextMergeItemId: 
+  - itemId: Recipe_1
+    itemName: "\uC7A5\uC5B4\uAD6C\uC774\uC815\uC2DD"
+    group: 2
+    rarity: 1
+    grade: 1
+    weight: 100
+    itemIcon: {fileID: -5011394437853923541, guid: fb3f70245531e1442ae7e4b8b093f5aa, type: 3}
+    linkedWeaponId: 
+    linkedFurnitureId: 
+    linkedRecipeId: recipe_3
+    stats:
+      attackPower: 0
+      goldBonusFlat: 0
+      goldBonusRate: 0
+    nextMergeItemId: 
+  - itemId: Recipe_2
+    itemName: "\uD574\uBB3C\uCC1C"
+    group: 2
+    rarity: 2
+    grade: 1
+    weight: 100
+    itemIcon: {fileID: -1500366873817124674, guid: fb3f70245531e1442ae7e4b8b093f5aa, type: 3}
+    linkedWeaponId: 
+    linkedFurnitureId: 
+    linkedRecipeId: recipe_6
+    stats:
+      attackPower: 0
+      goldBonusFlat: 0
+      goldBonusRate: 0
+    nextMergeItemId: 
+  - itemId: Recipe_3
+    itemName: "\uD574\uBB3C\uD0D5"
+    group: 2
+    rarity: 3
+    grade: 1
+    weight: 100
+    itemIcon: {fileID: -8808243382295292962, guid: fb3f70245531e1442ae7e4b8b093f5aa, type: 3}
+    linkedWeaponId: 
+    linkedFurnitureId: 
+    linkedRecipeId: recipe_8
+    stats:
+      attackPower: 0
+      goldBonusFlat: 0
+      goldBonusRate: 0
+    nextMergeItemId: 
+  pityConfig:
+    levels:
+    - level: 1
+      requiredPullCount: 20
+      rarities:
+      - rarity: 0
+        weight: 99
+      - rarity: 1
+        weight: 1
+      - rarity: 2
+        weight: 0
+      - rarity: 3
+        weight: 0
+    - level: 2
+      requiredPullCount: 50
+      rarities:
+      - rarity: 0
+        weight: 95
+      - rarity: 1
+        weight: 5
+      - rarity: 2
+        weight: 0
+      - rarity: 3
+        weight: 0
+    - level: 3
+      requiredPullCount: 120
+      rarities:
+      - rarity: 0
+        weight: 90
+      - rarity: 1
+        weight: 9
+      - rarity: 2
+        weight: 1
+      - rarity: 3
+        weight: 0
+    - level: 4
+      requiredPullCount: 200
+      rarities:
+      - rarity: 0
+        weight: 85
+      - rarity: 1
+        weight: 10
+      - rarity: 2
+        weight: 4
+      - rarity: 3
+        weight: 1
+    - level: 5
+      requiredPullCount: 500
+      rarities:
+      - rarity: 0
+        weight: 80
+      - rarity: 1
+        weight: 12
+      - rarity: 2
+        weight: 6
+      - rarity: 3
+        weight: 2

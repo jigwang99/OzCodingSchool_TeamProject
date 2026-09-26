@@ -17,6 +17,49 @@ namespace PixelRestaurant.Gacha
         private Dictionary<GachaGroup, GachaPityProgress> _progressPerGroup
             = new Dictionary<GachaGroup, GachaPityProgress>();
 
+        // GameManager가 저장 데이터를 불러온 뒤 처음 접근할 때 복원한다.
+        private PlayerData _loadedPlayerData;
+
+        private void EnsureLoaded()
+        {
+            PlayerData data = GameManager.instance != null ? GameManager.instance.PlayerData : null;
+            if (data == null || ReferenceEquals(_loadedPlayerData, data)) return;
+
+            _loadedPlayerData = data;
+            InitializeProgress();
+            if (data.gachaPity == null) data.gachaPity = new GachaPityData();
+            if (data.gachaPity.groups == null)
+                data.gachaPity.groups = new List<GachaPityGroupData>();
+
+            foreach (GachaPityGroupData saved in data.gachaPity.groups)
+            {
+                if (saved == null) continue;
+                GachaPityProgress progress;
+                if (_progressPerGroup.TryGetValue(saved.group, out progress))
+                    progress.Restore(saved.totalPullCount, saved.currentLevelPullCount, saved.currentPityLevel);
+            }
+        }
+
+        private void SyncToPlayerData()
+        {
+            PlayerData data = GameManager.instance != null ? GameManager.instance.PlayerData : null;
+            if (data == null) return;
+            if (data.gachaPity == null) data.gachaPity = new GachaPityData();
+            if (data.gachaPity.groups == null)
+                data.gachaPity.groups = new List<GachaPityGroupData>();
+            data.gachaPity.groups.Clear();
+            foreach (var entry in _progressPerGroup)
+            {
+                data.gachaPity.groups.Add(new GachaPityGroupData
+                {
+                    group = entry.Key,
+                    totalPullCount = entry.Value.TotalPullCount,
+                    currentLevelPullCount = entry.Value.CurrentLevelPullCount,
+                    currentPityLevel = entry.Value.CurrentPityLevel
+                });
+            }
+        }
+
         public static GachaPitySystem Instance
         {
             get
@@ -66,12 +109,14 @@ namespace PixelRestaurant.Gacha
         /// <param name="group">그룹</param>
         public void IncreasePullCount(GachaGroup group)
         {
+            EnsureLoaded();
             if (!_progressPerGroup.ContainsKey(group))
             {
                 _progressPerGroup[group] = new GachaPityProgress();
             }
 
             _progressPerGroup[group].IncreasePullCount();
+            SyncToPlayerData();
         }
 
         /// <summary>
@@ -81,6 +126,7 @@ namespace PixelRestaurant.Gacha
         /// <returns>진행도 객체</returns>
         public GachaPityProgress GetProgress(GachaGroup group)
         {
+            EnsureLoaded();
             if (!_progressPerGroup.ContainsKey(group))
             {
                 _progressPerGroup[group] = new GachaPityProgress();
@@ -137,6 +183,7 @@ namespace PixelRestaurant.Gacha
             if (progress.CurrentLevelPullCount >= requiredCount)
             {
                 progress.LevelUp();
+                SyncToPlayerData();
                 return true;
             }
 
@@ -196,27 +243,6 @@ namespace PixelRestaurant.Gacha
         }
 
 
-        /// <summary>
-        /// 특정 그룹 진행도 리셋 (테스트용)
-        /// </summary>
-        /// <param name="group">그룹</param>
-        public void ResetProgress(GachaGroup group)
-        {
-            if (_progressPerGroup.ContainsKey(group))
-            {
-                _progressPerGroup[group].Reset();
-            }
-        }
 
-        /// <summary>
-        /// 모든 그룹 진행도 리셋 (테스트용)
-        /// </summary>
-        public void ResetAllProgress()
-        {
-            foreach (var group in _progressPerGroup.Keys)
-            {
-                _progressPerGroup[group].Reset();
-            }
-        }
     }
 }

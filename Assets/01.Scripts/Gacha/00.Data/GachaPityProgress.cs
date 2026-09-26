@@ -49,6 +49,16 @@ namespace PixelRestaurant.Gacha
         /// <summary>
         /// 진행도 리셋 (디버그/테스트용)
         /// </summary>
+        // 저장된 진행도 복원 (기존 진행도 및 레벨을 유지)
+        public void Restore(int total, int current, int level)
+        {
+            totalPullCount = Mathf.Max(0, total);
+            currentLevelPullCount = Mathf.Clamp(current, 0, totalPullCount);
+            currentPityLevel = Mathf.Max(1, level);
+        }
+
+     
+
         public void Reset()
         {
             totalPullCount = 0;
@@ -62,7 +72,7 @@ namespace PixelRestaurant.Gacha
         /// </summary>
         public void DebugPrint(string groupName)
         {
-            
+
         }
     }
 }

@@ -9,8 +9,9 @@ public class SoundManager : Singleton<SoundManager>
 
     [Header("BGM Clips")]
     [SerializeField] private AudioClip titleBgm;
-    [SerializeField] private AudioClip BusinessBgm; // ∞Êøµ æ¿ ∫Í±›
+    [SerializeField] private AudioClip businessBgm; // ∞Êøµ æ¿ ∫Í±›
     [SerializeField] private AudioClip combatBgm;     // ¿¸≈ı æ¿ ∫Í±›
+    [SerializeField] private AudioClip gachaBgm;     // ∞°√≠ æ¿ ∫Í±›
     //[SerializeField] private AudioClip bossBgm;       // ∫∏Ω∫ æ¿ ∫Í±›
 
     [Header("Enemy Attack SFX")]
@@ -66,11 +67,15 @@ public class SoundManager : Singleton<SoundManager>
 
 
             case "BusinessScene": // ∞Êøµ æ¿ ¿Ã∏ß
-                PlayBGM(BusinessBgm);
+                PlayBGM(businessBgm);
                 break;
 
             case "CombatScene": // ¿¸≈ı æ¿ ¿Ã∏ß
                 PlayBGM(combatBgm);
+                break;
+
+            case "GachaScene": // ∞°√≠ æ¿ ¿Ã∏ß
+                PlayBGM(gachaBgm);
                 break;
 
             //case "BossScene": // ∫∏Ω∫ æ¿ ¿Ã∏ß

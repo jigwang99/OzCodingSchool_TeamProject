@@ -173,13 +173,7 @@ namespace PixelRestaurant.Gacha
             // 실제 전투 공격력에 적용
             unitAttack.SetAttackDamage(finalDamage);
 
-            Debug.Log(
-                $"[가챠 무기 스탯]\n" +
-                $"장착 무기: {currentWeaponId}\n" +
-                $"기본 공격력: {baseDamage}\n" +
-                $"가챠 공격력: +{gachaAttackPower}\n" +
-                $"최종 공격력: {finalDamage}"
-            );
+            
         }
 
         /// <summary>
@@ -273,13 +267,7 @@ namespace PixelRestaurant.Gacha
 
                 totalAttackPower += bonus;
 
-                Debug.Log(
-                    $"[가챠 무기 연결]\n" +
-                    $"가챠 아이템: {item.ItemId}\n" +
-                    $"연결 무기: {item.LinkedWeaponId}\n" +
-                    $"보유 수량: {ownedCount}\n" +
-                    $"공격력 보너스: +{bonus}"
-                );
+           
             }
 
             return totalAttackPower;

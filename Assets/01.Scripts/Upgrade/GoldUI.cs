@@ -8,7 +8,7 @@ public class GoldUI : MonoBehaviour
 
     private void Start()
     {
-        OnGoldChanged();
+        OnGoldChanged(GameManager.instance.PlayerData.gold);
     }
 
     private void OnEnable()
@@ -23,9 +23,8 @@ public class GoldUI : MonoBehaviour
             CurrencyManager.instance.OnGoldChanged -= OnGoldChanged;
     }
 
-    private void OnGoldChanged()
+    private void OnGoldChanged(BigNumber gold)
     {
-        BigNumber gold = GameManager.instance.PlayerData.gold;
         goldText.text = $"{gold}";
     }
 }

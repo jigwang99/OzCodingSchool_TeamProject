@@ -37,7 +37,7 @@ public class StageManager : MonoBehaviour
 
     private int CurrentStage => GameManager.instance.PlayerData.currentStage;
     private bool IsRetry => GameManager.instance.PlayerData.isRetryEnabled;
-    private int MaxStage => stageDataList != null ? Mathf.Max(1, stageDataList.Count) : 1;
+    private int MaxStage => int.MaxValue;
 
     private Vector3 playerStartPosition;
     private bool isTransitioning;
@@ -47,6 +47,8 @@ public class StageManager : MonoBehaviour
 
     public int StageCount => stageDataList != null ? stageDataList.Count : 0;
     public int CurrentStageNumber => CurrentStage;
+    public int EnvironmentStageNumber => stageDataList != null ? stageDataList.GetEnvironmentStage(CurrentStage) : 1;
+    public int LatestEndlessStage => Mathf.Max(StageCount + 1, GameManager.instance.PlayerData.highestUnlockedStage);
 
     public event Action<StageResult> OnStageResult;
     public event Action OnStageStarted;
@@ -65,7 +67,7 @@ public class StageManager : MonoBehaviour
             return;
         }
 
-        GameManager.instance.PlayerData.InitializeStageProgress(StageCount);
+        GameManager.instance.PlayerData.InitializeStageProgress(MaxStage);
 
         playerStartPosition = playerSpawnPoint != null
             ? playerSpawnPoint.position
@@ -101,7 +103,7 @@ public class StageManager : MonoBehaviour
 
     public bool IsStageUnlocked(int stageNumber)
     {
-        return stageNumber >= 1 && stageNumber <= StageCount &&
+        return stageNumber >= 1 &&
             stageNumber <= GameManager.instance.PlayerData.highestUnlockedStage;
     }
 
@@ -143,7 +145,6 @@ public class StageManager : MonoBehaviour
         combatManager.StopBattle();
         enemySpawner.SetCombatRunning(false);
         playerCat.HasPendingEnemies = false;
-        playerCat.PrepareForPool();
         playerCat.enabled = false;
         CancellationToken token = this.GetCancellationTokenOnDestroy();
         EnsureFade();
@@ -153,20 +154,22 @@ public class StageManager : MonoBehaviour
             await FadeAsync(1f, fadeOutDuration, token);
             // 완전히 검은 프레임을 그린 뒤 풀을 갱신한다.
             await UniTask.NextFrame(token);
+            // 사망 비주얼은 화면이 완전히 가려진 뒤에만 Idle로 되돌린다.
+            playerCat.PrepareForPool();
             enemySpawner.Clear();
             await CombatFeedbackPool.PrepareForStageAsync(token);
             await CombatObjectPoolManager.instance.PrepareStageAsync(data, token);
             // 맵 구조를 먼저 확정해야 생성 위치·스폰·카메라가 같은 범위를 사용한다.
-            if (floorMap != null && combatBackground != null && combatBackground.PrepareStage(CurrentStage))
+            if (floorMap != null && combatBackground != null && combatBackground.PrepareStage(EnvironmentStageNumber))
             {
                 floorMap.ApplyStageLayout(data.ElevatedFloorCounts, combatBackground.MapHorizontalRange);
                 playerStartPosition = floorMap.GetGroundStartPosition();
                 if (playerSpawnPoint != null) playerSpawnPoint.position = playerStartPosition;
             }
-            floorMap?.ApplyChapterPalette((Mathf.Max(1, CurrentStage) - 1) / 5);
+            floorMap?.ApplyChapterPalette((EnvironmentStageNumber - 1) / 5);
             playerCat.transform.position = playerStartPosition;
             playerCat.Revive();
-            fishDropSystem?.SetDropTable(data.DropTable);
+            fishDropSystem?.SetDropTable(data.DropTable, data.BossGuaranteedFishCount);
             Vector3 origin = enemySpawnOrigin != null ? enemySpawnOrigin.position : enemySpawner.transform.position;
             combatManager.BeginBattle(playerCat, data.EnemyCount);
             enemySpawner.PrepareStage(data, origin, playerCat, floorMap);
@@ -226,7 +229,7 @@ public class StageManager : MonoBehaviour
         RetargetPlayer();
     }
 
-    // 처치 이벤트는 다음 탐지를 예약한다. 실제 선택은 플레이어의 주기적 탐지가 담당한다.
+    // 현재 타겟이 없을 때만, 남은 공격 모션이 끝난 뒤 다음 적을 탐색한다.
     private void HandleEnemyDefeated(EnemyController _)
     {
         RetargetPlayer();
@@ -241,13 +244,15 @@ public class StageManager : MonoBehaviour
     private void HandleStageCleared()
     {
         if (isTransitioning) return;
+        playerCat.GetComponent<PlayerWeaponEquipment>()?.ResetSkillCooldown();
         int completedStage = CurrentStage;
         bool retryWasEnabled = IsRetry;
 
         // 반복 사냥도 최초 클리어라면 다음 구간을 해금한다. 이동 여부와 해금 기록은 별개다.
         GameManager.instance.PlayerData.UnlockNextStage(completedStage, MaxStage);
 
-        if (!IsRetry && CurrentStage < MaxStage)
+        // 최종 보스부터는 반복 토글과 관계없이 무한 도전을 진행한다.
+        if ((!IsRetry || completedStage >= StageCount) && CurrentStage < MaxStage)
             GameManager.instance.PlayerData.SetCurrentStage(CurrentStage + 1);
 
         RestartAfterAsync(CreateResult(true, completedStage, retryWasEnabled, clearDelay)).Forget();
@@ -260,7 +265,7 @@ public class StageManager : MonoBehaviour
         int completedStage = CurrentStage;
         bool retryWasEnabled = IsRetry;
 
-        if (!IsRetry)
+        if (!IsRetry && !stageDataList.IsEndlessStage(completedStage))
         {
             // 챕터당 5개 스테이지: 1-1, 2-1, 3-1(진행도 1, 6, 11)에서는 후퇴하지 않는다.
             if ((completedStage - 1) % 5 != 0)
@@ -269,7 +274,10 @@ public class StageManager : MonoBehaviour
             GameManager.instance.PlayerData.SetRetryEnabled(true);
         }
 
-        RestartAfterAsync(CreateResult(false, completedStage, retryWasEnabled, failDelay)).Forget();
+        CatUnitView view = playerCat.GetComponentInChildren<CatUnitView>(true);
+        float deathDuration = view != null && view.DeathAnimationDuration > 0f
+            ? view.DeathAnimationDuration : failDelay;
+        RestartAfterAsync(CreateResult(false, completedStage, retryWasEnabled, deathDuration)).Forget();
     }
 
     private StageResult CreateResult(bool isClear, int completedStage, bool retryWasEnabled, float delay)
@@ -279,7 +287,7 @@ public class StageManager : MonoBehaviour
         return new StageResult(isClear, completedStage, CurrentStage,
             string.IsNullOrEmpty(completedName) ? completedStage.ToString() : completedName,
             string.IsNullOrEmpty(nextName) ? CurrentStage.ToString() : nextName,
-            retryWasEnabled, Mathf.Max(0f, delay));
+            retryWasEnabled, Mathf.Max(0f, delay), stageDataList.IsEndlessStage(completedStage));
     }
 
     private async UniTaskVoid RestartAfterAsync(StageResult result)

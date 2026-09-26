@@ -15,7 +15,9 @@ public class GameManager : Singleton<GameManager>
             return;
 
         QualitySettings.vSyncCount = 0;
-        Application.targetFrameRate = 60;
+        // [수정] 저장된 프레임 제한 설정 적용 (기본값: Index 1 = 60FPS)
+        int savedFrameIndex = PlayerPrefs.GetInt("FrameRateIndex", 1);
+        ApplyFrameRate(savedFrameIndex);
         // [추가] 백그라운드에서도 게임이 멈추지 않고 진행되도록 설정
         Application.runInBackground = true;
 
@@ -26,6 +28,18 @@ public class GameManager : Singleton<GameManager>
             gameObject.AddComponent<IdleFishManager>();
 
 
+    }
+    // 프레임 설정 적용 함수
+    private void ApplyFrameRate(int index)
+    {
+        switch (index)
+        {
+            case 0: Application.targetFrameRate = 30; break;
+            case 1: Application.targetFrameRate = 60; break;
+            case 2: Application.targetFrameRate = 120; break;
+            case 3: Application.targetFrameRate = -1; break;
+            default: Application.targetFrameRate = 60; break;
+        }
     }
 
     // [추가] 창 포커스를 잃으면(다른 창 클릭) 소리를 끄고, 돌아오면 다시 켬
