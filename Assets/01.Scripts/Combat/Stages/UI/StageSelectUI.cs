@@ -72,7 +72,9 @@ public class StageSelectUI : MonoBehaviour
         openButton.interactable = true;
         stageManager.OnStageStarted += RequestRefresh;
         stageManager.OnStageResult += HandleResult;
+        stageManager.OnStageTransitionFailed += HandleTransitionFailed;
         RequestRefresh();
+        if (stageManager.HasTransitionFailed) HandleTransitionFailed();
     }
 
     private void OnDisable()
@@ -81,6 +83,7 @@ public class StageSelectUI : MonoBehaviour
         {
             stageManager.OnStageStarted -= RequestRefresh;
             stageManager.OnStageResult -= HandleResult;
+            stageManager.OnStageTransitionFailed -= HandleTransitionFailed;
         }
         if (openButton != null) openButton.interactable = false;
         Hide();
@@ -89,7 +92,9 @@ public class StageSelectUI : MonoBehaviour
     public void Show()
     {
         if (!initialized || !isActiveAndEnabled) return;
-        hint.text = SelectionHint;
+        hint.text = stageManager.HasTransitionFailed
+            ? "전투를 준비하지 못했습니다. 스테이지를 다시 선택해 주세요."
+            : SelectionHint;
         modal.SetActive(true);
         ResizePanel();
         Refresh();
@@ -115,6 +120,12 @@ public class StageSelectUI : MonoBehaviour
     public void SelectEndless() => Select(stageManager.LatestEndlessStage);
 
     private void HandleResult(StageResult _) => RequestRefresh();
+
+    private void HandleTransitionFailed()
+    {
+        refreshPending = true;
+        Show();
+    }
 
     private void RequestRefresh()
     {

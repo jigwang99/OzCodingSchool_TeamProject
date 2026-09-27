@@ -20,12 +20,14 @@ public class UnitMove : MonoBehaviour
     private Vector3[] originalEffectFlips;
     private float facingDirection = 1f;
     private float attackDirection = 1f;
+    private float appliedFacingDirection;
     private Collider2D bodyCollider;
     private Collider2D landingPlatform;
     private readonly List<Collider2D> ignoredPlatforms = new();
 
     private Rigidbody2D unitRigidbody;
     private readonly List<Collider2D> collisionBuffer = new List<Collider2D>(2);
+    private int collisionCacheFrame = -1;
 
     private float skillSpeedMultiplier = 1f;
     public float MoveSpeed => moveSpeed * skillSpeedMultiplier;
@@ -51,6 +53,7 @@ public class UnitMove : MonoBehaviour
 
     public void ConfigureFacing(Transform visual, bool facesRight)
     {
+        appliedFacingDirection = 0f;
         facingRoot = visual;
         initialVisualScale = visual.localScale;
         initiallyFacesRight = facesRight;
@@ -75,7 +78,10 @@ public class UnitMove : MonoBehaviour
         if (facingRoot == null) return;
         Vector3 scale = initialVisualScale;
         scale.x *= (facingDirection > 0f) == initiallyFacesRight ? 1f : -1f;
-        facingRoot.localScale = scale;
+        // 애니메이션/Rebind가 덮어쓴 스케일은 복구하되 같은 값은 다시 쓰지 않는다.
+        if (facingRoot.localScale != scale) facingRoot.localScale = scale;
+        if (appliedFacingDirection == facingDirection) return;
+        appliedFacingDirection = facingDirection;
         // 파티클 빌보드의 UV는 부모의 음수 스케일로 반전되지 않으므로 따로 맞춘다.
         bool mirrored = (facingDirection > 0f) != initiallyFacesRight;
         for (int i = 0; facingEffects != null && i < facingEffects.Length; i++)
@@ -101,6 +107,8 @@ public class UnitMove : MonoBehaviour
 
     public void ResetMotion()
     {
+        appliedFacingDirection = 0f;
+        collisionCacheFrame = -1;
         // Controller와 Module의 Awake 순서에 의존하지 않는다.
         if (unitRigidbody == null) Awake();
         CancelFloorTravel();
@@ -176,11 +184,23 @@ public class UnitMove : MonoBehaviour
     public void IgnoreUnitCollisions(UnitMove other)
     {
         if (other == null || other == this) return;
-        // 풀 재활성화와 런타임 콜라이더 변경을 반영하면서 검색 결과 배열은 할당하지 않는다.
-        GetComponentsInChildren<Collider2D>(collisionBuffer);
-        other.GetComponentsInChildren<Collider2D>(other.collisionBuffer);
+        RefreshCollisionCache();
+        other.RefreshCollisionCache();
         foreach (Collider2D own in collisionBuffer)
             foreach (Collider2D obstacle in other.collisionBuffer)
-                Physics2D.IgnoreCollision(own, obstacle);
+                if (own != null && obstacle != null && own.gameObject.activeInHierarchy && obstacle.gameObject.activeInHierarchy)
+                    Physics2D.IgnoreCollision(own, obstacle);
+    }
+
+    private void OnEnable() => collisionCacheFrame = -1;
+    private void OnTransformChildrenChanged() => collisionCacheFrame = -1;
+
+    private void RefreshCollisionCache()
+    {
+        // 한 프레임에 여러 적이 등장해도 각 유닛의 계층 검색은 한 번만 수행한다.
+        // 다음 스폰 프레임과 풀 재활성화에서는 런타임 콜라이더 변경을 반영한다.
+        if (collisionCacheFrame == Time.frameCount) return;
+        GetComponentsInChildren<Collider2D>(collisionBuffer);
+        collisionCacheFrame = Time.frameCount;
     }
 }
