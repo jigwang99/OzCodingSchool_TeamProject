@@ -213,10 +213,8 @@ public class EnemySpawner : MonoBehaviour
                     enemy.Move.IgnoreUnitCollisions(other.Move);
             enemy.enabled = running;
             pending.RemoveAt(i);
-            player.HasPendingEnemies = HasPendingEnemies;
             OnEnemyActivated?.Invoke(enemy);
         }
-        player.HasPendingEnemies = HasPendingEnemies;
     }
 
     private float GetActivationDistance()
@@ -240,7 +238,6 @@ public class EnemySpawner : MonoBehaviour
         running = false;
         pending.Clear();
         spawnPositions = Array.Empty<Vector3>();
-        if (player != null) player.HasPendingEnemies = false;
         foreach (EnemyController enemy in active)
         {
             if (enemy == null) continue;

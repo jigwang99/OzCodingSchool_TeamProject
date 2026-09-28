@@ -147,7 +147,6 @@ public class StageManager : MonoBehaviour
                 throw new InvalidOperationException("스테이지 데이터 또는 적 프리팹 등록을 확인하세요.");
             combatManager.StopBattle();
             enemySpawner.SetCombatRunning(false);
-            playerCat.HasPendingEnemies = false;
             playerCat.enabled = false;
             EnsureFade();
             fade.gameObject.SetActive(true);
@@ -191,7 +190,6 @@ public class StageManager : MonoBehaviour
             CurrentResult = null;
             resultEndsAt = 0f;
             playerCat.enabled = false;
-            playerCat.HasPendingEnemies = false;
             playerCat.ConfigureNavigation(null, floorMap);
             combatManager.StopBattle();
             enemySpawner.Clear();
