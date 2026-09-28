@@ -34,11 +34,11 @@ namespace PixelRestaurant.Gacha
             if (rangeText != null)
             {
                 if (endPull < 0)
-                    rangeText.text = $"Pull Count : {startPull}+";
+                    rangeText.text = $"»Ì±â È½¼ö : {startPull}+";
                 else if (startPull == endPull)
-                    rangeText.text = $"Pull Count : {startPull}";
+                    rangeText.text = $"»Ì±â È½¼ö : {startPull}";
                 else
-                    rangeText.text = $"Pull Count : {startPull} ~ {endPull}";
+                    rangeText.text = $"»Ì±â È½¼ö : {startPull} ~ {endPull}";
             }
             // -------------------------
             // Weight °¡Á®¿À±â
@@ -105,16 +105,16 @@ namespace PixelRestaurant.Gacha
          float epic)
         {
             if (commonText != null)
-                commonText.text = $"COMMON\n{common:0.##}%";
+                commonText.text = $"ÀÏ¹Ý\n{common:0.##}%";
 
             if (rareText != null)
-                rareText.text = $"RARE\n{rare:0.##}%";
+                rareText.text = $"Èñ±Í\n{rare:0.##}%";
 
             if (uniqueText != null)
-                uniqueText.text = $"UNIQUE\n{unique:0.##}%";
+                uniqueText.text = $"À¯´ÏÅ©\n{unique:0.##}%";
 
             if (epicText != null)
-                epicText.text = $"EPIC\n{epic:0.##}%";
+                epicText.text = $"¿¡ÇÈ\n{epic:0.##}%";
         }
     }
 }

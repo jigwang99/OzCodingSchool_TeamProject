@@ -1470,7 +1470,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7bfb6e5d15a40324b92dfcc993d10f65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PixelRestaurant.Gacha.GachaManager
-  weaponGachaCost: 500
+  weaponGachaCost: 1
   recipeGachaCost: 1000
   furnitureGachaCost: 5000
   commonRecipeGoldPerDraw: 50
