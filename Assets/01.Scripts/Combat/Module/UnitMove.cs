@@ -40,7 +40,6 @@ public class UnitMove : MonoBehaviour
         skillSpeedMultiplier = 1f + Mathf.Max(0f, bonus);
         if (previous != MoveSpeed) OnMoveSpeedChanged?.Invoke();
     }
-    public bool IsMoving => unitRigidbody.linearVelocity.sqrMagnitude > 0f;
 
     private void Awake()
     {

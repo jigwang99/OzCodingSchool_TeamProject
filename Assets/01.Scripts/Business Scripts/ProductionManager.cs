@@ -1,9 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Net.Mail;
 using TMPro;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class ProductionManager : MonoBehaviour
 {
@@ -40,13 +38,6 @@ public class ProductionManager : MonoBehaviour
             StartChef(i);
         }
         Recipes = new int[4];
-        for(int i = 0; i < Recipes.Length; i++)
-        {
-            if(Recipes[i] > 1)
-                Recipes[i] = 1;
-
-            PlayerPrefs.GetInt($"레시피{i}", 0);
-        }
     }
     
     // 등급 선택 버튼 → 여기로 재연결 (구 FishInventoryManager.SelectXxx)
@@ -145,7 +136,6 @@ public class ProductionManager : MonoBehaviour
         for (int j = rarity; j >= 0; j--)
         {
             int chefLevel = FacilityManager.instance.ChefCatLevel;
-            //int maxUse = (j == 0 || j == 1) ? Mathf.Clamp(chefLevel,1,3) : (j == 2 ? 2 : 1);
             int maxUse = 0;
 
             if (j == 0)

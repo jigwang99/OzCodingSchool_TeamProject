@@ -17,11 +17,9 @@ public class EnemyController : BaseUnitController, IPoolable
     public EnemyNavigation Navigation { get; private set; }
     public EnemyPatrolState PatrolState { get; private set; }
     public EnemyReturnHomeState ReturnHomeState { get; private set; }
-    public float DetectionRange => detectionRange;
     public Enum PoolKey => enemyType;
     public Vector3 HomePosition => Navigation.HomePosition;
     public bool IsReturningHome => Navigation.IsReturningHome;
-    public bool IsPatrolling => StateMachine != null && StateMachine.CurrentState == PatrolState;
     protected override bool InitiallyFacesRight => false;
 
     protected override void CreateStates()

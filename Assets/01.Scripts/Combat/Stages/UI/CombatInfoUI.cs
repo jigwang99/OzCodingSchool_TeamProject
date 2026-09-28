@@ -1,6 +1,5 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 // 전투는 계속 진행하며, 최종 전투 모듈의 값을 읽어 강화·버프를 함께 표시한다.
 [DisallowMultipleComponent]

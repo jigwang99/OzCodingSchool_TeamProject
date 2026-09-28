@@ -100,6 +100,5 @@ public class PlayercatController : BaseUnitController
         if (attackSound != null) SoundManager.instance?.PlaySFX(attackSound);
     }
 
-    public bool HasPendingEnemies { get; set; }
     public override bool IsTargetDetected => HasTarget || hasSearchPosition || IsChangingFloors;
 }

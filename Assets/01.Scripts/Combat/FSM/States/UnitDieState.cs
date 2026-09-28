@@ -1,5 +1,4 @@
-﻿using UnityEngine;
-using StudioNAP; // AnimationTypeEnum
+﻿using StudioNAP; // AnimationTypeEnum
 
 public class UnitDieState : UnitBaseState
 {

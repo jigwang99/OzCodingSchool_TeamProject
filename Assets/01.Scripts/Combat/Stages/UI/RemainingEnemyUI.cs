@@ -1,6 +1,5 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 // 전투 판정의 수치를 그대로 표시한다. 아직 화면에 등장하지 않은 적도 전체 수에 포함된다.
 [DisallowMultipleComponent]

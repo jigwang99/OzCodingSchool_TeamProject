@@ -1,7 +1,5 @@
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 public class FacilityManager : Singleton<FacilityManager> //시설 업그레이드, 가구 배치, 직원 고용, 
@@ -22,7 +20,6 @@ public class FacilityManager : Singleton<FacilityManager> //시설 업그레이�
     public float SpecialChance { get => data.SpecialChance; set => data.SpecialChance = value; }
     public float NoUseFishChance { get => data.NoUseFishChance; set => data.NoUseFishChance = value; }
 
-    int Gold;
     public TextMeshProUGUI goldText;
 
     int gasstove;
