@@ -1,0 +1,78 @@
+using System;
+using UnityEngine;
+
+public class UpgradeManager : Singleton<UpgradeManager>
+{
+    public event Action<UpgradeData, int> OnUpgradePurchased;
+
+    // 업그레이드 비용 계산
+    public BigNumber GetUpgradeCost(UpgradeData data, int currentLevel)
+    {
+        int levelIndex = Mathf.Max(0, currentLevel - 1);
+
+        long cost = (long)Math.Round(data.baseCost * Math.Pow(data.costMultiplier, levelIndex) / 10) * 10;
+
+        return new BigNumber(cost);
+    }
+
+    // 업그레이드 시도
+    public void TryUpgrade(UpgradeData data, PlayerData playerData)
+    {
+        if (data == null || playerData == null || playerData != GameManager.instance.PlayerData)
+            return;
+
+        // 결제 시작 시 대상 무기를 고정한다.
+        string weaponId = playerData.equippedWeaponId;
+
+        if (data.type == UpgradeType.WeaponPower && !playerData.OwnsWeapon(weaponId))
+            return;
+
+        int currentLevel = GetCurrentLevel(data, playerData);
+
+        if (currentLevel >= data.maxLevel)
+            return;
+
+        BigNumber cost = GetUpgradeCost(data, currentLevel);
+
+        if (CurrencyManager.instance.SpendGold(cost))
+        {
+            if (data.type == UpgradeType.WeaponPower)
+                playerData.TryIncreaseWeaponLevel(weaponId, data.maxLevel);
+            else
+                SetNextLevel(data, playerData);
+
+            int updatedLevel = data.type == UpgradeType.WeaponPower
+                ? playerData.GetWeaponLevel(weaponId)
+                : GetCurrentLevel(data, playerData);
+
+            // 효과 반영
+            OnUpgradePurchased?.Invoke(data, updatedLevel);
+        }
+    }
+
+    // 타입별 현재 레벨 조회
+    public int GetCurrentLevel(UpgradeData data, PlayerData playerData)
+    {
+        switch (data.type)
+        {
+            case UpgradeType.WeaponPower: return playerData.GetWeaponLevel(playerData.equippedWeaponId);
+            case UpgradeType.Health: return playerData.healthLevel;
+            case UpgradeType.FishDropRate: return playerData.fishDropRateLevel;
+            case UpgradeType.RestaurantExpansion: return playerData.restaurantLevel;
+            case UpgradeType.ChefCookingSkill: return playerData.chefCatLevel;
+            default: return 1;
+        }
+    }
+
+    // 타입별 레벨 +1
+    private void SetNextLevel(UpgradeData data, PlayerData playerData)
+    {
+        switch (data.type)
+        {
+            case UpgradeType.Health: playerData.healthLevel++; break;
+            case UpgradeType.FishDropRate: playerData.fishDropRateLevel++; break;
+            case UpgradeType.RestaurantExpansion: playerData.restaurantLevel++; break;
+            case UpgradeType.ChefCookingSkill: playerData.chefCatLevel++; break;
+        }
+    }
+}

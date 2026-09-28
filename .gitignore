@@ -104,3 +104,18 @@ InitTestScene*.unity*
 
 # Auto-generated cache in Assets folder
 /[Aa]ssets/[Ss]ceneDependencyCache*
+
+# 고양이 에셋 (저작권/용량 문제로 리포 제외)
+Assets/Business Assets
+
+# 외부 에셋 (저작권 및 용량 문제로 제외)
+Assets/SPUM
+Assets/SP1
+Assets/Eric VFX Studio
+Assets/HitEffectPack
+Assets/WCE Assets
+Assets/98.Fonts/Cafe24DongdongRegular Bitmap.asset
+
+# Business asset import folder (local only)
+/Assets/Business_Assets/
+/Assets/Business_Assets.meta

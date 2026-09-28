@@ -1,0 +1,51 @@
+using UnityEngine;
+using PixelRestaurant.Data;
+
+namespace PixelRestaurant.Gacha
+{
+    [System.Serializable]
+    public class GachaItem
+    {
+        [Header("Item Information")]
+        [SerializeField] private string itemId;
+        [SerializeField] private string itemName;
+        [SerializeField] private GachaGroup group;
+        [SerializeField] private GachaRarity rarity;
+        [SerializeField] private int grade;
+        [SerializeField] private int weight;
+
+        [Header("Display")]
+        [SerializeField] private Sprite itemIcon;
+
+        [Header("Weapon Connection")]
+        [Tooltip("실제 PlayerWeaponCatalog의 무기 ID")]
+        [SerializeField] private string linkedWeaponId;
+
+        [Header("Recipe Connection")]
+        [Tooltip("실제 비즈니스 씬에서 사용하는 레시피 ID")]
+        [SerializeField] private string linkedRecipeId;
+        public string LinkedRecipeId => linkedRecipeId;
+
+        [Header("Weapon Merge")]
+        [Tooltip("합치기 성공 시 획득할 다음 단계 가챠 무기의 ItemId")]
+        [SerializeField] private string nextMergeItemId;
+
+        public string NextMergeItemId => nextMergeItemId;
+        public string ItemId => itemId;
+        public string ItemName => itemName;
+        public GachaGroup Group => group;
+        public GachaRarity Rarity => rarity;
+        public int Grade => grade;
+        public int Weight => weight;
+        public Sprite ItemIcon => itemIcon;
+
+        // 실제 플레이어 무기와 연결되는 ID
+        public string LinkedWeaponId => linkedWeaponId;
+
+        public string GetDisplayName()
+        {
+            return $"{itemName} LV.{grade}";
+        }
+
+    }
+}
