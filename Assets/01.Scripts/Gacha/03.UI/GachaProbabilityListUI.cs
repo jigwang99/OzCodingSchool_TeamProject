@@ -277,13 +277,13 @@ namespace PixelRestaurant.Gacha
             if (requiredCount == int.MaxValue)
             {
                 currentPityText.text =
-                    $"Current Level : {currentLevel} / MAX";
+                    $"현재 레벨 : {currentLevel} / 최대";
             }
             else
             {
                 currentPityText.text =
-                    $"Current Level : {currentLevel}   " +
-                    $"Progress : {currentCount}/{requiredCount}";
+                    $"현재 레벨 : {currentLevel}   " +
+                    $"진행도 : {currentCount}/{requiredCount}";
             }
         }
         // =========================
@@ -297,15 +297,15 @@ namespace PixelRestaurant.Gacha
             switch (currentGroup)
             {
                 case GachaGroup.Weapon:
-                    titleText.text = "WEAPON RATES";
+                    titleText.text = "무기 뽑기 확률";
                     break;
 
                 case GachaGroup.Furniture:
-                    titleText.text = "FURNITURE RATES";
+                    titleText.text = "가구 뽑기 확률";
                     break;
 
                 case GachaGroup.Recipe:
-                    titleText.text = "RECIPE RATES";
+                    titleText.text = "레시피 뽑기 확률";
                     break;
             }
         }

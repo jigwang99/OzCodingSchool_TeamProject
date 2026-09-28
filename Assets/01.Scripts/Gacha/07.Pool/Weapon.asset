@@ -178,9 +178,9 @@ MonoBehaviour:
   - itemId: Weapon_16
     itemName: "\uB119\uCE58"
     group: 0
-    rarity: 1
-    grade: 8
-    weight: 12
+    rarity: 2
+    grade: 1
+    weight: 40
     itemIcon: {fileID: -9144741878822685231, guid: c1b0bbbd287f34b63a81673b7ada0b31, type: 3}
     linkedWeaponId: swords_16
     linkedRecipeId: 
@@ -189,8 +189,8 @@ MonoBehaviour:
     itemName: "\uCCAD\uC0C8\uCE58"
     group: 0
     rarity: 2
-    grade: 1
-    weight: 40
+    grade: 2
+    weight: 30
     itemIcon: {fileID: -178236419022009773, guid: c1b0bbbd287f34b63a81673b7ada0b31, type: 3}
     linkedWeaponId: swords_17
     linkedRecipeId: 
@@ -199,8 +199,8 @@ MonoBehaviour:
     itemName: "\uCC38\uCE58"
     group: 0
     rarity: 2
-    grade: 2
-    weight: 30
+    grade: 3
+    weight: 20
     itemIcon: {fileID: 5326364851146495771, guid: c1b0bbbd287f34b63a81673b7ada0b31, type: 3}
     linkedWeaponId: swords_18
     linkedRecipeId: 
@@ -209,8 +209,8 @@ MonoBehaviour:
     itemName: "\uB300\uC655\uBCF5\uC5B4"
     group: 0
     rarity: 2
-    grade: 3
-    weight: 20
+    grade: 4
+    weight: 10
     itemIcon: {fileID: -2174811614663726402, guid: c1b0bbbd287f34b63a81673b7ada0b31, type: 3}
     linkedWeaponId: swords_19
     linkedRecipeId: 
@@ -218,9 +218,9 @@ MonoBehaviour:
   - itemId: Weapon_20
     itemName: "\uAC00\uBB3C\uCE58"
     group: 0
-    rarity: 2
-    grade: 4
-    weight: 10
+    rarity: 3
+    grade: 1
+    weight: 45
     itemIcon: {fileID: 573806895040313311, guid: c1b0bbbd287f34b63a81673b7ada0b31, type: 3}
     linkedWeaponId: swords_20
     linkedRecipeId: 
@@ -229,8 +229,8 @@ MonoBehaviour:
     itemName: "\uCD08\uB871\uC544\uADC0"
     group: 0
     rarity: 3
-    grade: 1
-    weight: 70
+    grade: 2
+    weight: 35
     itemIcon: {fileID: -1150020013204898742, guid: c1b0bbbd287f34b63a81673b7ada0b31, type: 3}
     linkedWeaponId: swords_21
     linkedRecipeId: 
@@ -239,8 +239,8 @@ MonoBehaviour:
     itemName: "\uBC94\uACE0\uB798"
     group: 0
     rarity: 3
-    grade: 2
-    weight: 30
+    grade: 3
+    weight: 20
     itemIcon: {fileID: -8352473898307048687, guid: c1b0bbbd287f34b63a81673b7ada0b31, type: 3}
     linkedWeaponId: swords_22
     linkedRecipeId: 
