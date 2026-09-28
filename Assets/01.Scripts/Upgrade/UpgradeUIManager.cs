@@ -17,7 +17,6 @@ public class UpgradeUIManager : Singleton<UpgradeUIManager>
     private readonly Queue<GameObject> upgradeUIPool = new();
     private readonly List<GameObject> activeUpgradeUIs = new();
 
-    // 현재 열려 있는 카테고리
     private UpgradeCategory? currentCategory = null;
 
     protected override void Awake()

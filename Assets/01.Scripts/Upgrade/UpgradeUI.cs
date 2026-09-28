@@ -124,7 +124,6 @@ public class UpgradeUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     private void OnUpgradePurchased(UpgradeData data, int level)
     {
-        // 내가 담당하는 업그레이드가 아니면 무시
         if (data != upgradeData)
             return;
 
