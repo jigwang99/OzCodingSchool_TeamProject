@@ -36,7 +36,6 @@ public class SaveManager : Singleton<SaveManager>
 
             // 마지막 저장 시간 갱신
             data.lastSaveTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-            //data.lastSaveTime = System.DateTime.Now.ToBinary().ToString();
 
             string json = JsonUtility.ToJson(data, true);
             File.WriteAllText(saveFilePath, json);

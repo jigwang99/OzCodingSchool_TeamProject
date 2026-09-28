@@ -166,9 +166,42 @@ public struct BigNumber : IComparable<BigNumber>, IEquatable<BigNumber>, IFormat
 
     public static BigNumber operator -(BigNumber a, BigNumber b)
     {
-        if (a == b) return new BigNumber(0);
+        if (a.exponent == b.exponent && a.value == b.value)
+        {
+            return new BigNumber(0);
+        }
 
-        return a + (b * new BigNumber(-1));
+        bool isNegative = false;
+        if (a < b)
+        {
+            var temp = b - a;
+            return new BigNumber(-temp.value, temp.exponent);
+        }
+
+        int expDiff = a.exponent - b.exponent;
+
+        if (expDiff > 18) return a;
+
+        long baseValueA = a.value;
+        long baseValueB = b.value;
+
+        if (expDiff > 0)
+        {
+            long divisor = (long)Math.Pow(10, expDiff);
+
+            baseValueB = baseValueB / divisor;
+        }
+        else if (expDiff < 0)
+        {
+            int diff = -expDiff;
+            long multiplier = (long)Math.Pow(10, diff);
+            baseValueA *= multiplier;
+        }
+
+        long newValue = baseValueA - baseValueB;
+        int newExp = a.exponent;
+
+        return new BigNumber(newValue, newExp);
     }
 
     public static BigNumber operator *(BigNumber a, BigNumber b)
