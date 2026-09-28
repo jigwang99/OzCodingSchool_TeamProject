@@ -10,18 +10,18 @@ public class BObjectPoolManager : MonoBehaviour
     
     List<GameObject> activeObjects = new(); //현재 나오는 유닛 받아오기 (게임 종료할때 풀에 다 꺼서 리턴하기위해서)
 
-    int poolSize;
+    private const int poolSize = 5;
     private void Awake()
     {
-        if (instance == null)
-            instance = this;
-        else
+        if (instance != null && instance != this)
+        {
             Destroy(gameObject);
-    }
-    void Start()
-    {
-        poolSize = 5;
+            return;
+        }
 
+        instance = this;
+
+        // Finish preparing the pools before CustomerSpawn.Start requests a customer.
         foreach (GameObject obj in objList)
         {
             pools[obj.name] = new Queue<GameObject>();

@@ -8,6 +8,11 @@ public class Food : MonoBehaviour
     {
         originalScale = transform.localScale;
     }
+
+    private void OnEnable()
+    {
+        isSpecial = false;
+    }
     public string foodName;
 
     public int fishCount;

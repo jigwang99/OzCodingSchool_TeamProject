@@ -11,6 +11,12 @@ public class ProductionManager : MonoBehaviour
     public GameObject[] chefsSlider;
     public Food[] foods;
 
+    private const float ChefBarGap = 12f;
+    private Transform[] chefBarAnchors;
+    private Vector3[] chefBarLocalPositions;
+    private Canvas chefBarCanvas;
+    private readonly Vector3[] barCorners = new Vector3[4];
+
     [Header("요리할 등급 선택")]
     [SerializeField] private TextMeshProUGUI selectRarityText; // 선택 등급 표시 (선택)
     public int SelectedRarity { get; private set; } = 0;       // 구 nowSelectRarity
@@ -38,6 +44,73 @@ public class ProductionManager : MonoBehaviour
             StartChef(i);
         }
         Recipes = new int[4];
+    }
+
+    private void OnEnable() => Canvas.willRenderCanvases += PositionChefBars;
+
+    private void OnDisable() => Canvas.willRenderCanvases -= PositionChefBars;
+
+    private void Start()
+    {
+        chefBarAnchors = new Transform[chefs.Length];
+        chefBarLocalPositions = new Vector3[chefs.Length];
+        for (int i = 0; i < chefs.Length; i++)
+        {
+            SpriteRenderer spriteRenderer = chefs[i].GetComponent<SpriteRenderer>();
+            if (spriteRenderer == null || spriteRenderer.sprite == null) continue;
+
+            // Cache the initial sprite height relative to the placement root, which
+            // is not animated. Sprite asset bounds also work for inactive hired chefs.
+            Transform anchor = chefs[i].transform.parent;
+            Bounds bounds = spriteRenderer.sprite.bounds;
+            Vector3 head = new Vector3(bounds.center.x, bounds.max.y, bounds.center.z);
+            chefBarAnchors[i] = anchor;
+            chefBarLocalPositions[i] = anchor.InverseTransformPoint(
+                spriteRenderer.transform.TransformPoint(head));
+        }
+
+        chefBarCanvas = chefsSlider[0].GetComponentInParent<Canvas>().rootCanvas;
+    }
+
+    private void PositionChefBars()
+    {
+        if (chefBarAnchors == null || chefBarCanvas == null) return;
+
+        // Use the scene camera assigned to the canvas (it is not tagged MainCamera).
+        Camera worldCamera = chefBarCanvas.worldCamera;
+        if (worldCamera == null) return;
+        Camera uiCamera = chefBarCanvas.renderMode == RenderMode.ScreenSpaceOverlay
+            ? null : worldCamera;
+
+        for (int i = 0; i < chefs.Length; i++)
+        {
+            if (!chefsSlider[i].activeInHierarchy || !chefs[i].gameObject.activeInHierarchy
+                || chefBarAnchors[i] == null || chefs[i].makeTimeBar == null) continue;
+
+            RectTransform bar = (RectTransform)chefsSlider[i].transform;
+            RectTransform parent = (RectTransform)bar.parent;
+            Vector3 head = chefBarAnchors[i].TransformPoint(chefBarLocalPositions[i]);
+            Vector3 screenPoint = worldCamera.WorldToScreenPoint(head);
+            if (screenPoint.z <= 0f || !RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                parent, screenPoint, uiCamera, out Vector2 headPosition)) continue;
+
+            // Align the visible slider's bottom, including its prefab offset and scale.
+            RectTransform slider = (RectTransform)chefs[i].makeTimeBar.transform;
+            slider.GetWorldCorners(barCorners);
+            float bottom = float.PositiveInfinity;
+            float centerX = 0f;
+            for (int corner = 0; corner < barCorners.Length; corner++)
+            {
+                Vector3 localCorner = parent.InverseTransformPoint(barCorners[corner]);
+                bottom = Mathf.Min(bottom, localCorner.y);
+                centerX += localCorner.x / barCorners.Length;
+            }
+
+            Vector3 position = bar.localPosition;
+            position.x += headPosition.x - centerX;
+            position.y += headPosition.y + ChefBarGap - bottom;
+            bar.localPosition = position;
+        }
     }
     
     // 등급 선택 버튼 → 여기로 재연결 (구 FishInventoryManager.SelectXxx)
@@ -75,6 +148,16 @@ public class ProductionManager : MonoBehaviour
 
     IEnumerator CookQueue(MakeFood chef, int chefNumber)
     {
+        bool alreadyCooking = chefNumber switch
+        {
+            1 => chef1Cooking,
+            2 => chef2Cooking,
+            3 => chef3Cooking,
+            4 => chef4Cooking,
+            _ => true
+        };
+        if (alreadyCooking) yield break;
+
         if (chefNumber == 1) chef1Cooking = true;
         if (chefNumber == 2) chef2Cooking = true;
         if (chefNumber == 3) chef3Cooking = true;
@@ -187,8 +270,6 @@ public class ProductionManager : MonoBehaviour
             chefsSlider[0].transform.localScale = new Vector3(.8f, .8f, .8f);
             chefsSlider[1].transform.localScale = new Vector3(.8f, .8f, .8f);
 
-            chefsSlider[0].transform.localPosition = new Vector3(-200, 390);
-            chefsSlider[1].transform.localPosition = new Vector3(167, 390);
         }
         else if (FacilityManager.instance.RestaurantLevel == 3)
         {
@@ -204,15 +285,13 @@ public class ProductionManager : MonoBehaviour
             chefsSlider[1].transform.localScale = new Vector3(.6f, .6f, .6f);
             chefsSlider[2].transform.localScale = new Vector3(.6f, .6f, .6f);
 
-            chefsSlider[0].transform.localPosition = new Vector3(-219, 212);
-            chefsSlider[1].transform.localPosition = new Vector3(271, 221);
-            chefsSlider[2].transform.localPosition = new Vector3(-512, 234);
         }
     }
 
     public void CancelCook()   //식당 레벨업시 음식 캔슬
     {
         StopAllCoroutines();
+        chef1Cooking = chef2Cooking = chef3Cooking = chef4Cooking = false;
         int cookCatNum = FacilityManager.instance.CookCatNum;
         for (int i = 0; i <= cookCatNum; i++)
             chefs[i].CancelCook();

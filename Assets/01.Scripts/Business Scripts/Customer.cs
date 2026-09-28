@@ -172,17 +172,14 @@ public class Customer : MonoBehaviour
         {
             timer = 0f;
 
-            BObjectPoolManager.instance.ReturnObject(myFood.name.ToString().Split("(Clone)")[0], myFood);
             Food f = myFood.GetComponent<Food>();
-            if (Random.Range(0f, 1f) < FacilityManager.instance.SpecialChance)
-            {
-                f.isSpecial = true;
-            }
+            f.isSpecial = Random.Range(0f, 1f) < FacilityManager.instance.SpecialChance;
             GetGoldPopup myPopup = Instantiate(popUp);
             myPopup.Show(f.price, f.isSpecial);
             myPopup.transform.position = transform.position + Vector3.up * .7f;
             FacilityManager.instance.GetGold(f.price, f.isSpecial);
 
+            BObjectPoolManager.instance.ReturnObject(myFood.name.ToString().Split("(Clone)")[0], myFood);
             myFood = null;
             mySeat.isFull = false;
             eatTimeBar.gameObject.SetActive(false);

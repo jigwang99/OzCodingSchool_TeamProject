@@ -193,10 +193,7 @@ public class FacilityManager : Singleton<FacilityManager> //시설 업그레이�
         CookCatNum += 1;
         btn.interactable = CookCatNum < RestaurantLevel;
 
-        for (int i = 1; i <= CookCatNum; i++)
-        {
-            ProductionManager.instance.StartChef(i);
-        }
+        ProductionManager.instance.StartChef(CookCatNum);
 
         SaveManager.instance.Save();
         InfoText();
@@ -362,6 +359,19 @@ public class FacilityManager : Singleton<FacilityManager> //시설 업그레이�
         // 1~6 = 가구
         int oldSavedMachine = FoodMachine2[slotIndex];
 
+        // Validate the replacement before changing inventory or installed effects.
+        if (nowSelectMachineNum < 0 || nowSelectMachineNum >= MachineCount.Length)
+            return;
+
+        if (oldSavedMachine == nowSelectMachineNum + 1)
+        {
+            selectMachinesPopup.gameObject.SetActive(false);
+            return;
+        }
+
+        if (MachineCount[nowSelectMachineNum] <= 0)
+            return;
+
         if (oldSavedMachine != 0)
         {
             int oldMachineNum = oldSavedMachine - 1;
@@ -374,10 +384,6 @@ public class FacilityManager : Singleton<FacilityManager> //시설 업그레이�
         // =========================
         // 2. 새 가구 효과 추가
         // =========================
-
-        // 보유 개수 없으면 설치 불가
-        if (MachineCount[nowSelectMachineNum] <= 0)
-            return;
 
         MachineCount[nowSelectMachineNum]--; // 하나 사용
         AddMachineEffect(nowSelectMachineNum);
