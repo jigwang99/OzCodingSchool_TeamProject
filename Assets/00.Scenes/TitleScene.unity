@@ -2680,18 +2680,6 @@ PrefabInstance:
       propertyPath: minimumLoadingTime
       value: 1.5
       objectReference: {fileID: 0}
-    - target: {fileID: 3812035539122871179, guid: e776960ec6501f748a8796e1599d4fa3, type: 3}
-      propertyPath: 'loadingTips.Array.data[0]'
-      value: "\uC624\uB298\uC758 \uD301: 1111 "
-      objectReference: {fileID: 0}
-    - target: {fileID: 3812035539122871179, guid: e776960ec6501f748a8796e1599d4fa3, type: 3}
-      propertyPath: 'loadingTips.Array.data[1]'
-      value: "\uC624\uB298\uC758 \uD301: 2222 "
-      objectReference: {fileID: 0}
-    - target: {fileID: 3812035539122871179, guid: e776960ec6501f748a8796e1599d4fa3, type: 3}
-      propertyPath: 'loadingTips.Array.data[2]'
-      value: "\uC624\uB298\uC758 \uD301: 3333 "
-      objectReference: {fileID: 0}
     - target: {fileID: 4132196589437842925, guid: e776960ec6501f748a8796e1599d4fa3, type: 3}
       propertyPath: m_Color.b
       value: 0.22459061
@@ -2706,10 +2694,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4881530539574366690, guid: e776960ec6501f748a8796e1599d4fa3, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4898425804038775420, guid: e776960ec6501f748a8796e1599d4fa3, type: 3}
-      propertyPath: loadingTips.Array.size
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7753270655374226251, guid: e776960ec6501f748a8796e1599d4fa3, type: 3}
