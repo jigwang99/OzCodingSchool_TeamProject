@@ -93,17 +93,6 @@ public class PlayerWeaponEquipment : MonoBehaviour
         NotifySkillChanged();
     }
 
-    // 가차 결과 지급/인스펙터 테스트의 공통 진입점. 획득과 장착은 별도 동작이다.
-    public bool AcquireWeapon(string weaponId, int count = 1)
-    {
-        PlayerWeaponCatalog.Weapon weapon = catalog != null ? catalog.Find(weaponId) : null;
-        if (weapon == null || weapon.GetSprite() == null)
-            return false;
-
-        PlayerData data = GameManager.instance.PlayerData;
-        return data != null && data.AddWeapon(weaponId, count);
-    }
-
     private void OnEnable()
     {
         subscribedUpgradeManager = UpgradeManager.instance;

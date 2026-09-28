@@ -1,4 +1,4 @@
-﻿using TMPro;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -47,6 +47,7 @@ public class FacilityManager : Singleton<FacilityManager> //시설 업그레이�
     public TextMeshProUGUI infoText;
 
     public TextMeshProUGUI chefBuyText;
+    [SerializeField] private GameObject chefGoldIcon;
 
     public GameObject selectMachinesParentObj;   //가구 추가 2
     public Sprite[] selectMachinesImgs;
@@ -75,7 +76,7 @@ public class FacilityManager : Singleton<FacilityManager> //시설 업그레이�
         if (RestaurantLevel >= 3) { RestaurantLevel = 3;  }
         if (ChefCatLevel >= 9) { ChefCatLevel = 9; }
 
-        chefLevelText.text = $"Chef Level : {ChefCatLevel}";
+        chefLevelText.text = $"셰프 레벨 : {ChefCatLevel}";
         selectMachinesObjs = selectMachinesParentObj.GetComponentsInChildren<Button>();
         UpgradeRestaurant();
 
@@ -188,7 +189,7 @@ public class FacilityManager : Singleton<FacilityManager> //시설 업그레이�
         if (CookCatNum >= RestaurantLevel) return;
 
         int currentPrice = 2000 * (CookCatNum + 1);
-        chefBuyText.text = $"{currentPrice}";
+        chefBuyText.text = $"{currentPrice} G";
 
         if (!CurrencyManager.instance.SpendGold(new BigNumber(currentPrice))) return;
 
@@ -250,19 +251,13 @@ public class FacilityManager : Singleton<FacilityManager> //시설 업그레이�
             btn.interactable = false;
         }
 
-        chefLevelText.text = $"Chef Level : {ChefCatLevel}";
+        chefLevelText.text = $"셰프 레벨 : {ChefCatLevel}";
         SaveManager.instance.Save();
         InfoText();
     }
 
     public void GetGold(int foodPrice, bool special)
     {
-        //if (Random.Range(0f, 1f) < FacilityManager.instance.SpecialChance)    //손님에서 음식 다먹었을때 실행
-        //{
-        //    Debug.Log("스페셜 성공!");
-        //    special = true;
-        //}
-
         int addGold = (int)(foodPrice * (1f + FacilityManager.instance.GoldBonus));
 
         int goldAmount = addGold;
@@ -324,22 +319,22 @@ public class FacilityManager : Singleton<FacilityManager> //시설 업그레이�
         switch (index)
         {
             case 0:
-                selectMachinesText.text = $"Gas Stove\r\n\r\n\n Food Make Speed + 10%";
+                selectMachinesText.text = $"가스레인지\n\n조리 속도 +10%";
                 break;
             case 1:
-                selectMachinesText.text = $"Refrigerator\r\n\r\n\n No Use Fish Chance = 5%";
+                selectMachinesText.text = $"냉장고\n\n재료 절약 확률 +5%";
                 break;
             case 2:
-                selectMachinesText.text = $"Deepfryer\r\n\r\n Make Speed + 20%\n Gold Bonus + 5%";
+                selectMachinesText.text = $"튀김기\n\n조리 속도 +20%\n추가 골드 +5%";
                 break;
             case 3:
-                selectMachinesText.text = $"Oven\r\n\r\n\n Food Make Speed + 10%";
+                selectMachinesText.text = $"오븐\n\n특별 요리 확률 +30%";
                 break;
             case 4:
-                selectMachinesText.text = $"Microwave Oven\r\n\r\n\n GoldBonus + 15%";
+                selectMachinesText.text = $"전자레인지\n\n추가 골드 +15%";
                 break;
             case 5:
-                selectMachinesText.text = $"Steamer\r\n\r\n Make Speed + 5%\n GoldBonus + 5%";
+                selectMachinesText.text = $"찜기\n\n조리 속도 +5%\n추가 골드 +5%";
                 break;
         }
     }
@@ -426,9 +421,12 @@ public class FacilityManager : Singleton<FacilityManager> //시설 업그레이�
 
     public void InfoText()
     {
-        infoText.text = $" MakeSpeed : {MakeSpeed * 100}%\n GoldBonus : {GoldBonus * 100}%\n SpecialChance : {SpecialChance * 100}%\n NoUseFishChance : {NoUseFishChance * 100}%";
-        chefLevelText.text = $"Chef Level : {(ChefCatLevel)}";
-        chefBuyText.text = $"{2000 * (CookCatNum + 1)}";
+        infoText.text = $"조리 속도 : {MakeSpeed * 100}%\n추가 골드 : {GoldBonus * 100}%\n특별 요리 확률 : {SpecialChance * 100}%\n재료 절약 확률 : {NoUseFishChance * 100}%";
+        chefLevelText.text = $"셰프 레벨 : {(ChefCatLevel)}";
+        bool canHire = CookCatNum < RestaurantLevel;
+        chefBuyText.text = canHire ? $"{2000 * (CookCatNum + 1)} G" : "고용 완료";
+        if (chefGoldIcon != null)
+            chefGoldIcon.SetActive(canHire);
     }
 
     private void AddMachineEffect(int machineNum)

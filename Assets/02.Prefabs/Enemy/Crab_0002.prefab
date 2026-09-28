@@ -350,4 +350,3 @@ MonoBehaviour:
   attack1Clip: attack
   deadClip: die
   crossFade: 0.1
-  logClipNames: 0

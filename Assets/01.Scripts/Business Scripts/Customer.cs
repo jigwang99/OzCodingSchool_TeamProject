@@ -178,7 +178,6 @@ public class Customer : MonoBehaviour
             Food f = myFood.GetComponent<Food>();
             if (Random.Range(0f, 1f) < FacilityManager.instance.SpecialChance)
             {
-                Debug.Log("스페셜 성공!");
                 f.isSpecial = true;
             }
             GetGoldPopup myPopup = Instantiate(popUp);

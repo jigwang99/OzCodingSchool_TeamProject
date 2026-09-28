@@ -65,12 +65,5 @@ namespace PixelRestaurant.Gacha
 
         }
 
-        /// <summary>
-        /// 현재 진행도 정보 출력
-        /// </summary>
-        public void DebugPrint(string groupName)
-        {
-
-        }
     }
 }

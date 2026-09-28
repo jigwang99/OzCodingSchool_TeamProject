@@ -69,25 +69,25 @@ public class FishInventoryManager : MonoBehaviour
 
     public void SelectCommon()
     {
-        selectRarityText.text = "Common";
+        selectRarityText.text = "\uC77C\uBC18";
         nowSelectRarity = 0;
     }
 
     public void SelectRare()
     {
-        selectRarityText.text = "Rare";
+        selectRarityText.text = "\uD76C\uADC0";
         nowSelectRarity = 1;
     }
 
     public void SelectUnique()
     {
-        selectRarityText.text = "Unique";
+        selectRarityText.text = "\uC720\uB2C8\uD06C";
         nowSelectRarity = 2;
     }
 
     public void SelectEpic()
     {
-        selectRarityText.text = "Epic";
+        selectRarityText.text = "\uC5D0\uD53D";
         nowSelectRarity = 3;
     }
 

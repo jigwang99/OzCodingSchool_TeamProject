@@ -303,15 +303,4 @@ public class CombatFloorMap : MonoBehaviour
         return Mathf.Min(a.max.x, b.max.x) - Mathf.Max(a.min.x, b.min.x) >= 1.2f;
     }
 
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.cyan;
-        for (int i = 0; i < FloorCount; i++)
-            if (floors[i] != null)
-            {
-                Vector2 range = GetWalkableRange(i);
-                Gizmos.DrawLine(new Vector3(range.x, GetStandingY(i), transform.position.z),
-                    new Vector3(range.y, GetStandingY(i), transform.position.z));
-            }
-    }
 }

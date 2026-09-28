@@ -283,10 +283,6 @@ public class UISettingsPopup : MonoBehaviour
             Resolution res = resolutions[index];
             Screen.SetResolution(res.width, res.height, Screen.fullScreen);
 
-#if UNITY_EDITOR
-            // 에디터에서만 콘솔 창에 출력되는 확인용 로그
-            Debug.Log($"[해상도 변경] {res.width} x {res.height} (전체화면: {Screen.fullScreen})");
-#endif
         }
     }
 

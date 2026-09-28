@@ -81,7 +81,7 @@ public class SaveManager : Singleton<SaveManager>
         }
     }
 
-    // 저장 파일 삭제 - 테스트용
+    // Deletes saved progress from the settings reset flow.
     public void DeleteSaveFile()
     {
         try

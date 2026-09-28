@@ -50,10 +50,10 @@ public class ProductionManager : MonoBehaviour
     }
     
     // 등급 선택 버튼 → 여기로 재연결 (구 FishInventoryManager.SelectXxx)
-    public void SelectCommon() => SetSelected(0, "Common");
-    public void SelectRare() => SetSelected(1, "Rare");
-    public void SelectUnique() => SetSelected(2, "Unique");
-    public void SelectEpic() => SetSelected(3, "Epic");
+    public void SelectCommon() => SetSelected(0, "일반");
+    public void SelectRare() => SetSelected(1, "희귀");
+    public void SelectUnique() => SetSelected(2, "유니크");
+    public void SelectEpic() => SetSelected(3, "에픽");
 
     private void SetSelected(int rarity, string label)
     {
