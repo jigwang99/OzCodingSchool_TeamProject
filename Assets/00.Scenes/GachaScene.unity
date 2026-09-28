@@ -1352,9 +1352,9 @@ MonoBehaviour:
   recipeGachaCost: 2000
   furnitureGachaCost: 3000
   commonRecipeGoldPerDraw: 50
-  rareRecipeGoldPerDraw: 50
-  uniqueRecipeGoldPerDraw: 50
-  epicRecipeGoldPerDraw: 50
+  rareRecipeGoldPerDraw: 1000
+  uniqueRecipeGoldPerDraw: 5000
+  epicRecipeGoldPerDraw: 10000
 --- !u!1 &314551834
 GameObject:
   m_ObjectHideFlags: 0
