@@ -24,7 +24,7 @@ namespace PixelRestaurant.Gacha
             if (gachaInventory != null)
             {
                 gachaInventory.LoadFromPlayerData();
-          
+
             }
         }
 
@@ -49,7 +49,6 @@ namespace PixelRestaurant.Gacha
             gachaInventory = currentInventory;
             gachaInventory.OnInventoryChanged += SyncInventoryToPlayerData;
             isSubscribed = true;
-
 
         }
 
@@ -79,13 +78,13 @@ namespace PixelRestaurant.Gacha
 
             if (gachaInventory == null)
             {
-            
+
                 return;
             }
 
             if (GameManager.instance == null)
             {
-          
+
                 return;
             }
 
@@ -122,7 +121,6 @@ namespace PixelRestaurant.Gacha
                 );
             }
 
-       
         }
     }
 }

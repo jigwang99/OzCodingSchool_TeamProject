@@ -1,9 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using PixelRestaurant.Data;
-using System;
-using System.Collections.Generic;
-using UnityEngine;
 using Random = UnityEngine.Random;
 
 namespace PixelRestaurant.Gacha
@@ -19,12 +16,30 @@ namespace PixelRestaurant.Gacha
         [Header("가챠 1회 비용")]
         [SerializeField, Min(0)]
         private int weaponGachaCost = 1;
-            
+
         [SerializeField, Min(0)]
         private int recipeGachaCost = 1 ;
 
         [SerializeField, Min(0)]
         private int furnitureGachaCost = 1;
+
+        [Header("Recipe Income - Gold Per Draw")]
+        [SerializeField, Min(0)] private int commonRecipeGoldPerDraw = GachaRecipeIncomeAdapter.DefaultGoldPerDraw;
+        [SerializeField, Min(0)] private int rareRecipeGoldPerDraw = GachaRecipeIncomeAdapter.DefaultGoldPerDraw;
+        [SerializeField, Min(0)] private int uniqueRecipeGoldPerDraw = GachaRecipeIncomeAdapter.DefaultGoldPerDraw;
+        [SerializeField, Min(0)] private int epicRecipeGoldPerDraw = GachaRecipeIncomeAdapter.DefaultGoldPerDraw;
+
+        private void ConfigureRecipeIncome()
+        {
+            var data = GameManager.instance != null ? GameManager.instance.PlayerData : null;
+            if (data == null || !_pools.TryGetValue(GachaGroup.Recipe, out var recipePool)) return;
+            if (data.gachaInventory == null) data.gachaInventory = new GachaInventoryData();
+            GachaRecipeIncomeAdapter.Configure(data.gachaInventory, recipePool, new[]
+            {
+                commonRecipeGoldPerDraw, rareRecipeGoldPerDraw,
+                uniqueRecipeGoldPerDraw, epicRecipeGoldPerDraw
+            });
+        }
 
         private Dictionary<GachaGroup, GachaPoolData> _pools
             = new Dictionary<GachaGroup, GachaPoolData>();
@@ -36,9 +51,6 @@ namespace PixelRestaurant.Gacha
         // 공용 CurrencyManager를 ICurrencyProvider로 사용
         private ICurrencyProvider _currencyProvider;
 
-        private GachaItem _lastDrawnItem;
-
-        public event Action<List<GachaItem>> OnGachaItemsDrawn;
         public static GachaManager Instance
         {
             get
@@ -46,12 +58,6 @@ namespace PixelRestaurant.Gacha
                 if (_instance == null)
                 {
                     _instance = FindObjectOfType<GachaManager>();
-
-                    if (_instance == null)
-                    {
-                   
-                      
-                    }
                 }
 
                 return _instance;
@@ -69,13 +75,9 @@ namespace PixelRestaurant.Gacha
             _instance = this;
             DontDestroyOnLoad(gameObject);
 
-
             if (CurrencyManager.instance != null)
             {
                 _currencyProvider = CurrencyManager.instance;
-            }
-            else
-            {
             }
         }
         /// <summary>
@@ -91,6 +93,7 @@ namespace PixelRestaurant.Gacha
             _pitySystem = pitySystem;
             _inventory = inventory;
             _currencyProvider = currencyProvider;
+            ConfigureRecipeIncome();
 
         }
 
@@ -111,7 +114,6 @@ namespace PixelRestaurant.Gacha
                     return new BigNumber(furnitureGachaCost);
 
                 default:
-                  
 
                     return new BigNumber(0);
             }
@@ -133,14 +135,12 @@ namespace PixelRestaurant.Gacha
 
             if (pullCount != 1 && pullCount != 10)
             {
-        
 
                 return results;
             }
 
             if (_pools == null || !_pools.ContainsKey(group))
             {
-   
 
                 return results;
             }
@@ -151,7 +151,6 @@ namespace PixelRestaurant.Gacha
 
                 if (_currencyProvider == null)
                 {
-                  
 
                     return results;
                 }
@@ -160,15 +159,12 @@ namespace PixelRestaurant.Gacha
 
             if (_pitySystem == null)
             {
-           
-               
 
                 return results;
             }
 
             GachaPoolData poolData = _pools[group];
-
-
+            ConfigureRecipeIncome();
 
             // =========================
             // 가챠 종류별 비용 계산
@@ -181,7 +177,6 @@ namespace PixelRestaurant.Gacha
             // 1회 비용 유효성 확인
             if (costPerPull <= new BigNumber(0))
             {
-               
 
                 return results;
             }
@@ -201,7 +196,6 @@ namespace PixelRestaurant.Gacha
             // 골드 부족 시 뽑기 중단
             if (currentGold < totalCost)
             {
-                
 
                 return results;
             }
@@ -215,7 +209,6 @@ namespace PixelRestaurant.Gacha
                 // BigNumber 기준으로 골드 소비
                 if (!_currencyProvider.SpendGold(costPerPull))
                 {
-               
 
                     // 중간 실패이므로 결과 전체 취소
                     results.Clear();
@@ -256,17 +249,10 @@ namespace PixelRestaurant.Gacha
                 _pitySystem.IncreasePullCount(group);
 
                 // Step 6
-                if (_pitySystem.CheckAndLevelUp(
-                    group,
-                    poolData.PityConfig))
-                {
-                    
-                }
+                _pitySystem.CheckAndLevelUp(group, poolData.PityConfig);
 
                 results.Add(item);
-                _lastDrawnItem = item;
 
-               
             }
 
             // =========================
@@ -275,12 +261,10 @@ namespace PixelRestaurant.Gacha
 
             if (results.Count != pullCount)
             {
-                
 
                 results.Clear();
                 return results;
             }
-
 
             if (results.Count > 0)
             {
@@ -304,19 +288,16 @@ namespace PixelRestaurant.Gacha
 
                     }
                 }
-              
 
                 // 결과 표시와 다른 시스템에 알림
-                OnGachaItemsDrawn?.Invoke(results);
 
-                // Persist once, after all awards and result subscribers finish.
+                // Persist once, after all items have been awarded.
                 if (_inventory != null && SaveManager.instance != null)
                     SaveManager.instance.Save();
             }
 
             return results;
 
-           
         }
 
         // =========================
@@ -362,7 +343,6 @@ namespace PixelRestaurant.Gacha
 
             if (totalWeight <= 0)
             {
-              
 
                 return GachaRarity.Common;
             }
@@ -404,7 +384,7 @@ namespace PixelRestaurant.Gacha
 
             if (candidates.Count == 0)
             {
-            
+
                 return null;
             }
 

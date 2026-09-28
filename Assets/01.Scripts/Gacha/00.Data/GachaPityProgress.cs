@@ -57,8 +57,6 @@ namespace PixelRestaurant.Gacha
             currentPityLevel = Mathf.Max(1, level);
         }
 
-     
-
         public void Reset()
         {
             totalPullCount = 0;

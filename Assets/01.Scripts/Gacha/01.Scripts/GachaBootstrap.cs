@@ -34,7 +34,6 @@ public class GachaBootstrap : MonoBehaviour
 
         if (currency == null)
         {
-            
 
             return;
         }
@@ -46,6 +45,5 @@ public class GachaBootstrap : MonoBehaviour
             currency
         );
 
-       
     }
 }

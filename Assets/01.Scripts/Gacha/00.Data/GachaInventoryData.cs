@@ -12,6 +12,8 @@ namespace PixelRestaurant.Gacha
     {
         // 보유 아이템 목록
         public List<GachaOwnedItemData> items = new List<GachaOwnedItemData>();
+
+        public List<GachaRecipeIncomeRule> recipeIncomeRules = new List<GachaRecipeIncomeRule>();
     }
 
     /// <summary>

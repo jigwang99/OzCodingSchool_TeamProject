@@ -7,10 +7,6 @@ namespace PixelRestaurant.Gacha
 {
     public class GachaProbabilityListUI : MonoBehaviour
     {
-        [Header("Tab Buttons")]
-        [SerializeField] private Button weaponTabButton;
-        [SerializeField] private Button furnitureTabButton;
-        [SerializeField] private Button recipeTabButton;
 
         [Header("Level Page")]
         [SerializeField] private Transform levelPage;
@@ -77,7 +73,7 @@ namespace PixelRestaurant.Gacha
 
             if (GachaManager.Instance == null)
             {
-              
+
                 return;
             }
 
@@ -86,7 +82,6 @@ namespace PixelRestaurant.Gacha
 
             if (poolData == null)
             {
-               
 
                 return;
             }
@@ -95,7 +90,6 @@ namespace PixelRestaurant.Gacha
 
             if (currentConfig == null)
             {
-              
 
                 return;
             }
@@ -319,7 +313,7 @@ namespace PixelRestaurant.Gacha
         // =========================
         // Clear
         // =========================
-    
+
         private void ClearPage()
         {
             if (levelPage == null)

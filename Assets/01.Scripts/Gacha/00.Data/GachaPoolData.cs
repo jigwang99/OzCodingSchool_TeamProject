@@ -49,59 +49,12 @@ namespace PixelRestaurant.Gacha
         {
             if (pityConfig == null)
             {
-        
+
                 return 0;
             }
 
             return pityConfig.GetWeight(pityLevel, rarity);
         }
 
-#if UNITY_EDITOR
-        /// <summary>
-        /// 에디터에서 풀 데이터 검증
-        /// </summary>
-        [ContextMenu("Validate Pool")]
-        private void ValidatePool()
-        {
-            if (string.IsNullOrEmpty(poolName))
-            {
-                return;
-            }
-
-            if (items.Count == 0)
-            {
-                return;
-            }
-
-            if (pityConfig == null)
-            {
-    
-                return;
-            }
-
-            // 아이템 ID 중복 체크
-            var itemIds = new HashSet<string>();
-            foreach (var item in items)
-            {
-                if (itemIds.Contains(item.ItemId))
-                {
-              
-                }
-                itemIds.Add(item.ItemId);
-
-                // 그룹 일치성 확인
-                if (item.Group != group)
-                {
-                }
-            }
-
-            // 레어리티별 아이템 개수 확인
-            int commonCount = GetItemsByRarity(GachaRarity.Common).Count;
-            int rareCount = GetItemsByRarity(GachaRarity.Rare).Count;
-            int uniqueCount = GetItemsByRarity(GachaRarity.Unique).Count;
-            int epicCount = GetItemsByRarity(GachaRarity.Epic).Count;
-
-        }
-#endif
     }
 }

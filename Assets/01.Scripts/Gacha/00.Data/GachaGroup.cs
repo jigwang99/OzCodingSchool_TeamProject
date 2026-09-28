@@ -22,7 +22,5 @@ namespace PixelRestaurant.Data
         /// </summary>
         Recipe,
 
-     
-
     }
 }

@@ -32,6 +32,5 @@ namespace PixelRestaurant.Data
         /// </summary>
         Epic
 
-        
     }
 }

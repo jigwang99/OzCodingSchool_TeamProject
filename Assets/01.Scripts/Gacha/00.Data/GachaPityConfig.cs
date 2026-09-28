@@ -76,14 +76,14 @@ namespace PixelRestaurant.Gacha
             var pityLevel = levels.Find(l => l.Level == level);
             if (pityLevel == null)
             {
-             
+
                 return 0;
             }
 
             var rarityWeight = pityLevel.Rarities.Find(r => r.Rarity == rarity);
             if (rarityWeight == null)
             {
-          
+
                 return 0;
             }
 
@@ -106,32 +106,5 @@ namespace PixelRestaurant.Gacha
             return nextLevel.RequiredPullCount;
         }
 
-#if UNITY_EDITOR
-        /// <summary>
-        /// 에디터에서 데이터 검증
-        /// </summary>
-        [ContextMenu("Validate Pity Config")]
-        private void ValidatePityConfig()
-        {
-            if (levels.Count == 0)
-            {
-                return;
-            }
-
-            // Level 1부터 시작하는지 확인
-            if (levels[0].Level != 1)
-            {
-            }
-
-            // 각 Level마다 모든 Rarity 가중치 확인
-            foreach (var level in levels)
-            {
-                if (level.Rarities.Count != 4)
-                {
-                }
-            }
-
-        }
-#endif
     }
 }

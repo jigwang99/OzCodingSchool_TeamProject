@@ -23,12 +23,7 @@ MonoBehaviour:
     weight: 100
     itemIcon: {fileID: -4261018228057752908, guid: fb3f70245531e1442ae7e4b8b093f5aa, type: 3}
     linkedWeaponId: 
-    linkedFurnitureId: 
-    linkedRecipeId: recipe_0
-    stats:
-      attackPower: 1
-      goldBonusFlat: 0
-      goldBonusRate: 0
+    linkedRecipeId: recipe_2
     nextMergeItemId: 
   - itemId: Recipe_1
     itemName: "\uC7A5\uC5B4\uAD6C\uC774\uC815\uC2DD"
@@ -38,12 +33,7 @@ MonoBehaviour:
     weight: 100
     itemIcon: {fileID: -5011394437853923541, guid: fb3f70245531e1442ae7e4b8b093f5aa, type: 3}
     linkedWeaponId: 
-    linkedFurnitureId: 
-    linkedRecipeId: recipe_3
-    stats:
-      attackPower: 0
-      goldBonusFlat: 0
-      goldBonusRate: 0
+    linkedRecipeId: recipe_5
     nextMergeItemId: 
   - itemId: Recipe_2
     itemName: "\uD574\uBB3C\uCC1C"
@@ -53,12 +43,7 @@ MonoBehaviour:
     weight: 100
     itemIcon: {fileID: -1500366873817124674, guid: fb3f70245531e1442ae7e4b8b093f5aa, type: 3}
     linkedWeaponId: 
-    linkedFurnitureId: 
-    linkedRecipeId: recipe_6
-    stats:
-      attackPower: 0
-      goldBonusFlat: 0
-      goldBonusRate: 0
+    linkedRecipeId: recipe_7
     nextMergeItemId: 
   - itemId: Recipe_3
     itemName: "\uD574\uBB3C\uD0D5"
@@ -68,12 +53,7 @@ MonoBehaviour:
     weight: 100
     itemIcon: {fileID: -8808243382295292962, guid: fb3f70245531e1442ae7e4b8b093f5aa, type: 3}
     linkedWeaponId: 
-    linkedFurnitureId: 
     linkedRecipeId: recipe_8
-    stats:
-      attackPower: 0
-      goldBonusFlat: 0
-      goldBonusRate: 0
     nextMergeItemId: 
   pityConfig:
     levels:
@@ -100,7 +80,7 @@ MonoBehaviour:
       - rarity: 3
         weight: 0
     - level: 3
-      requiredPullCount: 120
+      requiredPullCount: 40
       rarities:
       - rarity: 0
         weight: 90
@@ -111,7 +91,7 @@ MonoBehaviour:
       - rarity: 3
         weight: 0
     - level: 4
-      requiredPullCount: 200
+      requiredPullCount: 60
       rarities:
       - rarity: 0
         weight: 85
@@ -122,13 +102,13 @@ MonoBehaviour:
       - rarity: 3
         weight: 1
     - level: 5
-      requiredPullCount: 500
+      requiredPullCount: 80
       rarities:
       - rarity: 0
         weight: 80
       - rarity: 1
         weight: 12
       - rarity: 2
-        weight: 6
+        weight: 5
       - rarity: 3
-        weight: 2
+        weight: 3

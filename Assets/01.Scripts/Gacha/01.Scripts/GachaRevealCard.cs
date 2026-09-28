@@ -372,8 +372,6 @@ namespace PixelRestaurant.Gacha
                 epicSpawnVFX
             );
 
-
-
             PlayVFX(vfx);
         }
 
@@ -422,16 +420,11 @@ namespace PixelRestaurant.Gacha
 
         private void PlayVFX(GameObject vfx)
         {
-            if (vfx == null)
-            {
-
-            }
 
             vfx.SetActive(true);
 
             ParticleSystem[] particles =
                 vfx.GetComponentsInChildren<ParticleSystem>(true);
-
 
             foreach (ParticleSystem particle in particles)
             {
@@ -519,11 +512,6 @@ namespace PixelRestaurant.Gacha
 
             _canvasGroup.interactable = false;
             _canvasGroup.blocksRaycasts = false;
-
-            if (AudioManager.Instance != null)
-            {
-                AudioManager.Instance.PlayButtonSound();
-            }
 
             DisableAllVFX();
 

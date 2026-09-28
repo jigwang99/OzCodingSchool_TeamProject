@@ -31,9 +31,6 @@ namespace PixelRestaurant.Gacha
                 if (_instance == null)
                 {
                     _instance = FindObjectOfType<GachaInventory>();
-                    if (_instance == null)
-                    {
-                    }
                 }
                 return _instance;
             }
@@ -107,15 +104,11 @@ namespace PixelRestaurant.Gacha
                 SaveGameData();
         }
 
-
         public int TryMergeAllWeapons(
     GachaPoolData pool,
     PlayerWeaponCatalog catalog)
         {
-            if (pool == null || pool.Items == null || catalog == null)
-            {
-               
-            }
+            if (pool == null || pool.Items == null || catalog == null) return 0;
 
             int merged = 0;
             bool changed;
@@ -144,20 +137,6 @@ namespace PixelRestaurant.Gacha
             }
             while (changed);
 
-            // 다른 무기가 합쳐졌더라도 Weapon_15의 상태를 출력
-            foreach (GachaItem item in pool.Items)
-            {
-                if (item == null || item.ItemId != "Weapon_15")
-                    continue;
-
-                int count = GetItemCount(item.ItemId);
-
-                if (count >= GachaWeaponMerge.RequiredCount)
-                {
-                    
-                }
-            }
-            DiagnoseWeapon15(pool, catalog);
             return merged;
         }
         public bool HasMergeableWeapon(GachaPoolData pool, PlayerWeaponCatalog catalog)
@@ -183,62 +162,8 @@ namespace PixelRestaurant.Gacha
             if (sourceWeapon == null || resultWeapon == null ||
                 !GameManager.instance.PlayerData.OwnsWeapon(source.LinkedWeaponId)) return false;
             int remaining = GetItemCount(source.ItemId) - GachaWeaponMerge.RequiredCount;
-            if (remaining < 0 || (remaining == 0 && source.LinkedWeaponId == "swords_0")) return false;
+            if (remaining < 1) return false;
             return GetItemCount(result.ItemId) < int.MaxValue;
-        }
-       private void DiagnoseWeapon15(
-    GachaPoolData pool,
-    PlayerWeaponCatalog catalog)
-        {
-            if (pool == null || pool.Items == null)
-                return;
-
-            GachaItem source = pool.Items.Find(
-                item => item != null && item.ItemId == "Weapon_15"
-            );
-
-            if (source == null)
-            {
-               
-                return;
-            }
-
-            int count = GetItemCount(source.ItemId);
-
-            if (count < GachaWeaponMerge.RequiredCount)
-                return;
-
-            GachaItem result;
-
-            if (!GachaWeaponMerge.TryFindMergeResult(
-                    source, this, pool, out result))
-            {
-                return;
-            }
-
-            if (catalog == null ||
-                catalog.Find(source.LinkedWeaponId) == null ||
-                catalog.Find(result.LinkedWeaponId) == null)
-            {
-                
-                return;
-            }
-
-            if (GameManager.instance == null ||
-                GameManager.instance.PlayerData == null)
-            {
-               
-                return;
-            }
-
-            if (!GameManager.instance.PlayerData.OwnsWeapon(
-                    source.LinkedWeaponId))
-            {
-                return;
-            }
-
-         
-
         }
         // All preconditions are checked before any gacha material is consumed.
         public bool TryMergeWeapon(GachaItem source, GachaPoolData pool, PlayerWeaponCatalog catalog)
@@ -248,15 +173,14 @@ namespace PixelRestaurant.Gacha
             if (!GachaWeaponMerge.TryFindMergeResult(source, this, pool, out result)) return false;
             PlayerData data = GameManager.instance.PlayerData;
             int remaining = GetItemCount(source.ItemId) - GachaWeaponMerge.RequiredCount;
-            bool keepSource = remaining > 0;
+            if (remaining < 1) return false;
             int resultCount = GetItemCount(result.ItemId);
 
             // PlayerData mutation returns false without changing data on failed validation.
-            if (!data.TryApplyGachaWeaponMerge(source.LinkedWeaponId, result.LinkedWeaponId, keepSource))
+            if (!data.TryApplyGachaWeaponMerge(source.LinkedWeaponId, result.LinkedWeaponId))
                 return false;
 
-            if (remaining == 0) { _items.Remove(source.ItemId); _newItems.Remove(source.ItemId); }
-            else _items[source.ItemId] = remaining;
+            _items[source.ItemId] = remaining;
             _items[result.ItemId] = resultCount + 1;
             if (resultCount == 0) _newItems.Add(result.ItemId);
             SyncInventoryToPlayerData();
@@ -412,15 +336,12 @@ namespace PixelRestaurant.Gacha
                     gachaItem.LinkedRecipeId))
                 {
 
-
-
                     return;
                 }
                 PlayerData playerData =
                     GameManager.instance.PlayerData;
 
                 string recipeId = gachaItem.LinkedRecipeId;
-
 
                 // 레시피 목록이 없으면 초기화
                 if (playerData.ownedRecipes == null)
@@ -439,8 +360,6 @@ namespace PixelRestaurant.Gacha
                 // 처음 획득한 레시피만 추가
                 if (!alreadyOwned)
 
-
-
                     playerData.ownedRecipes.Add(
                         new OwnedRecipeData
                         {
@@ -449,7 +368,6 @@ namespace PixelRestaurant.Gacha
                         }
                     );
             }
-
 
             return;
         }
@@ -562,8 +480,6 @@ namespace PixelRestaurant.Gacha
             return _items.ContainsKey(itemId) && _items[itemId] > 0;
         }
 
-
-
         public void LoadFromPlayerData()
         {
             if (GameManager.instance == null)
@@ -608,7 +524,6 @@ namespace PixelRestaurant.Gacha
                     _newItems.Add(data.itemId);
                 }
             }
-
 
         }
     }
