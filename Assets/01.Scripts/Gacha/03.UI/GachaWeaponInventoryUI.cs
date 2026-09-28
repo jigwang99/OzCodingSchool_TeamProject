@@ -83,21 +83,18 @@ public class GachaWeaponInventoryUI : MonoBehaviour
 
         if (weaponInventoryGrid == null)
         {
-            
 
             return;
         }
 
         if (itemCardPrefab == null)
         {
-           
 
             return;
         }
 
         if (weaponGachaPool == null)
         {
-            
 
             return;
         }
@@ -105,8 +102,6 @@ public class GachaWeaponInventoryUI : MonoBehaviour
         if (GameManager.instance == null ||
             GameManager.instance.PlayerData == null)
         {
-        
-
 
             return;
         }
@@ -234,7 +229,6 @@ public class GachaWeaponInventoryUI : MonoBehaviour
     {
         if (weaponEquipment == null)
         {
-           
 
             return;
         }

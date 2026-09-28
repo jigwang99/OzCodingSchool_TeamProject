@@ -23,12 +23,7 @@ MonoBehaviour:
     weight: 13
     itemIcon: {fileID: 3009030062900057397, guid: c1b0bbbd287f34b63a81673b7ada0b31, type: 3}
     linkedWeaponId: swords_0
-    linkedFurnitureId: 
     linkedRecipeId: 
-    stats:
-      attackPower: 0
-      goldBonusFlat: 0
-      goldBonusRate: 0
     nextMergeItemId: Weapon_1
   - itemId: Weapon_1
     itemName: "\uC815\uC5B4\uB9AC"
@@ -38,12 +33,7 @@ MonoBehaviour:
     weight: 13
     itemIcon: {fileID: 444537707431101305, guid: c1b0bbbd287f34b63a81673b7ada0b31, type: 3}
     linkedWeaponId: swords_1
-    linkedFurnitureId: 
     linkedRecipeId: 
-    stats:
-      attackPower: 0
-      goldBonusFlat: 0
-      goldBonusRate: 0
     nextMergeItemId: Weapon_2
   - itemId: Weapon_2
     itemName: "\uBCF5\uC5B4"
@@ -53,12 +43,7 @@ MonoBehaviour:
     weight: 13
     itemIcon: {fileID: -3679431063578376676, guid: c1b0bbbd287f34b63a81673b7ada0b31, type: 3}
     linkedWeaponId: swords_2
-    linkedFurnitureId: 
     linkedRecipeId: 
-    stats:
-      attackPower: 0
-      goldBonusFlat: 0
-      goldBonusRate: 0
     nextMergeItemId: Weapon_3
   - itemId: Weapon_3
     itemName: "\uC804\uAC31\uC774"
@@ -68,12 +53,7 @@ MonoBehaviour:
     weight: 13
     itemIcon: {fileID: 8393812645107108321, guid: c1b0bbbd287f34b63a81673b7ada0b31, type: 3}
     linkedWeaponId: swords_3
-    linkedFurnitureId: 
     linkedRecipeId: 
-    stats:
-      attackPower: 0
-      goldBonusFlat: 0
-      goldBonusRate: 0
     nextMergeItemId: Weapon_4
   - itemId: Weapon_4
     itemName: "\uBB34\uB2AC\uBCF5\uC5B4"
@@ -83,12 +63,7 @@ MonoBehaviour:
     weight: 12
     itemIcon: {fileID: -5907963261406464630, guid: c1b0bbbd287f34b63a81673b7ada0b31, type: 3}
     linkedWeaponId: swords_4
-    linkedFurnitureId: 
     linkedRecipeId: 
-    stats:
-      attackPower: 0
-      goldBonusFlat: 0
-      goldBonusRate: 0
     nextMergeItemId: Weapon_5
   - itemId: Weapon_5
     itemName: "\uB0A0\uCE58"
@@ -98,12 +73,7 @@ MonoBehaviour:
     weight: 12
     itemIcon: {fileID: 7917612348479043816, guid: c1b0bbbd287f34b63a81673b7ada0b31, type: 3}
     linkedWeaponId: swords_5
-    linkedFurnitureId: 
     linkedRecipeId: 
-    stats:
-      attackPower: 0
-      goldBonusFlat: 0
-      goldBonusRate: 0
     nextMergeItemId: Weapon_6
   - itemId: Weapon_6
     itemName: "\uBE59\uC5B4"
@@ -113,12 +83,7 @@ MonoBehaviour:
     weight: 12
     itemIcon: {fileID: -1527510420817029064, guid: c1b0bbbd287f34b63a81673b7ada0b31, type: 3}
     linkedWeaponId: swords_6
-    linkedFurnitureId: 
     linkedRecipeId: 
-    stats:
-      attackPower: 0
-      goldBonusFlat: 0
-      goldBonusRate: 0
     nextMergeItemId: Weapon_7
   - itemId: Weapon_7
     itemName: "\uC6B0\uB7ED"
@@ -128,12 +93,7 @@ MonoBehaviour:
     weight: 12
     itemIcon: {fileID: 2465368753443547920, guid: c1b0bbbd287f34b63a81673b7ada0b31, type: 3}
     linkedWeaponId: swords_7
-    linkedFurnitureId: 
     linkedRecipeId: 
-    stats:
-      attackPower: 0
-      goldBonusFlat: 0
-      goldBonusRate: 0
     nextMergeItemId: Weapon_8
   - itemId: Weapon_8
     itemName: "\uC1A1\uC5B4"
@@ -143,12 +103,7 @@ MonoBehaviour:
     weight: 13
     itemIcon: {fileID: -3581400602456801779, guid: c1b0bbbd287f34b63a81673b7ada0b31, type: 3}
     linkedWeaponId: swords_8
-    linkedFurnitureId: 
     linkedRecipeId: 
-    stats:
-      attackPower: 0
-      goldBonusFlat: 0
-      goldBonusRate: 0
     nextMergeItemId: Weapon_9
   - itemId: Weapon_9
     itemName: "\uC740\uAC08\uCE58"
@@ -158,12 +113,7 @@ MonoBehaviour:
     weight: 13
     itemIcon: {fileID: 989341614017228077, guid: c1b0bbbd287f34b63a81673b7ada0b31, type: 3}
     linkedWeaponId: swords_9
-    linkedFurnitureId: 
     linkedRecipeId: 
-    stats:
-      attackPower: 0
-      goldBonusFlat: 0
-      goldBonusRate: 0
     nextMergeItemId: Weapon_10
   - itemId: Weapon_10
     itemName: "\uACE0\uB4F1\uC5B4"
@@ -173,12 +123,7 @@ MonoBehaviour:
     weight: 12
     itemIcon: {fileID: 1799176996764264566, guid: c1b0bbbd287f34b63a81673b7ada0b31, type: 3}
     linkedWeaponId: swords_10
-    linkedFurnitureId: 
     linkedRecipeId: 
-    stats:
-      attackPower: 0
-      goldBonusFlat: 0
-      goldBonusRate: 0
     nextMergeItemId: Weapon_11
   - itemId: Weapon_11
     itemName: "\uC624\uC9D5\uC5B4"
@@ -188,12 +133,7 @@ MonoBehaviour:
     weight: 12
     itemIcon: {fileID: -5521930113802750886, guid: c1b0bbbd287f34b63a81673b7ada0b31, type: 3}
     linkedWeaponId: swords_11
-    linkedFurnitureId: 
     linkedRecipeId: 
-    stats:
-      attackPower: 0
-      goldBonusFlat: 0
-      goldBonusRate: 0
     nextMergeItemId: Weapon_12
   - itemId: Weapon_12
     itemName: "\uAC00\uC790\uBBF8"
@@ -203,12 +143,7 @@ MonoBehaviour:
     weight: 12
     itemIcon: {fileID: -5330209929612280627, guid: c1b0bbbd287f34b63a81673b7ada0b31, type: 3}
     linkedWeaponId: swords_12
-    linkedFurnitureId: 
     linkedRecipeId: 
-    stats:
-      attackPower: 0
-      goldBonusFlat: 0
-      goldBonusRate: 0
     nextMergeItemId: Weapon_13
   - itemId: Weapon_13
     itemName: "\uB18D\uC5B4"
@@ -218,12 +153,7 @@ MonoBehaviour:
     weight: 12
     itemIcon: {fileID: 5420241916359937051, guid: c1b0bbbd287f34b63a81673b7ada0b31, type: 3}
     linkedWeaponId: swords_13
-    linkedFurnitureId: 
     linkedRecipeId: 
-    stats:
-      attackPower: 0
-      goldBonusFlat: 0
-      goldBonusRate: 0
     nextMergeItemId: Weapon_14
   - itemId: Weapon_14
     itemName: "\uC7A5\uC5B4"
@@ -233,12 +163,7 @@ MonoBehaviour:
     weight: 12
     itemIcon: {fileID: -252366736038406540, guid: c1b0bbbd287f34b63a81673b7ada0b31, type: 3}
     linkedWeaponId: swords_14
-    linkedFurnitureId: 
     linkedRecipeId: 
-    stats:
-      attackPower: 0
-      goldBonusFlat: 0
-      goldBonusRate: 0
     nextMergeItemId: Weapon_15
   - itemId: Weapon_15
     itemName: "\uB3C4\uBBF8"
@@ -248,12 +173,7 @@ MonoBehaviour:
     weight: 12
     itemIcon: {fileID: -4038341700606420678, guid: c1b0bbbd287f34b63a81673b7ada0b31, type: 3}
     linkedWeaponId: swords_15
-    linkedFurnitureId: 
     linkedRecipeId: 
-    stats:
-      attackPower: 0
-      goldBonusFlat: 0
-      goldBonusRate: 0
     nextMergeItemId: Weapon_16
   - itemId: Weapon_16
     itemName: "\uB119\uCE58"
@@ -263,12 +183,7 @@ MonoBehaviour:
     weight: 12
     itemIcon: {fileID: -9144741878822685231, guid: c1b0bbbd287f34b63a81673b7ada0b31, type: 3}
     linkedWeaponId: swords_16
-    linkedFurnitureId: 
     linkedRecipeId: 
-    stats:
-      attackPower: 0
-      goldBonusFlat: 0
-      goldBonusRate: 0
     nextMergeItemId: Weapon_17
   - itemId: Weapon_17
     itemName: "\uCCAD\uC0C8\uCE58"
@@ -278,12 +193,7 @@ MonoBehaviour:
     weight: 40
     itemIcon: {fileID: -178236419022009773, guid: c1b0bbbd287f34b63a81673b7ada0b31, type: 3}
     linkedWeaponId: swords_17
-    linkedFurnitureId: 
     linkedRecipeId: 
-    stats:
-      attackPower: 0
-      goldBonusFlat: 0
-      goldBonusRate: 0
     nextMergeItemId: Weapon_18
   - itemId: Weapon_18
     itemName: "\uCC38\uCE58"
@@ -293,12 +203,7 @@ MonoBehaviour:
     weight: 30
     itemIcon: {fileID: 5326364851146495771, guid: c1b0bbbd287f34b63a81673b7ada0b31, type: 3}
     linkedWeaponId: swords_18
-    linkedFurnitureId: 
     linkedRecipeId: 
-    stats:
-      attackPower: 0
-      goldBonusFlat: 0
-      goldBonusRate: 0
     nextMergeItemId: Weapon_19
   - itemId: Weapon_19
     itemName: "\uB300\uC655\uBCF5\uC5B4"
@@ -308,12 +213,7 @@ MonoBehaviour:
     weight: 20
     itemIcon: {fileID: -2174811614663726402, guid: c1b0bbbd287f34b63a81673b7ada0b31, type: 3}
     linkedWeaponId: swords_19
-    linkedFurnitureId: 
     linkedRecipeId: 
-    stats:
-      attackPower: 0
-      goldBonusFlat: 0
-      goldBonusRate: 0
     nextMergeItemId: Weapon_20
   - itemId: Weapon_20
     itemName: "\uAC00\uBB3C\uCE58"
@@ -323,12 +223,7 @@ MonoBehaviour:
     weight: 10
     itemIcon: {fileID: 573806895040313311, guid: c1b0bbbd287f34b63a81673b7ada0b31, type: 3}
     linkedWeaponId: swords_20
-    linkedFurnitureId: 
     linkedRecipeId: 
-    stats:
-      attackPower: 0
-      goldBonusFlat: 0
-      goldBonusRate: 0
     nextMergeItemId: Weapon_21
   - itemId: Weapon_21
     itemName: "\uCD08\uB871\uC544\uADC0"
@@ -338,12 +233,7 @@ MonoBehaviour:
     weight: 70
     itemIcon: {fileID: -1150020013204898742, guid: c1b0bbbd287f34b63a81673b7ada0b31, type: 3}
     linkedWeaponId: swords_21
-    linkedFurnitureId: 
     linkedRecipeId: 
-    stats:
-      attackPower: 0
-      goldBonusFlat: 0
-      goldBonusRate: 0
     nextMergeItemId: Weapon_22
   - itemId: Weapon_22
     itemName: "\uBC94\uACE0\uB798"
@@ -353,12 +243,7 @@ MonoBehaviour:
     weight: 30
     itemIcon: {fileID: -8352473898307048687, guid: c1b0bbbd287f34b63a81673b7ada0b31, type: 3}
     linkedWeaponId: swords_22
-    linkedFurnitureId: 
     linkedRecipeId: 
-    stats:
-      attackPower: 0
-      goldBonusFlat: 0
-      goldBonusRate: 0
     nextMergeItemId: 
   pityConfig:
     levels:

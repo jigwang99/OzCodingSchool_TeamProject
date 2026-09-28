@@ -54,12 +54,6 @@ namespace PixelRestaurant.Gacha
             DontDestroyOnLoad(gameObject);
 
             _objectPool = GetComponent<GachaObjectPool>();
-
-            if (_objectPool == null)
-            {
-               
-               
-            }
         }
 
         // 기존 호출 방식 유지

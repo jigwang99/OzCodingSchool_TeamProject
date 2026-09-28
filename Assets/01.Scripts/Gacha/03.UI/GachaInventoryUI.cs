@@ -33,9 +33,6 @@ namespace PixelRestaurant.Gacha
         [Header("가챠 UI")]
         [SerializeField] private GachaUIController gachaUI;
 
-        [Header("테스트")]
-        [SerializeField] private Button clearGachaInventoryButton;
-
         // =========================================================
         // 인벤토리 탭
         // =========================================================
@@ -79,7 +76,6 @@ namespace PixelRestaurant.Gacha
         private void Start()
         {
 
-
             if (mergeAllButton != null)
                 mergeAllButton.onClick.AddListener(MergeAllWeapons);
             RefreshInventoryDisplay();
@@ -104,7 +100,6 @@ namespace PixelRestaurant.Gacha
             try
             {
                 int merged = GachaInventory.Instance.TryMergeAllWeapons(pool, weaponCatalog);
-                if (merged == 0)
                 if (mergeResultText != null)
                     mergeResultText.text = merged > 0 ? $"무기 {merged}회 합치기 완료" : "합칠 수 있는 무기가 없습니다.";
             }
@@ -125,18 +120,18 @@ namespace PixelRestaurant.Gacha
                 ? GachaManager.Instance.GetPoolData(GachaGroup.Weapon) : null;
             // Do not disable the whole button because one weapon is unmergeable.
             // The inventory merge routine checks each weapon independently and skips failures.
-            bool hasFiveOrMore = false;
+            bool hasMergeMaterials = false;
             if (pool != null && pool.Items != null && GachaInventory.Instance != null)
             {
                 foreach (GachaItem item in pool.Items)
                 {
                     if (item == null || item.Group != GachaGroup.Weapon) continue;
-                    if (GachaInventory.Instance.GetItemCount(item.ItemId) < GachaWeaponMerge.RequiredCount) continue;
-                    hasFiveOrMore = true;
+                    if (GachaInventory.Instance.GetItemCount(item.ItemId) < GachaWeaponMerge.MinimumOwnedCount) continue;
+                    hasMergeMaterials = true;
                     break;
                 }
             }
-            mergeAllButton.interactable = !_merging && weaponCatalog != null && hasFiveOrMore;
+            mergeAllButton.interactable = !_merging && weaponCatalog != null && hasMergeMaterials;
         }
         // =========================================================
         // 탭 이벤트
@@ -189,14 +184,12 @@ namespace PixelRestaurant.Gacha
             if (inventoryPopup == null)
             {
 
-
                 return;
             }
 
             inventoryPopup.SetActive(true);
 
             RefreshInventoryDisplay();
-
 
         }
 
@@ -261,7 +254,6 @@ namespace PixelRestaurant.Gacha
             if (inventory == null)
             {
 
-
                 return;
             }
 
@@ -277,7 +269,6 @@ namespace PixelRestaurant.Gacha
 
             if (poolData == null)
             {
-
 
                 return;
             }
@@ -335,7 +326,6 @@ namespace PixelRestaurant.Gacha
                     System.StringComparison.Ordinal
                 );
             });
-
 
             // -----------------------------------------------------
             // 카드 생성
@@ -448,7 +438,6 @@ namespace PixelRestaurant.Gacha
 
             card.name =
                 $"{item.ItemName}_InventoryCard";
-
 
             // -----------------------------------------------------
             // 보유 개수
@@ -605,7 +594,6 @@ namespace PixelRestaurant.Gacha
                     return 99;
             }
         }
-
 
         public void PreviousPage()
         {

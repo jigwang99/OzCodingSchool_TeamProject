@@ -38,11 +38,6 @@ namespace PixelRestaurant.Gacha
         private Color _uniqueColor = new Color(0.5f, 0, 1);
         private Color _epicColor =  Color.yellow;
 
-        private void Start()
-        {
-      
-        }
-
         /// <summary>
         /// 아이템 정보를 카드에 표시
         /// </summary>

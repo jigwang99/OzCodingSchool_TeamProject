@@ -6,6 +6,8 @@ namespace PixelRestaurant.Gacha
     public static class GachaWeaponMerge
     {
         public const int RequiredCount = 5;
+        // Reserve one owned copy so its upgrade level is never lost.
+        public const int MinimumOwnedCount = RequiredCount + 1;
 
         // 레어도별 최대 등급
         public static int GetMaxGrade(GachaRarity rarity)
@@ -116,7 +118,7 @@ namespace PixelRestaurant.Gacha
             if (sourceItem.Group != GachaGroup.Weapon)
                 return false;
 
-            if (inventory.GetItemCount(sourceItem.ItemId) < RequiredCount)
+            if (inventory.GetItemCount(sourceItem.ItemId) < MinimumOwnedCount)
                 return false;
 
             if (!TryGetNextStage(
@@ -132,8 +134,7 @@ namespace PixelRestaurant.Gacha
 
             if (string.IsNullOrWhiteSpace(nextItemId))
             {
-   
-                
+
                 return false;
             }
 
@@ -147,8 +148,7 @@ namespace PixelRestaurant.Gacha
 
             if (candidate == null)
             {
-          
-                
+
                 return false;
             }
 
@@ -156,13 +156,13 @@ namespace PixelRestaurant.Gacha
                 candidate.Rarity != nextRarity ||
                 candidate.Grade != nextGrade)
             {
-           
+
                 return false;
             }
 
             if (string.IsNullOrWhiteSpace(candidate.LinkedWeaponId))
             {
-           
+
                 return false;
             }
 

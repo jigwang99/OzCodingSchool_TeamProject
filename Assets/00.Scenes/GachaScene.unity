@@ -426,7 +426,6 @@ GameObject:
   m_Component:
   - component: {fileID: 92234957}
   - component: {fileID: 92234958}
-  - component: {fileID: 92234959}
   - component: {fileID: 92234960}
   m_Layer: 0
   m_Name: GachaBootstrap
@@ -466,20 +465,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1a7a4879dd8ce1b4f9a5d94dddb2885a, type: 2}
   - {fileID: 11400000, guid: d2c3f8d12c3667344ab9e5203ac23598, type: 2}
   - {fileID: 11400000, guid: 7d004b2d807b55d4eb242363d99570d0, type: 2}
---- !u!114 &92234959
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 92234956}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 72512cbee89163e498a45e62ed54b336, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PixelRestaurant.Gacha.GachaInventoryAdapter
-  gachaManager: {fileID: 278279962}
-  gachaInventory: {fileID: 1142169544}
 --- !u!114 &92234960
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -600,12 +585,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19309ff7cde076e4d90924322799fd8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PixelRestaurant.Gacha.GachaUIController
-  gachaOpenButton: {fileID: 0}
   gachaPopup: {fileID: 0}
   inventoryUI: {fileID: 367393607}
-  weaponButton: {fileID: 1640914179}
-  furnitureButton: {fileID: 764225330}
-  recipeButton: {fileID: 1441780172}
   pull1Button: {fileID: 362862181}
   pull10Button: {fileID: 489651580}
   pull1CostDisplay: {fileID: 1459725761}
@@ -625,10 +606,6 @@ MonoBehaviour:
   resultPopup: {fileID: 478893397}
   infoPopup: {fileID: 2100422246}
   listPopup: {fileID: 0}
-  resultOpenButton: {fileID: 0}
-  resultCloseButton: {fileID: 1951493291}
-  inventoryOpenButton: {fileID: 0}
-  listOpenButton: {fileID: 0}
   commonResultSFX: {fileID: 8300000, guid: 335c4605cb9ad714fa3ddbe07990ab50, type: 3}
   rareResultSFX: {fileID: 8300000, guid: f65caa19586755d409230ad9898755ad, type: 3}
   uniqueResultSFX: {fileID: 8300000, guid: f6872c18dcf310b4d8a973e3242f4a6b, type: 3}
@@ -636,7 +613,6 @@ MonoBehaviour:
   insufficientGoldSFX: {fileID: 8300000, guid: a69f4c09491c5f94aabf55c0f99b53c1, type: 3}
   insufficientGoldSFXDelay: 1.5
   warningCooldown: 5
-  retryGachaButton: {fileID: 157507213}
 --- !u!4 &106314149
 Transform:
   m_ObjectHideFlags: 0
@@ -1372,9 +1348,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7bfb6e5d15a40324b92dfcc993d10f65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PixelRestaurant.Gacha.GachaManager
-  weaponGachaCost: 1000
-  recipeGachaCost: 10000
-  furnitureGachaCost: 30000
+  weaponGachaCost: 500
+  recipeGachaCost: 2000
+  furnitureGachaCost: 3000
+  commonRecipeGoldPerDraw: 50
+  rareRecipeGoldPerDraw: 50
+  uniqueRecipeGoldPerDraw: 50
+  epicRecipeGoldPerDraw: 50
 --- !u!1 &314551834
 GameObject:
   m_ObjectHideFlags: 0
@@ -1407,10 +1387,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 478893398}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 1920, y: 1080}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &314551836
 MonoBehaviour:
@@ -2261,7 +2241,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PixelRestaurant.Gacha.GachaInventoryUI
   inventoryPopup: {fileID: 0}
   gachaUI: {fileID: 0}
-  clearGachaInventoryButton: {fileID: 0}
   weaponTab: {fileID: 0}
   furnitureTab: {fileID: 0}
   recipeTab: {fileID: 0}
@@ -2637,7 +2616,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 522431164}
-  - component: {fileID: 522431166}
   m_Layer: 0
   m_Name: GachaStatManager
   m_TagString: Untagged
@@ -2661,18 +2639,6 @@ Transform:
   - {fileID: 918260545}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &522431166
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 522431163}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa2f536689c5ef5459c5a4c2f1a02847, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PixelRestaurant.Gacha.GachaStatManager
 --- !u!1 &536529699
 GameObject:
   m_ObjectHideFlags: 0
@@ -4287,7 +4253,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 918260545}
-  - component: {fileID: 918260546}
   m_Layer: 0
   m_Name: GachaStatAdapter
   m_TagString: Untagged
@@ -4310,20 +4275,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 522431164}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &918260546
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 918260544}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 82d0c11ea8eadff4b9b9d7f7aabb3ea6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PixelRestaurant.Gacha.GachaStatAdapter
-  gachaManager: {fileID: 278279962}
-  statManager: {fileID: 522431166}
 --- !u!1 &918939110
 GameObject:
   m_ObjectHideFlags: 0
@@ -7504,9 +7455,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f66fc2c0ed903d44910b1e4d979cd5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PixelRestaurant.Gacha.GachaProbabilityListUI
-  weaponTabButton: {fileID: 585478564}
-  furnitureTabButton: {fileID: 357570329}
-  recipeTabButton: {fileID: 1041633989}
   levelPage: {fileID: 743496607}
   levelRowPrefab: {fileID: 4692131148131751222, guid: 17f57fd1c6cd38c46809d23771f044e7, type: 3}
   prevPageButton: {fileID: 1991336293}

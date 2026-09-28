@@ -67,9 +67,6 @@ namespace PixelRestaurant.Gacha
                 if (_instance == null)
                 {
                     _instance = FindObjectOfType<GachaPitySystem>();
-                    if (_instance == null)
-                    {
-                    }
                 }
                 return _instance;
             }
@@ -241,8 +238,6 @@ namespace PixelRestaurant.Gacha
             int currentLevel = GetCurrentPityLevel(group);
             return config.GetWeight(currentLevel, rarity);
         }
-
-
 
     }
 }

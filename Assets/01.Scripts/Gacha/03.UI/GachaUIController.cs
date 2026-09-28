@@ -10,15 +10,9 @@ namespace PixelRestaurant.Gacha
     public class GachaUIController : MonoBehaviour
     {
         [Header("Gacha Open / Close")]
-        [SerializeField] private Button gachaOpenButton;
 
         [SerializeField] private GameObject gachaPopup;
         [SerializeField] private GachaInventoryUI inventoryUI;
-
-        [Header("Gacha Type")]
-        [SerializeField] private Button weaponButton;
-        [SerializeField] private Button furnitureButton;
-        [SerializeField] private Button recipeButton;
 
         private GachaGroup _currentGachaType = GachaGroup.Weapon;
 
@@ -60,12 +54,6 @@ namespace PixelRestaurant.Gacha
         [SerializeField] private GameObject infoPopup;
         [SerializeField] private GameObject listPopup;
 
-        [Header("Popup Buttons")]
-        [SerializeField] private Button resultOpenButton;
-        [SerializeField] private Button resultCloseButton;
-        [SerializeField] private Button inventoryOpenButton;
-        [SerializeField] private Button listOpenButton;
-
         [Header("Gacha Result SFX")]
         [SerializeField] private AudioClip commonResultSFX;
         [SerializeField] private AudioClip rareResultSFX;
@@ -77,9 +65,6 @@ namespace PixelRestaurant.Gacha
         [SerializeField] private float insufficientGoldSFXDelay = 1.5f;
         [SerializeField] private float warningCooldown = 5f;
         private float nextWarningTime = 0f;
-
-        [Header("Retry Gacha")]
-        [SerializeField] private Button retryGachaButton;
 
         // 마지막으로 성공한 뽑기 횟수
         private int lastPullCount = 1;
@@ -161,7 +146,6 @@ namespace PixelRestaurant.Gacha
         {
             _currentGachaType = group;
 
-
             UpdateDisplay();
         }
         public void OpenResultPopup()
@@ -179,7 +163,6 @@ namespace PixelRestaurant.Gacha
         // =========================
         // Pull
         // =========================
-
 
         public void Pull1()
         {
