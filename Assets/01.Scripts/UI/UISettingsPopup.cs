@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
-using TMPro; // TMP_Dropdown 제어를 위해 추가
+using TMPro;
 
 public class UISettingsPopup : MonoBehaviour
 {
@@ -12,7 +12,7 @@ public class UISettingsPopup : MonoBehaviour
     [SerializeField] private GameObject convenienceContentPanel;
 
     [Header("Confirm Delete Popup")]
-    [SerializeField] private GameObject confirmDeletePanel; // [추가] 저장 파일 삭제 확인 팝업 패널
+    [SerializeField] private GameObject confirmDeletePanel;
 
     [Header("Tab Images")]
     [SerializeField] private Image soundTabImage;
@@ -179,34 +179,46 @@ public class UISettingsPopup : MonoBehaviour
             frameRateDropdown.onValueChanged.AddListener(OnFrameRateChanged);
         }
 
-        // 해상도 드롭다운 목록 자동 생성
+        // 고정 해상도 4종 드롭다운 생성 (모니터 제한 필터링 적용)
         if (resolutionDropdown != null)
         {
             resolutionDropdown.onValueChanged.RemoveAllListeners();
             resolutionDropdown.ClearOptions();
 
-            Resolution[] allResolutions = Screen.resolutions;
-            HashSet<string> uniqueResSet = new HashSet<string>();
             resolutions.Clear();
-
-            int currentResIndex = 0;
             List<string> options = new List<string>();
 
-            for (int i = 0; i < allResolutions.Length; i++)
-            {
-                // 주사율 차이로 인한 중복 해상도 제거
-                string option = $"{allResolutions[i].width} x {allResolutions[i].height}";
-                if (!uniqueResSet.Contains(option))
-                {
-                    uniqueResSet.Add(option);
-                    resolutions.Add(allResolutions[i]);
-                    options.Add(option);
+            // 현재 사용 중인 모니터의 최대 해상도 확인
+            int maxMonitorWidth = Screen.currentResolution.width;
+            int maxMonitorHeight = Screen.currentResolution.height;
 
-                    if (allResolutions[i].width == Screen.currentResolution.width &&
-                        allResolutions[i].height == Screen.currentResolution.height)
-                    {
-                        currentResIndex = resolutions.Count - 1;
-                    }
+            // 준비된 4가지 고정 해상도 목록
+            var presetResolutions = new (int width, int height, string label)[]
+            {
+                (1280, 720, "1280 × 720"),
+                (1366, 768, "1366 × 768"),
+                (1920, 1080, "1920 × 1080"),
+                (2560, 1440, "2560 × 1440")
+            };
+
+            foreach (var preset in presetResolutions)
+            {
+                // 모니터 해상도를 초과하지 않거나, 첫 항목(HD)인 경우 드롭다운 옵션에 추가
+                if ((preset.width <= maxMonitorWidth && preset.height <= maxMonitorHeight) || resolutions.Count == 0)
+                {
+                    resolutions.Add(new Resolution { width = preset.width, height = preset.height });
+                    options.Add(preset.label);
+                }
+            }
+
+            // 현재 화면 해상도와 일치하는 항목 찾기
+            int currentResIndex = 0;
+            for (int i = 0; i < resolutions.Count; i++)
+            {
+                if (resolutions[i].width == Screen.width && resolutions[i].height == Screen.height)
+                {
+                    currentResIndex = i;
+                    break;
                 }
             }
 
@@ -282,7 +294,6 @@ public class UISettingsPopup : MonoBehaviour
         {
             Resolution res = resolutions[index];
             Screen.SetResolution(res.width, res.height, Screen.fullScreen);
-
         }
     }
 
