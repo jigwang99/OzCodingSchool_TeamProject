@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -59,6 +59,12 @@ public class StageManager : MonoBehaviour
         ? Mathf.Max(0f, resultEndsAt - Time.time)
         : 0f;
 
+    private void Awake()
+    {
+        EnsureFade();
+        fade.alpha = 1f;
+        fade.gameObject.SetActive(true);
+    }
     private void Start()
     {
         if (combatManager == null || enemySpawner == null || playerCat == null || StageCount == 0)
@@ -150,7 +156,8 @@ public class StageManager : MonoBehaviour
             playerCat.enabled = false;
             EnsureFade();
             fade.gameObject.SetActive(true);
-            await FadeAsync(1f, fadeOutDuration, token);
+            if (fade.alpha < 1f)
+                await FadeAsync(1f, fadeOutDuration, token);
             // 완전히 검은 프레임을 그린 뒤 풀을 갱신한다.
             await UniTask.NextFrame(token);
             // 사망 비주얼은 화면이 완전히 가려진 뒤에만 Idle로 되돌린다.
