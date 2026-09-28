@@ -52,6 +52,8 @@ public class StageManager : MonoBehaviour
 
     public event Action<StageResult> OnStageResult;
     public event Action OnStageStarted;
+    public event Action OnStageTransitionFailed;
+    public bool HasTransitionFailed { get; private set; }
     public StageResult? CurrentResult { get; private set; }
     public float ResultRemainingSeconds => isTransitioning
         ? Mathf.Max(0f, resultEndsAt - Time.time)
@@ -111,6 +113,7 @@ public class StageManager : MonoBehaviour
     public bool SelectStage(int stageNumber)
     {
         if (!isInitialized || !isActiveAndEnabled || isChangingStage || !IsStageUnlocked(stageNumber) ||
+            CombatObjectPoolManager.instance == null ||
             !CombatObjectPoolManager.instance.CanPrepare(stageDataList.GetClone(stageNumber)))
             return false;
 
@@ -118,7 +121,7 @@ public class StageManager : MonoBehaviour
         GameManager.instance.PlayerData.SetCurrentStage(stageNumber);
         ChangeStageAsync().Forget();
         SaveManager.instance?.Save();
-        return true;
+        return !HasTransitionFailed;
     }
 
     private void CancelPendingRestart()
@@ -132,25 +135,22 @@ public class StageManager : MonoBehaviour
     // 수동 선택/자동 진행/재도전 모두 동일한 전환을 사용한다.
     private async UniTask ChangeStageAsync()
     {
-        StageData data = stageDataList?.GetClone(CurrentStage);
-        if (!CombatObjectPoolManager.instance.CanPrepare(data))
-        {
-#if UNITY_EDITOR
-            Debug.LogError("[StageManager] 스테이지 데이터 또는 적 프리팹 등록을 확인하세요.", this);
-#endif
-            return;
-        }
+        if (isChangingStage) return;
         isChangingStage = true;
         isTransitioning = true;
-        combatManager.StopBattle();
-        enemySpawner.SetCombatRunning(false);
-        playerCat.HasPendingEnemies = false;
-        playerCat.enabled = false;
+        HasTransitionFailed = false;
         CancellationToken token = this.GetCancellationTokenOnDestroy();
-        EnsureFade();
-        fade.gameObject.SetActive(true);
         try
         {
+            StageData data = stageDataList?.GetClone(CurrentStage);
+            if (CombatObjectPoolManager.instance == null || !CombatObjectPoolManager.instance.CanPrepare(data))
+                throw new InvalidOperationException("스테이지 데이터 또는 적 프리팹 등록을 확인하세요.");
+            combatManager.StopBattle();
+            enemySpawner.SetCombatRunning(false);
+            playerCat.HasPendingEnemies = false;
+            playerCat.enabled = false;
+            EnsureFade();
+            fade.gameObject.SetActive(true);
             await FadeAsync(1f, fadeOutDuration, token);
             // 완전히 검은 프레임을 그린 뒤 풀을 갱신한다.
             await UniTask.NextFrame(token);
@@ -182,10 +182,27 @@ public class StageManager : MonoBehaviour
             enemySpawner.SetCombatRunning(true);
             playerCat.enabled = true;
         }
+        catch (OperationCanceledException) when (token.IsCancellationRequested) { }
+        catch (Exception exception)
+        {
+            Debug.LogException(exception, this);
+            HasTransitionFailed = true;
+            // 일부만 준비된 전투를 종료하고 스테이지 선택으로 재시도할 수 있게 한다.
+            CurrentResult = null;
+            resultEndsAt = 0f;
+            playerCat.enabled = false;
+            playerCat.HasPendingEnemies = false;
+            playerCat.ConfigureNavigation(null, floorMap);
+            combatManager.StopBattle();
+            enemySpawner.Clear();
+        }
         finally
         {
             isChangingStage = false;
+            isTransitioning = false;
             if (fade != null) fade.gameObject.SetActive(false);
+            if (HasTransitionFailed && !token.IsCancellationRequested)
+                OnStageTransitionFailed?.Invoke();
         }
     }
 

@@ -201,16 +201,17 @@ public class EnemySpawner : MonoBehaviour
             if (!stage.SpawnInCamera && Mathf.Abs(position.x - player.transform.position.x) > distance) continue;
             EnemyController enemy = CombatObjectPoolManager.instance.GetObject<EnemyController>(stage.GetEnemyType(index), position);
             if (enemy == null) throw new InvalidOperationException("준비된 몬스터 풀을 찾을 수 없습니다.");
+            // 이후 설정에 실패해도 Clear가 대여된 적을 빠짐없이 반납한다.
+            if (!active.Contains(enemy)) active.Add(enemy);
             enemy.Health.SetMaxHp(stage.EnemyMaxHp);
             enemy.Attack.SetAttackDamage(stage.EnemyDamage);
             enemy.SetFloorMap(floorMap);
             enemy.SetTarget(player);
             enemy.Move.IgnoreUnitCollisions(player.Move);
             foreach (EnemyController other in active)
-                if (other != null && other.gameObject.activeInHierarchy)
+                if (other != null && other != enemy && other.gameObject.activeInHierarchy)
                     enemy.Move.IgnoreUnitCollisions(other.Move);
             enemy.enabled = running;
-            active.Add(enemy);
             pending.RemoveAt(i);
             player.HasPendingEnemies = HasPendingEnemies;
             OnEnemyActivated?.Invoke(enemy);
@@ -241,7 +242,16 @@ public class EnemySpawner : MonoBehaviour
         spawnPositions = Array.Empty<Vector3>();
         if (player != null) player.HasPendingEnemies = false;
         foreach (EnemyController enemy in active)
-            if (enemy != null) CombatObjectPoolManager.instance.ReturnObject(enemy.PoolKey, enemy.gameObject);
+        {
+            if (enemy == null) continue;
+            if (CombatObjectPoolManager.instance != null)
+                CombatObjectPoolManager.instance.ReturnObject(enemy.PoolKey, enemy.gameObject);
+            else
+            {
+                enemy.gameObject.SetActive(false);
+                Destroy(enemy.gameObject);
+            }
+        }
         active.Clear();
         player = null;
         stage = null;

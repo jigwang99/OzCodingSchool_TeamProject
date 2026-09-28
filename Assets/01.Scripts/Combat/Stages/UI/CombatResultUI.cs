@@ -70,6 +70,7 @@ public class CombatResultUI : MonoBehaviour
         if (!initialized) return;
         stageManager.OnStageResult += Show;
         stageManager.OnStageStarted += Hide;
+        stageManager.OnStageTransitionFailed += Hide;
 
         // 결과 표시 중 컴포넌트가 다시 활성화되어도 실제 남은 대기 시간을 사용한다.
         if (stageManager.CurrentResult.HasValue)
@@ -82,6 +83,7 @@ public class CombatResultUI : MonoBehaviour
         {
             stageManager.OnStageResult -= Show;
             stageManager.OnStageStarted -= Hide;
+            stageManager.OnStageTransitionFailed -= Hide;
         }
         Hide();
     }
