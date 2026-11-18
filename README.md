@@ -111,7 +111,7 @@
 
 ### 1. 준비
 
-- Unity Hub와 **Unity Editor `6000.3.17f1`**을 설치합니다.
+- Unity Hub와 Unity Editor `6000.3.17f1`을 설치합니다.
 - Windows 실행 파일을 빌드하려면 해당 에디터의 Windows 빌드 지원 모듈을 설치합니다.
 - UniTask Git 패키지를 가져올 수 있도록 Git을 설치하고 패키지 다운로드가 가능한 네트워크를 준비합니다.
 
